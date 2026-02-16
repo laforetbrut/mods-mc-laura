@@ -2,44 +2,34 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.0.0] - 2026-02-16
+## [1.1.0] - 2026-02-16
 
 ### Added / Ajouté
-- **1000 HP Attribute**: Laura is now extremely durable.
-- **Fast Regeneration**: 1 HP recovery every tick.
-- **Anti-Duplication System**: Security prevents multi-spawning per player.
-- **6 Languages Support**: EN, FR, DE, ES, IT, PT-BR localized chat.
-- **Aggression Logic**: Laura becomes sad if hit too much.
-- **Love Checks**: Periodic checks for player affection.
-- **Fart Mechanic**: Rare humorous sound effect.
-- **Inventory System**: 9-slot storage with Shift-Right Click.
-- **Interaction Database**: 200+ unique localized phrases.
+- **Massive Interaction Database**: Over 500+ unique localized interactions across 11 categories (Greetings, Love, Philosophy, Combat, etc.).
+- **6-Block Follow Distance**: Optimized AI to stay at a "partner" distance (approx. 6 blocks) instead of standing on top of the player.
+- **Stuck Detection**: Laura now complains in chat if she's stuck or cannot reach the player for more than 10 seconds.
+- **Hourly Playful Interaction**: Every hour, Laura playfully hits the player and apologizes with localized dialogue.
+- **Portal Support**: Laura can now follow the player through Nether and End portals.
+- **Dimension Uniqueness**: Improved `LauraWorldData` ensures only one Laura exists globally across all dimensions.
+- **Player Binding**: Laura is strictly bound to her summoner.
+- **Anti-Corruption**: Audited NBT persistence to prevent data loss or state corruption.
+- **Multilingual Excellence**: Full support for French, English, German, Spanish, Italian, and Portuguese.
 
 ---
 
-- **Attribut 1000 PV**: Laura est maintenant extrêmement résistante.
-- **Régénération Rapide**: Récupération de 1 PV chaque tick.
-- **Système Anti-Duplication**: Sécurité empêchant l'apparition multiple par joueur.
-- **Support 6 Langues**: Chat localisé en EN, FR, DE, ES, IT, PT-BR.
-- **Logique d'Agression**: Laura devient triste si elle est trop frappée.
-- **Tests d'Amour**: Vérifications périodiques de l'affection du joueur.
-- **Mécanique de Pet**: Effet sonore humoristique rare.
-- **Système d'Inventaire**: Stockage 9 emplacements via Shift-Clic Droit.
-- **Base d'Interactions**: Plus de 200 phrases localisées uniques.
+- **Base d'Interactions Massive**: Plus de 500 interactions localisées uniques à travers 11 catégories.
+- **Distance de Suivi de 6 Blocs**: IA optimisée pour maintenir une distance de "partenaire".
+- **Détection de Blocage**: Laura se plaint si elle est coincée pendant plus de 10 secondes.
+- **Interaction Ludique Horaire**: Toutes les heures, Laura frappe joyeusement le joueur et s'excuse.
+- **Support des Portails**: Laura peut maintenant suivre le joueur à travers les portails du Nether et de l'End.
+- **Unicité Dimensionnelle**: `LauraWorldData` garantit une seule Laura globalement.
+- **Liaison au Joueur**: Laura est liée strictement à son invocateur.
+- **Anti-Corruption**: Audit de la persistance NBT.
+- **Excellence Multilingue**: Support complet (FR, EN, DE, ES, IT, PT).
 
-## [Unreleased] - 2026-02-16
-### Added
-- **Inventory System**: Laura now has a 9-slot inventory (3x3). Accessible via Shift+Right Click when tamed.
-- **Sound System**: Added `laura_ambient` sound events for all versions.
-- **Ambient AI**: Laura now speaks random messages and plays sounds periodically.
-- **Gift System**: Giving a Poppy to Laura has a 20% chance to reward the player with a Diamond or Emerald.
-- **Advanced AI Goals**: 
-    - Laura now scares villagers (they run away from her).
-    - Laura gets scared of monsters (she runs away and complains).
-    - Laura complains if she cannot find a bed to sleep in at night.
-    - Improved following and sitting behavior.
-- **Multi-version Support**: Full feature parity between Forge 1.20.1, NeoForge 1.21.1, and Forge 1.21.1.
+## [1.0.0] - 2026-02-16
 
-### Fixed
-- Fixed localization issues for French language.
-- Fixed skin system metadata handling.
+### Added / Ajouté
+- Initial Release with 1000 HP, Regeneration, Inventory, and Social logic.
+- 6 Languages support (Basic).
+- Inventory System (9 slots).

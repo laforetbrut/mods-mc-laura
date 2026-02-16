@@ -3,6 +3,9 @@ package com.vyrriox.lauramod.event;
 import com.vyrriox.lauramod.LauraMod;
 import com.vyrriox.lauramod.entity.LauraEntity;
 import com.vyrriox.lauramod.init.ModEntities;
+import com.vyrriox.lauramod.init.ModSounds;
+import com.vyrriox.lauramod.util.InteractionDatabase;
+import com.vyrriox.lauramod.util.LauraWorldData;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.ServerChatEvent;
@@ -20,12 +23,10 @@ public class ChatEvents {
         if (message.contains("je me sens seul") || message.contains("i feel lonely")
                 || message.contains("ich fühle mich einsam") || message.contains("me siento solo")
                 || message.contains("mi sento solo") || message.contains("eu me sinto sozinho")) {
-            // Anti-duplication check
-            boolean alreadyHasLaura = player.level()
-                    .getEntitiesOfClass(LauraEntity.class, player.getBoundingBox().inflate(1000)).stream()
-                    .anyMatch(l -> l.isOwnedBy(player));
+            // Anti-duplication check (Global World-Wide)
+            LauraWorldData data = LauraWorldData.get(player.level());
 
-            if (alreadyHasLaura) {
+            if (data.exists()) {
                 player.sendSystemMessage(Component.literal(
                         "<Laura> " + InteractionDatabase.getStaticString(player.getLanguage(), "already_here")));
             } else {

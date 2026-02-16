@@ -21,6 +21,10 @@ public class LauraInventoryMenu extends AbstractContainerMenu {
         this(id, playerInventory, new SimpleContainer(9));
     }
 
+    public LauraInventoryMenu(int id, Inventory playerInventory, net.minecraft.network.FriendlyByteBuf buf) {
+        this(id, playerInventory, new SimpleContainer(9));
+    }
+
     public LauraInventoryMenu(int id, Inventory playerInventory, Container container) {
         super(ModMenus.LAURA_INVENTORY.get(), id);
         checkContainerSize(container, 9);

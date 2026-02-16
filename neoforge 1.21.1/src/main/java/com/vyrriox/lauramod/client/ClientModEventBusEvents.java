@@ -5,11 +5,13 @@ import com.vyrriox.lauramod.client.gui.LauraInventoryScreen;
 import com.vyrriox.lauramod.client.renderer.LauraRenderer;
 import com.vyrriox.lauramod.init.ModEntities;
 import com.vyrriox.lauramod.init.ModMenus;
+import com.vyrriox.lauramod.inventory.LauraInventoryMenu;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
 @EventBusSubscriber(modid = LauraMod.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientModEventBusEvents {
@@ -20,9 +22,7 @@ public class ClientModEventBusEvents {
     }
 
     @SubscribeEvent
-    public static void onClientSetup(net.neoforged.fml.event.lifecycle.FMLClientSetupEvent event) {
-        event.enqueueWork(() -> {
-            MenuScreens.register(ModMenus.LAURA_INVENTORY.get(), LauraInventoryScreen::new);
-        });
+    public static void registerScreens(RegisterMenuScreensEvent event) {
+        event.register(ModMenus.LAURA_INVENTORY.get(), LauraInventoryScreen::new);
     }
 }

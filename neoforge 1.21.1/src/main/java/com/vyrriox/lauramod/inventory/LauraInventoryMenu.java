@@ -13,11 +13,7 @@ import net.minecraft.world.item.ItemStack;
 public class LauraInventoryMenu extends AbstractContainerMenu {
     private final Container container;
 
-    public LauraInventoryMenu(int id, Inventory playerInventory) {
-        this(id, playerInventory, new SimpleContainer(9));
-    }
-
-    public LauraInventoryMenu(int id, Inventory playerInventory, RegistryFriendlyByteBuf buf) {
+    public LauraInventoryMenu(int id, Inventory playerInventory, net.minecraft.network.FriendlyByteBuf buf) {
         this(id, playerInventory, new SimpleContainer(9));
     }
 

@@ -14,6 +14,8 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
@@ -53,9 +55,10 @@ public class LauraEntity extends TamableAnimal implements MenuProvider {
     private int lastHitTick = 0;
     private int loveCheckCooldown = 12000; // 10 minutes average
     private int fartCooldown = 24000; // 20 minutes average
-    private int chatterTimer = 0;
-    private boolean isWaitingForLoveResponse = false;
     private int loveResponseTimer = 0;
+    private int stuckTimer = 0;
+    private int hourlyHitTimer = 72000;
+    private boolean isWaitingForLoveResponse = false;
 
     public LauraEntity(EntityType<? extends TamableAnimal> entityType, Level level) {
         super(entityType, level);
@@ -73,6 +76,9 @@ public class LauraEntity extends TamableAnimal implements MenuProvider {
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putString("SkinUrl", this.getSkinUrl());
+        compound.putBoolean("IsSad", this.isSad());
+        compound.putInt("SadnessTimer", this.entityData.get(SADNESS_TIMER));
+        compound.putInt("HourlyHitTimer", this.hourlyHitTimer);
         compound.put("Inventory", this.inventory.createTag());
     }
 
@@ -81,6 +87,15 @@ public class LauraEntity extends TamableAnimal implements MenuProvider {
         super.readAdditionalSaveData(compound);
         if (compound.contains("SkinUrl")) {
             this.setSkinUrl(compound.getString("SkinUrl"));
+        }
+        if (compound.contains("IsSad")) {
+            this.setSad(compound.getBoolean("IsSad"));
+        }
+        if (compound.contains("SadnessTimer")) {
+            this.entityData.set(SADNESS_TIMER, compound.getInt("SadnessTimer"));
+        }
+        if (compound.contains("HourlyHitTimer")) {
+            this.hourlyHitTimer = compound.getInt("HourlyHitTimer");
         }
         if (compound.contains("Inventory")) {
             this.inventory.fromTag(compound.getList("Inventory", 10));
@@ -111,7 +126,8 @@ public class LauraEntity extends TamableAnimal implements MenuProvider {
                 return super.canUse() || LauraEntity.this.isSad();
             }
         });
-        this.goalSelector.addGoal(2, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false) {
+        this.goalSelector.addGoal(2, new FollowOwnerGoal(this, 1.0D, 8.0F, 4.0F, false) { // Starts at 8, stops at 4
+                                                                                          // (approx 6 avg)
             @Override
             public boolean canUse() {
                 return super.canUse() && !LauraEntity.this.isSad();
@@ -161,6 +177,18 @@ public class LauraEntity extends TamableAnimal implements MenuProvider {
                 this.heal(1.0F);
             }
 
+            // Global World Registration check
+            LauraWorldData data = LauraWorldData.get(this.level());
+            if (!data.exists() || !this.getUUID().equals(data.getLauraUUID())) {
+                if (!data.exists()) {
+                    data.setExists(true, this.getUUID());
+                } else {
+                    // Another Laura exists elsewhere or this one isn't the registered one
+                    this.discard();
+                    return;
+                }
+            }
+
             // Sadness timer
             int timer = this.entityData.get(SADNESS_TIMER);
             if (timer > 0) {
@@ -200,6 +228,33 @@ public class LauraEntity extends TamableAnimal implements MenuProvider {
                 if (owner instanceof ServerPlayer serverPlayer && this.distanceTo(owner) < 5) {
                     owner.sendSystemMessage(Component.literal(
                             "<Laura> " + InteractionDatabase.getStaticString(serverPlayer.getLanguage(), "fart")));
+                }
+            }
+
+            // Stuck detection
+            Player owner = (Player) this.getOwner();
+            if (owner instanceof ServerPlayer serverPlayer && !this.isOrderedToSit() && !this.isSad()) {
+                double dist = this.distanceTo(owner);
+                if (dist > 10 && this.getDeltaMovement().lengthSqr() < 0.001) {
+                    stuckTimer++;
+                    if (stuckTimer >= 200) { // 10 seconds stuck
+                        owner.sendSystemMessage(Component.literal(
+                                "<Laura> " + InteractionDatabase.getStaticString(serverPlayer.getLanguage(), "stuck")));
+                        stuckTimer = 0;
+                    }
+                } else {
+                    stuckTimer = 0;
+                }
+
+                // Hourly playful hit
+                hourlyHitTimer--;
+                if (hourlyHitTimer <= 0) {
+                    hourlyHitTimer = 72000;
+                    if (dist < 3) {
+                        this.doHurtTarget(owner);
+                        owner.sendSystemMessage(Component.literal("<Laura> "
+                                + InteractionDatabase.getStaticString(serverPlayer.getLanguage(), "oops_sorry")));
+                    }
                 }
             }
         }
@@ -312,9 +367,32 @@ public class LauraEntity extends TamableAnimal implements MenuProvider {
         return new LauraInventoryMenu(id, playerInventory, this.inventory);
     }
 
+    @Override
+    public void die(DamageSource source) {
+        super.die(source);
+        if (!this.level().isClientSide) {
+            LauraWorldData.get(this.level()).setExists(false, null);
+        }
+    }
+
+    @Override
+    public void onRemovedFromWorld() {
+        super.onRemovedFromWorld();
+    }
+
     @Nullable
     @Override
-    public AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
-        return null;
+    public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob other) {
+        return null; // Laura cannot breed
+    }
+
+    @Override
+    public boolean canChangeDimensions() {
+        return true;
+    }
+
+    @Override
+    public int getPortalWaitTime() {
+        return 40; // 2 seconds
     }
 }

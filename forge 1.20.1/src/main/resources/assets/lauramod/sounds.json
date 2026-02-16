@@ -4,27 +4,28 @@
         "sounds": [
             "lauramod:laura_ambient_1",
             "lauramod:laura_ambient_2",
-            "lauramod:laura_ambient_3"
+            "lauramod:laura_ambient_3",
+            "lauramod:laura_ambient_4",
+            "lauramod:laura_ambient_5",
+            "lauramod:laura_ambient_6"
         ]
     },
     "laura_fart": {
         "category": "neutral",
         "sounds": [
-            "lauramod:laura_fart"
+            "lauramod:laura_fart_1"
         ]
     },
     "laura_happy": {
         "category": "neutral",
         "sounds": [
-            "lauramod:laura_happy_1",
-            "lauramod:laura_happy_2"
+            "lauramod:laura_happy_1"
         ]
     },
     "laura_sad": {
         "category": "neutral",
         "sounds": [
-            "lauramod:laura_sad_1",
-            "lauramod:laura_sad_2"
+            "lauramod:laura_sad_1"
         ]
     },
     "laura_angry": {

@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LauraRenderer extends HumanoidMobRenderer<LauraEntity, PlayerModel<LauraEntity>> {
-    private static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(LauraMod.MODID,
+    private static final ResourceLocation DEFAULT_TEXTURE = ResourceLocation.fromNamespaceAndPath(LauraMod.MODID,
             "textures/entity/laura.png");
     private static final Map<String, ResourceLocation> SKIN_CACHE = new HashMap<>();
 
@@ -37,7 +37,7 @@ public class LauraRenderer extends HumanoidMobRenderer<LauraEntity, PlayerModel<
     private ResourceLocation registerSkin(String url) {
         try {
             String hash = Integer.toHexString(url.hashCode());
-            ResourceLocation location = new ResourceLocation(LauraMod.MODID, "skins/" + hash);
+            ResourceLocation location = ResourceLocation.fromNamespaceAndPath(LauraMod.MODID, "skins/" + hash);
             TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 
             if (textureManager.getTexture(location) == null) {

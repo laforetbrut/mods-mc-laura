@@ -3,6 +3,7 @@ package com.vyrriox.lauramod.entity.ai;
 import com.vyrriox.lauramod.entity.LauraEntity;
 import com.vyrriox.lauramod.util.InteractionDatabase;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
 

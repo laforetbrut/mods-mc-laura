@@ -2,6 +2,7 @@ package com.vyrriox.lauramod.init;
 
 import com.vyrriox.lauramod.LauraMod;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -20,7 +21,7 @@ public class ModSounds {
 
     private static RegistryObject<SoundEvent> registerSoundEvent(String name) {
         return SOUND_EVENTS.register(name,
-                () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(LauraMod.MODID, name)));
+                () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(LauraMod.MODID, name)));
     }
 
     public static void register(IEventBus eventBus) {
