@@ -1,0 +1,10 @@
+{
+    "laura_ambient": {
+        "category": "neutral",
+        "sounds": [
+            "lauramod:laura_ambient_1",
+            "lauramod:laura_ambient_2",
+            "lauramod:laura_ambient_3"
+        ]
+    }
+}
