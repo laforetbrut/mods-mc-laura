@@ -10,6 +10,7 @@ import java.util.EnumSet;
 
 public class ChatterGoal extends Goal {
     private final LauraEntity laura;
+    private int chatterTimer = 12000; // 10 minutes
 
     public ChatterGoal(LauraEntity laura) {
         this.laura = laura;
@@ -18,10 +19,23 @@ public class ChatterGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        Player owner = (Player) laura.getOwner();
-        if (owner != null) {
-            owner.sendSystemMessage(Component.literal("<Laura> " + InteractionDatabase.getRandomMessage()));
+        if (laura.isTame() && !laura.isSad() && laura.getOwner() != null) {
+            if (chatterTimer > 0) {
+                chatterTimer--;
+                return false;
+            }
+            return true;
         }
-        cooldown = 2400; // 2 minutes min between chatter
+        return false;
+    }
+
+    @Override
+    public void start() {
+        Player owner = (Player) laura.getOwner();
+        if (owner instanceof ServerPlayer serverPlayer) {
+            owner.sendSystemMessage(
+                    Component.literal("<Laura> " + InteractionDatabase.getRandomMessage(serverPlayer.getLanguage())));
+        }
+        chatterTimer = 12000; // Reset to 10 minutes
     }
 }

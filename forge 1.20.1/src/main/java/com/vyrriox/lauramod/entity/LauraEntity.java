@@ -13,13 +13,17 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -31,12 +35,27 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class LauraEntity extends TamableAnimal implements MenuProvider {
     private static final EntityDataAccessor<String> SKIN_URL = SynchedEntityData.defineId(LauraEntity.class,
             EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<Boolean> IS_SAD = SynchedEntityData.defineId(LauraEntity.class,
+            EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> SADNESS_TIMER = SynchedEntityData.defineId(LauraEntity.class,
+            EntityDataSerializers.INT);
+
     private final SimpleContainer inventory = new SimpleContainer(9);
+    private int aggressionLevel = 0;
+    private int lastHitTick = 0;
+    private int loveCheckCooldown = 12000; // 10 minutes average
+    private int fartCooldown = 24000; // 20 minutes average
+    private int chatterTimer = 0;
+    private boolean isWaitingForLoveResponse = false;
+    private int loveResponseTimer = 0;
 
     public LauraEntity(EntityType<? extends TamableAnimal> entityType, Level level) {
         super(entityType, level);
@@ -46,6 +65,8 @@ public class LauraEntity extends TamableAnimal implements MenuProvider {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(SKIN_URL, "");
+        this.entityData.define(IS_SAD, false);
+        this.entityData.define(SADNESS_TIMER, 0);
     }
 
     @Override
@@ -76,7 +97,7 @@ public class LauraEntity extends TamableAnimal implements MenuProvider {
 
     public static AttributeSupplier.Builder createAttributes() {
         return TamableAnimal.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 20.0D)
+                .add(Attributes.MAX_HEALTH, 1000.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.3D)
                 .add(Attributes.ATTACK_DAMAGE, 1.0D);
     }
@@ -84,16 +105,152 @@ public class LauraEntity extends TamableAnimal implements MenuProvider {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new SitWhenOrderedToGoal(this));
-        this.goalSelector.addGoal(2, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
+        this.goalSelector.addGoal(1, new SitWhenOrderedToGoal(this) {
+            @Override
+            public boolean canUse() {
+                return super.canUse() || LauraEntity.this.isSad();
+            }
+        });
+        this.goalSelector.addGoal(2, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false) {
+            @Override
+            public boolean canUse() {
+                return super.canUse() && !LauraEntity.this.isSad();
+            }
+        });
         this.goalSelector.addGoal(3, new ComplainGoal(this));
-        this.goalSelector.addGoal(3, new ChatterGoal(this));
+        this.goalSelector.addGoal(3, new ChatterGoal(this) {
+            @Override
+            public boolean canUse() {
+                return super.canUse() && !LauraEntity.this.isSad();
+            }
+        });
         this.goalSelector.addGoal(4, new LauraSleepGoal(this));
         this.goalSelector.addGoal(5, new ScareVillagersGoal(this));
         this.goalSelector.addGoal(6, new AvoidEntityGoal<>(this, Monster.class, 8.0F, 0.6D, 1.0D));
-        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D) {
+            @Override
+            public boolean canUse() {
+                return super.canUse() && !LauraEntity.this.isSad();
+            }
+        });
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
+    }
+
+    public boolean isSad() {
+        return this.entityData.get(IS_SAD);
+    }
+
+    public void setSad(boolean sad) {
+        this.entityData.set(IS_SAD, sad);
+        if (sad) {
+            this.setOrderedToSit(true);
+            this.entityData.set(SADNESS_TIMER, 3600); // 3 minutes
+        } else {
+            this.entityData.set(SADNESS_TIMER, 0);
+            this.aggressionLevel = 0;
+        }
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        if (!this.level().isClientSide) {
+            // Rapid Regeneration: 1 HP per tick
+            if (this.getHealth() < this.getMaxHealth()) {
+                this.heal(1.0F);
+            }
+
+            // Sadness timer
+            int timer = this.entityData.get(SADNESS_TIMER);
+            if (timer > 0) {
+                this.entityData.set(SADNESS_TIMER, timer - 1);
+                if (timer - 1 <= 0) {
+                    this.setSad(false);
+                }
+            }
+
+            // Aggression reset
+            if (this.tickCount - lastHitTick > 600) { // 30 seconds
+                this.aggressionLevel = 0;
+            }
+
+            // Love Check
+            if (this.isTame() && !this.isSad() && this.random.nextInt(loveCheckCooldown) == 0) {
+                Player owner = (Player) this.getOwner();
+                if (owner instanceof ServerPlayer serverPlayer && this.distanceTo(owner) < 10) {
+                    owner.sendSystemMessage(Component.literal("<Laura> "
+                            + InteractionDatabase.getStaticString(serverPlayer.getLanguage(), "love_check")));
+                    this.isWaitingForLoveResponse = true;
+                    this.loveResponseTimer = 600; // 30 seconds to answer
+                }
+            }
+
+            if (this.isWaitingForLoveResponse) {
+                this.loveResponseTimer--;
+                if (this.loveResponseTimer <= 0) {
+                    this.isWaitingForLoveResponse = false;
+                }
+            }
+
+            // Fart (extremely rare)
+            if (this.random.nextInt(fartCooldown) == 0) {
+                this.playSound(ModSounds.LAURA_FART.get(), 1.0F, 1.0F);
+                Player owner = (Player) this.getOwner();
+                if (owner instanceof ServerPlayer serverPlayer && this.distanceTo(owner) < 5) {
+                    owner.sendSystemMessage(Component.literal(
+                            "<Laura> " + InteractionDatabase.getStaticString(serverPlayer.getLanguage(), "fart")));
+                }
+            }
+        }
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (source.getEntity() instanceof ServerPlayer player && this.isOwnedBy(player)) {
+            this.aggressionLevel++;
+            this.lastHitTick = this.tickCount;
+            if (this.aggressionLevel >= 3) {
+                this.setSad(true);
+                this.playSound(ModSounds.LAURA_SAD.get(), 1.0F, 1.0F);
+                player.sendSystemMessage(Component
+                        .literal("<Laura> " + InteractionDatabase.getStaticString(player.getLanguage(), "sad")));
+            } else {
+                this.playSound(ModSounds.LAURA_ANGRY.get(), 1.0F, 1.0F);
+                player.sendSystemMessage(Component
+                        .literal("<Laura> " + InteractionDatabase.getStaticString(player.getLanguage(), "angry")));
+            }
+        }
+        return super.hurt(source, amount);
+    }
+
+    public void handleLoveResponse(boolean loved) {
+        this.isWaitingForLoveResponse = false;
+        Player owner = (Player) this.getOwner();
+        if (owner instanceof ServerPlayer serverPlayer) {
+            String locale = serverPlayer.getLanguage();
+            if (loved) {
+                this.playSound(ModSounds.LAURA_HAPPY.get(), 1.0F, 1.0F);
+                owner.sendSystemMessage(
+                        Component.literal("<Laura> " + InteractionDatabase.getStaticString(locale, "love_yes")));
+                for (int i = 0; i < 7; ++i) {
+                    double d0 = this.random.nextGaussian() * 0.02D;
+                    double d1 = this.random.nextGaussian() * 0.02D;
+                    double d2 = this.random.nextGaussian() * 0.02D;
+                    this.level().addParticle(net.minecraft.core.particles.ParticleTypes.HEART, this.getRandomX(1.0D),
+                            this.getRandomY() + 0.5D, this.getRandomZ(1.0D), d0, d1, d2);
+                }
+            } else {
+                this.setSad(true);
+                this.playSound(ModSounds.LAURA_SAD.get(), 1.0F, 1.0F);
+                owner.sendSystemMessage(
+                        Component.literal("<Laura> " + InteractionDatabase.getStaticString(locale, "love_no")));
+            }
+        }
+    }
+
+    public boolean isWaitingForLoveResponse() {
+        return isWaitingForLoveResponse;
     }
 
     @Override

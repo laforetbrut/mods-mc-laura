@@ -6,5 +6,32 @@
             "lauramod:laura_ambient_2",
             "lauramod:laura_ambient_3"
         ]
+    },
+    "laura_fart": {
+        "category": "neutral",
+        "sounds": [
+            "lauramod:laura_fart"
+        ]
+    },
+    "laura_happy": {
+        "category": "neutral",
+        "sounds": [
+            "lauramod:laura_happy_1",
+            "lauramod:laura_happy_2"
+        ]
+    },
+    "laura_sad": {
+        "category": "neutral",
+        "sounds": [
+            "lauramod:laura_sad_1",
+            "lauramod:laura_sad_2"
+        ]
+    },
+    "laura_angry": {
+        "category": "neutral",
+        "sounds": [
+            "lauramod:laura_angry_1",
+            "lauramod:laura_angry_2"
+        ]
     }
 }

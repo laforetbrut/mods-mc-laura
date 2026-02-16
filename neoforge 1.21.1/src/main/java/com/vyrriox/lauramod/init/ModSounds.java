@@ -14,6 +14,10 @@ public class ModSounds {
             .create(BuiltInRegistries.SOUND_EVENT, LauraMod.MODID);
 
     public static final Supplier<SoundEvent> LAURA_AMBIENT = registerSoundEvent("laura_ambient");
+    public static final Supplier<SoundEvent> LAURA_FART = registerSoundEvent("laura_fart");
+    public static final Supplier<SoundEvent> LAURA_HAPPY = registerSoundEvent("laura_happy");
+    public static final Supplier<SoundEvent> LAURA_SAD = registerSoundEvent("laura_sad");
+    public static final Supplier<SoundEvent> LAURA_ANGRY = registerSoundEvent("laura_angry");
 
     private static Supplier<SoundEvent> registerSoundEvent(String name) {
         return SOUND_EVENTS.register(name,

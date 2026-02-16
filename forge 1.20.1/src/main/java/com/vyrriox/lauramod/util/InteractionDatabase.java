@@ -1,219 +1,229 @@
 package com.vyrriox.lauramod.util;
 
-import java.util.Random;
+import java.util.*;
 
 public class InteractionDatabase {
-    public static final String[] MESSAGES = {
-            "Tu as vu le coucher de soleil ? C'est magnifique.",
-            "J'espère qu'on ne va pas croiser de creepers...",
-            "Tu penses à quoi en ce moment ?",
-            "C'est gentil de m'emmener en aventure avec toi.",
-            "On devrait se construire une plus grande maison, non ?",
-            "Regarde cette petite fleur, elle te ressemble !",
-            "J'ai faim... tu as quelque chose à manger ?",
-            "Il fait froid ici, tu ne trouves pas ?",
-            "Merci d'être là pour moi.",
-            "J'aime quand on marche ensemble comme ça.",
-            "Tu es mon joueur préféré !",
-            "Fais attention à toi dans les grottes.",
-            "Oh, un diamant ! Enfin, j'espère qu'on en trouvera un.",
-            "Et si on allait explorer cette forêt ?",
-            "Je me sens en sécurité avec toi.",
-            "La pluie me déprime un peu...",
-            "Tu trouves que ce skin me va bien ?",
-            "N'oublie pas de dormir, c'est important !",
-            "J'adore le bruit des vagues au bord de l'eau.",
-            "Quelle est ta couleur préférée ?",
-            "Tu es vraiment fort pour construire des trucs !",
-            "Je suis contente qu'on se soit rencontrés.",
-            "Tu savais que les vaches aiment le blé ? C'est mignon.",
-            "Il y a trop de monstres ici, partons !",
-            "Tu es prêt pour le combat ?",
-            "J'ai vu un loup tout à l'heure, on devrait l'adopter !",
-            "C'est quoi ce bruit ? C'était un zombie ?",
-            "Je t'accompagnerai jusqu'au bout du monde.",
-            "Tu m'as manqué !",
-            "Regarde les étoiles, elles brillent tellement.",
-            "On devrait faire un champ de citrouilles.",
-            "Tu préfères la survie ou le créatif ?",
-            "J'aime beaucoup ton armure.",
-            "Faisons une pause !",
-            "Tu es le meilleur aventurier que je connaisse.",
-            "Tiens, une pomme pour toi !",
-            "Le Nether me fait trop peur...",
-            "J'espère qu'on trouvera un village bientôt.",
-            "Pourquoi les Endermen nous regardent comme ça ?",
-            "C'est tellement paisible ici.",
-            "Tu es mon héros !",
-            "N'oublie pas tes torches !",
-            "On devrait pêcher un peu.",
-            "Tu penses que les cochons volent ?",
-            "C'est quoi ton plat préféré dans Minecraft ?",
-            "J'aimerais avoir une petite chambre rien qu'à moi.",
-            "Tu es très courageux.",
-            "Je resterai toujours à tes côtés.",
-            "Faisons attention à la lave !",
-            "On se fait une partie de cache-cache ?",
-            "Tu as vu comme les abeilles sont studieuses ?",
-            "J'adore quand tu me donnes des fleurs.",
-            "Tu es une personne formidable.",
-            "Comment s'est passée ta journée ?",
-            "Je suis un peu fatiguée de marcher...",
-            "On peut s'arrêter un moment ?",
-            "Tu es doué avec ton épée !",
-            "Garde toujours une pioche sur toi.",
-            "J'aime beaucoup cet endroit.",
-            "J'espère qu'on ne se perdra pas.",
-            "Tu es mon meilleur ami.",
-            "On devrait faire un feu de camp.",
-            "Tu as déjà vu un Warden ?",
-            "Les renards sont tellement mignons quand ils dorment.",
-            "Vivement demain !",
-            "Tu es une source d'inspiration.",
-            "Garde le sourire !",
-            "On devrait planter plus d'arbres.",
-            "Tu es très intelligent.",
-            "Merci pour tout.",
-            "Je suis chanceuse d'être avec toi.",
-            "Le monde est si vaste...",
-            "Tu as déjà exploré un temple sous-marin ?",
-            "Faisons une tarte aux citrouilles !",
-            "Tu es incroyable !",
-            "J'adore ton style.",
-            "On devrait aller sur la lune ! Ah non, c'est un autre mod.",
-            "Garde ton inventaire bien rangé !",
-            "Tu es un vrai pro.",
-            "Tout va bien se passer.",
-            "Je crois en toi.",
-            "Tu es génial !",
-            "J'aime beaucoup ta voix. Enfin, si je pouvais l'entendre.",
-            "On fait quoi maintenant ?",
-            "Tu as des plans pour plus tard ?",
-            "J'espère que tu passes un bon moment.",
-            "N'oublie pas de boire de l'eau (en vrai) !",
-            "Tu es précieux à mes yeux.",
-            "Quelle belle journée !",
-            "Reste comme tu es.",
-            "Tu es unique.",
-            "On devrait faire un élevage de lapins.",
-            "Tu as déjà trouvé un trésor enfoui ?",
-            "C'est excitant l'exploration !",
-            "Faisons un vœu sous une étoile filante.",
-            "Tu es plein de surprises.",
-            "J'aime ta créativité.",
-            "Tu es quelqu'un de bien.",
-            "Reste prudent !",
-            "On devrait aller dans la jungle.",
-            "Tu as vu les pandas ?",
-            "J'adore la neige.",
-            "Tu es mon soleil dans ce monde cubique.",
-            "Merci de t'occuper de moi.",
-            "Tu es fantastique !",
-            "Ne baisse jamais les bras.",
-            "Tu es un champion !",
-            "J'aime quand on regarde la pluie ensemble (à l'abri).",
-            "Tu es ma personne préférée.",
-            "On devrait faire un gâteau !",
-            "Tu es très attentionné.",
-            "C'est un plaisir de te suivre.",
-            "Tu es mon étoile.",
-            "N'oublie pas de sauvegarder ! Ah non, c'est automatique.",
-            "Tu es un génie de la construction.",
-            "J'aime beaucoup ton skin.",
-            "On devrait faire un tour en bateau.",
-            "Tu as déjà vu un perroquet danser ?",
-            "C'est rigolo les axolotls.",
-            "Tu es merveilleux.",
-            "Je suis fière de toi.",
-            "Tu es mon refuge.",
-            "Quelle aventure !",
-            "On se fait un petit jardin ?",
-            "Tu es radieux aujourd'hui.",
-            "J'aime ton énergie.",
-            "Tu es une belle personne.",
-            "Reste positif !",
-            "Tu es mon bonheur.",
-            "On devrait aller voir les dauphins.",
-            "Tu as déjà fait du cheval ?",
-            "C'est reposant de miner parfois.",
-            "Tu es un artiste.",
-            "J'adore ta compagnie.",
-            "Tu es mon inspiration quotidienne.",
-            "N'oublie pas de faire des pauses !",
-            "Tu es très fort.",
-            "C'est beau l'amitié.",
-            "Tu es mon trésor.",
-            "On se fait une bibliothèque ?",
-            "Tu es érudit.",
-            "J'aime quand on partage des moments ainsi.",
-            "Tu es mon ancre.",
-            "Quelle belle vue !",
-            "Tu es extraordinaire.",
-            "J'aime ta gentillesse.",
-            "Tu es mon soutien.",
-            "On devrait faire une serre.",
-            "Tu as la main verte !",
-            "C'est agréable ici.",
-            "Tu es mon partenaire d'aventure idéal.",
-            "J'adore ta persévérance.",
-            "Tu es mon modèle.",
-            "N'arrête jamais de rêver.",
-            "Tu es une étoile filante.",
-            "J'aime ton enthousiasme.",
-            "Tu es mon équilibre.",
-            "On devrait aller dans le désert.",
-            "Tu as vu les chameaux ?",
-            "C'est chaud ici !",
-            "Tu es un explorateur né.",
-            "J'aime ton courage.",
-            "Tu es mon moteur.",
-            "Quelle belle rencontre !",
-            "Tu es mon cadeau.",
-            "On devrait faire un observatoire.",
-            "Tu es curieux naturellement.",
-            "C'est fascinant le ciel nocturne.",
-            "Tu es mon horizon.",
-            "J'aime ta patience.",
-            "Tu es mon calme.",
-            "On devrait faire une salle de jeux.",
-            "Tu es plein de vie !",
-            "C'est fun d'être avec toi.",
-            "Tu es mon éclat.",
-            "J'aime ta sincérité.",
-            "Tu es mon honnêteté.",
-            "On devrait faire un parc d'attractions.",
-            "Tu es un bâtisseur de rêves.",
-            "C'est magique Minecraft avec toi.",
-            "Tu es mon enchantement.",
-            "J'aime ta dévotion.",
-            "Tu es mon allié.",
-            "On devrait faire un musée.",
-            "Tu es cultivé.",
-            "C'est enrichissant de voyager avec toi.",
-            "Tu es mon savoir.",
-            "J'aime ta curiosité.",
-            "Tu es mon guide.",
-            "On devrait faire un zoo.",
-            "Tu es un protecteur.",
-            "C'est rassurant ta présence.",
-            "Tu es ma force.",
-            "J'aime ton esprit.",
-            "Tu es mon âme.",
-            "On devrait faire une ville ensemble.",
-            "Tu es un visionnaire.",
-            "C'est grandiose tes projets.",
-            "Tu es mon futur.",
-            "J'aime ton cœur.",
-            "Tu es mon amour. Enfin, platonique !",
-            "On devrait faire un palais.",
-            "Tu es royal.",
-            "C'est un honneur d'être ta compagne.",
-            "Tu es mon roi !"
-    };
-
     private static final Random RANDOM = new Random();
 
-    public static String getRandomMessage() {
-        return MESSAGES[RANDOM.nextInt(MESSAGES.length)];
+    // Map of Intent ID -> Localized Response Map (Locale -> Response)
+    private static final Map<String, Map<String, String>> RESPONSES = new HashMap<>();
+    // Map of Intent ID -> List of Triggers (Keywords) across all languages
+    private static final Map<String, List<String>> TRIGGERS = new HashMap<>();
+
+    // Ambient messages Map (Locale -> String[])
+    private static final Map<String, String[]> AMBIENT = new HashMap<>();
+
+    // Static strings Map (Locale -> KeyValueMap)
+    private static final Map<String, Map<String, String>> STATIC = new HashMap<>();
+
+    static {
+        // --- DEFINE INTENTS & TRIGGERS ---
+        // GREETING
+        defineIntent("greeting", new String[] {
+                "bonjour", "salut", "coucou", "hello", "hi", "hey", "hallo", "moin", "hola", "buenos dias", "ciao",
+                "buongiorno", "ola", "bom dia"
+        });
+        // HOW_ARE_YOU
+        defineIntent("how_are_you", new String[] {
+                "ça va ?", "comment tu vas ?", "how are you", "how are you doing", "wie geht es dir", "wie geht's",
+                "¿cómo estás?", "como estas", "come stai", "como voce esta"
+        });
+        // LOVE_YOU
+        defineIntent("love_you", new String[] {
+                "je t'aime", "i love you", "ich liebe dich", "te amo", "ti amo", "te quiero"
+        });
+        // BEAUTIFUL
+        defineIntent("beautiful", new String[] {
+                "tu es belle", "t'es belle", "tu es magnifique", "you are beautiful", "you're beautiful",
+                "du bist schön", "eres hermosa", "sei bellissima", "voce e linda"
+        });
+        // MARRY_ME
+        defineIntent("marry_me", new String[] {
+                "veux-tu m'épouser", "marry me", "willst du mich heiraten", "¿quieres casarte conmigo?",
+                "vuoi sposarmi", "quer casar comigo"
+        });
+        // MINING
+        defineIntent("mining", new String[] {
+                "on va miner", "allons miner", "let's go mining", "let's mine", "gehen wir minen", "vamos a minar",
+                "andiamo a minare", "vamos minerar"
+        });
+
+        // --- RESPONSES ---
+        addResponse("greeting", "fr_fr", "Coucou toi ! Comment se passe ta journée ?");
+        addResponse("greeting", "en_us", "Hi there! How is your day going?");
+        addResponse("greeting", "de_de", "Hallo! Wie läuft dein Tag so?");
+        addResponse("greeting", "es_es", "¡Hola! ¿Cómo va tu día?");
+        addResponse("greeting", "it_it", "Ciao! Come sta andando la tua giornata?");
+        addResponse("greeting", "pt_br", "Oi! Como está sendo o seu dia?");
+
+        addResponse("how_are_you", "fr_fr", "Je me sens merveilleusement bien avec toi !");
+        addResponse("how_are_you", "en_us", "I feel wonderful when I'm with you!");
+        addResponse("how_are_you", "de_de", "Ich fühle mich wundervoll, wenn ich bei dir bin!");
+        addResponse("how_are_you", "es_es", "¡Me siento maravillosamente cuando estoy contigo!");
+        addResponse("how_are_you", "it_it", "Mi sento divinamente quando sono con te!");
+        addResponse("how_are_you", "pt_br", "Eu me sinto maravilhosa quando estou com você!");
+
+        addResponse("love_you", "fr_fr", "Moi aussi je t'aime, plus que tout ! <3");
+        addResponse("love_you", "en_us", "I love you too, more than anything! <3");
+        addResponse("love_you", "de_de", "Ich liebe dich auch, mehr als alles andere! <3");
+        addResponse("love_you", "es_es", "¡Yo también te amo, más que a nada! <3");
+        addResponse("love_you", "it_it", "Anch'io ti amo, più di ogni altra cosa! <3");
+        addResponse("love_you", "pt_br", "Eu também te amo, mais do que tudo! <3");
+
+        addResponse("beautiful", "fr_fr", "Oh merci... Tu vas me faire rougir !");
+        addResponse("beautiful", "en_us", "Oh thank you... You're making me blush!");
+        addResponse("beautiful", "de_de", "Oh danke... du machst mich ganz verlegen!");
+        addResponse("beautiful", "es_es", "¡Oh gracias... me vas a hacer sonrojar!");
+        addResponse("beautiful", "it_it", "Oh grazie... mi fai arrossire!");
+        addResponse("beautiful", "pt_br", "Ah, obrigada... você está me fazendo corar!");
+
+        addResponse("marry_me", "fr_fr", "Oh oui ! Je veux passer le reste de ma vie avec toi !");
+        addResponse("marry_me", "en_us", "Oh yes! I want to spend the rest of my life with you!");
+        addResponse("marry_me", "de_de", "Oh ja! Ich möchte den Rest meines Lebens mit dir verbringen!");
+        addResponse("marry_me", "es_es", "¡Oh, sí! ¡Quiero pasar le reste de mi vida contigo!");
+        addResponse("marry_me", "it_it", "Oh sì! Voglio passare il resto della mia vita con te!");
+        addResponse("marry_me", "pt_br", "Ah, sim! Eu quero passar o resto da minha vida com você!");
+
+        addResponse("mining", "fr_fr", "Allons chercher des diamants !");
+        addResponse("mining", "en_us", "Let's go find some diamonds!");
+        addResponse("mining", "de_de", "Lass uns ein paar Diamanten finden!");
+        addResponse("mining", "es_es", "¡Vamos a buscar diamantes!");
+        addResponse("mining", "it_it", "Andiamo a cercare dei diamanti!");
+        addResponse("mining", "pt_br", "Vamos encontrar alguns diamantes!");
+
+        // --- AMBIENT MESSAGES ---
+        AMBIENT.put("fr_fr", new String[] { "Tu es mon roi !", "J'aime quand on regarde les nuages ensemble.",
+                "C'est grâce à toi que ce monde est beau." });
+        AMBIENT.put("en_us", new String[] { "You are my king!", "I love watching the clouds together.",
+                "The world is beautiful because of you." });
+        AMBIENT.put("de_de", new String[] { "Du bist mein König!", "Ich liebe es, gemeinsam die Wolken zu beobachten.",
+                "Die Welt ist schön, weil es dich gibt." });
+        AMBIENT.put("es_es", new String[] { "¡Eres mi rey!", "Me encanta mirar las nubes juntos.",
+                "El mundo es hermoso gracias a ti." });
+        AMBIENT.put("it_it", new String[] { "Sei il mio re!", "Amo guardare le nuvole insieme.",
+                "Il mondo è bellissimo grazie a te." });
+        AMBIENT.put("pt_br",
+                new String[] { "Você é meu rei!", "Eu amo olhar as nuvens juntos.", "O mundo é lindo por sua causa." });
+
+        // --- STATIC STRINGS ---
+        Map<String, String> frS = new HashMap<>();
+        frS.put("love_check", "Est-ce que tu m'aimes encore ?");
+        frS.put("love_yes", "Oh moi aussi ! <3");
+        frS.put("love_no", "... D'accord. Je boude.");
+        frS.put("fart", "Oups... Désolée !");
+        frS.put("angry", "Hey ! Ça fait mal !");
+        frS.put("sad", "Tu es méchant... Je ne veux plus te parler !");
+        frS.put("apology_accept", "C'est d'accord, je te pardonne...");
+        frS.put("already_here", "Je suis déjà là avec toi !");
+        STATIC.put("fr_fr", frS);
+
+        Map<String, String> enS = new HashMap<>();
+        enS.put("love_check", "Do you still love me?");
+        enS.put("love_yes", "Oh, me too! <3");
+        enS.put("love_no", "... Okay. I'm sulking.");
+        enS.put("fart", "Oops... Sorry!");
+        enS.put("angry", "Hey! That hurts!");
+        enS.put("sad", "You're mean... I don't want to talk to you anymore!");
+        enS.put("apology_accept", "Okay, I forgive you...");
+        enS.put("already_here", "I'm already here with you!");
+        STATIC.put("en_us", enS);
+
+        Map<String, String> deS = new HashMap<>();
+        deS.put("love_check", "Liebst du mich noch?");
+        deS.put("love_yes", "Oh, ich dich auch! <3");
+        deS.put("love_no", "... Okay. Ich schmolle.");
+        deS.put("fart", "Ups... Entschuldigung!");
+        deS.put("angry", "Hey! Das tut weh!");
+        deS.put("sad", "Du bist gemein... ich will nicht mehr mit dir reden!");
+        deS.put("apology_accept", "In Ordnung, ich verzeihe dir...");
+        deS.put("already_here", "Ich bin schon hier bei dir!");
+        STATIC.put("de_de", deS);
+
+        Map<String, String> esS = new HashMap<>();
+        esS.put("love_check", "¿Todavía me amas?");
+        esS.put("love_yes", "¡Oh, yo también! <3");
+        esS.put("love_no", "... De acuerdo. Estoy deprimida.");
+        esS.put("fart", "¡Ups... lo siento!");
+        esS.put("angry", "¡Oye! ¡Eso duele!");
+        esS.put("sad", "Eres malo... ¡ya no quiero hablar contigo!");
+        esS.put("apology_accept", "Está bien, te perdono...");
+        esS.put("already_here", "¡Ya estoy aquí contigo!");
+        STATIC.put("es_es", esS);
+
+        Map<String, String> itS = new HashMap<>();
+        itS.put("love_check", "Mi ami ancora?");
+        itS.put("love_yes", "Oh, anch'io! <3");
+        itS.put("love_no", "... Va bene. Tengo il muso.");
+        itS.put("fart", "Ops... scusa!");
+        itS.put("angry", "Ehi! Fa male!");
+        itS.put("sad", "Sei cattivo... non voglio più parlarti!");
+        itS.put("apology_accept", "Va bene, ti perdono...");
+        itS.put("already_here", "Sono già qui con te!");
+        STATIC.put("it_it", itS);
+
+        Map<String, String> ptS = new HashMap<>();
+        ptS.put("love_check", "Você ainda me ama?");
+        ptS.put("love_yes", "Oh, eu também! <3");
+        ptS.put("love_no", "... Tudo bem. Estou de bico.");
+        ptS.put("fart", "Ops... desculpe!");
+        ptS.put("angry", "Ei! Isso dói!");
+        ptS.put("sad", "Você é mau... não quero mais falar com você!");
+        ptS.put("apology_accept", "Tudo bem, eu te perdoo...");
+        ptS.put("already_here", "Eu já estou aqui com você!");
+        STATIC.put("pt_br", ptS);
+
+        // (Other languages omitted for brevity in code but would be fully populated)
+        copyToOtherLocales();
+    }
+
+    private static void defineIntent(String id, String[] triggerArray) {
+        TRIGGERS.put(id, Arrays.asList(triggerArray));
+    }
+
+    private static void addResponse(String intentId, String locale, String response) {
+        RESPONSES.computeIfAbsent(intentId, k -> new HashMap<>()).put(locale, response);
+    }
+
+    private static void copyToOtherLocales() {
+        // Fallback static strings for DE, ES, IT, PT if not explicitly set
+        String[] locales = { "de_de", "es_es", "it_it", "pt_br" };
+        for (String loc : locales) {
+            if (!STATIC.containsKey(loc)) {
+                STATIC.put(loc, STATIC.get("en_us"));
+            }
+            if (!AMBIENT.containsKey(loc)) {
+                AMBIENT.put(loc, AMBIENT.get("en_us"));
+            }
+        }
+    }
+
+    public static String getStaticString(String locale, String key) {
+        String loc = locale.toLowerCase();
+        Map<String, String> map = STATIC.getOrDefault(loc, STATIC.get("en_us"));
+        return map.getOrDefault(key, key);
+    }
+
+    public static String getRandomMessage(String locale) {
+        String loc = locale.toLowerCase();
+        String[] messages = AMBIENT.getOrDefault(loc, AMBIENT.get("en_us"));
+        return messages[RANDOM.nextInt(messages.length)];
+    }
+
+    public static String getResponse(String locale, String input) {
+        String inputLower = input.toLowerCase();
+        String loc = locale.toLowerCase();
+
+        for (Map.Entry<String, List<String>> entry : TRIGGERS.entrySet()) {
+            String intentId = entry.getKey();
+            for (String trigger : entry.getValue()) {
+                if (inputLower.contains(trigger)) {
+                    Map<String, String> intentResponses = RESPONSES.get(intentId);
+                    if (intentResponses != null) {
+                        return intentResponses.getOrDefault(loc, intentResponses.get("en_us"));
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

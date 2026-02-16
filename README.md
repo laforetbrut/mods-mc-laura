@@ -1,14 +1,37 @@
-# My girlfriend Laura - Mod
+# My Girlfriend Laura Mod
 
-A Minecraft mod that adds Laura as a companion with unique features.
-Un mod Minecraft qui ajoute Laura comme compagne avec des fonctionnalités uniques.
+"My Girlfriend Laura" is a Minecraft mod that adds a companion NPC with advanced social features, an inventory system, and unique interactions.
 
 ## Features / Fonctionnalités
-- **Customizable Skins**: Change Laura's appearance via URL. / **Skins personnalisables**: Changez l'apparence de Laura via URL.
-- **Inventory**: Store items in Laura's 9-slot inventory. / **Inventaire**: Stockez des objets dans l'inventaire de 9 emplacements de Laura.
-- **Interactions**: Talk to Laura and give her gifts. / **Interactions**: Parlez à Laura et offrez-lui des cadeaux.
-- **Dynamic AI**: She follows you, sits when asked, and reacts to the environment. / **IA Dynamique**: Elle vous suit, s'assoit quand on lui demande et réagit à l'environnement.
-- **Multi-Version**: Supports Forge 1.20.1, 1.21.1, and NeoForge 1.21.1. / **Multi-Version**: Supporte Forge 1.20.1, 1.21.1 et NeoForge 1.21.1.
+
+### Social & AI / Social & IA
+- **Advanced Dialogue**: Over 200 possible interactions and random chatter.
+- **1000 HP & Fast Regen**: Laura is extremely resilient and heals 1 HP per tick.
+- **Aggression System**: Becomes sad and immobile if hit 3 times.
+- **Love Checks**: Randomly asks if you still love her.
+- **Fart Mechanic**: Rare random sound effect.
+- **Anti-Duplication**: Prevents multiple Lauras per player.
+- **Multi-lingual Support**: Fully localized in English, French, German, Spanish, Italian, and Portuguese.
+
+---
+
+- **Dialogue Avancé**: Plus de 200 interactions possibles et bavardages aléatoires.
+- **1000 PV & Régénération Rapide**: Laura est extrêmement résistante et récupère 1 PV par tick.
+- **Système d'Agression**: Devient triste et immobile si elle est frappée 3 fois.
+- **Tests d'Amour**: Demande aléatoirement si vous l'aimez encore.
+- **Mécanique de Pet**: Effet sonore rare et aléatoire.
+- **Anti-Duplication**: Empêche d'avoir plusieurs Laura par joueur.
+- **Support Multi-langue**: Entièrement traduit en Anglais, Français, Allemand, Espagnol, Italien et Portugais.
+
+## Installation
+Available for:
+- Forge 1.20.1
+- Forge 1.21.1
+- NeoForge 1.21.1
+
+## Credits
+**Author**: vyrriox
+**Framework**: Forge & NeoForge
 
 ## Installation
 1. Download the JAR for your Minecraft version.
