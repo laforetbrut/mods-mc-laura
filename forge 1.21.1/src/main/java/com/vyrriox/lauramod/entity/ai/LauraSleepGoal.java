@@ -42,13 +42,18 @@ public class LauraSleepGoal extends Goal {
         }
     }
 
+    
     @Override
     public void tick() {
-        if (owner == null)
-            return;
-        if (laura.distanceToSqr(owner) > 5) {
+        if (owner == null) return;
+        if (laura.distanceToSqr(owner) > 9) {
             laura.getNavigation().moveTo(owner, 1.0);
+            laura.setInSittingPose(false);
+        } else {
+            laura.getNavigation().stop();
+            laura.setInSittingPose(true); // Simulate sleeping by sitting securely near player
         }
-        // TODO: Logic to make her actually lie down or complain about no bed
     }
+    // TODO: ...
+
 }

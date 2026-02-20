@@ -32,22 +32,47 @@ public class LauraRenderer extends HumanoidMobRenderer<LauraEntity, PlayerModel<
         return SKIN_CACHE.computeIfAbsent(url, this::registerSkin);
     }
 
-    private ResourceLocation registerSkin(String url) {
+    
+    private ResourceLocation registerSkin(String urlStr) {
         try {
-            String hash = Integer.toHexString(url.hashCode());
-            ResourceLocation location = new ResourceLocation(LauraMod.MODID, "skins/" + hash);
-            net.minecraft.client.renderer.texture.TextureManager textureManager = net.minecraft.client.Minecraft
-                    .getInstance().getTextureManager();
-
-            if (textureManager.getTexture(location) == null) {
-                java.io.File skinDir = new java.io.File(net.minecraft.client.Minecraft.getInstance().gameDirectory,
-                        "cached_images/skins");
-                skinDir.mkdirs();
-                java.io.File skinFile = new java.io.File(skinDir, hash);
-                textureManager.register(location, new net.minecraft.client.renderer.texture.HttpTexture(skinFile, url,
-                        DEFAULT_TEXTURE, false, null));
+            String hash = Integer.toHexString(urlStr.hashCode());
+            ResourceLocation location;
+            try {
+                // Forge 1.20
+                location = (ResourceLocation) ResourceLocation.class.getConstructor(String.class, String.class).newInstance(LauraMod.MODID, "skins/" + hash);
+            } catch(Exception e) {
+                // Forge/NeoForge 1.21.1
+                location = (ResourceLocation) ResourceLocation.class.getMethod("fromNamespaceAndPath", String.class, String.class).invoke(null, LauraMod.MODID, "skins/" + hash);
             }
-            return location;
+            
+            final ResourceLocation finalLocation = location;
+            net.minecraft.client.renderer.texture.TextureManager tm = net.minecraft.client.Minecraft.getInstance().getTextureManager();
+            if (tm.getTexture(finalLocation) == null) {
+                java.io.File skinDir = new java.io.File(net.minecraft.client.Minecraft.getInstance().gameDirectory, "cached_images/skins");
+                skinDir.mkdirs();
+                java.io.File skinFile = new java.io.File(skinDir, hash + ".png");
+
+                if (!skinFile.exists()) {
+                    new Thread(() -> {
+                        try {
+                            java.net.HttpURLConnection conn = (java.net.HttpURLConnection) new java.net.URL(urlStr).openConnection();
+                            conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
+                            conn.connect();
+                            try (java.io.InputStream in = conn.getInputStream(); java.io.FileOutputStream out = new java.io.FileOutputStream(skinFile)) {
+                                byte[] buffer = new byte[1024];
+                                int len;
+                                while ((len = in.read(buffer)) > 0) out.write(buffer, 0, len);
+                            }
+                            net.minecraft.client.Minecraft.getInstance().execute(() -> {
+                                tm.register(finalLocation, new net.minecraft.client.renderer.texture.HttpTexture(skinFile, urlStr, DEFAULT_TEXTURE, false, null));
+                            });
+                        } catch (Exception e) {}
+                    }).start();
+                } else {
+                    tm.register(finalLocation, new net.minecraft.client.renderer.texture.HttpTexture(skinFile, urlStr, DEFAULT_TEXTURE, false, null));
+                }
+            }
+            return finalLocation;
         } catch (Exception e) {
             return DEFAULT_TEXTURE;
         }

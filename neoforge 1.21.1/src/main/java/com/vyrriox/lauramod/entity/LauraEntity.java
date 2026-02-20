@@ -110,7 +110,7 @@ public class LauraEntity extends TamableAnimal implements MenuProvider {
     public static AttributeSupplier.Builder createAttributes() {
         return TamableAnimal.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 1000.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.3D)
+                .add(Attributes.MOVEMENT_SPEED, 0.4D)
                 .add(Attributes.ATTACK_DAMAGE, 1.0D);
     }
 
@@ -269,6 +269,9 @@ public class LauraEntity extends TamableAnimal implements MenuProvider {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
+        boolean success = super.hurt(source, amount);
+        if (!success) return false;
+
         if (source.getEntity() instanceof ServerPlayer player && this.isOwnedBy(player)) {
             this.aggressionLevel++;
             this.lastHitTick = this.tickCount;
@@ -283,7 +286,7 @@ public class LauraEntity extends TamableAnimal implements MenuProvider {
                         .literal("<§dLaura§r> " + InteractionDatabase.getStaticString(player.getLanguage(), "angry")));
             }
         }
-        return super.hurt(source, amount);
+        return true;
     }
 
     @Override
@@ -373,6 +376,10 @@ public class LauraEntity extends TamableAnimal implements MenuProvider {
 
     @Nullable
     @Override
+    public int getAmbientSoundInterval() {
+        return 400; // Drastically reduce ambient sound frequency
+    }
+
     protected SoundEvent getAmbientSound() {
         return ModSounds.LAURA_AMBIENT.get();
     }

@@ -11,8 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 public class LauraInventoryScreen extends AbstractContainerScreen<LauraInventoryMenu> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(LauraMod.MODID,
-            "textures/gui/laura_inventory.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("minecraft", "textures/gui/container/inventory.png");
 
     public LauraInventoryScreen(LauraInventoryMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
