@@ -219,7 +219,7 @@ public class LauraEntity extends TamableAnimal implements MenuProvider {
             }
 
             // Love Check
-            if (this.isTame() && !this.isSad() && this.random.nextInt(loveCheckCooldown) == 0) {
+            if (this.isTame() && !this.isSad() && this.tickCount % 20 == 0 && this.random.nextInt(loveCheckCooldown / 20) == 0) {
                 Player owner = (Player) this.getOwner();
                 if (owner instanceof ServerPlayer serverPlayer && this.distanceTo(owner) < 10) {
                     owner.sendSystemMessage(Component.literal("<§dLaura§r> "
@@ -237,8 +237,11 @@ public class LauraEntity extends TamableAnimal implements MenuProvider {
             }
 
             // Fart (extremely rare)
-            if (this.random.nextInt(fartCooldown) == 0) {
+            if (this.tickCount % 20 == 0 && this.random.nextInt(fartCooldown / 20) == 0) {
                 this.playSound(ModSounds.LAURA_FART.get(), 1.0F, 1.0F);
+                if (this.level() instanceof ServerLevel serverLevel) {
+                    serverLevel.sendParticles(net.minecraft.core.particles.ParticleTypes.CAMPFIRE_COSY_SMOKE, this.getX(), this.getY() + 0.5D, this.getZ(), 10, 0.5D, 0.5D, 0.5D, 0.05D);
+                }
                 Player owner = (Player) this.getOwner();
                 if (owner instanceof ServerPlayer serverPlayer && this.distanceTo(owner) < 5) {
                     owner.sendSystemMessage(Component.literal(
@@ -263,7 +266,7 @@ public class LauraEntity extends TamableAnimal implements MenuProvider {
                 }
 
                 // Hourly playful hit
-                hourlyHitTimer--;
+                if (this.tickCount % 20 == 0) hourlyHitTimer -= 20;
                 if (hourlyHitTimer <= 0) {
                     hourlyHitTimer = 72000;
                     if (dist < 3) {
