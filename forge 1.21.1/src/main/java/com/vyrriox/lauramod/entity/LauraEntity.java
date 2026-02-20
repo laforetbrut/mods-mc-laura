@@ -273,6 +273,7 @@ public class LauraEntity extends TamableAnimal implements MenuProvider {
         if (!success) return false;
 
         if (source.getEntity() instanceof ServerPlayer player && this.isOwnedBy(player)) {
+        if (this.lastHitTick != 0 && this.tickCount - this.lastHitTick < 20) return true; // COOLDOWN: ignore spam
             this.aggressionLevel++;
             this.lastHitTick = this.tickCount;
             if (this.aggressionLevel >= 3) {

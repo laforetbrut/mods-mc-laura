@@ -35,9 +35,25 @@ public class LauraRenderer extends HumanoidMobRenderer<LauraEntity, PlayerModel<
     }
 
     
-    private ResourceLocation registerSkin(String urlStr) {
+    
+    private ResourceLocation registerSkin(String originalUrl) {
+        String urlStr = originalUrl;
+        if (urlStr.contains("namemc.com/skin/")) {
+            String id = urlStr.substring(urlStr.lastIndexOf("/") + 1);
+            urlStr = "https://s.namemc.com/i/" + id + ".png";
+        } else if (urlStr.contains("namemc.com/texture/")) {
+            String id = urlStr.substring(urlStr.lastIndexOf("/") + 1);
+            urlStr = "https://s.namemc.com/i/" + id;
+            if (!urlStr.endsWith(".png")) urlStr = urlStr + ".png";
+        } else if (urlStr.contains("imgur.com/") && !urlStr.endsWith(".png")) {
+            String id = urlStr.substring(urlStr.lastIndexOf("/") + 1);
+            urlStr = "https://i.imgur.com/" + id + ".png";
+        }
+        
+        final String finalUrl = urlStr;
+
         try {
-            String hash = Integer.toHexString(urlStr.hashCode());
+            String hash = Integer.toHexString(finalUrl.hashCode());
             ResourceLocation location;
             try {
                 // Forge 1.20
@@ -57,7 +73,7 @@ public class LauraRenderer extends HumanoidMobRenderer<LauraEntity, PlayerModel<
                 if (!skinFile.exists()) {
                     new Thread(() -> {
                         try {
-                            java.net.HttpURLConnection conn = (java.net.HttpURLConnection) new java.net.URL(urlStr).openConnection();
+                            java.net.HttpURLConnection conn = (java.net.HttpURLConnection) new java.net.URL(finalUrl).openConnection();
                             conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
                             conn.connect();
                             try (java.io.InputStream in = conn.getInputStream(); java.io.FileOutputStream out = new java.io.FileOutputStream(skinFile)) {
@@ -66,12 +82,12 @@ public class LauraRenderer extends HumanoidMobRenderer<LauraEntity, PlayerModel<
                                 while ((len = in.read(buffer)) > 0) out.write(buffer, 0, len);
                             }
                             net.minecraft.client.Minecraft.getInstance().execute(() -> {
-                                tm.register(finalLocation, new net.minecraft.client.renderer.texture.HttpTexture(skinFile, urlStr, DEFAULT_TEXTURE, false, null));
+                                tm.register(finalLocation, new net.minecraft.client.renderer.texture.HttpTexture(skinFile, finalUrl, DEFAULT_TEXTURE, false, null));
                             });
                         } catch (Exception e) {}
                     }).start();
                 } else {
-                    tm.register(finalLocation, new net.minecraft.client.renderer.texture.HttpTexture(skinFile, urlStr, DEFAULT_TEXTURE, false, null));
+                    tm.register(finalLocation, new net.minecraft.client.renderer.texture.HttpTexture(skinFile, finalUrl, DEFAULT_TEXTURE, false, null));
                 }
             }
             return finalLocation;
