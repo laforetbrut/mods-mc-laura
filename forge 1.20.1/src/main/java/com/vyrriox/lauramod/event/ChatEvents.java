@@ -28,7 +28,7 @@ public class ChatEvents {
 
             if (data.exists()) {
                 player.sendSystemMessage(Component.literal(
-                        "<Laura> " + InteractionDatabase.getStaticString(player.getLanguage(), "already_here")));
+                        "<§dLaura§r> " + InteractionDatabase.getStaticString(player.getLanguage(), "already_here")));
             } else {
                 LauraEntity laura = new LauraEntity(ModEntities.LAURA.get(), player.level());
                 laura.setPos(player.getX(), player.getY(), player.getZ());
@@ -66,7 +66,7 @@ public class ChatEvents {
                                 || message.contains("desculpe"))) {
                             laura.setSad(false);
                             player.sendSystemMessage(Component.literal(
-                                    "<Laura> " + InteractionDatabase.getStaticString(locale, "apology_accept")));
+                                    "<§dLaura§r> " + InteractionDatabase.getStaticString(locale, "apology_accept")));
                             laura.playSound(ModSounds.LAURA_HAPPY.get(), 1.0F, 1.0F);
                         }
                         // Love Response logic
@@ -83,7 +83,7 @@ public class ChatEvents {
                         else {
                             String response = InteractionDatabase.getResponse(locale, message);
                             if (response != null) {
-                                player.sendSystemMessage(Component.literal("<Laura> " + response));
+                                player.sendSystemMessage(Component.literal("<§dLaura§r> " + response));
                             }
                         }
                     });

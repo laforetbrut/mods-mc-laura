@@ -33,8 +33,8 @@
 
 <p align="center"><strong>My Girlfriend Laura</strong> adds a companion NPC with advanced social features to your world.<br>She features unique interactions, an inventory system, and dynamic behaviors.</p>
 
-<p align="center">
-  <strong>Created for <a href="https://linktr.ee/justzenh">Zenh</a></strong>
+<p align="center" style="font-size: 1.2em;">
+  ✨ <strong>Created for <a href="https://linktr.ee/justzenh">Zenh</a></strong> ✨
 </p>
 
 <h3 align="center">✨ Key Features</h3>
@@ -69,8 +69,8 @@
 
 <p align="center"><strong>My Girlfriend Laura</strong> ajoute un PNJ compagnon avec des fonctionnalités sociales avancées à votre monde.<br>Elle dispose d'interactions uniques, d'un système d'inventaire et de comportements dynamiques.</p>
 
-<p align="center">
-  <strong>Créé pour <a href="https://linktr.ee/justzenh">Zenh</a></strong>
+<p align="center" style="font-size: 1.2em;">
+  ✨ <strong>Créé pour <a href="https://linktr.ee/justzenh">Zenh</a></strong> ✨
 </p>
 
 <h3 align="center">✨ Fonctionnalités Clés</h3>

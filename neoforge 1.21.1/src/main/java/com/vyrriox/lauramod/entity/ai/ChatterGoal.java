@@ -35,7 +35,7 @@ public class ChatterGoal extends Goal {
         Player owner = (Player) laura.getOwner();
         if (owner instanceof ServerPlayer serverPlayer) {
             owner.sendSystemMessage(
-                    Component.literal("<Laura> " + InteractionDatabase.getRandomMessage(serverPlayer.getLanguage())));
+                    Component.literal("<§dLaura§r> " + InteractionDatabase.getRandomMessage(serverPlayer.getLanguage())));
         }
         chatterTimer = 12000; // Reset to 10 minutes
     }

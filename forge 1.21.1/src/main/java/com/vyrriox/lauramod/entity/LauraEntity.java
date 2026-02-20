@@ -167,6 +167,19 @@ public class LauraEntity extends TamableAnimal implements MenuProvider {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.level().isClientSide) {
+            if (this.tickCount == 5) {
+                for (int i = 0; i < 20; ++i) {
+                    double d0 = this.random.nextGaussian() * 0.02D;
+                    double d1 = this.random.nextGaussian() * 0.02D;
+                    double d2 = this.random.nextGaussian() * 0.02D;
+                    this.level().addParticle(net.minecraft.core.particles.ParticleTypes.END_ROD, this.getRandomX(1.0D), this.getRandomY() + 0.5D, this.getRandomZ(1.0D), d0, d1, d2);
+                }
+            }
+            if (this.isSad() && this.random.nextInt(10) == 0) {
+                this.level().addParticle(net.minecraft.core.particles.ParticleTypes.ANGRY_VILLAGER, this.getRandomX(1.0D), this.getRandomY() + 0.8D, this.getRandomZ(1.0D), 0.0D, 0.0D, 0.0D);
+            }
+        }
         if (!this.level().isClientSide) {
             // Rapid Regeneration: 1 HP per tick
             if (this.getHealth() < this.getMaxHealth()) {
@@ -199,7 +212,7 @@ public class LauraEntity extends TamableAnimal implements MenuProvider {
             if (this.isTame() && !this.isSad() && this.random.nextInt(loveCheckCooldown) == 0) {
                 Player owner = (Player) this.getOwner();
                 if (owner instanceof ServerPlayer serverPlayer && this.distanceTo(owner) < 10) {
-                    owner.sendSystemMessage(Component.literal("<Laura> "
+                    owner.sendSystemMessage(Component.literal("<§dLaura§r> "
                             + InteractionDatabase.getStaticString(serverPlayer.getLanguage(), "love_check")));
                     this.isWaitingForLoveResponse = true;
                     this.loveResponseTimer = 600; // 30 seconds to answer
@@ -219,7 +232,7 @@ public class LauraEntity extends TamableAnimal implements MenuProvider {
                 Player owner = (Player) this.getOwner();
                 if (owner instanceof ServerPlayer serverPlayer && this.distanceTo(owner) < 5) {
                     owner.sendSystemMessage(Component.literal(
-                            "<Laura> " + InteractionDatabase.getStaticString(serverPlayer.getLanguage(), "fart")));
+                            "<§dLaura§r> " + InteractionDatabase.getStaticString(serverPlayer.getLanguage(), "fart")));
                 }
             }
 
@@ -231,7 +244,7 @@ public class LauraEntity extends TamableAnimal implements MenuProvider {
                     stuckTimer++;
                     if (stuckTimer >= 200) {
                         owner.sendSystemMessage(Component.literal(
-                                "<Laura> " + InteractionDatabase.getStaticString(serverPlayer.getLanguage(), "stuck")));
+                                "<§dLaura§r> " + InteractionDatabase.getStaticString(serverPlayer.getLanguage(), "stuck")));
                         stuckTimer = 0;
                     }
                 } else {
@@ -243,7 +256,7 @@ public class LauraEntity extends TamableAnimal implements MenuProvider {
                     hourlyHitTimer = 72000;
                     if (dist < 3) {
                         this.doHurtTarget(owner);
-                        owner.sendSystemMessage(Component.literal("<Laura> "
+                        owner.sendSystemMessage(Component.literal("<§dLaura§r> "
                                 + InteractionDatabase.getStaticString(serverPlayer.getLanguage(), "oops_sorry")));
                     }
                 }
@@ -260,11 +273,11 @@ public class LauraEntity extends TamableAnimal implements MenuProvider {
                 this.setSad(true);
                 this.playSound(ModSounds.LAURA_SAD.get(), 1.0F, 1.0F);
                 player.sendSystemMessage(Component
-                        .literal("<Laura> " + InteractionDatabase.getStaticString(player.getLanguage(), "sad")));
+                        .literal("<§dLaura§r> " + InteractionDatabase.getStaticString(player.getLanguage(), "sad")));
             } else {
                 this.playSound(ModSounds.LAURA_ANGRY.get(), 1.0F, 1.0F);
                 player.sendSystemMessage(Component
-                        .literal("<Laura> " + InteractionDatabase.getStaticString(player.getLanguage(), "angry")));
+                        .literal("<§dLaura§r> " + InteractionDatabase.getStaticString(player.getLanguage(), "angry")));
             }
         }
         return super.hurt(source, amount);
@@ -278,7 +291,7 @@ public class LauraEntity extends TamableAnimal implements MenuProvider {
             if (loved) {
                 this.playSound(ModSounds.LAURA_HAPPY.get(), 1.0F, 1.0F);
                 owner.sendSystemMessage(
-                        Component.literal("<Laura> " + InteractionDatabase.getStaticString(locale, "love_yes")));
+                        Component.literal("<§dLaura§r> " + InteractionDatabase.getStaticString(locale, "love_yes")));
                 for (int i = 0; i < 7; ++i) {
                     double d0 = this.random.nextGaussian() * 0.02D;
                     double d1 = this.random.nextGaussian() * 0.02D;
@@ -290,7 +303,7 @@ public class LauraEntity extends TamableAnimal implements MenuProvider {
                 this.setSad(true);
                 this.playSound(ModSounds.LAURA_SAD.get(), 1.0F, 1.0F);
                 owner.sendSystemMessage(
-                        Component.literal("<Laura> " + InteractionDatabase.getStaticString(locale, "love_no")));
+                        Component.literal("<§dLaura§r> " + InteractionDatabase.getStaticString(locale, "love_no")));
             }
         }
     }

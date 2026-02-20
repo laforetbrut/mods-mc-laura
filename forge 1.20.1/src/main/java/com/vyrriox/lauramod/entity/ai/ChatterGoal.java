@@ -5,6 +5,7 @@ import com.vyrriox.lauramod.util.InteractionDatabase;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.EnumSet;
 
@@ -34,7 +35,8 @@ public class ChatterGoal extends Goal {
         Player owner = (Player) laura.getOwner();
         if (owner instanceof ServerPlayer serverPlayer) {
             owner.sendSystemMessage(
-                    Component.literal("<Laura> " + InteractionDatabase.getRandomMessage(serverPlayer.getLanguage())));
+                    Component.literal(
+                            "<§dLaura§r> " + InteractionDatabase.getRandomMessage(serverPlayer.getLanguage())));
         }
         chatterTimer = 12000; // Reset to 10 minutes
     }
