@@ -405,6 +405,7 @@
   "lauramod.summon.everyone_coming": "Tus compañeras están de camino.",
   "lauramod.summon.max": "Ya tienes el máximo de compañeras (%s).",
   "lauramod.summon.no_permission": "No tienes permiso para invocar a una compañera aquí.",
+  "lauramod.summon.no_room": "Aquí no hay ningún lugar seguro para ella. Ponte sobre suelo firme y vuelve a llamarla.",
   "lauramod.summon.on_her_way": "¡%s está de camino!",
   "lauramod.summon.respawning": "%s vuelve en %s segundos.",
   "lauramod.summon.world_taken": "Este mundo ya tiene todas las compañeras que permite.",

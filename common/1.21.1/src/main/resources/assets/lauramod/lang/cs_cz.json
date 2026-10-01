@@ -397,6 +397,7 @@
   "lauramod.summon.everyone_coming": "Tvoje společnice jsou na cestě.",
   "lauramod.summon.max": "Už máš maximální počet společnic (%s).",
   "lauramod.summon.no_permission": "Tady nemáš oprávnění přivolat společnici.",
+  "lauramod.summon.no_room": "Není tu pro ni žádné bezpečné místo. Postav se na pevnou zem a zavolej ji znovu.",
   "lauramod.summon.on_her_way": "%s je na cestě!",
   "lauramod.summon.respawning": "%s se vrátí za %s s.",
   "lauramod.summon.world_taken": "V tomto světě už je tolik společnic, kolik je povoleno.",

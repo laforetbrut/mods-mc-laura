@@ -420,6 +420,25 @@ public final class LauraTestCases {
                 ctx.succeed();
             });
         });
+        // Summoned over the void: nothing is created, the player is told why and may call again at once.
+        add(tests, "summon_over_void", 300, ctx -> {
+            ServerPlayer player = ctx.player();
+            ServerLevel end = ctx.server().getLevel(Level.END);
+            ctx.check(end != null, "the test server has no End");
+            LauraWorldData data = LauraWorldData.get(ctx.server());
+            data.meta(player.getUUID()).lastSummon = 0;
+            player.changeDimension(new DimensionTransition(end, Vec3.atBottomCenterOf(new BlockPos(500, 80, -300)), Vec3.ZERO, 0, 0, DimensionTransition.DO_NOTHING));
+            LauraManager.summon(player, false);
+            ctx.check(copies(ctx).isEmpty() && data.byOwner(player.getUUID()).isEmpty(), "a companion was created over the void");
+            ctx.check(MockPlayers.heard(player).stream().anyMatch(m -> m.contains("lauramod.summon.no_room") || m.contains("no safe place")), "the player was not told why she does not come");
+            ctx.check(data.meta(player.getUUID()).lastSummon == 0, "the refused summon started the cooldown");
+            player.changeDimension(new DimensionTransition(ctx.level, Vec3.atBottomCenterOf(ctx.origin), Vec3.ZERO, 0, 0, DimensionTransition.DO_NOTHING));
+            LauraManager.summon(player, false);
+            ctx.waitFor("the summon on solid ground", 100, () -> !LauraManager.findAll(player).isEmpty(), () -> {
+                ctx.check(standsSafely(LauraManager.findAll(player).get(0)), "she does not stand on the ground");
+                ctx.succeed();
+            });
+        });
         add(tests, "teleport_updates_record", 600, ctx -> {
             ServerLevel nether = nether(ctx);
             swept(ctx, nether, NETHER_FLOOR, () -> withLaura(ctx, laura -> {
@@ -630,7 +649,7 @@ public final class LauraTestCases {
         });
         // Left in a chunk that unloads: her record is exact, calling her brings her back as she was, once,
         // and no chunk stays forced. Then the automatic recall of a follower, twice in a row.
-        add(tests, "recall_unloaded", 1500, ctx -> {
+        add(tests, "recall_unloaded", 2400, ctx -> {
             BlockPos column = new BlockPos(ctx.origin.getX() + 320, 0, ctx.origin.getZ());
             swept(ctx, ctx.level, column, () -> withLaura(ctx, laura -> {
                 ServerPlayer player = ctx.player();
@@ -643,7 +662,7 @@ public final class LauraTestCases {
                 laura.inventory().setItem(0, new ItemStack(Items.DIAMOND, 7));
                 ctx.check(!record.snapshot.toString().contains("minecraft:diamond"), "her snapshot already has the diamonds");
                 ctx.check(LauraManager.teleport(laura, ctx.level, far) == laura && laura.blockPosition().distSqr(far) < 64, "she was not sent far away");
-                ctx.waitFor("her chunk to unload", 400, () -> unloaded(ctx, id, far), () -> {
+                ctx.waitFor("her chunk to unload", 400, () -> unloaded(laura), () -> {
                     ctx.check(record.pos.distSqr(far) < 64, "the record says " + record.pos + ", she is near " + far);
                     ctx.check(record.snapshot != null && record.snapshot.toString().contains("minecraft:diamond"), "the snapshot is older than her unload");
                     // Called twice before she arrives: the second call must not keep her chunk loaded for ever.
@@ -676,7 +695,7 @@ public final class LauraTestCases {
                 laura.setMode(LauraMode.STAY);
                 laura.inventory().setItem(0, new ItemStack(Items.DIAMOND, 7));
                 ctx.check(LauraManager.teleport(laura, ctx.level, far) == laura, "she was not sent far away");
-                ctx.waitFor("her chunk to unload", 400, () -> unloaded(ctx, id, far), () -> {
+                ctx.waitFor("her chunk to unload", 400, () -> unloaded(laura), () -> {
                     LauraManager.clear();
                     record.pos = far.offset(0, 0, 160);
                     record.following = true;
@@ -1322,12 +1341,12 @@ public final class LauraTestCases {
 
     /** The ground of the flat test world under a position (its chunk is loaded for the answer). */
     /**
-     * True once her chunk is really gone. Right after a teleport into a chunk that was loaded for it,
-     * she is hidden for a few ticks and then shows up again: that is not an unload, and a test that
-     * went on at that point would change her record while she still ticks.
+     * Saved with her chunk and gone from memory. Not being found by her UUID is not enough: she is
+     * hidden for a moment when she arrives in a chunk that is still loading, and what the game writes
+     * when it really unloads her would come after what the test puts in her record.
      */
-    private static boolean unloaded(TestRunner.Context ctx, UUID id, BlockPos pos) {
-        return ctx.level.getEntity(id) == null && ctx.level.getChunkSource().getChunkNow(pos.getX() >> 4, pos.getZ() >> 4) == null;
+    private static boolean unloaded(LauraEntity laura) {
+        return laura.getRemovalReason() == Entity.RemovalReason.UNLOADED_TO_CHUNK;
     }
 
     private static BlockPos ground(TestRunner.Context ctx, BlockPos column) {
@@ -1387,7 +1406,7 @@ public final class LauraTestCases {
         UUID id = laura.getUUID();
         laura.setMode(LauraMode.STAY);
         LauraManager.teleport(laura, ctx.level, far);
-        ctx.waitFor("her chunk to unload", 400, () -> unloaded(ctx, id, far), () -> {
+        ctx.waitFor("her chunk to unload", 400, () -> unloaded(laura), () -> {
             LauraManager.clear();
             LauraWorldData.get(ctx.server()).get(id).following = true;
             ctx.waitFor("the automatic recall", 300, () -> ctx.level.getEntity(id) instanceof LauraEntity l && l.distanceTo(player) < 16, () -> {
