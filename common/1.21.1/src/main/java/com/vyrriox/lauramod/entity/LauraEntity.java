@@ -49,6 +49,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleContainer;
@@ -61,6 +62,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.RelativeMovement;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -74,12 +76,15 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.portal.DimensionTransition;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.Set;
 
 /**
  * Laura herself.
@@ -135,6 +140,7 @@ public class LauraEntity extends TamableAnimal {
     private long summonGameTime = -1;
     private FetchGoal fetchGoal;
     private final int tickOffset;
+    private boolean tracked;
 
     public LauraEntity(EntityType<? extends TamableAnimal> type, Level level) {
         super(type, level);
@@ -208,6 +214,11 @@ public class LauraEntity extends TamableAnimal {
         if (this.level().isClientSide) {
             return;
         }
+        if (!tracked) {
+            // First tick of this entity (loaded, created, or just arrived from another dimension).
+            tracked = true;
+            LauraManager.track(this);
+        }
         if (emoteEndTick > 0) {
             Emote emote = getEmote();
             int elapsed = emote.duration - (emoteEndTick - this.tickCount);
@@ -239,14 +250,65 @@ public class LauraEntity extends TamableAnimal {
         }
         if ((this.tickCount + tickOffset) % 5 == 0) {
             LauraActions.processQueue(this);
-        }
-        if ((this.tickCount + tickOffset) % 20 == 0) {
-            applyConfigAttributes();
-            brain.tickSecond();
-            if ((this.tickCount + tickOffset) % 100 == 0) {
-                LauraManager.track(this);
+            if (this.isRemoved()) {
+                // A queued order sent her to another dimension: she goes on there, as another entity.
+                return;
             }
         }
+        if ((this.tickCount + tickOffset) % 20 == 0) {
+            if (LauraManager.removeTwin(this)) {
+                return;
+            }
+            applyConfigAttributes();
+            brain.tickSecond();
+            LauraManager.track(this);
+        }
+    }
+
+    // ------------------------------------------------------------------ ownership and dimensions
+
+    /**
+     * By UUID. The vanilla check looks her owner up in her own level, so a partner who is in another
+     * dimension would not be her owner and could not call her.
+     */
+    @Override
+    public boolean isOwnedBy(LivingEntity entity) {
+        return entity != null && entity.getUUID().equals(this.getOwnerUUID());
+    }
+
+    /**
+     * Every change of dimension ends here (portals, commands, other mods, {@link LauraManager#teleport}).
+     * The game replaces her with a copy in the other level: the world registry learns it at once.
+     */
+    @Nullable
+    @Override
+    public Entity changeDimension(DimensionTransition transition) {
+        if (transition.newLevel() != this.level() && transition.newLevel().getEntity(this.getUUID()) != null) {
+            // A second her is already there (see LauraManager.removeTwin). The game would not add the
+            // one who arrives, and she would be lost: she stays.
+            return null;
+        }
+        Entity moved = super.changeDimension(transition);
+        if (moved instanceof LauraEntity copy && copy != this) {
+            LauraManager.onChangedDimension(copy);
+        }
+        return moved;
+    }
+
+    /** Portals only (commands and calls do not ask): with followAcrossDimensions off she does not wander into another dimension alone. */
+    @Override
+    public boolean canChangeDimensions(Level oldLevel, Level newLevel) {
+        return LauraConfig.followAcrossDimensions.get() && super.canChangeDimensions(oldLevel, newLevel);
+    }
+
+    /** The vanilla teleport to another level (/tp, /execute in) replaces her without saying by whom: it goes the same way as a portal. */
+    @Override
+    public boolean teleportTo(ServerLevel level, double x, double y, double z, Set<RelativeMovement> relativeMovements, float yRot, float xRot) {
+        if (level == this.level()) {
+            return super.teleportTo(level, x, y, z, relativeMovements, yRot, xRot);
+        }
+        this.setXRot(Mth.clamp(xRot, -90.0F, 90.0F));
+        return this.changeDimension(new DimensionTransition(level, new Vec3(x, y, z), Vec3.ZERO, yRot, this.getXRot(), DimensionTransition.DO_NOTHING)) != null;
     }
 
     private void applyConfigAttributes() {
@@ -308,6 +370,10 @@ public class LauraEntity extends TamableAnimal {
         }
         if (isGagged() && (matchesAny(stack, LauraConfig.ungagItems.get()) || (stack.isEmpty() && player.isSecondaryUseActive()))) {
             LauraActions.ungag(serverPlayer, this, false);
+            return InteractionResult.CONSUME;
+        }
+        if (stack.is(Items.WATER_BUCKET)) {
+            LauraActions.wash(serverPlayer, this, hand);
             return InteractionResult.CONSUME;
         }
         if (LauraBags.isWearableOnBack(stack) && getBackItem().isEmpty()
@@ -753,6 +819,7 @@ public class LauraEntity extends TamableAnimal {
             this.wanderCenter = this.blockPosition();
         }
         this.getNavigation().stop();
+        LauraManager.modeChanged(this);
     }
 
     public CombatMode getCombatMode() {

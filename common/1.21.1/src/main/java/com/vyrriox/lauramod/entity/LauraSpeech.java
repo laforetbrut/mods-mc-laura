@@ -9,6 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -73,6 +74,18 @@ public final class LauraSpeech {
 
     /** Says a dialogue line to a player. Returns false when no line exists for the key. */
     public static boolean say(LauraEntity laura, ServerPlayer to, String key, LineFormatter.Values values) {
+        return say(laura, to, key, values, false);
+    }
+
+    /**
+     * Her answer to something a player asked from out of earshot (a command, the call key, Laura's
+     * Heart): he gets it even from another dimension, where her voice would not carry.
+     */
+    public static boolean tell(LauraEntity laura, ServerPlayer to, String key, LineFormatter.Values values) {
+        return say(laura, to, key, values, true);
+    }
+
+    private static boolean say(LauraEntity laura, ServerPlayer to, String key, LineFormatter.Values values, boolean reach) {
         if (to == null) {
             return false;
         }
@@ -84,7 +97,7 @@ public final class LauraSpeech {
         if (line == null) {
             return false;
         }
-        deliver(laura, to, format(laura, to, line, values));
+        deliver(laura, to, format(laura, to, line, values), reach);
         if (com.vyrriox.lauramod.test.LauraSelfTest.enabled()) {
             SAID.merge(effectiveKey, 1, Integer::sum);
         }
@@ -111,7 +124,7 @@ public final class LauraSpeech {
         if (line == null) {
             return false;
         }
-        deliver(laura, to, format(laura, to, line, values));
+        deliver(laura, to, format(laura, to, line, values), false);
         return true;
     }
 
@@ -132,18 +145,25 @@ public final class LauraSpeech {
         if (line == null) {
             return false;
         }
-        deliver(laura, to, format(laura, to, line, values));
+        deliver(laura, to, format(laura, to, line, values), false);
         return true;
     }
 
     /** Sends an already built message with her prefix. */
     public static void sayRaw(LauraEntity laura, ServerPlayer to, Component message) {
-        deliver(laura, to, message.copy());
+        deliver(laura, to, message.copy(), false);
     }
 
+    /** Her partner when he is in the same dimension as her, null otherwise. */
     public static ServerPlayer owner(LauraEntity laura) {
         LivingEntity owner = laura.getOwner();
         return owner instanceof ServerPlayer player ? player : null;
+    }
+
+    /** Her partner wherever he is on the server, for what must reach him across dimensions. */
+    public static ServerPlayer ownerAnywhere(LauraEntity laura) {
+        MinecraftServer server = laura.getServer();
+        return server == null || laura.getOwnerUUID() == null ? null : server.getPlayerList().getPlayer(laura.getOwnerUUID());
     }
 
     private static MutableComponent format(LauraEntity laura, ServerPlayer to, String line, LineFormatter.Values values) {
@@ -163,9 +183,9 @@ public final class LauraSpeech {
 
     /**
      * Proximity chat: everybody close enough hears her (not only the player she talks to), and
-     * nobody further away does.
+     * nobody further away does, except the player she answers when {@code reach} is set.
      */
-    private static void deliver(LauraEntity laura, ServerPlayer to, MutableComponent text) {
+    private static void deliver(LauraEntity laura, ServerPlayer to, MutableComponent text, boolean reach) {
         spoken++;
         LauraNetwork.sendSpeech(laura, text);
         if (!(laura.level() instanceof net.minecraft.server.level.ServerLevel level)) {
@@ -176,6 +196,9 @@ public final class LauraSpeech {
             if (inEarshot(laura, player)) {
                 player.sendSystemMessage(message);
             }
+        }
+        if (reach && !inEarshot(laura, to)) {
+            to.sendSystemMessage(message);
         }
     }
 

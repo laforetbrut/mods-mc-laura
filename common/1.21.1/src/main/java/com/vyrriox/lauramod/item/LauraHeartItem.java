@@ -45,8 +45,13 @@ public class LauraHeartItem extends Item {
         }
         if (existing != null) {
             if (existing.level() != level || existing.distanceToSqr(player) > 12 * 12) {
-                LauraManager.teleport(existing, serverPlayer.serverLevel(), player.blockPosition());
-                existing = LauraManager.find(serverPlayer);
+                // From another dimension she comes back as a new entity; null when she cannot stand near him.
+                LauraEntity moved = LauraManager.teleport(existing, serverPlayer.serverLevel(), player.blockPosition());
+                if (moved == null) {
+                    LauraSpeech.tell(existing, serverPlayer, "stuck", LineFormatter.values());
+                    return InteractionResultHolder.fail(stack);
+                }
+                existing = moved;
             }
             if (existing != null) {
                 existing.brain().changeAffection(50);

@@ -66,27 +66,41 @@ public final class LauraActions {
         return laura.isOwnedBy(player) || LauraConfig.othersCanInteract.get() || player.hasPermissions(2);
     }
 
-    /** Orders she might refuse when she is in a bad mood. */
-    private static boolean isRefusable(LauraAction action) {
+    /**
+     * Orders she might refuse when she is in a bad mood. A hug and a kiss are not orders: a hug is
+     * how her partner comforts her, and both have their own rules in {@link #hug} and {@link #kiss}.
+     */
+    private static boolean isRefusable(LauraAction action, String arg) {
         return switch (action) {
-            case FOLLOW, STAY, WANDER, HOME, COME, FETCH, EMOTE, HUG, KISS, SLEEP, EAT -> true;
+            case FOLLOW, STAY, WANDER, HOME, COME, FETCH, SLEEP, EAT -> true;
+            case EMOTE -> !isCuddle(Emote.byName(arg));
             default -> false;
         };
     }
 
-    public static void perform(ServerPlayer player, LauraEntity laura, LauraAction action, String arg, Source source) {
+    /** The hug and the kiss of the emote wheel are the real ones, not an animation played on order: see {@link #emote}. */
+    private static boolean isCuddle(Emote emote) {
+        return emote == Emote.HUG || emote == Emote.KISS;
+    }
+
+    /** Returns false when nothing was done: the player may not command her, or she refused. */
+    public static boolean perform(ServerPlayer player, LauraEntity laura, LauraAction action, String arg, Source source) {
         if (!canCommand(player, laura)) {
             LauraSpeech.refuse(laura, player);
-            return;
+            return false;
         }
         String a = arg == null ? "" : arg.trim();
         if (source == Source.MENU && (action == LauraAction.TASK || action == LauraAction.FETCH) && laura.workplace().isRepeatedRequest(action.name() + "|" + a)) {
             // The same button twice within half a second is one click: one task, one answer.
-            return;
+            return false;
         }
-        if (isRefusable(action) && laura.brain().refuses(player, action.name())) {
-            return;
+        // She only argues face to face. An order sent from out of earshot (the command, the call key)
+        // is obeyed, like the recall of a companion who is not loaded: her refusal would not be heard.
+        if (isRefusable(action, a) && LauraSpeech.inEarshot(laura, player) && laura.brain().refuses(player, action.name())) {
+            return false;
         }
+        // Going home or coming over can take her to another dimension, where she is a new entity.
+        LauraEntity live = laura;
         switch (action) {
             case FOLLOW -> {
                 clearMovementTasks(laura);
@@ -103,7 +117,7 @@ public final class LauraActions {
                 laura.setMode(LauraMode.WANDER);
                 LauraSpeech.say(laura, player, "order.wander", LineFormatter.values());
             }
-            case HOME -> goHome(player, laura);
+            case HOME -> live = goHome(player, laura);
             case SET_HOME -> setHome(player, laura);
             case CLEAR_HOME -> {
                 laura.setHome(null, null);
@@ -112,7 +126,7 @@ public final class LauraActions {
                 }
                 LauraSpeech.say(laura, player, "home.cleared", LineFormatter.values());
             }
-            case COME -> come(player, laura);
+            case COME -> live = come(player, laura);
             case FETCH -> {
                 // "item", or "item|count" and "item|count|queue" from the menu. The limit keeps the
                 // empty parts, so an argument made of separators only still has a first part.
@@ -220,7 +234,8 @@ public final class LauraActions {
                 }
             }
         }
-        LauraNetwork.sendStatus(player, laura);
+        LauraNetwork.sendStatus(player, live);
+        return true;
     }
 
     private static int parseInt(String s, int def) {
@@ -254,34 +269,42 @@ public final class LauraActions {
         LauraSpeech.say(laura, player, "home.set", LineFormatter.values());
     }
 
-    public static void goHome(ServerPlayer player, LauraEntity laura) {
+    /** Returns her as she is afterwards: a new entity when her home is in another dimension. */
+    public static LauraEntity goHome(ServerPlayer player, LauraEntity laura) {
         BlockPos home = laura.getHomePos();
         if (home == null) {
             LauraSpeech.say(laura, player, "home.none", LineFormatter.values());
-            return;
+            return laura;
         }
         laura.wakeUp();
         laura.fetchGoal().cancel(true);
         laura.setMode(LauraMode.HOME);
-        LauraSpeech.say(laura, player, "home.go", LineFormatter.values());
+        LauraSpeech.tell(laura, player, "home.go", LineFormatter.values());
         ServerLevel homeLevel = player.getServer().getLevel(laura.getHomeDimension());
         if (homeLevel == null) {
-            return;
+            return laura;
         }
         boolean otherDimension = homeLevel != laura.level();
         double far = LauraConfig.homeTeleportDistance.getInt();
         if (otherDimension || laura.blockPosition().distSqr(home) > far * far) {
-            LauraManager.teleport(laura, homeLevel, home);
+            LauraEntity moved = LauraManager.teleport(laura, homeLevel, home);
+            if (moved == null) {
+                // Her home is walled in or gone: she says so and stays where she is.
+                LauraSpeech.tell(laura, player, "stuck", LineFormatter.values());
+                return laura;
+            }
+            return moved;
         }
+        return laura;
     }
 
-    public static void come(ServerPlayer player, LauraEntity laura) {
+    /** Returns her as she is afterwards: a new entity when she came from another dimension. */
+    public static LauraEntity come(ServerPlayer player, LauraEntity laura) {
         laura.wakeUp();
         laura.setMode(LauraMode.FOLLOW);
         double far = LauraConfig.teleportDistance.getDouble();
-        if (laura.level() != player.level() || laura.distanceToSqr(player) > far * far) {
-            LauraManager.teleport(laura, player.serverLevel(), player.blockPosition());
-        } else {
+        boolean jump = laura.level() != player.level() || laura.distanceToSqr(player) > far * far;
+        if (!jump) {
             // A call is an order: when no path leads to the player at all, she comes anyway.
             // Beyond her path range a partial path is normal: she walks it and searches again.
             double range = laura.getAttributeValue(Attributes.FOLLOW_RANGE);
@@ -290,10 +313,20 @@ public final class LauraActions {
             if (walkable) {
                 laura.getNavigation().moveTo(path, 1.2);
             } else {
-                LauraManager.teleport(laura, player.serverLevel(), player.blockPosition());
+                jump = true;
             }
         }
+        if (jump) {
+            LauraEntity moved = LauraManager.teleport(laura, player.serverLevel(), player.blockPosition());
+            if (moved == null) {
+                // Nowhere safe to stand next to him (he flies, or hangs over the void): she says so and stays.
+                LauraSpeech.tell(laura, player, "stuck", LineFormatter.values());
+                return laura;
+            }
+            laura = moved;
+        }
         LauraSpeech.say(laura, player, "order.come", LineFormatter.values());
+        return laura;
     }
 
     // ------------------------------------------------------------------ fetch
@@ -469,6 +502,7 @@ public final class LauraActions {
             if (owner == null) {
                 return;
             }
+            // The queue is saved with her, so it goes on in the entity she becomes in another dimension.
             switch (current.type()) {
                 case COME -> come(owner, laura);
                 case GO_HOME -> goHome(owner, laura);
@@ -544,6 +578,14 @@ public final class LauraActions {
             LauraSpeech.say(laura, player, "confused", LineFormatter.values());
             return;
         }
+        if (isCuddle(emote)) {
+            // Asked for as an emote, a hug or a kiss still is one: her rules, the counter and the advancement.
+            if (emote == Emote.HUG ? hug(player, laura) : kiss(player, laura)) {
+                LauraAdvancements.onEmote(player, emote);
+                com.vyrriox.lauramod.api.LauraAPI.fire("emote", laura, player, emote.animationName());
+            }
+            return;
+        }
         if (laura.isAsleep()) {
             laura.wakeUp();
         }
@@ -558,34 +600,42 @@ public final class LauraActions {
         }
     }
 
-    public static void hug(ServerPlayer player, LauraEntity laura) {
-        if (laura.brain().isSulking() && laura.getRandom().nextBoolean()) {
+    /** Returns false when she pushed it away. */
+    public static boolean hug(ServerPlayer player, LauraEntity laura) {
+        // Hungry, sad or jealous, she takes the hug: that is how her partner comforts her. Only a
+        // grudge pushes it away (she sulks or is still angry), and asking again right away gets
+        // through, as for any order.
+        if (laura.brain().holdsGrudge() && !laura.brain().askedAgain("HUG")) {
             LauraSpeech.say(laura, player, "hug.refused", LineFormatter.values());
             laura.playEmote(Emote.POUT);
-            return;
+            return false;
         }
         laura.getLookControl().setLookAt(player);
         laura.playEmote(Emote.HUG);
         laura.brain().onHug(player);
         LauraSpeech.say(laura, player, "hug", LineFormatter.values());
         LauraAdvancements.add(player, "hugs", 1);
+        return true;
     }
 
-    public static void kiss(ServerPlayer player, LauraEntity laura) {
+    /** Returns false when she did not kiss back. */
+    public static boolean kiss(ServerPlayer player, LauraEntity laura) {
         if (laura.isGagged()) {
             LauraSpeech.say(laura, player, "gagged_talk", LineFormatter.values());
-            return;
+            return false;
         }
-        if (laura.brain().isSulking() || laura.getAffection() < 200) {
+        // By design a kiss has to be earned: no grudge, and enough affection. Her needs do not matter.
+        if (laura.brain().holdsGrudge() || laura.getAffection() < 200) {
             LauraSpeech.say(laura, player, "kiss.refused", LineFormatter.values());
             laura.playEmote(Emote.SLAP);
-            return;
+            return false;
         }
         laura.getLookControl().setLookAt(player);
         laura.playEmote(Emote.KISS);
         laura.brain().onKiss(player);
         LauraSpeech.say(laura, player, "kiss", LineFormatter.values());
         LauraAdvancements.add(player, "kisses", 1);
+        return true;
     }
 
     public static void rename(ServerPlayer player, LauraEntity laura, String name) {
@@ -597,6 +647,22 @@ public final class LauraActions {
         laura.setCustomName(Component.literal(clean));
         LauraSpeech.say(laura, player, "rename.done", LineFormatter.values().with("name", clean));
         LauraAdvancements.award(player, "rename");
+    }
+
+    // ------------------------------------------------------------------ wash
+
+    /** A bucket of water poured over her: a quick wash, whether she went looking for water or not. */
+    public static void wash(ServerPlayer player, LauraEntity laura, InteractionHand hand) {
+        if (!player.getAbilities().instabuild) {
+            player.setItemInHand(hand, new ItemStack(net.minecraft.world.item.Items.BUCKET));
+        }
+        laura.wakeUp();
+        laura.brain().needs().add(Needs.Need.HYGIENE, 60);
+        laura.playSound(SoundEvents.BUCKET_EMPTY, 1.0F, 1.0F);
+        laura.spawnParticles(ParticleTypes.SPLASH, 40, 0.4);
+        laura.spawnParticles(ParticleTypes.FALLING_WATER, 12, 0.3);
+        laura.brain().onWashed(player);
+        laura.brain().syncToEntity();
     }
 
     // ------------------------------------------------------------------ gag
