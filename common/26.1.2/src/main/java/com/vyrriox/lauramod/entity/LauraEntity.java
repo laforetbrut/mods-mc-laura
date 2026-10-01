@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 import com.vyrriox.lauramod.LauraMod;
 import com.vyrriox.lauramod.config.LauraConfig;
 import com.vyrriox.lauramod.desire.Desire;
-import com.vyrriox.lauramod.dialogue.LineFormatter;
 import com.vyrriox.lauramod.entity.ai.FetchGoal;
 import com.vyrriox.lauramod.entity.ai.LauraAttentionGoal;
 import com.vyrriox.lauramod.entity.ai.LauraBathGoal;
@@ -123,6 +122,14 @@ public class LauraEntity extends TamableAnimal {
     private final LauraWorkplace workplace = new LauraWorkplace(this);
     private LauraWorkGoal workGoal;
     private final List<ItemStack> keptOwnerItems = new ArrayList<>();
+    /** Items of a fetch that was cut short by a save, a death or a change of dimension; put in her bags on her next tick. */
+    private final List<ItemStack> pendingFetchBag = new ArrayList<>();
+    /** Saved items that no longer fit in her bag (inventoryRows was lowered): dropped on her first tick. */
+    private final List<ItemStack> overflow = new ArrayList<>();
+    /** Game time of the sleep order she is following, -1 when she sleeps on her own or is awake. */
+    private long sleepOrderedAt = -1;
+    private int lastInteractTick = -1;
+    private java.util.UUID lastInteractPlayer;
     private BlockPos homePos;
     private ResourceKey<Level> homeDimension;
     private BlockPos wanderCenter;
@@ -218,6 +225,22 @@ public class LauraEntity extends TamableAnimal {
         if (gagTicks > 0 && --gagTicks == 0 && isGagged()) {
             LauraActions.ungag(null, this, true);
         }
+        if (!overflow.isEmpty()) {
+            for (ItemStack stack : overflow) {
+                this.spawnAtLocation(stack);
+            }
+            overflow.clear();
+        }
+        if (!pendingFetchBag.isEmpty()) {
+            // Not while loading: she has to be in the world to drop what does not fit.
+            for (ItemStack stack : pendingFetchBag) {
+                ItemStack rest = bags().add(stack);
+                if (!rest.isEmpty()) {
+                    this.spawnAtLocation(rest);
+                }
+            }
+            pendingFetchBag.clear();
+        }
         if ((this.tickCount + tickOffset) % 5 == 0) {
             LauraActions.processQueue(this);
         }
@@ -252,7 +275,9 @@ public class LauraEntity extends TamableAnimal {
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         boolean client = this.level().isClientSide();
-        if (stack.is(Items.NAME_TAG) || stack.is(Items.LEAD)) {
+        // A name tag that reaches this point is an unnamed one (the game already used the named
+        // ones to rename her): it is a gift or a wish like any other item.
+        if (stack.is(Items.LEAD)) {
             return super.mobInteract(player, hand);
         }
         if (!this.isTame() || this.getOwnerUUID() == null) {
@@ -269,8 +294,16 @@ public class LauraEntity extends TamableAnimal {
             return InteractionResult.SUCCESS;
         }
         ServerPlayer serverPlayer = (ServerPlayer) player;
+        // One interaction per player and per tick: a click that reaches the server twice must not
+        // hand over two items (and make her speak twice).
+        int serverTick = serverPlayer.level().getServer().getTickCount();
+        if (lastInteractTick == serverTick && serverPlayer.getUUID().equals(lastInteractPlayer)) {
+            return InteractionResult.CONSUME;
+        }
+        lastInteractTick = serverTick;
+        lastInteractPlayer = serverPlayer.getUUID();
         if (!this.isOwnedBy(player) && !LauraConfig.othersCanInteract.get()) {
-            LauraSpeech.say(this, serverPlayer, "not_your_girlfriend", LineFormatter.values());
+            LauraSpeech.refuse(this, serverPlayer);
             return InteractionResult.CONSUME;
         }
         if (LauraConfig.gagEnabled.get() && matchesAny(stack, LauraConfig.gagItems.get())) {
@@ -363,6 +396,14 @@ public class LauraEntity extends TamableAnimal {
 
     /** Drops everything she carries at her feet: bag, equipment, items kept for her partner, back item. */
     public void dropBelongings() {
+        if (fetchGoal != null) {
+            // What she carries for a fetch goes back into her bag first, and is dropped with the rest.
+            fetchGoal.cancel(false);
+        }
+        for (ItemStack stack : pendingFetchBag) {
+            this.spawnAtLocation(stack);
+        }
+        pendingFetchBag.clear();
         for (int i = 0; i < inventory.getContainerSize(); i++) {
             ItemStack stack = inventory.removeItemNoUpdate(i);
             if (!stack.isEmpty()) {
@@ -380,6 +421,10 @@ public class LauraEntity extends TamableAnimal {
             this.spawnAtLocation(stack);
         }
         keptOwnerItems.clear();
+        for (ItemStack stack : overflow) {
+            this.spawnAtLocation(stack);
+        }
+        overflow.clear();
         if (!getBackItem().isEmpty()) {
             this.spawnAtLocation(getBackItem().copy());
             setBackItem(ItemStack.EMPTY);
@@ -788,12 +833,27 @@ public class LauraEntity extends TamableAnimal {
             setState(STATE_FLOOR_SLEEP, false);
             this.setPose(Pose.STANDING);
         }
+        sleepOrderedAt = -1;
     }
 
     @Override
     public void stopSleeping() {
         super.stopSleeping();
         setState(STATE_FLOOR_SLEEP, false);
+        sleepOrderedAt = -1;
+    }
+
+    /** Marks the sleep she just started as an order: it lasts until she is rested, not until the next daylight check. */
+    public void markSleepOrdered() {
+        sleepOrderedAt = this.level().getGameTime();
+    }
+
+    public boolean isSleepOrdered() {
+        return sleepOrderedAt >= 0;
+    }
+
+    public long sleepOrderedAt() {
+        return sleepOrderedAt;
     }
 
     /** Bed within the radius that nobody sleeps in. */
@@ -905,10 +965,18 @@ public class LauraEntity extends TamableAnimal {
         tag.putByte("Combat", (byte) getCombatMode().ordinal());
         tag.putBoolean("Pickup", isPickingUpItems());
         tag.putInt("Affection", getAffection());
-        tag.putInt("GagTicks", isGagged() ? Math.max(gagTicks, 1) : 0);
+        // The real value: 0 means "no timer" (gag.durationSeconds = 0), she keeps the gag after a reload.
+        tag.putInt("GagTicks", isGagged() ? gagTicks : 0);
         tag.putBoolean("Gagged", isGagged());
         tag.putLong("SummonTime", summonGameTime);
-        inventory.storeAsItemList(tag.list("Inventory", ItemStack.CODEC));
+        ValueOutput.TypedOutputList<ItemStack> items = tag.list("Inventory", ItemStack.CODEC);
+        inventory.storeAsItemList(items);
+        for (ItemStack stack : overflow) {
+            if (!stack.isEmpty()) {
+                // Not dropped yet (saved before her first tick): kept, they overflow again at the next load.
+                items.add(stack);
+            }
+        }
         if (!getBackItem().isEmpty()) {
             tag.store("BackItem", ItemStack.CODEC, getBackItem());
         }
@@ -917,6 +985,25 @@ public class LauraEntity extends TamableAnimal {
             if (!stack.isEmpty()) {
                 kept.add(stack);
             }
+        }
+        // The fetch itself is not saved, only what she already carries for it: without this the items
+        // vanish when she is saved and unloaded, dies, is sent away or changes dimension on the way.
+        List<ItemStack> fetchBag = new ArrayList<>();
+        for (ItemStack stack : pendingFetchBag) {
+            if (!stack.isEmpty()) {
+                fetchBag.add(stack);
+            }
+        }
+        if (fetchGoal != null) {
+            for (ItemStack stack : fetchGoal.carried()) {
+                if (!stack.isEmpty()) {
+                    fetchBag.add(stack);
+                }
+            }
+        }
+        if (!fetchBag.isEmpty()) {
+            ValueOutput.TypedOutputList<ItemStack> saved = tag.list("FetchBag", ItemStack.CODEC);
+            fetchBag.forEach(saved::add);
         }
         if (homePos != null) {
             tag.putInt("HomeX", homePos.getX());
@@ -956,10 +1043,23 @@ public class LauraEntity extends TamableAnimal {
             setGagged(true, tag.getIntOr("GagTicks", 0));
         }
         summonGameTime = tag.getLong("SummonTime").orElseGet(() -> this.level().getGameTime());
-        tag.list("Inventory", ItemStack.CODEC).ifPresent(inventory::fromItemList);
+        overflow.clear();
+        tag.list("Inventory", ItemStack.CODEC).ifPresent(items -> {
+            // Like SimpleContainer.fromItemList, but what no longer fits (general.inventoryRows was lowered)
+            // is kept and dropped at her feet on her first tick instead of being deleted.
+            inventory.clearContent();
+            for (ItemStack stack : items) {
+                ItemStack rest = inventory.addItem(stack);
+                if (!rest.isEmpty()) {
+                    overflow.add(rest);
+                }
+            }
+        });
         keptOwnerItems.clear();
         setBackItem(tag.read("BackItem", ItemStack.CODEC).orElse(ItemStack.EMPTY));
         tag.listOrEmpty("KeptOwnerItems", ItemStack.CODEC).forEach(keptOwnerItems::add);
+        pendingFetchBag.clear();
+        tag.listOrEmpty("FetchBag", ItemStack.CODEC).forEach(pendingFetchBag::add);
         Optional<Integer> homeX = tag.getInt("HomeX");
         if (homeX.isPresent()) {
             homePos = new BlockPos(homeX.get(), tag.getIntOr("HomeY", 0), tag.getIntOr("HomeZ", 0));

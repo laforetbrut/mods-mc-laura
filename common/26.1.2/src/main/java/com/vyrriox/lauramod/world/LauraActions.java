@@ -76,10 +76,14 @@ public final class LauraActions {
 
     public static void perform(ServerPlayer player, LauraEntity laura, LauraAction action, String arg, Source source) {
         if (!canCommand(player, laura)) {
-            LauraSpeech.say(laura, player, "not_your_girlfriend", LineFormatter.values());
+            LauraSpeech.refuse(laura, player);
             return;
         }
         String a = arg == null ? "" : arg.trim();
+        if (source == Source.MENU && (action == LauraAction.TASK || action == LauraAction.FETCH) && laura.workplace().isRepeatedRequest(action.name() + "|" + a)) {
+            // The same button twice within half a second is one click: one task, one answer.
+            return;
+        }
         if (isRefusable(action) && laura.brain().refuses(player, action.name())) {
             return;
         }
@@ -110,12 +114,13 @@ public final class LauraActions {
             }
             case COME -> come(player, laura);
             case FETCH -> {
-                // "item", or "item|count" and "item|count|queue" from the menu.
-                String[] parts = a.split("\\|");
+                // "item", or "item|count" and "item|count|queue" from the menu. The limit keeps the
+                // empty parts, so an argument made of separators only still has a first part.
+                String[] parts = a.split("\\|", -1);
                 fetch(player, laura, parts[0], parts.length > 1 ? parseInt(parts[1], 0) : 0, parts.length > 2 && parts[2].equalsIgnoreCase("queue"));
             }
             case JOB -> {
-                String[] parts = a.split(":");
+                String[] parts = a.split(":", -1);
                 LauraJob job = LauraJob.byName(parts[0]);
                 boolean on = parts.length > 1 && parts[1].equalsIgnoreCase("on");
                 if (on && job != null && job != LauraJob.NONE) {
@@ -126,7 +131,7 @@ public final class LauraActions {
             }
             case WORK -> backToWork(player, laura);
             case TASK -> {
-                String[] parts = a.split(":");
+                String[] parts = a.split(":", -1);
                 LauraTask.Type type = LauraTask.Type.byName(parts[0]);
                 if (type == null || !type.isErrand() || type == LauraTask.Type.FETCH) {
                     LauraSpeech.say(laura, player, "confused", LineFormatter.values());
@@ -202,6 +207,8 @@ public final class LauraActions {
                     LauraSpeech.say(laura, player, "sleep.not_tired", LineFormatter.values());
                 } else {
                     laura.goToSleep(laura.findFreeBed(laura.blockPosition(), 8));
+                    // An order: the sleep goal ends it when she is rested, whatever her mode.
+                    laura.markSleepOrdered();
                     LauraSpeech.say(laura, player, "sleep.good_night", LineFormatter.values());
                 }
             }
@@ -372,6 +379,8 @@ public final class LauraActions {
             return;
         }
         laura.workGoal().reset();
+        // A direct order is tried right away, even when the last one of its kind found nothing.
+        laura.workGoal().forgetFailures(type);
         laura.wakeUp();
         laura.setOrderedToSit(false);
         work.replaceCurrent(task);
@@ -434,7 +443,8 @@ public final class LauraActions {
             if (laura.fetchGoal().isActive() || work.queued().isEmpty()) {
                 return;
             }
-            current = work.advance();
+            // An errand whose kind just found nothing to do waits its turn without blocking the others.
+            current = work.advance(task -> !laura.workGoal().isWaiting(task));
             if (current == null) {
                 return;
             }
@@ -448,7 +458,8 @@ public final class LauraActions {
                 work.finishCurrent();
                 return;
             }
-            if (owner != null && current.type().isErrand()) {
+            // A new attempt at an errand that already said it found nothing starts without a word.
+            if (owner != null && current.type().isErrand() && !laura.workGoal().isQuiet(current)) {
                 LauraSpeech.say(laura, owner, "task.start." + current.type().key(), LineFormatter.values());
             }
         }
@@ -491,6 +502,12 @@ public final class LauraActions {
             } else {
                 LauraSpeech.say(laura, player, "chest.not_assigned", LineFormatter.values());
             }
+            return;
+        }
+        if (com.vyrriox.lauramod.platform.LauraInventories.isLocked(laura, pos)
+                || !com.vyrriox.lauramod.platform.LauraInventories.playerMayUse(player, player.level(), pos)) {
+            // A chest the player could not open (locked, protected, claimed by someone else) is not hers to use.
+            LauraSpeech.say(laura, player, "chest.not_assigned", LineFormatter.values());
             return;
         }
         if (!laura.workplace().assign(pos, player.level().dimension(), purpose)) {

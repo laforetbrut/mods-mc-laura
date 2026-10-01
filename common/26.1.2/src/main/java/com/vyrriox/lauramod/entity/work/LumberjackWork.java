@@ -131,13 +131,9 @@ public class LumberjackWork implements Work {
         }
         candidates.sort(Comparator.comparingDouble(p -> p.distSqr(ctx.laura().blockPosition())));
         for (BlockPos candidate : candidates) {
-            Set<BlockPos> logs = collectLogs(candidate);
+            Set<BlockPos> logs = treeLogs(level, candidate);
             if (logs.isEmpty()) {
                 rejected.add(candidate);
-                continue;
-            }
-            if (LauraConfig.onlyNaturalTrees.get() && naturalLeaves(logs) < 4) {
-                rejected.addAll(logs);
                 continue;
             }
             return candidate;
@@ -145,41 +141,124 @@ public class LumberjackWork implements Work {
         return null;
     }
 
-    private Set<BlockPos> collectLogs(BlockPos start) {
-        ServerLevel level = ctx.level();
-        Set<BlockPos> logs = new HashSet<>();
+    /** How far a natural tree spreads sideways from the foot of its trunk (large oaks, acacias, 2 x 2 trunks). */
+    private static final int NATURAL_SPREAD = 6;
+
+    /**
+     * The logs she fells when she chops the trunk at {@code base}, or an empty set when it is not a
+     * tree she may cut. With {@code onlyNaturalTrees} a tree stands on soil, is made of one kind of
+     * log, stays close to its trunk, and every log she takes leads up to a log crowned by natural
+     * leaves: a wall, a beam or a roof made of logs that touches the tree is left standing. A log
+     * column of a build that natural leaves grow right on top of cannot be told from a trunk.
+     */
+    public static Set<BlockPos> treeLogs(ServerLevel level, BlockPos base) {
+        boolean natural = LauraConfig.onlyNaturalTrees.get();
+        if (natural && !isSoil(level.getBlockState(base.below()))) {
+            return Set.of();
+        }
+        List<BlockPos> order = new ArrayList<>();
+        java.util.Map<BlockPos, BlockPos> parents = connectedLogs(level, base, natural, order);
+        if (!natural) {
+            return new HashSet<>(order);
+        }
+        // A log is part of the tree when natural leaves grow right above it, when it carries a log
+        // of the tree, or when a log of the tree was found through it (bends and branches).
+        Set<BlockPos> all = new HashSet<>(order);
+        Set<BlockPos> kept = new HashSet<>();
         Deque<BlockPos> open = new ArrayDeque<>();
-        open.add(start);
-        int limit = LauraConfig.maxLogsPerTree.getInt();
-        while (!open.isEmpty() && logs.size() < limit) {
-            BlockPos pos = open.poll();
-            if (logs.contains(pos) || !level.getBlockState(pos).is(BlockTags.LOGS) || pos.getY() < start.getY()) {
+        for (BlockPos log : order) {
+            if (isNaturalLeaf(level.getBlockState(log.above()))) {
+                open.add(log);
+            }
+        }
+        while (!open.isEmpty()) {
+            BlockPos log = open.poll();
+            if (!kept.add(log)) {
                 continue;
             }
-            logs.add(pos);
-            for (int dx = -1; dx <= 1; dx++) {
-                for (int dy = 0; dy <= 1; dy++) {
+            BlockPos parent = parents.get(log);
+            if (parent != null) {
+                open.add(parent);
+            }
+            if (all.contains(log.below())) {
+                open.add(log.below());
+            }
+        }
+        return kept.contains(base) && naturalLeaves(level, kept) >= 4 ? kept : Set.of();
+    }
+
+    private static boolean isSoil(BlockState state) {
+        return state.is(BlockTags.DIRT) || state.is(net.minecraft.world.level.block.Blocks.MANGROVE_ROOTS);
+    }
+
+    private static boolean isNaturalLeaf(BlockState state) {
+        return state.getBlock() instanceof LeavesBlock && !state.getValue(LeavesBlock.PERSISTENT);
+    }
+
+    /**
+     * Logs connected to the base, never below it, in the order they were found (the base first,
+     * then the log right above each log before its other neighbours, so that a trunk is always
+     * followed upwards). Returns, for each log, the log it was found through.
+     */
+    private static java.util.Map<BlockPos, BlockPos> connectedLogs(ServerLevel level, BlockPos base, boolean natural, List<BlockPos> order) {
+        Block kind = level.getBlockState(base).getBlock();
+        java.util.Map<BlockPos, BlockPos> parents = new java.util.HashMap<>();
+        Set<BlockPos> seen = new HashSet<>();
+        Deque<BlockPos> open = new ArrayDeque<>();
+        BlockPos start = base.immutable();
+        open.add(start);
+        seen.add(start);
+        int limit = LauraConfig.maxLogsPerTree.getInt();
+        while (!open.isEmpty() && order.size() < limit) {
+            BlockPos pos = open.poll();
+            order.add(pos);
+            List<BlockPos> around = new ArrayList<>(17);
+            around.add(pos.above());
+            for (int dy = 1; dy >= 0; dy--) {
+                for (int dx = -1; dx <= 1; dx++) {
                     for (int dz = -1; dz <= 1; dz++) {
-                        if (dx != 0 || dy != 0 || dz != 0) {
-                            BlockPos next = pos.offset(dx, dy, dz);
-                            if (!logs.contains(next)) {
-                                open.add(next);
-                            }
+                        if (dx != 0 || dz != 0) {
+                            around.add(pos.offset(dx, dy, dz));
                         }
                     }
                 }
             }
+            for (BlockPos next : around) {
+                if (seen.contains(next)) {
+                    continue;
+                }
+                BlockState state = level.getBlockState(next);
+                if (!state.is(BlockTags.LOGS)) {
+                    continue;
+                }
+                if (natural && (state.getBlock() != kind || Math.abs(next.getX() - start.getX()) > NATURAL_SPREAD
+                        || Math.abs(next.getZ() - start.getZ()) > NATURAL_SPREAD)) {
+                    continue;
+                }
+                seen.add(next);
+                parents.put(next, pos);
+                open.add(next);
+            }
         }
-        return logs;
+        return parents;
     }
 
-    private int naturalLeaves(Set<BlockPos> logs) {
-        ServerLevel level = ctx.level();
+    /** Natural leaves next to the upper half of the logs: a tree carries its leaves at the top. */
+    private static int naturalLeaves(ServerLevel level, Set<BlockPos> logs) {
+        int minY = Integer.MAX_VALUE;
+        int maxY = Integer.MIN_VALUE;
+        for (BlockPos log : logs) {
+            minY = Math.min(minY, log.getY());
+            maxY = Math.max(maxY, log.getY());
+        }
+        int from = minY + (maxY - minY) / 2;
         int count = 0;
         for (BlockPos log : logs) {
+            if (log.getY() < from) {
+                continue;
+            }
             for (Direction dir : Direction.values()) {
-                BlockState state = level.getBlockState(log.relative(dir));
-                if (state.getBlock() instanceof LeavesBlock && !state.getValue(LeavesBlock.PERSISTENT)) {
+                if (isNaturalLeaf(level.getBlockState(log.relative(dir)))) {
                     count++;
                 }
             }
@@ -230,7 +309,13 @@ public class LumberjackWork implements Work {
         if (tool.isDamageableItem()) {
             tool.hurtAndBreak(1, ctx.laura(), EquipmentSlot.MAINHAND);
         }
-        Set<BlockPos> logs = collectLogs(base);
+        Set<BlockPos> logs = treeLogs(level, base);
+        if (logs.isEmpty()) {
+            // It stopped being a tree she may cut while she was chopping (its leaves were removed...).
+            rejected.add(base);
+            phase = Phase.FIND;
+            return Status.WORKING;
+        }
         List<BlockPos> ordered = new ArrayList<>(logs);
         ordered.sort(Comparator.comparingInt(BlockPos::getY));
         toBreak.clear();

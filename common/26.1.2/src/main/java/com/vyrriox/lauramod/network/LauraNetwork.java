@@ -13,12 +13,16 @@ import com.vyrriox.lauramod.world.LauraActions;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 
 /**
  * The single mod channel ({@code lauramod:main}). Loaders only move byte arrays; every message is
@@ -34,8 +38,21 @@ public final class LauraNetwork {
     public static final int MAX_PACKET = 1_048_000;
     /** Client to server chunks must stay below the vanilla 32 KiB custom payload limit. */
     public static final int UPLOAD_CHUNK = 30_000;
-    /** Server to client chunks. */
+    /** Largest server to client chunk a client accepts. */
     public static final int DOWNLOAD_CHUNK = 500_000;
+    /**
+     * Skin and model bytes one player is sent per tick (640 KB per second). Files leave the server
+     * at this pace whatever the client asks, so a connection that does not read cannot make the
+     * server pile up replies in memory.
+     */
+    public static final int ASSET_BYTES_PER_TICK = 32 * 1024;
+    /** Asset and list requests a player may send in a row, then {@link #ASSET_REQUESTS_PER_SECOND}. */
+    public static final int ASSET_REQUEST_BURST = 64;
+    public static final int ASSET_REQUESTS_PER_SECOND = 8;
+    /** A list request weighs as much as this many asset requests (its answer names every file). */
+    private static final int LIST_REQUEST_COST = 4;
+    /** Files waiting to be sent to one player. */
+    public static final int MAX_QUEUED_ASSETS = 64;
 
     // client -> server
     public static final int C2S_ACTION = 1;
@@ -57,8 +74,32 @@ public final class LauraNetwork {
     public static final int S2C_UPLOAD_RESULT = 107;
 
     private static final Map<UUID, UploadBuffer> UPLOADS = new HashMap<>();
+    private static final Map<UUID, Downloads> DOWNLOADS = new HashMap<>();
+    private static volatile BiConsumer<ServerPlayer, byte[]> observer;
+    /** Menu actions one player may send per second; the rest is dropped without an answer. */
+    public static final int ACTIONS_PER_SECOND = 20;
+    /** Per player: the server tick the current one second window started at, and the actions counted in it. */
+    private static final Map<UUID, int[]> ACTIONS = new HashMap<>();
+    /** A finished upload is checked, hashed and written: one every few seconds per player is plenty. */
+    private static final long UPLOAD_INTERVAL_MS = 3000;
+    private static final Map<UUID, Long> LAST_UPLOAD = new HashMap<>();
 
     private LauraNetwork() {
+    }
+
+    private static boolean actionAllowed(ServerPlayer player) {
+        int tick = player.level().getServer().getTickCount();
+        int[] window = ACTIONS.computeIfAbsent(player.getUUID(), id -> new int[]{tick, 0});
+        if (tick - window[0] >= 20 || tick < window[0]) {
+            window[0] = tick;
+            window[1] = 0;
+        }
+        return ++window[1] <= ACTIONS_PER_SECOND;
+    }
+
+    private static boolean uploadTooSoon(ServerPlayer player) {
+        Long last = LAST_UPLOAD.get(player.getUUID());
+        return last != null && System.currentTimeMillis() - last < UPLOAD_INTERVAL_MS;
     }
 
     public static FriendlyByteBuf buffer(int id) {
@@ -75,7 +116,17 @@ public final class LauraNetwork {
     }
 
     public static void send(ServerPlayer player, FriendlyByteBuf buf) {
-        LauraMod.platform().sendToPlayer(player, toBytes(buf));
+        byte[] bytes = toBytes(buf);
+        BiConsumer<ServerPlayer, byte[]> watching = observer;
+        if (watching != null) {
+            watching.accept(player, bytes);
+        }
+        LauraMod.platform().sendToPlayer(player, bytes);
+    }
+
+    /** Lets the self tests see every message sent to players (null to stop). Not for gameplay code. */
+    public static void observe(BiConsumer<ServerPlayer, byte[]> watcher) {
+        observer = watcher;
     }
 
     public static void sendToServer(FriendlyByteBuf buf) {
@@ -95,7 +146,7 @@ public final class LauraNetwork {
                     LauraAction action = LauraAction.byId(buf.readVarInt());
                     String arg = buf.readUtf(256);
                     LauraEntity laura = lauraById(player, entityId);
-                    if (action != null && laura != null) {
+                    if (action != null && laura != null && actionAllowed(player)) {
                         LauraActions.perform(player, laura, action, arg, LauraActions.Source.MENU);
                     }
                 }
@@ -117,29 +168,36 @@ public final class LauraNetwork {
                     }
                 }
                 case C2S_REQUEST_ASSET -> {
-                    AssetKind kind = AssetKind.byId(buf.readVarInt());
-                    String name = buf.readUtf(256);
-                    if (kind != null) {
-                        sendAsset(player, kind, name);
+                    // The budget comes first: a flood is dropped before anything is decoded or looked up.
+                    if (downloads(player).allow(player, 1)) {
+                        AssetKind kind = AssetKind.byId(buf.readVarInt());
+                        String name = buf.readUtf(256);
+                        if (kind != null) {
+                            requestAsset(player, kind, name);
+                        }
                     }
                 }
                 case C2S_UPLOAD -> handleUpload(player, buf);
                 case C2S_REQUEST_LIST -> {
-                    AssetKind kind = AssetKind.byId(buf.readVarInt());
-                    if (kind != null) {
-                        sendAssetList(player, kind);
+                    if (downloads(player).allow(player, LIST_REQUEST_COST)) {
+                        AssetKind kind = AssetKind.byId(buf.readVarInt());
+                        if (kind != null) {
+                            sendAssetList(player, kind);
+                        }
                     }
                 }
                 case C2S_REQUEST_STATUS -> {
                     LauraEntity laura = lauraById(player, buf.readVarInt());
-                    if (laura != null) {
+                    // Her status holds her home, her jobs and her needs: only for who may command her.
+                    if (laura != null && LauraActions.canCommand(player, laura)) {
                         sendStatus(player, laura);
                     }
                 }
                 case C2S_HELLO -> sendSettings(player);
                 default -> LauraMod.LOGGER.debug("Unknown packet {} from {}", id, player.getGameProfile().name());
             }
-        } catch (RuntimeException e) {
+        } catch (RuntimeException | StackOverflowError e) {
+            // Nothing a client sends may reach the server loop as an error.
             LauraMod.LOGGER.warn("Malformed packet from {}: {}", player.getGameProfile().name(), e.toString());
         } finally {
             buf.release();
@@ -154,39 +212,85 @@ public final class LauraNetwork {
         return null;
     }
 
-    private static void sendAsset(ServerPlayer player, AssetKind kind, String name) {
+    private static Downloads downloads(ServerPlayer player) {
+        return DOWNLOADS.computeIfAbsent(player.getUUID(), id -> new Downloads());
+    }
+
+    /**
+     * Puts a file in the player's queue; {@link #tick} sends it. Asking again for a file that is
+     * already waiting changes nothing, and nothing is read from disk here.
+     */
+    private static void requestAsset(ServerPlayer player, AssetKind kind, String name) {
+        if (!ServerAssetStore.isSafeName(name)) {
+            return;
+        }
+        Downloads state = downloads(player);
+        String key = kind.ordinal() + "|" + name;
+        if (state.queue.containsKey(key) || state.queue.size() >= MAX_QUEUED_ASSETS) {
+            return;
+        }
         ServerAssetStore.Entry entry = ServerAssetStore.get(kind, name);
         if (entry == null) {
-            FriendlyByteBuf buf = buffer(S2C_ASSET);
-            buf.writeVarInt(kind.ordinal());
-            buf.writeUtf(name, 256);
-            buf.writeUtf("", 64);
-            buf.writeVarInt(0);
-            buf.writeVarInt(0);
-            buf.writeByteArray(new byte[0]);
-            send(player, buf);
+            sendAssetChunk(player, kind, name, "", 0, 0, new byte[0]);
             return;
         }
-        byte[] bytes = ServerAssetStore.read(entry);
-        if (bytes == null) {
+        state.queue.put(key, new Download(entry));
+    }
+
+    private static void sendAssetChunk(ServerPlayer player, AssetKind kind, String name, String sha1, int total, int offset, byte[] chunk) {
+        FriendlyByteBuf buf = buffer(S2C_ASSET);
+        buf.writeVarInt(kind.ordinal());
+        buf.writeUtf(name, 256);
+        buf.writeUtf(sha1, 64);
+        buf.writeVarInt(total);
+        buf.writeVarInt(offset);
+        buf.writeByteArray(chunk);
+        send(player, buf);
+    }
+
+    /** Sends the waiting files, at most {@link #ASSET_BYTES_PER_TICK} per player. Called every server tick. */
+    public static void tick(MinecraftServer server) {
+        if (DOWNLOADS.isEmpty()) {
             return;
         }
-        for (int offset = 0; offset < bytes.length || offset == 0; offset += DOWNLOAD_CHUNK) {
-            int len = Math.min(DOWNLOAD_CHUNK, bytes.length - offset);
-            byte[] chunk = new byte[Math.max(0, len)];
-            System.arraycopy(bytes, offset, chunk, 0, chunk.length);
-            FriendlyByteBuf buf = buffer(S2C_ASSET);
-            buf.writeVarInt(kind.ordinal());
-            buf.writeUtf(entry.name(), 256);
-            buf.writeUtf(entry.sha1(), 64);
-            buf.writeVarInt(bytes.length);
-            buf.writeVarInt(offset);
-            buf.writeByteArray(chunk);
-            send(player, buf);
-            if (bytes.length == 0) {
-                break;
+        Iterator<Map.Entry<UUID, Downloads>> players = DOWNLOADS.entrySet().iterator();
+        while (players.hasNext()) {
+            Map.Entry<UUID, Downloads> state = players.next();
+            ServerPlayer player = server.getPlayerList().getPlayer(state.getKey());
+            if (player == null || player.hasDisconnected()) {
+                players.remove();
+                continue;
+            }
+            int budget = ASSET_BYTES_PER_TICK;
+            Iterator<Download> queue = state.getValue().queue.values().iterator();
+            while (budget > 0 && queue.hasNext()) {
+                Download download = queue.next();
+                ServerAssetStore.Entry entry = download.entry;
+                if (download.bytes == null) {
+                    download.bytes = ServerAssetStore.read(entry);
+                    if (download.bytes == null) {
+                        queue.remove();
+                        continue;
+                    }
+                }
+                int length = Math.min(budget, download.bytes.length - download.offset);
+                byte[] chunk = new byte[length];
+                System.arraycopy(download.bytes, download.offset, chunk, 0, length);
+                sendAssetChunk(player, entry.kind(), entry.name(), entry.sha1(), download.bytes.length, download.offset, chunk);
+                download.offset += length;
+                // An empty file still costs one message.
+                budget -= Math.max(1, length);
+                if (download.offset >= download.bytes.length) {
+                    queue.remove();
+                }
             }
         }
+    }
+
+    /** Files waiting to be sent to this player (for the self tests and diagnostics). */
+    public static int queuedAssets(ServerPlayer player) {
+        Downloads state = DOWNLOADS.get(player.getUUID());
+        return state == null ? 0 : state.queue.size();
     }
 
     public static void sendAssetList(ServerPlayer player, AssetKind kind) {
@@ -227,6 +331,11 @@ public final class LauraNetwork {
             UPLOADS.remove(player.getUUID());
             return;
         }
+        if (offset == 0 && uploadTooSoon(player)) {
+            uploadResult(player, false, Component.translatable("lauramod.look.cooldown"));
+            UPLOADS.remove(player.getUUID());
+            return;
+        }
         if (offset == 0 && !SkinService.hasUploadRoom(player, kind, name)) {
             uploadResult(player, false, Component.translatable("lauramod.upload.quota", SkinService.uploadQuota(kind)));
             UPLOADS.remove(player.getUUID());
@@ -250,6 +359,12 @@ public final class LauraNetwork {
         upload.received += chunk.length;
         if (upload.received >= total) {
             UPLOADS.remove(player.getUUID());
+            // Checked again here: chunks can be sent without their first one.
+            if (uploadTooSoon(player)) {
+                uploadResult(player, false, Component.translatable("lauramod.look.cooldown"));
+                return;
+            }
+            LAST_UPLOAD.put(player.getUUID(), System.currentTimeMillis());
             LauraEntity laura = lauraById(player, entityId);
             SkinService.finishUpload(player, laura, kind, name, upload.data, slim);
         }
@@ -264,6 +379,19 @@ public final class LauraNetwork {
 
     public static void forget(ServerPlayer player) {
         UPLOADS.remove(player.getUUID());
+        DOWNLOADS.remove(player.getUUID());
+        ACTIONS.remove(player.getUUID());
+        LAST_UPLOAD.remove(player.getUUID());
+        SkinService.forget(player);
+        com.vyrriox.lauramod.entity.LauraSpeech.forget(player);
+    }
+
+    /** Forgets every transfer and every rate limit (the server starts or stops). */
+    public static void clear() {
+        UPLOADS.clear();
+        DOWNLOADS.clear();
+        ACTIONS.clear();
+        LAST_UPLOAD.clear();
     }
 
     /** Settings the client needs to build its screens. */
@@ -319,6 +447,38 @@ public final class LauraNetwork {
                 buf.writeUtf(json, 32000);
                 send(p, buf);
             }
+        }
+    }
+
+    /** What one player asked for: a budget of requests and the files still to send. */
+    private static final class Downloads {
+        final Map<String, Download> queue = new LinkedHashMap<>();
+        double tokens = ASSET_REQUEST_BURST;
+        int lastRefill = Integer.MIN_VALUE;
+
+        /** Takes {@code cost} from the budget, refilled with the server ticks. False when it is used up. */
+        boolean allow(ServerPlayer player, int cost) {
+            MinecraftServer server = player.level().getServer();
+            int now = server == null ? 0 : server.getTickCount();
+            if (lastRefill != Integer.MIN_VALUE && now > lastRefill) {
+                tokens = Math.min(ASSET_REQUEST_BURST, tokens + (now - lastRefill) * (ASSET_REQUESTS_PER_SECOND / 20.0));
+            }
+            lastRefill = now;
+            if (tokens < cost) {
+                return false;
+            }
+            tokens -= cost;
+            return true;
+        }
+    }
+
+    private static final class Download {
+        final ServerAssetStore.Entry entry;
+        byte[] bytes;
+        int offset;
+
+        Download(ServerAssetStore.Entry entry) {
+            this.entry = entry;
         }
     }
 
