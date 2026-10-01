@@ -436,6 +436,8 @@ public final class LauraTestCases {
         add(tests, "chop_tree", 1400, ctx -> withLaura(ctx, laura -> {
             ServerPlayer player = ctx.player();
             BlockPos base = ctx.origin.offset(6, 0, 6);
+            // A natural tree stands on soil: a trunk on stone is a build, which she leaves alone.
+            ctx.level.setBlockAndUpdate(base.below(), Blocks.DIRT.defaultBlockState());
             for (int y = 0; y < 5; y++) {
                 ctx.level.setBlockAndUpdate(base.above(y), Blocks.OAK_LOG.defaultBlockState());
             }

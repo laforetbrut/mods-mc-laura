@@ -114,6 +114,15 @@ final class FabricPlatform implements Platform {
     }
 
     @Override
+    public boolean mayUseContainer(ServerPlayer player, ServerLevel level, BlockPos pos) {
+        // The callback Fabric runs when a player right clicks a block: claim mods answer FAIL there.
+        net.minecraft.world.phys.BlockHitResult hit = new net.minecraft.world.phys.BlockHitResult(
+                net.minecraft.world.phys.Vec3.atCenterOf(pos), net.minecraft.core.Direction.UP, pos, false);
+        return net.fabricmc.fabric.api.event.player.UseBlockCallback.EVENT.invoker()
+                .interact(player, level, net.minecraft.world.InteractionHand.MAIN_HAND, hit) != net.minecraft.world.InteractionResult.FAIL;
+    }
+
+    @Override
     public InventoryAccess inventoryAt(ServerLevel level, BlockPos pos) {
         if (!level.isLoaded(pos)) {
             return null;

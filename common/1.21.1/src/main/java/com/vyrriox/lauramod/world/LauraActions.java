@@ -80,6 +80,10 @@ public final class LauraActions {
             return;
         }
         String a = arg == null ? "" : arg.trim();
+        if (source == Source.MENU && (action == LauraAction.TASK || action == LauraAction.FETCH) && laura.workplace().isRepeatedRequest(action.name() + "|" + a)) {
+            // The same button twice within half a second is one click: one task, one answer.
+            return;
+        }
         if (isRefusable(action) && laura.brain().refuses(player, action.name())) {
             return;
         }
@@ -373,6 +377,8 @@ public final class LauraActions {
             return;
         }
         laura.workGoal().reset();
+        // A direct order is tried right away, even when the last one of its kind found nothing.
+        laura.workGoal().forgetFailures(type);
         laura.wakeUp();
         laura.setOrderedToSit(false);
         work.replaceCurrent(task);
@@ -435,7 +441,8 @@ public final class LauraActions {
             if (laura.fetchGoal().isActive() || work.queued().isEmpty()) {
                 return;
             }
-            current = work.advance();
+            // An errand whose kind just found nothing to do waits its turn without blocking the others.
+            current = work.advance(task -> !laura.workGoal().isWaiting(task));
             if (current == null) {
                 return;
             }
@@ -449,7 +456,8 @@ public final class LauraActions {
                 work.finishCurrent();
                 return;
             }
-            if (owner != null && current.type().isErrand()) {
+            // A new attempt at an errand that already said it found nothing starts without a word.
+            if (owner != null && current.type().isErrand() && !laura.workGoal().isQuiet(current)) {
                 LauraSpeech.say(laura, owner, "task.start." + current.type().key(), LineFormatter.values());
             }
         }
@@ -492,6 +500,12 @@ public final class LauraActions {
             } else {
                 LauraSpeech.say(laura, player, "chest.not_assigned", LineFormatter.values());
             }
+            return;
+        }
+        if (com.vyrriox.lauramod.platform.LauraInventories.isLocked(laura, pos)
+                || !com.vyrriox.lauramod.platform.LauraInventories.playerMayUse(player, player.serverLevel(), pos)) {
+            // A chest the player could not open (locked, protected, claimed by someone else) is not hers to use.
+            LauraSpeech.say(laura, player, "chest.not_assigned", LineFormatter.values());
             return;
         }
         if (!laura.workplace().assign(pos, player.level().dimension(), purpose)) {
