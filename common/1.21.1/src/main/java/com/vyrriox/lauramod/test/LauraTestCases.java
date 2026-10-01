@@ -627,7 +627,7 @@ public final class LauraTestCases {
                 laura.inventory().setItem(0, new ItemStack(Items.DIAMOND, 7));
                 ctx.check(!record.snapshot.toString().contains("minecraft:diamond"), "her snapshot already has the diamonds");
                 ctx.check(LauraManager.teleport(laura, ctx.level, far) == laura && laura.blockPosition().distSqr(far) < 64, "she was not sent far away");
-                ctx.waitFor("her chunk to unload", 200, () -> ctx.level.getEntity(id) == null, () -> {
+                ctx.waitFor("her chunk to unload", 400, () -> unloaded(ctx, id, far), () -> {
                     ctx.check(record.pos.distSqr(far) < 64, "the record says " + record.pos + ", she is near " + far);
                     ctx.check(record.snapshot != null && record.snapshot.toString().contains("minecraft:diamond"), "the snapshot is older than her unload");
                     // Called twice before she arrives: the second call must not keep her chunk loaded for ever.
@@ -660,7 +660,7 @@ public final class LauraTestCases {
                 laura.setMode(LauraMode.STAY);
                 laura.inventory().setItem(0, new ItemStack(Items.DIAMOND, 7));
                 ctx.check(LauraManager.teleport(laura, ctx.level, far) == laura, "she was not sent far away");
-                ctx.waitFor("her chunk to unload", 200, () -> ctx.level.getEntity(id) == null, () -> {
+                ctx.waitFor("her chunk to unload", 400, () -> unloaded(ctx, id, far), () -> {
                     LauraManager.clear();
                     record.pos = far.offset(0, 0, 160);
                     record.following = true;
@@ -1305,6 +1305,15 @@ public final class LauraTestCases {
     }
 
     /** The ground of the flat test world under a position (its chunk is loaded for the answer). */
+    /**
+     * True once her chunk is really gone. Right after a teleport into a chunk that was loaded for it,
+     * she is hidden for a few ticks and then shows up again: that is not an unload, and a test that
+     * went on at that point would change her record while she still ticks.
+     */
+    private static boolean unloaded(TestRunner.Context ctx, UUID id, BlockPos pos) {
+        return ctx.level.getEntity(id) == null && ctx.level.getChunkSource().getChunkNow(pos.getX() >> 4, pos.getZ() >> 4) == null;
+    }
+
     private static BlockPos ground(TestRunner.Context ctx, BlockPos column) {
         ctx.level.getChunkAt(column);
         return new BlockPos(column.getX(), ctx.level.getHeight(Heightmap.Types.MOTION_BLOCKING, column.getX(), column.getZ()), column.getZ());
@@ -1362,7 +1371,7 @@ public final class LauraTestCases {
         UUID id = laura.getUUID();
         laura.setMode(LauraMode.STAY);
         LauraManager.teleport(laura, ctx.level, far);
-        ctx.waitFor("her chunk to unload", 200, () -> ctx.level.getEntity(id) == null, () -> {
+        ctx.waitFor("her chunk to unload", 400, () -> unloaded(ctx, id, far), () -> {
             LauraManager.clear();
             LauraWorldData.get(ctx.server()).get(id).following = true;
             ctx.waitFor("the automatic recall", 300, () -> ctx.level.getEntity(id) instanceof LauraEntity l && l.distanceTo(player) < 16, () -> {
