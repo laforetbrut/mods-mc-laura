@@ -39,3 +39,6 @@ TEST_PROCEDURE_*.html
 
 # Local development journal
 ERROR_LOG.md
+
+# Built jars collected by tools/collect_jars.sh
+jars/
