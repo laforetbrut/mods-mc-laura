@@ -21,6 +21,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.TicketType;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -29,6 +30,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -37,7 +39,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -51,12 +52,24 @@ public final class LauraManager {
     private record Scheduled(long tick, Runnable task) {
     }
 
-    private record Recall(UUID owner, UUID laura, net.minecraft.resources.ResourceKey<Level> dimension, ChunkPos chunk, boolean forcedByUs, long timeout) {
+    /** {@code restore}: asked for by her partner, so a companion who is not found is brought back from her snapshot. */
+    private record Recall(UUID owner, UUID laura, net.minecraft.resources.ResourceKey<Level> dimension, ChunkPos chunk, boolean restore, long timeout) {
     }
 
     private static final List<Scheduled> SCHEDULED = new ArrayList<>();
     private static final List<Recall> RECALLS = new ArrayList<>();
     private static final long SNAPSHOT_INTERVAL = 20L * 60 * 5;
+    /** How often a ticking companion refreshes her record (see {@link LauraEntity#tick}). */
+    public static final int TRACK_INTERVAL = 20;
+    private static final int RECALL_TICKS = 200;
+    /** Chunks kept around the place a recalled companion was last seen: she is found even if she walked a little since. */
+    private static final int RECALL_RADIUS = 2;
+    /**
+     * Loads the chunks of a recall. A ticket of this type expires by itself and is never saved with
+     * the world, unlike a forced chunk: whatever happens to the recall, nothing stays loaded. Only
+     * the ticket types that are saved need to be in the game registry, so this one is not registered.
+     */
+    private static final TicketType RECALL_TICKET = new TicketType(RECALL_TICKS + 100, TicketType.FLAG_LOADING | TicketType.FLAG_SIMULATION);
 
     private LauraManager() {
     }
@@ -101,7 +114,26 @@ public final class LauraManager {
 
     /** Far enough to be sure she did not just lag behind: a teleport (waystone, /home, /tp, pearl...). */
     private static final double LEFT_BEHIND_DISTANCE = 96;
+    /** A portal sends her through at once and holds a player for a few seconds: she waits that long on the other side. */
+    private static final int PORTAL_WAIT = 200;
     private static final Map<UUID, Integer> LAST_FOLLOW_RECALL = new HashMap<>();
+    /** Server tick at which a companion last arrived in another dimension. */
+    private static final Map<UUID, Integer> ARRIVED = new HashMap<>();
+
+    /** In follow mode and free to move: where her partner goes, she goes. */
+    private static boolean follows(LauraEntity laura) {
+        return laura.getMode() == LauraMode.FOLLOW && !laura.isOrderedToSit() && !laura.isAsleep() && !laura.fetchGoal().isActive();
+    }
+
+    /** She just changed dimension, most likely through a portal her partner is still standing in. */
+    private static boolean waitsForPartner(MinecraftServer server, UUID laura) {
+        Integer arrived = ARRIVED.get(laura);
+        if (arrived != null && server.getTickCount() - arrived >= PORTAL_WAIT) {
+            ARRIVED.remove(laura);
+            return false;
+        }
+        return arrived != null;
+    }
 
     /**
      * Brings following companions along when their partner teleports far away by any means
@@ -118,24 +150,30 @@ public final class LauraManager {
                 if (!r.isActive() || !r.following) {
                     continue;
                 }
-                boolean otherDimension = !r.dimension.equals(player.level().dimension());
-                if (otherDimension && !LauraConfig.followAcrossDimensions.get()) {
-                    continue;
-                }
                 Entity entity = findEntity(server, r.laura, r.dimension);
                 if (entity instanceof LauraEntity laura) {
-                    if (laura.getMode() != LauraMode.FOLLOW || laura.isOrderedToSit() || laura.isAsleep() || laura.fetchGoal().isActive()) {
+                    if (!follows(laura)) {
+                        continue;
+                    }
+                    boolean elsewhere = laura.level() != player.level();
+                    if (elsewhere && (!LauraConfig.followAcrossDimensions.get() || waitsForPartner(server, r.laura))) {
                         continue;
                     }
                     // Loaded and ticking: she walks unless further than teleportDistance. Loaded but
                     // frozen (outside the simulation distance): she cannot walk, so she is brought along.
                     double teleport = LauraConfig.teleportDistance.getDouble();
                     boolean frozen = laura.level() instanceof ServerLevel level && !level.isPositionEntityTicking(laura.blockPosition());
-                    boolean far = laura.level() != player.level() || laura.distanceToSqr(player) > teleport * teleport
+                    boolean far = elsewhere || laura.distanceToSqr(player) > teleport * teleport
                             || frozen && laura.distanceToSqr(player) > LEFT_BEHIND_DISTANCE * LEFT_BEHIND_DISTANCE;
                     if (far) {
+                        // Null when her partner has no ground near him (he flies): the next pass tries again.
                         teleport(laura, player.level(), player.blockPosition());
                     }
+                    continue;
+                }
+                boolean otherDimension = !r.dimension.equals(player.level().dimension());
+                // The far side of a portal can take a moment to load: she is there, only not visible yet.
+                if (otherDimension && (!LauraConfig.followAcrossDimensions.get() || waitsForPartner(server, r.laura))) {
                     continue;
                 }
                 if (entity != null) {
@@ -147,17 +185,20 @@ public final class LauraManager {
                 boolean pending = RECALLS.stream().anyMatch(rc -> rc.laura().equals(r.laura));
                 if (far && !recently && !pending) {
                     LAST_FOLLOW_RECALL.put(r.laura, server.getTickCount());
-                    recall(player, r);
+                    recall(player, r, false);
                 }
             }
         }
     }
 
+    /** Server start and stop: nothing of one world may leak into the next one opened in the same game session. */
     public static void clear() {
         synchronized (SCHEDULED) {
             SCHEDULED.clear();
         }
         RECALLS.clear();
+        LAST_FOLLOW_RECALL.clear();
+        ARRIVED.clear();
     }
 
     // ------------------------------------------------------------------ lookup
@@ -244,6 +285,20 @@ public final class LauraManager {
         data.setDirty();
     }
 
+    /**
+     * The entity a companion is now. After a change of dimension the one at hand is removed and she
+     * lives on as another entity: code that keeps giving her orders must go on with that one. Null
+     * when she is gone or not loaded.
+     */
+    @Nullable
+    public static LauraEntity live(LauraEntity laura) {
+        if (!laura.isRemoved()) {
+            return laura;
+        }
+        MinecraftServer server = laura.level().getServer();
+        return server != null && findEntity(server, laura.getUUID(), laura.level().dimension()) instanceof LauraEntity now && now.isAlive() ? now : null;
+    }
+
     private static Entity findEntity(MinecraftServer server, UUID id, net.minecraft.resources.ResourceKey<Level> hint) {
         ServerLevel level = server.getLevel(hint);
         if (level != null) {
@@ -265,7 +320,14 @@ public final class LauraManager {
 
     /** Registers or refreshes a companion in the world registry. */
     public static void track(LauraEntity laura) {
-        if (!(laura.level() instanceof ServerLevel level) || laura.getOwnerUUID() == null || laura.isRemoved() || !laura.isAlive()) {
+        if (laura.isRemoved()) {
+            return;
+        }
+        write(laura, false);
+    }
+
+    private static void write(LauraEntity laura, boolean snapshot) {
+        if (!(laura.level() instanceof ServerLevel level) || laura.getOwnerUUID() == null || !laura.isAlive()) {
             return;
         }
         MinecraftServer server = level.getServer();
@@ -292,10 +354,87 @@ public final class LauraManager {
         if (owner != null) {
             record.ownerName = owner.getGameProfile().name();
         }
-        if (record.snapshot == null || level.getGameTime() % SNAPSHOT_INTERVAL < 100) {
+        if (snapshot || record.snapshot == null || level.getGameTime() % SNAPSHOT_INTERVAL < TRACK_INTERVAL) {
             record.snapshot = laura.saveWithoutId(new CompoundTag());
         }
         data.setDirty();
+    }
+
+    /** A second her must have been around this long before it is removed: a teleport by another mod may overlap for a moment. */
+    private static final int TWIN_AGE = 100;
+
+    /**
+     * True when this entity is a second copy of a companion who lives in another dimension, and has
+     * been removed. Travelling never leaves one: it is what a restore from her snapshot left when a
+     * world saved by an older version had her record in the wrong place. The one that loaded last
+     * goes, the one her partner has been with since then stays.
+     */
+    public static boolean removeTwin(LauraEntity laura) {
+        if (laura.tickCount < TWIN_AGE || !(laura.level() instanceof ServerLevel level)) {
+            return false;
+        }
+        for (ServerLevel other : level.getServer().getAllLevels()) {
+            // Entity ids grow with every entity the server creates: the higher one came last.
+            if (other != level && other.getEntity(laura.getUUID()) instanceof LauraEntity twin && twin.isAlive() && twin.getId() < laura.getId()) {
+                LauraMod.LOGGER.warn("{} exists twice (in {} and in {}), removing the one that loaded last", laura.getLauraName(),
+                        other.dimension().identifier(), level.dimension().identifier());
+                laura.discard();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** She was moved in one step (a goal teleported her): the place in her record follows at once. Never creates or revives a record. */
+    public static void moved(LauraEntity laura) {
+        LauraWorldData.Record record = activeRecord(laura);
+        if (record != null && laura.level() instanceof ServerLevel level) {
+            record.dimension = level.dimension();
+            record.pos = laura.blockPosition();
+            data(level.getServer()).setDirty();
+        }
+    }
+
+    /** Her mode changed: whether she follows is what the left behind check reads. Never creates or revives a record. */
+    public static void modeChanged(LauraEntity laura) {
+        LauraWorldData.Record record = activeRecord(laura);
+        if (record != null && laura.level() instanceof ServerLevel level) {
+            record.following = laura.getMode() == LauraMode.FOLLOW && !laura.isOrderedToSit() && !laura.isAsleep();
+            data(level.getServer()).setDirty();
+        }
+    }
+
+    /** The record of a companion who is in the world (not one still being created from a snapshot). */
+    private static LauraWorldData.Record activeRecord(LauraEntity laura) {
+        if (!(laura.level() instanceof ServerLevel level) || laura.isRemoved() || !laura.isAlive() || level.getEntity(laura.getUUID()) != laura) {
+            return null;
+        }
+        LauraWorldData.Record record = data(level.getServer()).get(laura.getUUID());
+        return record != null && record.isActive() ? record : null;
+    }
+
+    /**
+     * She arrived in another dimension, whatever sent her (a portal, a command, this mod): the game
+     * replaced her with this new entity, and her record must say where she is before anything reads it.
+     */
+    public static void onChangedDimension(LauraEntity laura) {
+        track(laura);
+        if (laura.level() instanceof ServerLevel level) {
+            ARRIVED.put(laura.getUUID(), level.getServer().getTickCount());
+        }
+    }
+
+    /**
+     * She leaves the loaded world with her chunk. The record keeps exactly where and how she is: a
+     * recall then loads the right place, and a restore from her snapshot loses nothing.
+     */
+    public static void onUnloaded(LauraEntity laura) {
+        Entity.RemovalReason reason = laura.getRemovalReason();
+        // The game hides her with her chunk before it marks her as unloaded, so there is usually no
+        // reason yet. A death, a discard or a change of dimension are recorded where they happen.
+        if (reason == null || reason == Entity.RemovalReason.UNLOADED_TO_CHUNK || reason == Entity.RemovalReason.UNLOADED_WITH_PLAYER) {
+            write(laura, true);
+        }
     }
 
     // ------------------------------------------------------------------ summoning
@@ -412,11 +551,15 @@ public final class LauraManager {
             Entity e = findEntity(player.level().getServer(), r.laura, r.dimension);
             if (e instanceof LauraEntity laura) {
                 if (laura.level() != player.level() || laura.distanceToSqr(player) > 16 * 16) {
-                    teleport(laura, player.level(), player.blockPosition());
-                    anyone = true;
+                    if (teleport(laura, player.level(), player.blockPosition()) != null) {
+                        anyone = true;
+                    } else {
+                        LauraSpeech.tell(laura, player, "stuck", LineFormatter.values());
+                        waiting = true;
+                    }
                 }
             } else {
-                recall(player, r);
+                recall(player, r, true);
                 anyone = true;
             }
         }
@@ -463,13 +606,18 @@ public final class LauraManager {
             laura.setHealth(laura.getMaxHealth());
             laura.deathTime = 0;
             laura.setRemainingFireTicks(0);
+            laura.resetFallDistance();
             laura.brain().needs().set(Needs.Need.HUNGER, Math.max(50, laura.brain().needs().get(Needs.Need.HUNGER)));
         } else {
             bind(laura, player);
             initDefaults(laura, player);
         }
         laura.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, player.getYRot() + 180, 0);
-        LauraMovement.teleportNear(laura, at);
+        // On the ground: under her partner when he is in the air. Only over the void does she appear where he is.
+        BlockPos spot = LauraMovement.findSafeSpot(laura, at);
+        if (spot != null) {
+            laura.snapTo(spot.getX() + 0.5, spot.getY(), spot.getZ() + 0.5, player.getYRot() + 180, 0);
+        }
         laura.setOrderedToSit(false);
         laura.setMode(LauraMode.FOLLOW);
         if (snapshot != null && !clearOldBody(player.level().getServer(), laura)) {
@@ -601,7 +749,7 @@ public final class LauraManager {
      */
     public static void removeAll(MinecraftServer server, ServerPlayer target) {
         LauraWorldData data = data(server);
-        Set<UUID> gone = new java.util.HashSet<>();
+        java.util.Set<UUID> gone = new java.util.HashSet<>();
         for (LauraEntity laura : findAll(target)) {
             gone.add(laura.getUUID());
             removeForGood(laura);
@@ -622,48 +770,80 @@ public final class LauraManager {
 
     // ------------------------------------------------------------------ recall across unloaded chunks
 
-    private static void recall(ServerPlayer player, LauraWorldData.Record record) {
+    /**
+     * Loads the place where a companion was last seen, so that she can be brought to her partner.
+     * {@code restore}: her partner asked for her, a companion who is not found there comes back from
+     * her last snapshot. An automatic recall never creates anything.
+     */
+    private static void recall(ServerPlayer player, LauraWorldData.Record record, boolean restore) {
         MinecraftServer server = player.level().getServer();
         ServerLevel level = server.getLevel(record.dimension);
         if (level == null) {
+            // Her dimension no longer exists: she cannot be anywhere else.
             restoreLost(player, record);
             return;
         }
-        ChunkPos chunk = ChunkPos.containing(record.pos);
-        boolean alreadyForced = level.getForceLoadedChunks().contains(chunk.pack());
-        if (!alreadyForced) {
-            level.setChunkForced(chunk.x(), chunk.z(), true);
+        for (int i = 0; i < RECALLS.size(); i++) {
+            Recall pending = RECALLS.get(i);
+            if (pending.laura().equals(record.laura)) {
+                // Already on her way: the same recall goes on, it only learns that she is now asked for.
+                if (restore && !pending.restore()) {
+                    RECALLS.set(i, new Recall(pending.owner(), pending.laura(), pending.dimension(), pending.chunk(), true, pending.timeout()));
+                }
+                return;
+            }
         }
-        RECALLS.removeIf(r -> r.laura().equals(record.laura));
-        RECALLS.add(new Recall(player.getUUID(), record.laura, record.dimension, chunk, !alreadyForced, server.getTickCount() + 200));
+        ChunkPos chunk = ChunkPos.containing(record.pos);
+        level.getChunkSource().addTicketWithRadius(RECALL_TICKET, chunk, RECALL_RADIUS);
+        RECALLS.add(new Recall(player.getUUID(), record.laura, record.dimension, chunk, restore, server.getTickCount() + RECALL_TICKS));
         player.sendSystemMessage(Component.translatable("lauramod.summon.on_her_way", record.lauraName));
+    }
+
+    private static void release(MinecraftServer server, Recall recall) {
+        ServerLevel level = server.getLevel(recall.dimension());
+        if (level != null) {
+            level.getChunkSource().removeTicketWithRadius(RECALL_TICKET, recall.chunk(), RECALL_RADIUS);
+        }
+    }
+
+    /** Recalls still waiting for their companion to load (read by the self tests). */
+    public static int pendingRecalls() {
+        return RECALLS.size();
     }
 
     private static void tickRecalls(MinecraftServer server) {
         Iterator<Recall> it = RECALLS.iterator();
         while (it.hasNext()) {
             Recall recall = it.next();
-            ServerLevel level = server.getLevel(recall.dimension());
             ServerPlayer owner = server.getPlayerList().getPlayer(recall.owner());
-            Entity entity = level == null ? null : level.getEntity(recall.laura());
+            LauraEntity laura = findEntity(server, recall.laura(), recall.dimension()) instanceof LauraEntity found && found.isAlive() ? found : null;
             boolean timeout = server.getTickCount() > recall.timeout();
-            if (!(entity instanceof LauraEntity) && !timeout && owner != null) {
+            if (laura == null && !timeout && owner != null) {
                 continue;
             }
             it.remove();
-            if (level != null && recall.forcedByUs()) {
-                level.setChunkForced(recall.chunk().x(), recall.chunk().z(), false);
-            }
+            release(server, recall);
             if (owner == null) {
                 continue;
             }
-            if (entity instanceof LauraEntity laura) {
-                teleport(laura, owner.level(), owner.blockPosition());
-            } else {
-                LauraWorldData.Record record = data(server).get(recall.laura());
-                if (record != null && record.isActive()) {
-                    restoreLost(owner, record);
+            if (laura != null) {
+                if (teleport(laura, owner.level(), owner.blockPosition()) == null && recall.restore()) {
+                    LauraSpeech.tell(laura, owner, "stuck", LineFormatter.values());
                 }
+                continue;
+            }
+            LauraWorldData.Record record = data(server).get(recall.laura());
+            if (record == null || !record.isActive()) {
+                continue;
+            }
+            if (recall.restore()) {
+                restoreLost(owner, record);
+            } else {
+                // Not where she was last seen. Nothing is created from an automatic recall: a copy made
+                // from her snapshot while she exists elsewhere would be a second her. She is followed
+                // again as soon as she loads and ticks.
+                record.following = false;
+                data(server).setDirty();
             }
         }
     }
@@ -683,8 +863,22 @@ public final class LauraManager {
 
     // ------------------------------------------------------------------ teleport
 
-    /** Moves a companion next to a position, in any dimension. */
-    public static void teleport(LauraEntity laura, ServerLevel target, BlockPos pos) {
+    /**
+     * Moves a companion to a safe spot next to a position, in any dimension, and returns her. After a
+     * change of dimension that is a new entity: the one passed in is gone and must not be used again.
+     * Returns null, and leaves her where she is, when there is nowhere safe near the position (a
+     * partner who flies over the void) or when the trip was refused.
+     */
+    @Nullable
+    public static LauraEntity teleport(LauraEntity laura, ServerLevel target, BlockPos pos) {
+        BlockPos spot = LauraMovement.findSafeSpot(laura, target, pos);
+        if (spot == null) {
+            return null;
+        }
+        if (laura.level() == target && laura.blockPosition().closerThan(spot, 2)) {
+            // Already there (the ground under a partner who hovers): no puff, no sound.
+            return laura;
+        }
         if (laura.isPassenger()) {
             laura.stopRiding();
         }
@@ -692,14 +886,13 @@ public final class LauraManager {
         if (laura.level() instanceof ServerLevel from) {
             from.sendParticles(ParticleTypes.PORTAL, laura.getX(), laura.getY() + 1, laura.getZ(), 20, 0.4, 0.6, 0.4, 0.2);
         }
-        if (laura.level() == target) {
-            if (!LauraMovement.teleportNear(laura, pos)) {
-                laura.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, laura.getYRot(), laura.getXRot());
-            }
-        } else {
-            laura.teleportTo(target, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, Set.of(), laura.getYRot(), laura.getXRot(), false);
+        LauraEntity moved = LauraMovement.place(laura, target, spot);
+        if (moved == null) {
+            return null;
         }
-        target.playSound(null, pos, SoundEvents.ENDERMAN_TELEPORT, SoundSource.NEUTRAL, 0.4F, 1.3F);
+        track(moved);
+        target.playSound(null, spot, SoundEvents.ENDERMAN_TELEPORT, SoundSource.NEUTRAL, 0.4F, 1.3F);
+        return moved;
     }
 
     // ------------------------------------------------------------------ death, graves and revival
@@ -715,7 +908,8 @@ public final class LauraManager {
         }
         LauraWorldData data = data(level.getServer());
         LauraWorldData.Record record = data.getOrCreate(laura.getUUID(), laura.getOwnerUUID());
-        ServerPlayer owner = LauraSpeech.owner(laura);
+        // Her partner is told wherever he is: she may die at home while he is in another dimension.
+        ServerPlayer owner = LauraSpeech.ownerAnywhere(laura);
         switch (LauraConfig.reviveMode.get()) {
             case GRAVE -> {
                 record.snapshot = laura.saveWithoutId(new CompoundTag());
@@ -844,45 +1038,35 @@ public final class LauraManager {
         LauraWorldData data = data(server);
         data.meta(player.getUUID()).lastLogout = System.currentTimeMillis();
         data.setDirty();
-        RECALLS.removeIf(r -> r.owner().equals(player.getUUID()));
+        RECALLS.removeIf(r -> {
+            if (!r.owner().equals(player.getUUID())) {
+                return false;
+            }
+            release(server, r);
+            return true;
+        });
     }
 
+    /**
+     * Her partner changed dimension: the companions who follow him come along in the same tick. They
+     * are still loaded where he left them, a second later their chunks are gone and so is every
+     * reference to them. The ones who are not loaded are recalled by the left behind check, and what
+     * she says on arrival and the advancement come from her own brain once they are together.
+     */
     public static void onPlayerChangedDimension(ServerPlayer player, ServerLevel from) {
         if (!LauraConfig.followAcrossDimensions.get()) {
             return;
         }
         MinecraftServer server = player.level().getServer();
-        List<LauraEntity> followers = new ArrayList<>();
         for (LauraWorldData.Record r : data(server).byOwner(player.getUUID())) {
-            Entity e = from.getEntity(r.laura);
-            if (e instanceof LauraEntity laura && laura.getMode() == LauraMode.FOLLOW && !laura.brain().isSulking() && !laura.isFetching()) {
-                followers.add(laura);
+            if (!r.isActive()) {
+                continue;
+            }
+            Entity e = findEntity(server, r.laura, from.dimension());
+            if (e instanceof LauraEntity laura && laura.isAlive() && laura.level() != player.level() && follows(laura)) {
+                teleport(laura, player.level(), player.blockPosition());
             }
         }
-        if (followers.isEmpty()) {
-            return;
-        }
-        schedule(server, 20, () -> {
-            if (player.hasDisconnected()) {
-                return;
-            }
-            for (LauraEntity laura : followers) {
-                if (laura.isAlive() && !laura.isRemoved()) {
-                    teleport(laura, player.level(), player.blockPosition());
-                }
-            }
-            schedule(server, 20, () -> {
-                LauraEntity moved = findNear(player, 16);
-                if (moved != null) {
-                    String key = player.level().dimension() == Level.NETHER ? "dimension.nether"
-                            : player.level().dimension() == Level.END ? "dimension.end" : "dimension.overworld";
-                    LauraSpeech.say(moved, player, key, LineFormatter.values());
-                    if (!key.equals("dimension.overworld")) {
-                        LauraAdvancements.award(player, key.substring("dimension.".length()));
-                    }
-                }
-            });
-        });
     }
 
     public static void onPlayerDeath(ServerPlayer player) {

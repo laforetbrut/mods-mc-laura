@@ -122,6 +122,8 @@ public final class LauraConfig {
     // combat
     public static ConfigFile.EnumValue<CombatMode> defaultCombatMode;
     public static ConfigFile.BoolValue retaliate;
+    public static ConfigFile.BoolValue attackPlayers;
+    public static ConfigFile.BoolValue shieldWithoutPvp;
 
     // fetch
     public static ConfigFile.BoolValue fetchEnabled;
@@ -292,6 +294,8 @@ public final class LauraConfig {
         ConfigFile.Section combat = f.section("combat", "Fighting.");
         defaultCombatMode = combat.enumeration("defaultMode", CombatMode.PASSIVE, "PASSIVE: she avoids monsters. DEFENSIVE: she protects you. AGGRESSIVE: she also attacks nearby monsters.");
         retaliate = combat.bool("retaliate", true, "She hits back anyone (except her partner) who hits her, unless she is PASSIVE.");
+        attackPlayers = combat.bool("attackPlayers", true, "She may fight other players, their companions and their pets, to defend her partner or herself.\nOnly where the server allows it: never when PvP is off, never against a teammate without friendly fire.\nfalse = she never fights a player or anything that belongs to a player.");
+        shieldWithoutPvp = combat.bool("shieldWithoutPvp", true, "Where the server forbids fights between two players (PvP off, same team without friendly fire),\nthe other player, their companions and their pets cannot hurt her either. Creative mode players still can.");
 
         ConfigFile.Section fetch = f.section("fetch", "Asking Laura to bring you things.");
         fetchEnabled = fetch.bool("enabled", true, "Enable the fetch action.");

@@ -140,7 +140,8 @@ public final class TestRunner {
         public ServerPlayer player() {
             if (player == null) {
                 player = MockPlayers.create(level, "LauraTester" + runner.index);
-                player.teleportTo(origin.getX() + 0.5, origin.getY(), origin.getZ() + 0.5);
+                // The fake player keeps its UUID, and with it the place and the dimension an earlier run saved.
+                player.teleportTo(level, origin.getX() + 0.5, origin.getY(), origin.getZ() + 0.5, java.util.Set.of(), 0.0F, 0.0F, false);
                 ServerPlayer p = player;
                 cleanups.add(() -> MockPlayers.remove(p));
             }
