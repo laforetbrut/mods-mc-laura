@@ -1,0 +1,92 @@
+name: Bug report
+description: Something does not work as the guides describe.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Check the [FAQ](https://github.com/laforetbrut/lauramod/blob/main/docs/FAQ.md) first.
+        Security problems are never reported here: use a
+        [private security advisory](https://github.com/laforetbrut/lauramod/security/advisories/new).
+  - type: dropdown
+    id: loader
+    attributes:
+      label: Loader
+      options:
+        - NeoForge
+        - Forge
+        - Fabric
+    validations:
+      required: true
+  - type: dropdown
+    id: minecraft
+    attributes:
+      label: Minecraft version
+      options:
+        - 1.21.1
+        - 1.20.1
+        - 26.1.2
+    validations:
+      required: true
+  - type: input
+    id: loader_version
+    attributes:
+      label: Loader version
+      placeholder: e.g. NeoForge 21.1.252
+  - type: input
+    id: mod_version
+    attributes:
+      label: Mod version
+      description: The version in the name of the jar.
+      placeholder: e.g. 2.0.0
+    validations:
+      required: true
+  - type: dropdown
+    id: side
+    attributes:
+      label: Where does it happen?
+      options:
+        - Singleplayer
+        - Multiplayer, dedicated server
+        - Multiplayer, world opened to LAN
+    validations:
+      required: true
+  - type: input
+    id: language
+    attributes:
+      label: Game language
+      description: Useful when the bug is about what she says or understands.
+      placeholder: e.g. fr_fr
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: What you did, one step per line. Include the exact command or chat message if there is one.
+      placeholder: |
+        1. /laura summon
+        2. ...
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: Expected and actual behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: mods
+    attributes:
+      label: Other mods installed
+      description: List them, or link the modpack. Say whether the bug still happens with My Girlfriend Laura alone.
+  - type: textarea
+    id: config
+    attributes:
+      label: Changed settings
+      description: Options of config/lauramod/lauramod-common.json or lauramod-client.json that are not at their default value.
+  - type: textarea
+    id: log
+    attributes:
+      label: Logs
+      description: Paste logs/latest.log or a crash report, or a link to it. Remove personal data first (IP addresses, tokens).
+      render: shell

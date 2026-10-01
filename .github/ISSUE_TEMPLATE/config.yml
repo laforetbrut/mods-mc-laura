@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and discussions
+    url: https://github.com/laforetbrut/lauramod/discussions
+    about: Ask questions and share ideas here.
+  - name: Guides and FAQ
+    url: https://github.com/laforetbrut/lauramod/tree/main/docs
+    about: Config, commands, skins, models, languages and compatibility.
+  - name: Security issue
+    url: https://github.com/laforetbrut/lauramod/security/advisories/new
+    about: Report vulnerabilities privately.

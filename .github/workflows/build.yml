@@ -17,7 +17,12 @@ jobs:
       - uses: actions/checkout@v4
       - name: Check languages
         run: |
-          if [ -f tools/check_lang.py ]; then python3 tools/check_lang.py; else echo "No tools folder on this branch."; fi
+          if [ ! -f tools/check_lang.py ]; then echo "No tools folder on this branch."; exit 0; fi
+          for dir in common/*/; do
+            version=$(basename "$dir")
+            echo "== Minecraft $version"
+            python3 tools/check_lang.py --mc "$version"
+          done
 
   build:
     runs-on: ubuntu-latest

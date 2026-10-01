@@ -4,11 +4,15 @@
 
 <p align="center">
   <a href="https://discord.gg/xjF8Rtzyd4">
-    <img src="https://img.shields.io/discord/1457392657830772738?style=for-the-badge&color=5865F2&label=Discord&logo=discord&logoColor=white" alt="Discord">
+    <img src="https://img.shields.io/badge/Discord-Join-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Discord">
   </a>
   &nbsp;
   <a href="https://arcadia-echoes-of-power.fr/">
     <img src="https://img.shields.io/badge/Website-Arcadia-blue?style=for-the-badge&logo=google-chrome" alt="Website">
+  </a>
+  &nbsp;
+  <a href="https://github.com/laforetbrut/lauramod">
+    <img src="https://img.shields.io/badge/Source-GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub">
   </a>
   &nbsp;
   <a href="https://buy.stripe.com/3cI3co6X97Vy4IK50QfIs00">
@@ -20,39 +24,188 @@
   </a>
 </p>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Minecraft-1.20.1_|_1.21.1_|_26.1.2-62B47A?style=for-the-badge" alt="Minecraft">
+  &nbsp;
+  <img src="https://img.shields.io/badge/Loaders-NeoForge_|_Forge_|_Fabric-E04E14?style=for-the-badge" alt="Loaders">
+  &nbsp;
+  <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="MIT">
+</p>
+
 </div>
 
 <br><br>
 
-<p align="center" style="font-size: 1.5em; font-weight: bold;">🇺🇸 English (US)</p>
+<p align="center" style="font-size: 1.5em; font-weight: bold;">English (US)</p>
 <div align="center">
   <hr style="width: 50%;">
 </div>
 
 <br>
 
-<p align="center"><strong>My Girlfriend Laura</strong> adds a companion NPC with advanced social features to your world.<br>She features unique interactions, an inventory system, and dynamic behaviors.</p>
+<p align="center"><strong>My Girlfriend Laura</strong> adds a companion who shares your world, for NeoForge, Forge and Fabric.<br>She follows you, talks with you in chat in your own language, has needs, moods and wishes, fetches items, works as a lumberjack, a farmer or a cook, and wears the skin or the Blockbench model you choose.</p>
+
+<p align="center"><em>Say "I feel lonely" in chat. She takes it from there.</em></p>
 
 <p align="center" style="font-size: 1.2em;">
-  ✨ <strong>Created for <a href="https://linktr.ee/justzenh">Zenh</a></strong> ✨
+  <strong>Created for <a href="https://linktr.ee/justzenh">Zenh</a></strong>
 </p>
 
-<h3 align="center">✨ Key Features</h3>
+<h3 align="center">Meet Her</h3>
 
 <p align="center">
-🗣️ <strong>Advanced Dialogue</strong> — Over 200 possible interactions and random chatter.<br>
-❤️ <strong>1000 HP & Fast Regen</strong> — Laura is extremely resilient and heals 1 HP per tick.<br>
-😡 <strong>Aggression System</strong> — Becomes sad and immobile if hit 3 times.<br>
-💞 <strong>Love Checks</strong> — Randomly asks if you still love her.<br>
-💨 <strong>Fun Mechanics</strong> — Rare random sound effects (fart mechanic).<br>
-🌐 <strong>Multi-lingual</strong> — Fully localized in English, French, German, Spanish, Italian, and Portuguese.
+<strong>Chat phrase</strong>: say "I feel lonely" in chat, in the language of your game or in English.<br>
+<strong>Command</strong>: <code>/laura summon</code>.<br>
+<strong>Laura's Heart</strong>: smelt a pink tulip in a furnace, then right click with the heart. Later on, a heart calls her to you from anywhere and makes her happy. Each use consumes the heart.<br>
+<strong>She stays</strong>: she never despawns, and <code>/laura where</code> tells you where each companion is.<br>
+<strong>If she dies</strong>: craft a Laura's Gravestone (one stone bricks on top, three stone bricks in the middle, three cobblestone slabs at the bottom), place it and right click it with a flower. She comes back with her inventory.
 </p>
 
 <br>
 
+<h3 align="center">What She Does</h3>
+
+<p align="center">
+<strong>Follows you</strong>: she walks with you, into the Nether and the End too, and only teleports when you are more than 128 blocks away. She can also stay, wander, come or go home.<br>
+<strong>Talks in your language</strong>: she reads the chat and understands plain sentences such as "follow me", "bring me bread" or "be a farmer". Chain orders with "then". Her answers show in chat and in a bubble above her head.<br>
+<strong>Needs and moods</strong>: hunger, energy, fun, attention and hygiene go down over time. She eats, sleeps and bathes on her own when she can, and tells you when something is missing. Her mood and her affection, from "Hates you" to "Soulmates", change how she behaves.<br>
+<strong>Desires and gifts</strong>: about every 12 minutes she wishes for an item, a place or an activity (a sunset, a boat ride, fireworks), shown in a thought bubble. You have 15 minutes. Gifts and favourite food raise her affection, and she sometimes gives something back.<br>
+<strong>Fetches items</strong>: say "bring me bread" and she searches 24 blocks around her: items on the ground, then chests, barrels and modded storage, then the logs, flowers and ripe crops she may harvest. Harvested crops are replanted. A number in the message is the count ("bring me 32 bread"); without one she brings up to 16. <code>/laura fetch bread 32</code> and the Fetch tab of her menu do the same.<br>
+<strong>Works</strong>: as a lumberjack she fells natural trees and replants saplings, never touching the logs of your builds. As a farmer she harvests, replants, sows and uses bone meal. As a cook she uses furnaces, smokers and lit campfires, and prepares meals at a crafting table. She can hold several jobs, do a single task, or follow a to-do list of 16 tasks. By default she works during the day, and felling trees and farming need the <code>mobGriefing</code> game rule.<br>
+<strong>Uses chests</strong>: assign containers to eight purposes (wood, harvest, seeds, ingredients, fuel, meals, pantry, storage). She takes what she needs there and stores what she produces.<br>
+<strong>Stays home</strong>: set her home with <code>/laura home set</code>, then send her there with <code>/laura home</code>. At home she stays within 12 blocks of it and sleeps in a free bed at night.<br>
+<strong>Looks after you</strong>: she gives you food when you are hurt and hungry, and returns your items when you die near her. Three combat modes: passive (default), defensive, aggressive.<br>
+<strong>Carries her things</strong>: three rows of inventory, four armor slots, both hands and a back slot. Sneak and right click her to open it.<br>
+<strong>Quiet time</strong>: a hay bale keeps her quiet for a while, right click her with it (it costs a little affection). Remove it with shears or <code>/laura ungag</code>, or wait: she removes it herself after 5 minutes. The feature can be turned off.<br>
+<strong>58 advancements</strong>: a whole tab to complete, from the first hug to 365 days together.
+</p>
+
+<p align="center"><em>Fair warning: out of the box she is very demanding, and she may refuse an order when she is unhappy (asking twice always works). One option makes her calm, see Configuration below.</em></p>
+
+<br>
+
+<h3 align="center">Make Her Yours</h3>
+
+<p align="center">
+<strong>Skins</strong>: six built-in outfits (Laura, Summer, Winter, Pyjamas, Sporty, Gothic), or any standard Minecraft skin: a PNG of your own skins folder picked in her menu, a file of the server, an image address from an allowed site, or the skin of a Minecraft account.<br>
+<strong>Custom models</strong>: Blockbench projects (<code>.bbmodel</code>) and Bedrock geometries (<code>.geo.json</code>) with their own textures and animations. A model without animations borrows the default ones when its bones have recognisable names.<br>
+<strong>Name</strong>: rename her with <code>/laura name</code>, the pencil in her menu, or a name tag.<br>
+<strong>Emotes</strong>: 30 emotes, from a wave to air guitar, by chat, command, menu or wheel.<br>
+<strong>Menu, key K</strong>: seven tabs (Home, Orders, Emotes, Work, Fetch, Style, Settings). A right click with an empty hand opens it too.<br>
+<strong>Emote wheel, key G</strong>: point at an emote and release the key.
+</p>
+
+<br>
+
+<h3 align="center">Multiplayer</h3>
+
+<p align="center">
+<strong>One partner each</strong>: a companion is bound to the player who summoned her. Other players cannot give her orders or change her look unless the server allows it.<br>
+<strong>Several companions per player</strong>: 3 by default, with an optional limit for the whole world. Write a name to talk to one of them, or "everyone" to talk to all.<br>
+<strong>Proximity chat</strong>: she hears you, and players hear her, only within 64 blocks in the same dimension. She answers each player in the language of that player's game.<br>
+<strong>Server control</strong>: skin uploads are on and model uploads are off by default, both with size and count limits. <code>/laura reload</code> and <code>/laura admin</code> need permission level 2 by default.
+</p>
+
+<br>
+
+<h3 align="center">Configuration and Languages</h3>
+
+<p align="center">
+<strong>Readable config files</strong>: everything lives in <code>config/lauramod/</code>. <code>lauramod-common.json</code> for the server or your singleplayer world, <code>lauramod-client.json</code> for your display. Every option is written with its comment, its range and its default.<br>
+<strong>A calmer companion</strong>: set <code>needs.annoyance</code> to <code>CHILL</code> or <code>NORMAL</code>, or turn needs, desires and refusals off one by one.<br>
+<strong>Your own content</strong>: <code>gifts.json</code>, <code>desires.json</code> and <code>recipes.json</code> list her gifts, her wishes and the meals she cooks. Apply changes with <code>/laura reload</code>.<br>
+<strong>18 languages</strong>: Czech, German, English, Spanish, French, Indonesian, Italian, Japanese, Korean, Dutch, Polish, Brazilian Portuguese, Russian, Swedish, Turkish, Ukrainian, Simplified Chinese and Traditional Chinese, for the interface and for everything she says and understands.<br>
+<strong>Add your own</strong>: drop a JSON file in <code>config/lauramod/dialogues/</code> to add lines, chat phrases or a whole new language, and in <code>config/lauramod/lang/</code> for the interface. No code and no resource pack needed.
+</p>
+
+<br>
+
+<h3 align="center">Optional Integrations</h3>
+
+<p align="center">Nothing below is required and nothing is bundled. The table describes the Minecraft 1.21.1 builds.</p>
+
 <div align="center">
-    <h3 align="center">🎮 Join the Adventure</h3>
-    <p align="center">Experience the mod in action on our unique <strong>Industry, Magic & Exploration</strong> modpack.</p>
+<table>
+  <tr><th>Integration</th><th>NeoForge</th><th>Forge</th><th>Fabric</th></tr>
+  <tr><td>Modded storage blocks</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+  <tr><td>Backpack worn on her back</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+  <tr><td>Backpack used as extra storage</td><td>Yes</td><td>Yes</td><td>No</td></tr>
+  <tr><td>Applied Energistics 2</td><td>Yes</td><td>No</td><td>No</td></tr>
+  <tr><td>Curios</td><td>Yes</td><td>No</td><td>No</td></tr>
+  <tr><td>Farmer's Delight</td><td>Yes</td><td>No</td><td>Yes, Farmer's Delight Refabricated</td></tr>
+  <tr><td>KubeJS</td><td>Yes</td><td>No</td><td>No</td></tr>
+</table>
+</div>
+
+<p align="center">
+<strong>Modded storage</strong>: storage blocks of other mods work like vanilla chests for fetching, jobs and assigned chests.<br>
+<strong>Backpacks</strong>: she wears a bundle, a Sophisticated Backpacks backpack, or any item whose id contains "backpack". On NeoForge and Forge, a backpack that exposes its inventory becomes extra storage.<br>
+<strong>Applied Energistics 2</strong>: any block of a powered ME network gives her the whole network storage, to fetch from it and to store her production in it.<br>
+<strong>Curios</strong>: she wears trinkets (necklace, ring, bracelet, charm, head, back, belt).<br>
+<strong>Farmer's Delight</strong>: as a cook she also uses the cooking pots of her work area.<br>
+<strong>KubeJS</strong>: scripts add gifts, desires, meals and dialogue lines, and react to what happens to her.<br>
+<strong>Also</strong>: Carry On cannot pick her up, and when she follows you she rejoins you after a waystone, a teleport command or an ender pearl.
+</p>
+
+<br>
+
+<h3 align="center">Supported Versions</h3>
+
+<p align="center">
+<strong>Minecraft 1.21.1</strong>: version 2.0.0 for NeoForge, Forge and Fabric (Fabric API required), Java 21.<br>
+<strong>Minecraft 1.20.1 and 26.1.2</strong>: in preparation for the same three loaders, which will complete the planned set of nine targets.
+</p>
+
+<br>
+
+<h3 align="center">Getting Started</h3>
+
+<p align="center">
+<strong>1.</strong> Put the jar of your loader in the <code>mods</code> folder (Fabric also needs Fabric API). On a server, install it on the server and on every client.<br>
+<strong>2.</strong> Say "I feel lonely" in chat, or run <code>/laura summon</code>.<br>
+<strong>3.</strong> Press <strong>K</strong> near her to open her menu and look around the seven tabs.<br>
+<strong>4.</strong> Feed her: right click her with food. She heals while she is well fed.<br>
+<strong>5.</strong> Give her a job: stand in the middle of your field, run <code>/laura job farmer</code>, then look at a chest and run <code>/laura chest harvest</code>.<br>
+<strong>6.</strong> Ask for something: say "bring me bread", or run <code>/laura fetch bread 16</code> to choose the count.<br>
+<strong>7.</strong> Too demanding? Set <code>needs.annoyance</code> to <code>CHILL</code> in <code>config/lauramod/lauramod-common.json</code>, then run <code>/laura reload</code> (permission level 2) or restart the world.
+</p>
+
+<br>
+
+<h3 align="center">Guides</h3>
+
+<p align="center">
+<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/ACTIONS.md">Actions and behaviour</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/COMMANDS.md">Commands</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/CONFIG.md">Configuration</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/SKINS.md">Skins</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/MODELS.md">Custom models</a><br>
+<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/LANGUAGES.md">Languages and dialogues</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/KUBEJS.md">KubeJS</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/COMPATIBILITY.md">Compatibility</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/BUILDING.md">Building from source</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/FAQ.md">FAQ</a>
+</p>
+
+<p align="center">A problem or an idea? Open an issue on <a href="https://github.com/laforetbrut/lauramod/issues">GitHub</a>.</p>
+
+<br>
+
+<hr style="width: 50%;">
+
+<h3 align="center">Official Hosting Partner</h3>
+
+<p align="center">Want to play with Laura and your friends on your own server? Our official US / international partner offers high-performance Minecraft hosting optimized for modpacks.</p>
+
+<p align="center"><a href="https://wabbanode.com/partner/vyrriox" target="_blank" rel="nofollow noopener"><img style="border: 2px solid #62B47A;" src="https://arcadia-echoes-of-power.fr/storage/curseforge/bannerwab.png" alt="WabbaNode - Official Hosting Partner" width="800"></a></p>
+
+<p align="center"><a href="https://wabbanode.com/partner/vyrriox" target="_blank" rel="nofollow noopener"><img src="https://img.shields.io/badge/Host_with-WabbaNode-62B47A?style=for-the-badge&logo=server&logoColor=white" alt="Host with WabbaNode"></a></p>
+
+<br>
+
+<div align="center">
+    <h3 align="center">Join the Adventure</h3>
+    <p align="center">Discover our other mods on our unique <strong>Industry, Magic & Exploration</strong> modpack.</p>
     <a href="https://arcadia-echoes-of-power.fr/">
         <img src="https://img.shields.io/badge/Play_Now-Arcadia_Modpack-2ea44f?style=for-the-badge&logo=curseforge" alt="Play Now">
     </a>
@@ -60,35 +213,176 @@
 
 <br><br>
 
-<p align="center" style="font-size: 1.5em; font-weight: bold;">🇫🇷 Français (FR)</p>
+<p align="center" style="font-size: 1.5em; font-weight: bold;">Français (FR)</p>
 <div align="center">
   <hr style="width: 50%;">
 </div>
 
 <br>
 
-<p align="center"><strong>My Girlfriend Laura</strong> ajoute un PNJ compagnon avec des fonctionnalités sociales avancées à votre monde.<br>Elle dispose d'interactions uniques, d'un système d'inventaire et de comportements dynamiques.</p>
+<p align="center"><strong>My Girlfriend Laura</strong> ajoute une compagne qui partage votre monde, pour NeoForge, Forge et Fabric.<br>Elle vous suit, discute avec vous dans le chat dans votre langue, a des besoins, des humeurs et des envies, rapporte des objets, travaille comme bûcheronne, fermière ou cuisinière, et porte le skin ou le modèle Blockbench de votre choix.</p>
+
+<p align="center"><em>Dites « je me sens seul » dans le chat. Elle s'occupe du reste.</em></p>
 
 <p align="center" style="font-size: 1.2em;">
-  ✨ <strong>Créé pour <a href="https://linktr.ee/justzenh">Zenh</a></strong> ✨
+  <strong>Créé pour <a href="https://linktr.ee/justzenh">Zenh</a></strong>
 </p>
 
-<h3 align="center">✨ Fonctionnalités Clés</h3>
+<h3 align="center">La Rencontrer</h3>
 
 <p align="center">
-🗣️ <strong>Dialogue Avancé</strong> — Plus de 200 interactions possibles et bavardages aléatoires.<br>
-❤️ <strong>1000 PV & Régénération</strong> — Laura est extrêmement résistante et récupère 1 PV par tick.<br>
-😡 <strong>Système d'Agression</strong> — Devient triste et immobile si elle est frappée 3 fois.<br>
-💞 <strong>Tests d'Amour</strong> — Demande aléatoirement si vous l'aimez encore.<br>
-💨 <strong>Mécaniques Fun</strong> — Effets sonores rares et aléatoires (mécanique de pet).<br>
-🌐 <strong>Multi-langue</strong> — Entièrement traduit en Anglais, Français, Allemand, Espagnol, Italien et Portugais.
+<strong>Phrase dans le chat</strong> : dites « je me sens seul » dans le chat, dans la langue de votre jeu ou en anglais.<br>
+<strong>Commande</strong> : <code>/laura summon</code>.<br>
+<strong>Cœur de Laura</strong> : faites cuire une tulipe rose dans un fourneau, puis faites un clic droit avec le cœur. Par la suite, un cœur l'appelle à vous depuis n'importe où et la rend heureuse. Chaque utilisation consomme le cœur.<br>
+<strong>Elle reste</strong> : elle ne disparaît jamais, et <code>/laura where</code> vous dit où se trouve chaque compagne.<br>
+<strong>Si elle meurt</strong> : fabriquez une Tombe de Laura (une pierre taillée en haut, trois pierres taillées au milieu, trois dalles de pierres en bas), posez-la et faites un clic droit dessus avec une fleur. Elle revient avec son inventaire.
 </p>
 
 <br>
 
+<h3 align="center">Ce Qu'elle Fait</h3>
+
+<p align="center">
+<strong>Elle vous suit</strong> : elle marche avec vous, jusque dans le Nether et l'End, et ne se téléporte que si vous êtes à plus de 128 blocs. Elle peut aussi rester sur place, se promener, venir ou rentrer à la maison.<br>
+<strong>Elle parle votre langue</strong> : elle lit le chat et comprend des phrases simples comme « suis-moi », « apporte-moi du pain » ou « sois fermière ». Enchaînez les ordres avec « puis ». Ses réponses s'affichent dans le chat et dans une bulle au-dessus de sa tête.<br>
+<strong>Besoins et humeurs</strong> : la faim, l'énergie, l'amusement, l'attention et l'hygiène baissent avec le temps. Elle mange, dort et se lave seule quand elle le peut, et vous prévient quand il lui manque quelque chose. Son humeur et son affection, de « Te déteste » à « Âmes sœurs », changent son comportement.<br>
+<strong>Désirs et cadeaux</strong> : toutes les 12 minutes environ, elle désire un objet, un lieu ou une activité (un coucher de soleil, un tour en bateau, des feux d'artifice), affiché dans une bulle de pensée. Vous avez 15 minutes. Les cadeaux et ses aliments préférés augmentent son affection, et elle offre parfois quelque chose en retour.<br>
+<strong>Elle rapporte des objets</strong> : dites « apporte-moi du pain » et elle cherche dans un rayon de 24 blocs autour d'elle : les objets au sol, puis les coffres, les tonneaux et les rangements de mods, puis les bûches, les fleurs et les cultures mûres qu'elle peut récolter. Les cultures récoltées sont replantées. Un nombre dans le message donne la quantité (« apporte-moi 32 pains ») ; sans nombre, elle en rapporte jusqu'à 16. <code>/laura fetch bread 32</code> et l'onglet Chercher de son menu font la même chose.<br>
+<strong>Elle travaille</strong> : bûcheronne, elle abat les arbres naturels et replante des pousses, sans jamais toucher aux bûches de vos constructions. Fermière, elle récolte, replante, sème et utilise la poudre d'os. Cuisinière, elle utilise les fourneaux, les fumoirs et les feux de camp allumés, et prépare des plats sur un établi. Elle peut cumuler plusieurs métiers, faire une tâche unique, ou suivre une liste de 16 tâches. Par défaut elle travaille de jour, et l'abattage des arbres et le travail des champs demandent la règle de jeu <code>mobGriefing</code>.<br>
+<strong>Elle utilise les coffres</strong> : attribuez des conteneurs à huit usages (bois, récolte, graines, ingrédients, combustible, plats, garde-manger, stockage). Elle y prend ce dont elle a besoin et y range ce qu'elle produit.<br>
+<strong>Elle reste à la maison</strong> : fixez sa maison avec <code>/laura home set</code>, puis envoyez-la là-bas avec <code>/laura home</code>. À la maison, elle reste dans un rayon de 12 blocs autour et dort la nuit dans un lit libre.<br>
+<strong>Elle veille sur vous</strong> : elle vous donne de la nourriture quand vous êtes blessé et affamé, et vous rend vos objets quand vous mourez près d'elle. Trois modes de combat : pacifique (par défaut), défensive, agressive.<br>
+<strong>Elle porte ses affaires</strong> : trois rangées d'inventaire, quatre emplacements d'armure, les deux mains et un emplacement de dos. Accroupissez-vous et faites un clic droit sur elle pour l'ouvrir.<br>
+<strong>Un peu de calme</strong> : une botte de foin la fait taire un moment, faites un clic droit sur elle avec (cela coûte un peu d'affection). Retirez-la avec des cisailles ou <code>/laura ungag</code>, ou attendez : elle la retire elle-même au bout de 5 minutes. La fonction peut être désactivée.<br>
+<strong>58 progrès</strong> : un onglet entier à compléter, du premier câlin à 365 jours ensemble.
+</p>
+
+<p align="center"><em>Vous êtes prévenu : par défaut elle est très exigeante, et elle peut refuser un ordre quand elle est mécontente (le redonner une seconde fois marche toujours). Une option la rend calme, voir Configuration plus bas.</em></p>
+
+<br>
+
+<h3 align="center">La Personnaliser</h3>
+
+<p align="center">
+<strong>Skins</strong> : six tenues intégrées (Laura, Été, Hiver, Pyjama, Sportive, Gothique), ou n'importe quel skin Minecraft standard : un PNG de votre propre dossier de skins choisi dans son menu, un fichier du serveur, l'adresse d'une image sur un site autorisé, ou le skin d'un compte Minecraft.<br>
+<strong>Modèles personnalisés</strong> : des projets Blockbench (<code>.bbmodel</code>) et des géométries Bedrock (<code>.geo.json</code>) avec leurs propres textures et animations. Un modèle sans animation emprunte celles par défaut quand ses os portent des noms reconnaissables.<br>
+<strong>Nom</strong> : renommez-la avec <code>/laura name</code>, le crayon de son menu, ou une étiquette.<br>
+<strong>Émotes</strong> : 30 émotes, du coucou à l'air guitar, par le chat, une commande, le menu ou la roue.<br>
+<strong>Menu, touche K</strong> : sept onglets (Accueil, Ordres, Émotes, Travail, Chercher, Style, Réglages). Un clic droit à main vide l'ouvre aussi.<br>
+<strong>Roue des émotes, touche G</strong> : visez une émote et relâchez la touche.
+</p>
+
+<br>
+
+<h3 align="center">Multijoueur</h3>
+
+<p align="center">
+<strong>Un partenaire chacune</strong> : une compagne est liée au joueur qui l'a invoquée. Les autres joueurs ne peuvent ni lui donner d'ordres ni changer son apparence, sauf si le serveur l'autorise.<br>
+<strong>Plusieurs compagnes par joueur</strong> : 3 par défaut, avec une limite facultative pour le monde entier. Écrivez un nom pour parler à l'une d'elles, ou « tout le monde » pour parler à toutes.<br>
+<strong>Chat de proximité</strong> : elle vous entend, et les joueurs l'entendent, seulement dans un rayon de 64 blocs dans la même dimension. Elle répond à chaque joueur dans la langue du jeu de ce joueur.<br>
+<strong>Contrôle du serveur</strong> : l'envoi de skins est activé et l'envoi de modèles est désactivé par défaut, tous deux avec des limites de poids et de nombre. <code>/laura reload</code> et <code>/laura admin</code> demandent le niveau de permission 2 par défaut.
+</p>
+
+<br>
+
+<h3 align="center">Configuration et Langues</h3>
+
+<p align="center">
+<strong>Des fichiers lisibles</strong> : tout se trouve dans <code>config/lauramod/</code>. <code>lauramod-common.json</code> pour le serveur ou votre monde solo, <code>lauramod-client.json</code> pour votre affichage. Chaque option est écrite avec son commentaire, sa plage de valeurs et sa valeur par défaut.<br>
+<strong>Une compagne plus calme</strong> : mettez <code>needs.annoyance</code> à <code>CHILL</code> ou <code>NORMAL</code>, ou désactivez un par un les besoins, les désirs et les refus.<br>
+<strong>Votre propre contenu</strong> : <code>gifts.json</code>, <code>desires.json</code> et <code>recipes.json</code> listent ses cadeaux, ses envies et les plats qu'elle cuisine. Appliquez les changements avec <code>/laura reload</code>.<br>
+<strong>18 langues</strong> : tchèque, allemand, anglais, espagnol, français, indonésien, italien, japonais, coréen, néerlandais, polonais, portugais du Brésil, russe, suédois, turc, ukrainien, chinois simplifié et chinois traditionnel, pour l'interface et pour tout ce qu'elle dit et comprend.<br>
+<strong>Ajoutez la vôtre</strong> : déposez un fichier JSON dans <code>config/lauramod/dialogues/</code> pour ajouter des répliques, des phrases de chat ou une langue entière, et dans <code>config/lauramod/lang/</code> pour l'interface. Sans code ni pack de ressources.
+</p>
+
+<br>
+
+<h3 align="center">Intégrations Facultatives</h3>
+
+<p align="center">Rien de ce qui suit n'est obligatoire et rien n'est inclus dans le mod. Le tableau décrit les versions pour Minecraft 1.21.1.</p>
+
 <div align="center">
-    <h3>🎮 Rejoignez l'Aventure</h3>
-    <p>Découvrez le mod en action sur notre modpack unique <strong>Industrie, Magie & Exploration</strong>.</p>
+<table>
+  <tr><th>Intégration</th><th>NeoForge</th><th>Forge</th><th>Fabric</th></tr>
+  <tr><td>Rangements de mods</td><td>Oui</td><td>Oui</td><td>Oui</td></tr>
+  <tr><td>Sac à dos porté sur son dos</td><td>Oui</td><td>Oui</td><td>Oui</td></tr>
+  <tr><td>Sac à dos utilisé comme rangement supplémentaire</td><td>Oui</td><td>Oui</td><td>Non</td></tr>
+  <tr><td>Applied Energistics 2</td><td>Oui</td><td>Non</td><td>Non</td></tr>
+  <tr><td>Curios</td><td>Oui</td><td>Non</td><td>Non</td></tr>
+  <tr><td>Farmer's Delight</td><td>Oui</td><td>Non</td><td>Oui, Farmer's Delight Refabricated</td></tr>
+  <tr><td>KubeJS</td><td>Oui</td><td>Non</td><td>Non</td></tr>
+</table>
+</div>
+
+<p align="center">
+<strong>Rangements de mods</strong> : les blocs de rangement des autres mods fonctionnent comme les coffres du jeu de base pour rapporter, pour les métiers et pour les coffres attribués.<br>
+<strong>Sacs à dos</strong> : elle porte un sac du jeu de base, un sac à dos de Sophisticated Backpacks, ou tout objet dont l'identifiant contient « backpack ». Sur NeoForge et Forge, un sac à dos qui expose son inventaire devient un rangement supplémentaire.<br>
+<strong>Applied Energistics 2</strong> : n'importe quel bloc d'un réseau ME alimenté lui donne accès à tout le stockage du réseau, pour y prendre des objets et y ranger sa production.<br>
+<strong>Curios</strong> : elle porte des bijoux (collier, bague, bracelet, charme, tête, dos, ceinture).<br>
+<strong>Farmer's Delight</strong> : cuisinière, elle utilise aussi les marmites de sa zone de travail.<br>
+<strong>KubeJS</strong> : les scripts ajoutent des cadeaux, des désirs, des plats et des répliques, et réagissent à ce qui lui arrive.<br>
+<strong>Et aussi</strong> : Carry On ne peut pas la porter, et quand elle vous suit, elle vous rejoint après un waystone, une commande de téléportation ou une perle de l'Ender.
+</p>
+
+<br>
+
+<h3 align="center">Versions Supportées</h3>
+
+<p align="center">
+<strong>Minecraft 1.21.1</strong> : version 2.0.0 pour NeoForge, Forge et Fabric (Fabric API obligatoire), Java 21.<br>
+<strong>Minecraft 1.20.1 et 26.1.2</strong> : en préparation pour les trois mêmes chargeurs, ce qui complétera l'ensemble prévu de neuf cibles.
+</p>
+
+<br>
+
+<h3 align="center">Premiers Pas</h3>
+
+<p align="center">
+<strong>1.</strong> Placez le jar de votre chargeur dans le dossier <code>mods</code> (Fabric demande aussi Fabric API). Sur un serveur, installez-le sur le serveur et sur chaque client.<br>
+<strong>2.</strong> Dites « je me sens seul » dans le chat, ou lancez <code>/laura summon</code>.<br>
+<strong>3.</strong> Appuyez sur <strong>K</strong> près d'elle pour ouvrir son menu et parcourir les sept onglets.<br>
+<strong>4.</strong> Nourrissez-la : faites un clic droit sur elle avec de la nourriture. Elle récupère de la vie tant qu'elle est bien nourrie.<br>
+<strong>5.</strong> Donnez-lui un métier : placez-vous au milieu de votre champ, lancez <code>/laura job farmer</code>, puis regardez un coffre et lancez <code>/laura chest harvest</code>.<br>
+<strong>6.</strong> Demandez-lui quelque chose : dites « apporte-moi du pain », ou lancez <code>/laura fetch bread 16</code> pour choisir la quantité.<br>
+<strong>7.</strong> Trop exigeante ? Mettez <code>needs.annoyance</code> à <code>CHILL</code> dans <code>config/lauramod/lauramod-common.json</code>, puis lancez <code>/laura reload</code> (niveau de permission 2) ou relancez le monde.
+</p>
+
+<br>
+
+<h3 align="center">Guides</h3>
+
+<p align="center">
+<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/ACTIONS.md">Actions et comportement</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/COMMANDS.md">Commandes</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/CONFIG.md">Configuration</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/SKINS.md">Skins</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/MODELS.md">Modèles personnalisés</a><br>
+<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/LANGUAGES.md">Langues et dialogues</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/KUBEJS.md">KubeJS</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/COMPATIBILITY.md">Compatibilité</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/BUILDING.md">Compiler depuis les sources</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/FAQ.md">FAQ</a>
+</p>
+
+<p align="center">Un problème ou une idée ? Ouvrez un ticket sur <a href="https://github.com/laforetbrut/lauramod/issues">GitHub</a>.</p>
+
+<br>
+
+<hr style="width: 50%;">
+
+<h3 align="center">Hébergeur Officiel Partenaire</h3>
+
+<p align="center">Envie de jouer avec Laura et vos amis sur votre propre serveur ? Notre partenaire officiel français propose un hébergement Minecraft haute performance optimisé pour les modpacks.</p>
+
+<p align="center"><a href="https://lordhosting.fr/gaming/serveur-minecraft?ref=arcadia" target="_blank" rel="nofollow noopener"><img style="border: 2px solid #62B47A;" src="https://arcadia-echoes-of-power.fr/storage/curseforge/bannerlord.png" alt="LordHosting - Hébergeur Officiel Partenaire" width="800"></a></p>
+
+<p align="center"><a href="https://lordhosting.fr/gaming/serveur-minecraft?ref=arcadia" target="_blank" rel="nofollow noopener"><img src="https://img.shields.io/badge/Heberger_avec-LordHosting-62B47A?style=for-the-badge&logo=server&logoColor=white" alt="Héberger avec LordHosting"></a></p>
+
+<br>
+
+<div align="center">
+    <h3>Rejoignez l'Aventure</h3>
+    <p>Découvrez nos autres mods sur notre modpack unique <strong>Industrie, Magie & Exploration</strong>.</p>
     <a href="https://arcadia-echoes-of-power.fr/">
         <img src="https://img.shields.io/badge/Jouer_Maintenant-Modpack_Arcadia-2ea44f?style=for-the-badge&logo=curseforge" alt="Jouer Maintenant">
     </a>
@@ -99,7 +393,7 @@
 
 <div align="center">
 
-<p align="center" style="font-size: 1.5em; font-weight: bold;">❤️ Support the Project / Soutenir le Projet</p>
+<p align="center" style="font-size: 1.5em; font-weight: bold;">Support the Project / Soutenir le Projet</p>
 
 <p align="center">
   <strong>Your support helps us keep Arcadia alive and evolving!</strong><br>
@@ -117,5 +411,7 @@
   <img src="https://img.shields.io/badge/Partners-Partenaires-orange?style=for-the-badge&logoColor=white" alt="Partners" height="30">
 </a>
 </div>
+
+<p align="center"><strong>Author:</strong> vyrriox &nbsp;|&nbsp; <strong>License:</strong> MIT</p>
 
 </div>

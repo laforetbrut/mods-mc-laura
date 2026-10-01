@@ -1,0 +1,33 @@
+name: Feature request
+description: Suggest something Laura could do, say or understand.
+labels: [enhancement]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Orders and chat
+        - Jobs, tasks and fetch
+        - Needs, mood and desires
+        - Skins and models
+        - Dialogues and translations
+        - Compatibility with another mod
+        - Config and commands
+        - Other
+  - type: textarea
+    id: idea
+    attributes:
+      label: Idea
+      description: What should the mod do?
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why would it be useful?
+  - type: textarea
+    id: targets
+    attributes:
+      label: Loaders and Minecraft versions concerned
+      description: Leave empty if it concerns all of them.
