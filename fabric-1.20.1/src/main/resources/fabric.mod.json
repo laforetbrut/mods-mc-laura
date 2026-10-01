@@ -8,9 +8,9 @@
     "${mod_authors}"
   ],
   "contact": {
-    "homepage": "https://github.com/laforetbrut/lauramod",
-    "sources": "https://github.com/laforetbrut/lauramod",
-    "issues": "https://github.com/laforetbrut/lauramod/issues"
+    "homepage": "https://github.com/laforetbrut/mods-mc-laura",
+    "sources": "https://github.com/laforetbrut/mods-mc-laura",
+    "issues": "https://github.com/laforetbrut/mods-mc-laura/issues"
   },
   "license": "${mod_license}",
   "icon": "lauramod_logo.png",

@@ -13,7 +13,7 @@ Related guides / Guides liés : [ACTIONS.md](ACTIONS.md), [KUBEJS.md](KUBEJS.md)
 
 ### Targets
 
-Version 2.0.0 exists for nine targets: Minecraft 1.20.1, 1.21.1 and 26.1.2, each on NeoForge, Forge and Fabric. The README of the repository lists them with their loader and Java versions: <https://github.com/laforetbrut/lauramod>.
+Version 2.0.0 exists for nine targets: Minecraft 1.20.1, 1.21.1 and 26.1.2, each on NeoForge, Forge and Fabric. The README of the repository lists them with their loader and Java versions: <https://github.com/laforetbrut/mods-mc-laura>.
 
 The behaviour described in the guides is the same on the nine targets, because it lives in the shared code of each Minecraft version. Only the optional integrations below differ. None of them is required and none is bundled in the mod.
 
@@ -163,7 +163,7 @@ Companions in stay, home, wander or work mode are not moved.
 
 ### Cibles
 
-La version 2.0.0 existe pour neuf cibles : Minecraft 1.20.1, 1.21.1 et 26.1.2, chacun sur NeoForge, Forge et Fabric. Le README du dépôt les liste avec leurs versions de chargeur et de Java : <https://github.com/laforetbrut/lauramod>.
+La version 2.0.0 existe pour neuf cibles : Minecraft 1.20.1, 1.21.1 et 26.1.2, chacun sur NeoForge, Forge et Fabric. Le README du dépôt les liste avec leurs versions de chargeur et de Java : <https://github.com/laforetbrut/mods-mc-laura>.
 
 Le comportement décrit dans les guides est le même sur les neuf cibles, car il se trouve dans le code partagé de chaque version de Minecraft. Seules les intégrations facultatives ci-dessous diffèrent. Aucune n'est obligatoire et aucune n'est incluse dans le mod.
 

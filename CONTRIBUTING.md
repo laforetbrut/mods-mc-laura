@@ -7,7 +7,7 @@ My Girlfriend Laura (mod id `lauramod`), author / auteur : vyrriox.
 
 Thanks for wanting to make Laura a better companion.
 
-- Questions, bugs and feature requests: [GitHub issues](https://github.com/laforetbrut/lauramod/issues/new/choose).
+- Questions, bugs and feature requests: [GitHub issues](https://github.com/laforetbrut/mods-mc-laura/issues/new/choose).
 - Security problems: never in public, see [SECURITY.md](SECURITY.md).
 - Everyone taking part follows the [Code of Conduct](CODE_OF_CONDUCT.md).
 
@@ -169,7 +169,7 @@ A pull request must include:
 
 Merci de vouloir faire de Laura une meilleure compagne.
 
-- Questions, bugs et demandes de fonctionnalités : [issues GitHub](https://github.com/laforetbrut/lauramod/issues/new/choose).
+- Questions, bugs et demandes de fonctionnalités : [issues GitHub](https://github.com/laforetbrut/mods-mc-laura/issues/new/choose).
 - Problèmes de sécurité : jamais en public, voir [SECURITY.md](SECURITY.md).
 - Toute personne qui participe respecte le [Code de conduite](CODE_OF_CONDUCT.md).
 

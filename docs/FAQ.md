@@ -7,7 +7,7 @@ My Girlfriend Laura 2.0.0 (mod id `lauramod`), author / auteur : vyrriox.
 
 Guides : [ACTIONS.md](ACTIONS.md), [COMMANDS.md](COMMANDS.md), [CONFIG.md](CONFIG.md), [SKINS.md](SKINS.md), [MODELS.md](MODELS.md), [LANGUAGES.md](LANGUAGES.md), [KUBEJS.md](KUBEJS.md), [COMPATIBILITY.md](COMPATIBILITY.md), [BUILDING.md](BUILDING.md).
 
-Issues and suggestions / Problèmes et suggestions : <https://github.com/laforetbrut/lauramod/issues>
+Issues and suggestions / Problèmes et suggestions : <https://github.com/laforetbrut/mods-mc-laura/issues>
 
 ---
 

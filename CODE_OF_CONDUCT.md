@@ -31,7 +31,7 @@ contributors temporarily or permanently.
 Reports go through GitHub, never by email:
 
 - In private, through a
-  [GitHub private advisory](https://github.com/laforetbrut/lauramod/security/advisories/new) on
+  [GitHub private advisory](https://github.com/laforetbrut/mods-mc-laura/security/advisories/new) on
   the repository. Only you and the maintainers can read it.
 - On the content itself, with the report entry in the menu of the comment, issue, discussion or
   pull request (GitHub's moderation tools).
@@ -70,7 +70,7 @@ code, et bannir des contributeurs de façon temporaire ou définitive.
 Les signalements passent par GitHub, jamais par e-mail :
 
 - En privé, via une
-  [advisory privée GitHub](https://github.com/laforetbrut/lauramod/security/advisories/new) sur
+  [advisory privée GitHub](https://github.com/laforetbrut/mods-mc-laura/security/advisories/new) sur
   le dépôt. Seuls vous et les mainteneurs pouvez la lire.
 - Sur le contenu lui-même, avec l'entrée de signalement du menu du commentaire, de l'issue, de la
   discussion ou de la pull request (outils de modération de GitHub).

@@ -1,6 +1,6 @@
 # My Girlfriend Laura
 
-[![Build](https://github.com/laforetbrut/lauramod/actions/workflows/build.yml/badge.svg)](https://github.com/laforetbrut/lauramod/actions/workflows/build.yml)
+[![Build](https://github.com/laforetbrut/mods-mc-laura/actions/workflows/build.yml/badge.svg)](https://github.com/laforetbrut/mods-mc-laura/actions/workflows/build.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.20.1%20%7C%201.21.1%20%7C%2026.1.2-green)
 ![Loaders](https://img.shields.io/badge/Loaders-NeoForge%20%7C%20Forge%20%7C%20Fabric-orange)
@@ -185,7 +185,7 @@ docs/                          the ten guides
 - How to contribute, build and test: [CONTRIBUTING.md](CONTRIBUTING.md). Pull requests go
   against `main`.
 - Questions, bugs and requests:
-  [GitHub issues](https://github.com/laforetbrut/lauramod/issues/new/choose).
+  [GitHub issues](https://github.com/laforetbrut/mods-mc-laura/issues/new/choose).
 - Security problems are reported privately, see [SECURITY.md](SECURITY.md).
 - Everyone taking part follows the [Code of Conduct](CODE_OF_CONDUCT.md).
 
@@ -393,7 +393,7 @@ docs/                          les dix guides
 - Comment contribuer, compiler et tester : [CONTRIBUTING.md](CONTRIBUTING.md). Les pull requests
   se font sur `main`.
 - Questions, bugs et demandes :
-  [issues GitHub](https://github.com/laforetbrut/lauramod/issues/new/choose).
+  [issues GitHub](https://github.com/laforetbrut/mods-mc-laura/issues/new/choose).
 - Les problèmes de sécurité se signalent en privé, voir [SECURITY.md](SECURITY.md).
 - Chaque participant suit le [Code de conduite](CODE_OF_CONDUCT.md).
 

@@ -5,7 +5,7 @@ My Girlfriend Laura 2.0.0 (mod id `lauramod`), author / auteur : vyrriox.
 - [English](#english)
 - [Français](#français)
 
-Repository / Dépôt : <https://github.com/laforetbrut/lauramod>
+Repository / Dépôt : <https://github.com/laforetbrut/mods-mc-laura>
 
 ---
 

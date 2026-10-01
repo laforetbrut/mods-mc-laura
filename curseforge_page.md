@@ -11,7 +11,7 @@
     <img src="https://img.shields.io/badge/Website-Arcadia-blue?style=for-the-badge&logo=google-chrome" alt="Website">
   </a>
   &nbsp;
-  <a href="https://github.com/laforetbrut/lauramod">
+  <a href="https://github.com/laforetbrut/mods-mc-laura">
     <img src="https://img.shields.io/badge/Source-GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub">
   </a>
   &nbsp;
@@ -179,19 +179,19 @@ Nine jars in all: pick the one that matches your Minecraft version and your load
 <h3 align="center">Guides</h3>
 
 <p align="center">
-<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/ACTIONS.md">Actions and behaviour</a> &nbsp;|&nbsp;
-<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/COMMANDS.md">Commands</a> &nbsp;|&nbsp;
-<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/CONFIG.md">Configuration</a> &nbsp;|&nbsp;
-<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/SKINS.md">Skins</a> &nbsp;|&nbsp;
-<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/MODELS.md">Custom models</a><br>
-<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/LANGUAGES.md">Languages and dialogues</a> &nbsp;|&nbsp;
-<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/KUBEJS.md">KubeJS</a> &nbsp;|&nbsp;
-<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/COMPATIBILITY.md">Compatibility</a> &nbsp;|&nbsp;
-<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/BUILDING.md">Building from source</a> &nbsp;|&nbsp;
-<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/FAQ.md">FAQ</a>
+<a href="https://github.com/laforetbrut/mods-mc-laura/blob/main/docs/ACTIONS.md">Actions and behaviour</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/mods-mc-laura/blob/main/docs/COMMANDS.md">Commands</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/mods-mc-laura/blob/main/docs/CONFIG.md">Configuration</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/mods-mc-laura/blob/main/docs/SKINS.md">Skins</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/mods-mc-laura/blob/main/docs/MODELS.md">Custom models</a><br>
+<a href="https://github.com/laforetbrut/mods-mc-laura/blob/main/docs/LANGUAGES.md">Languages and dialogues</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/mods-mc-laura/blob/main/docs/KUBEJS.md">KubeJS</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/mods-mc-laura/blob/main/docs/COMPATIBILITY.md">Compatibility</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/mods-mc-laura/blob/main/docs/BUILDING.md">Building from source</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/mods-mc-laura/blob/main/docs/FAQ.md">FAQ</a>
 </p>
 
-<p align="center">A problem or an idea? Open an issue on <a href="https://github.com/laforetbrut/lauramod/issues">GitHub</a>.</p>
+<p align="center">A problem or an idea? Open an issue on <a href="https://github.com/laforetbrut/mods-mc-laura/issues">GitHub</a>.</p>
 
 <br>
 
@@ -360,19 +360,19 @@ Neuf jars en tout : prenez celui qui correspond à votre version de Minecraft et
 <h3 align="center">Guides</h3>
 
 <p align="center">
-<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/ACTIONS.md">Actions et comportement</a> &nbsp;|&nbsp;
-<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/COMMANDS.md">Commandes</a> &nbsp;|&nbsp;
-<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/CONFIG.md">Configuration</a> &nbsp;|&nbsp;
-<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/SKINS.md">Skins</a> &nbsp;|&nbsp;
-<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/MODELS.md">Modèles personnalisés</a><br>
-<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/LANGUAGES.md">Langues et dialogues</a> &nbsp;|&nbsp;
-<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/KUBEJS.md">KubeJS</a> &nbsp;|&nbsp;
-<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/COMPATIBILITY.md">Compatibilité</a> &nbsp;|&nbsp;
-<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/BUILDING.md">Compiler depuis les sources</a> &nbsp;|&nbsp;
-<a href="https://github.com/laforetbrut/lauramod/blob/main/docs/FAQ.md">FAQ</a>
+<a href="https://github.com/laforetbrut/mods-mc-laura/blob/main/docs/ACTIONS.md">Actions et comportement</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/mods-mc-laura/blob/main/docs/COMMANDS.md">Commandes</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/mods-mc-laura/blob/main/docs/CONFIG.md">Configuration</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/mods-mc-laura/blob/main/docs/SKINS.md">Skins</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/mods-mc-laura/blob/main/docs/MODELS.md">Modèles personnalisés</a><br>
+<a href="https://github.com/laforetbrut/mods-mc-laura/blob/main/docs/LANGUAGES.md">Langues et dialogues</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/mods-mc-laura/blob/main/docs/KUBEJS.md">KubeJS</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/mods-mc-laura/blob/main/docs/COMPATIBILITY.md">Compatibilité</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/mods-mc-laura/blob/main/docs/BUILDING.md">Compiler depuis les sources</a> &nbsp;|&nbsp;
+<a href="https://github.com/laforetbrut/mods-mc-laura/blob/main/docs/FAQ.md">FAQ</a>
 </p>
 
-<p align="center">Un problème ou une idée ? Ouvrez un ticket sur <a href="https://github.com/laforetbrut/lauramod/issues">GitHub</a>.</p>
+<p align="center">Un problème ou une idée ? Ouvrez un ticket sur <a href="https://github.com/laforetbrut/mods-mc-laura/issues">GitHub</a>.</p>
 
 <br>
 

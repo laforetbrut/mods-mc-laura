@@ -15,13 +15,13 @@ My Girlfriend Laura (mod id `lauramod`), author / auteur : vyrriox.
 ## Reporting a vulnerability
 
 Please do not open a public issue or pull request. Report it privately through a
-[GitHub private security advisory](https://github.com/laforetbrut/lauramod/security/advisories/new).
+[GitHub private security advisory](https://github.com/laforetbrut/mods-mc-laura/security/advisories/new).
 
 Reports are not taken by email: the advisory is the only private channel of this project.
 You will get an answer as soon as possible.
 
 A bug without any security impact goes to a normal
-[issue](https://github.com/laforetbrut/lauramod/issues/new/choose).
+[issue](https://github.com/laforetbrut/mods-mc-laura/issues/new/choose).
 
 ## What to include
 
@@ -87,13 +87,13 @@ The options are described in [docs/CONFIG.md](docs/CONFIG.md), the commands in
 ## Signaler une faille
 
 Merci de ne pas ouvrir d'issue ou de pull request publique. Signalez la faille en privé via une
-[GitHub private security advisory](https://github.com/laforetbrut/lauramod/security/advisories/new).
+[GitHub private security advisory](https://github.com/laforetbrut/mods-mc-laura/security/advisories/new).
 
 Aucun signalement n'est reçu par e-mail : l'advisory est le seul canal privé de ce projet.
 Vous recevrez une réponse dès que possible.
 
 Un bug sans conséquence pour la sécurité se signale dans une
-[issue](https://github.com/laforetbrut/lauramod/issues/new/choose) ordinaire.
+[issue](https://github.com/laforetbrut/mods-mc-laura/issues/new/choose) ordinaire.
 
 ## Ce qu'il faut indiquer
 
