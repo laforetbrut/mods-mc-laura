@@ -44,6 +44,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -58,6 +59,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -77,6 +79,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Laura herself.
@@ -354,6 +357,9 @@ public class LauraEntity extends TamableAnimal {
             return false;
         }
         Entity attacker = source.getEntity();
+        if (attacker instanceof LivingEntity living && !source.isCreativePlayer() && isShieldedFrom(living)) {
+            return false;
+        }
         boolean hurt = super.hurt(source, amount);
         if (hurt) {
             if (isAsleep()) {
@@ -370,6 +376,85 @@ public class LauraEntity extends TamableAnimal {
             }
         }
         return hurt;
+    }
+
+    // ------------------------------------------------------------------ players and their companions
+
+    /** The player behind an entity: the player itself, or the owner of a companion or a pet. */
+    @Nullable
+    private static UUID playerBehind(LivingEntity entity) {
+        if (entity instanceof Player) {
+            return entity.getUUID();
+        }
+        return entity instanceof OwnableEntity owned ? owned.getOwnerUUID() : null;
+    }
+
+    /**
+     * Whether the server lets her side and the side of {@code rival} hurt each other: the PvP
+     * setting first, then the teams (friendly fire).
+     */
+    private boolean pvpAllowedWith(UUID rival, LivingEntity entity) {
+        MinecraftServer server = this.level().getServer();
+        if (server == null || !server.isPvpAllowed()) {
+            return false;
+        }
+        Player rivalPlayer = entity instanceof Player p ? p : this.level().getPlayerByUUID(rival);
+        if (rivalPlayer != null && this.getOwner() instanceof Player partner) {
+            return partner.canHarmPlayer(rivalPlayer);
+        }
+        // One of the two players is away: the teams of the entities decide.
+        return !this.isAlliedTo(entity);
+    }
+
+    /**
+     * Whether she may fight this target. Never her partner, nor her partner's other companions
+     * and pets. A player, or the companion or pet of another player, only when the config allows
+     * it and the server lets the two players fight (PvP setting and teams).
+     */
+    public boolean mayFight(LivingEntity target) {
+        if (target == this || this.isOwnedBy(target)) {
+            return false;
+        }
+        UUID rival = playerBehind(target);
+        if (rival == null) {
+            return true;
+        }
+        if (rival.equals(this.getOwnerUUID())) {
+            return false;
+        }
+        return LauraConfig.attackPlayers.get() && pvpAllowedWith(rival, target);
+    }
+
+    /**
+     * The other side of {@link #mayFight}: where the server forbids fights between players, another
+     * player (or their companion or pet) cannot hurt her either, since she could not answer.
+     */
+    private boolean isShieldedFrom(LivingEntity attacker) {
+        if (!LauraConfig.shieldWithoutPvp.get() || this.getOwnerUUID() == null) {
+            return false;
+        }
+        UUID rival = playerBehind(attacker);
+        return rival != null && !rival.equals(this.getOwnerUUID()) && !pvpAllowedWith(rival, attacker);
+    }
+
+    @Override
+    public boolean canAttack(LivingEntity target) {
+        return mayFight(target) && super.canAttack(target);
+    }
+
+    @Override
+    public boolean wantsToAttack(LivingEntity target, LivingEntity owner) {
+        return mayFight(target);
+    }
+
+    @Override
+    public boolean doHurtTarget(Entity target) {
+        if (target instanceof LivingEntity living && !mayFight(living)) {
+            // The rules changed during the fight (PvP turned off, teams changed).
+            this.setTarget(null);
+            return false;
+        }
+        return super.doHurtTarget(target);
     }
 
     @Override

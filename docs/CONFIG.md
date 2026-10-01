@@ -168,6 +168,10 @@ Effect of `annoyance`:
 |---|---|---|---|
 | `defaultMode` | `PASSIVE` | PASSIVE, DEFENSIVE, AGGRESSIVE | Combat mode of a new companion. PASSIVE avoids monsters, DEFENSIVE protects you, AGGRESSIVE also attacks nearby monsters. |
 | `retaliate` | `true` | true / false | She hits back anyone (except her partner) who hits her, unless she is PASSIVE. |
+| `attackPlayers` | `true` | true / false | She may fight other players, their companions and their pets, to defend her partner or herself. Only where the server allows it: never when PvP is off, never against a teammate without friendly fire. `false` keeps her out of every fight with a player or anything that belongs to a player. |
+| `shieldWithoutPvp` | `true` | true / false | Where the server forbids fights between two players (PvP off, same team without friendly fire), the other player, their companions and their pets cannot hurt her either. Creative mode players still can. |
+
+She never fights her partner, nor her partner's other companions and pets, whatever these options say.
 
 #### fetch
 
@@ -529,6 +533,10 @@ Effet de `annoyance` :
 |---|---|---|---|
 | `defaultMode` | `PASSIVE` | PASSIVE, DEFENSIVE, AGGRESSIVE | Mode de combat d'une nouvelle compagne. PASSIVE évite les monstres, DEFENSIVE vous protège, AGGRESSIVE attaque aussi les monstres proches. |
 | `retaliate` | `true` | true / false | Elle rend les coups à quiconque la frappe (sauf son partenaire), sauf en mode PASSIVE. |
+| `attackPlayers` | `true` | true / false | Elle peut se battre contre les autres joueurs, leurs compagnes et leurs animaux, pour défendre son partenaire ou se défendre. Seulement là où le serveur l'autorise : jamais quand le PvP est désactivé, jamais contre un coéquipier sans tir ami. `false` la tient à l'écart de tout combat avec un joueur ou avec ce qui appartient à un joueur. |
+| `shieldWithoutPvp` | `true` | true / false | Là où le serveur interdit le combat entre deux joueurs (PvP désactivé, même équipe sans tir ami), l'autre joueur, ses compagnes et ses animaux ne peuvent pas la blesser non plus. Les joueurs en mode créatif le peuvent toujours. |
+
+Elle ne se bat jamais contre son partenaire, ni contre les autres compagnes et les animaux de son partenaire, quelles que soient ces options.
 
 #### fetch
 
