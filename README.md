@@ -158,7 +158,7 @@ test suite on a dedicated server (this accepts the
 ./gradlew runSelftest -PacceptEula
 ```
 
-To build the nine targets and collect their jars in the local `jars/` folder (ignored by Git),
+To build the nine targets and collect their jars in the local `jars/<version>/` folder (ignored by Git, one folder per mod version),
 run this from the repository root:
 
 ```
@@ -369,7 +369,7 @@ l'[EULA de Minecraft](https://aka.ms/MinecraftEULA)) :
 ./gradlew runSelftest -PacceptEula
 ```
 
-Pour compiler les neuf cibles et rassembler leurs jars dans le dossier local `jars/` (ignoré par
+Pour compiler les neuf cibles et rassembler leurs jars dans le dossier local `jars/<version>/` (un dossier par version du mod, ignoré par
 Git), lancez ceci depuis la racine du dépôt :
 
 ```
