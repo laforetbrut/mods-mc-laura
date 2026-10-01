@@ -89,11 +89,11 @@ public final class MiscAreaTests {
             for (int i = 0; i < laura.inventory().getContainerSize(); i++) {
                 laura.inventory().setItem(i, new ItemStack(Items.STONE, 64));
             }
-            player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.POPPY, 2));
+            player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.STICK, 2));
             long spoken = LauraSpeech.spokenCount();
             LauraActions.giveItem(player, laura, player.getMainHandItem(), InteractionHand.MAIN_HAND);
             ctx.check(player.getMainHandItem().getCount() == 1, "the gift was not taken");
-            ctx.check(count(ctx, laura.getBoundingBox().inflate(3), Items.POPPY) == 1, "the gift that did not fit was destroyed");
+            ctx.check(count(ctx, laura.getBoundingBox().inflate(3), Items.STICK) == 1, "the gift that did not fit was destroyed");
             ctx.check(LauraSpeech.spokenCount() - spoken == 1, "she said " + (LauraSpeech.spokenCount() - spoken) + " lines for one gift");
             ctx.succeed();
         }));
