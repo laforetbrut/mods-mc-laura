@@ -420,7 +420,7 @@ public final class LauraTestCases {
                 ctx.succeed();
             });
         });
-        add(tests, "teleport_updates_record", 300, ctx -> {
+        add(tests, "teleport_updates_record", 600, ctx -> {
             ServerLevel nether = nether(ctx);
             swept(ctx, nether, NETHER_FLOOR, () -> withLaura(ctx, laura -> {
                 BlockPos there = floor(nether, NETHER_FLOOR);
@@ -439,14 +439,15 @@ public final class LauraTestCases {
                 ctx.check(standsSafely(moved) && moved.blockPosition().distSqr(there) < 64, "she is not standing on the floor: " + moved.blockPosition());
                 // She usually lands next to the portal her partner came through: it must not take her back at once.
                 ctx.check(moved.isOnPortalCooldown(), "she arrived without a portal cooldown");
-                ctx.waitFor("her to appear in the Nether", 40, () -> nether.getEntity(id) == moved, () -> {
+                // Nobody keeps the place loaded but one forced chunk: a Nether that is still being generated shows her late.
+                ctx.waitFor("her to appear in the Nether", 300, () -> nether.getEntity(id) == moved, () -> {
                     ctx.check(copies(ctx).size() == 1, copies(ctx).size() + " companions exist");
                     ctx.succeed();
                 });
             }));
         });
         // The vanilla command sends her to another dimension without the mod being asked.
-        add(tests, "tp_command_across_dimensions", 400, ctx -> {
+        add(tests, "tp_command_across_dimensions", 800, ctx -> {
             ServerLevel nether = nether(ctx);
             swept(ctx, nether, NETHER_FLOOR, () -> withLaura(ctx, laura -> {
                 BlockPos there = floor(nether, NETHER_FLOOR);
@@ -459,7 +460,7 @@ public final class LauraTestCases {
                 LauraWorldData.Record record = LauraWorldData.get(ctx.server()).get(id);
                 ctx.check(laura.isRemoved(), "the command did not move her");
                 ctx.check(record.dimension == Level.NETHER && record.pos.equals(there), "the record says " + record.pos + " in " + record.dimension.location());
-                ctx.waitFor("her to appear in the Nether", 40, () -> nether.getEntity(id) instanceof LauraEntity, () -> {
+                ctx.waitFor("her to appear in the Nether", 300, () -> nether.getEntity(id) instanceof LauraEntity, () -> {
                     ctx.check(copies(ctx).size() == 1, copies(ctx).size() + " companions exist");
                     // A second her with the same identity (what a wrong restore would leave): one of them goes.
                     LauraEntity twin = LauraRegistries.LAURA.get().create(ctx.level);
@@ -529,24 +530,36 @@ public final class LauraTestCases {
                 ctx.check(ctx.level.getBlockState(inside).is(Blocks.NETHER_PORTAL), "the portal did not light");
                 ctx.check(!LauraMovement.canStandAt(laura, inside), "a teleport may put her inside a portal");
                 UUID id = laura.getUUID();
+                // With followAcrossDimensions off the portal does not take her (she sits in it, so as not to walk out).
+                boolean across = LauraConfig.followAcrossDimensions.get();
+                LauraConfig.followAcrossDimensions.set(false);
+                ctx.onCleanup(() -> LauraConfig.followAcrossDimensions.set(across));
+                laura.setMode(LauraMode.STAY);
                 laura.moveTo(inside.getX() + 0.5, inside.getY(), inside.getZ() + 0.5, 0, 0);
-                ctx.waitFor("her to go through the portal", 100, laura::isRemoved, () -> {
-                    // In the tick she left, before she is even visible on the other side.
-                    LauraWorldData.Record record = LauraWorldData.get(ctx.server()).get(id);
-                    ctx.check(record.dimension == Level.NETHER, "the record still says " + record.dimension.location());
-                    ctx.check(copies(ctx).size() <= 1, copies(ctx).size() + " companions exist");
-                    // Longer than the left behind check: she must not be pulled back while he stands in the portal.
-                    ctx.after(90, () -> {
-                        ctx.check(ctx.level.getEntity(id) == null && record.dimension == Level.NETHER, "she did not wait for her partner in the Nether");
-                        ctx.check(!done(ctx, "nether"), "the advancement came before her partner");
-                        DimensionTransition transition = ((Portal) Blocks.NETHER_PORTAL).getPortalDestination(ctx.level, player, inside);
-                        ctx.check(transition != null && transition.newLevel() == nether, "the portal leads nowhere");
-                        player.changeDimension(transition);
-                        ctx.waitFor("the Nether advancement", 400, () -> done(ctx, "nether"), () -> {
-                            ctx.check(nether.getEntity(id) instanceof LauraEntity l && l.distanceTo(player) < 16, "she is not next to her partner");
-                            ctx.check(copies(ctx).size() == 1, copies(ctx).size() + " companions exist");
-                            ctx.check(heard(ctx, "dimension.nether"), "she said nothing about the Nether");
-                            ctx.succeed();
+                ctx.after(40, () -> {
+                    ctx.check(!laura.isRemoved() && ctx.level.getBlockState(laura.blockPosition()).is(Blocks.NETHER_PORTAL), "she took the portal although followAcrossDimensions is off");
+                    LauraConfig.followAcrossDimensions.set(true);
+                    laura.setMode(LauraMode.FOLLOW);
+                    // The portal she stood in left her its cooldown.
+                    laura.setPortalCooldown(0);
+                    ctx.waitFor("her to go through the portal", 100, laura::isRemoved, () -> {
+                        // In the tick she left, before she is even visible on the other side.
+                        LauraWorldData.Record record = LauraWorldData.get(ctx.server()).get(id);
+                        ctx.check(record.dimension == Level.NETHER, "the record still says " + record.dimension.location());
+                        ctx.check(copies(ctx).size() <= 1, copies(ctx).size() + " companions exist");
+                        // Longer than the left behind check: she must not be pulled back while he stands in the portal.
+                        ctx.after(90, () -> {
+                            ctx.check(ctx.level.getEntity(id) == null && record.dimension == Level.NETHER, "she did not wait for her partner in the Nether");
+                            ctx.check(!done(ctx, "nether"), "the advancement came before her partner");
+                            DimensionTransition transition = ((Portal) Blocks.NETHER_PORTAL).getPortalDestination(ctx.level, player, inside);
+                            ctx.check(transition != null && transition.newLevel() == nether, "the portal leads nowhere");
+                            player.changeDimension(transition);
+                            ctx.waitFor("the Nether advancement", 400, () -> done(ctx, "nether"), () -> {
+                                ctx.check(nether.getEntity(id) instanceof LauraEntity l && l.distanceTo(player) < 16, "she is not next to her partner");
+                                ctx.check(copies(ctx).size() == 1, copies(ctx).size() + " companions exist");
+                                ctx.check(heard(ctx, "dimension.nether"), "she said nothing about the Nether");
+                                ctx.succeed();
+                            });
                         });
                     });
                 });
