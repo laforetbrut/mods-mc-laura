@@ -1,0 +1,23 @@
+{
+  "parent": "lauramod:laura/relation_love",
+  "display": {
+    "icon": {
+      "item": "minecraft:diamond"
+    },
+    "title": {
+      "translate": "advancements.lauramod.marry.title"
+    },
+    "description": {
+      "translate": "advancements.lauramod.marry.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

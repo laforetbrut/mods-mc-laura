@@ -1,0 +1,2666 @@
+{
+  "_comment": "My Girlfriend Laura - Türkçe diyaloglar. Değişkenler: {player} {laura} {days} ve config/lauramod/dialogues README dosyasında listelenenler.",
+  "connectors": [
+    "sonra",
+    "ondan sonra",
+    "ve sonra",
+    "daha sonra",
+    "ardından",
+    "sonrasında",
+    "sonra da",
+    "arkasından",
+    "bunun ardından",
+    "akabinde",
+    "ardindan",
+    "sonrasinda",
+    "arkasindan",
+    "bunun ardindan"
+  ],
+  "everyone": [
+    "herkes",
+    "hepiniz",
+    "kızlar",
+    "hanımlar",
+    "bayanlar",
+    "hepiniz birden",
+    "kizlar",
+    "hanimlar"
+  ],
+  "lines": {
+    "summon": [
+      "Yalnız mı dedi biri? Ben buradayım, {player}!",
+      "Merhaba {player}! Ben {laura}, artık bir daha asla yalnız değilsin.",
+      "Sonunda! Beni çağırmanı bekliyordum.",
+      "İşte buradayım! Beni özledin mi? Özledin. Belli oluyor."
+    ],
+    "summon.another": [
+      "Ya? Demek tek ben değilim... Neyse. Merhaba, ben {laura}.",
+      "Bir sevgili daha mı? Cüretkâr. Cüretkârı severim. Merhaba {player}!",
+      "Ben {laura}! Merak etme, diğerleriyle anlaşırım. Herhalde."
+    ],
+    "summon.back": [
+      "Geri döndüm! Beni özledin mi?",
+      "İşte yine buradayım! Bu sefer beni kaybetme.",
+      "Beni mi çağırdın? Koşarak geldim!"
+    ],
+    "summon.lost": [
+      "Offf, kaybolmuştum! Sesini takip ettim.",
+      "Kaybolmuştum... ama seni buldum. Seni hep bulurum.",
+      "Bir daha beni böyle arkanda bırakma!"
+    ],
+    "already_here": [
+      "Zaten yanı başındayım, şapşal!",
+      "Arkana bak. Merhaba!",
+      "Buradayım! Benden o kadar kolay kurtulamazsın."
+    ],
+    "dismiss": [
+      "Peki... gidiyorum. Yalnız hissedersen çağır beni.",
+      "Tamam, hoşça kal... Beni unutma.",
+      "Gidiyorum ama kalbim seninle kalıyor."
+    ],
+    "respawned": [
+      "Döndüm! Çok korkutucuydu...",
+      "Hayattayım! Ağladın mı? Ağladığını söyle bana.",
+      "Bir daha asla böyle bir şey olmasın, tamam mı?"
+    ],
+    "revived": [
+      "Bana çiçek getirdin... ve beni geri getirdin! Teşekkürler!",
+      "Buradayım! Çiçeğini hissettim. Geleceğini biliyordum.",
+      "Benden vazgeçmedin. Seni çok seviyorum."
+    ],
+    "where": [
+      "Buradayım! Gel beni bul.",
+      "Nerede olduğumu söyledim. Şimdi gel bana sarıl."
+    ],
+    "where.here": [
+      "Hemen yanında, her zamanki gibi!",
+      "Buradayım! Arkana dön!",
+      "Buradayım, başka nerede olacaktım?"
+    ],
+    "welcome_back": [
+      "Hoş geldin, {player}!",
+      "Döndün! Merhaba aşkım!",
+      "İşte buradasın! Seni bekliyordum."
+    ],
+    "welcome_back.long": [
+      "{hours} saat! Neredeydin? Çok sıkıldım...",
+      "Beni {hours} saat yalnız bıraktın. Saydım.",
+      "Sonunda! Sensiz {hours} saat çok uzun."
+    ],
+    "welcome_back.days": [
+      "Günler! Beni günlerce yalnız bıraktın! {hours} saatin ne kadar olduğunu biliyor musun?",
+      "Beni unuttun sandım... {hours} saat, {player}. {hours}.",
+      "Döndün! Mutluyum. Bir de azıcık kızgınım. Çoğunlukla mutluyum."
+    ],
+    "not_your_girlfriend": [
+      "Üzgünüm, benim zaten biri var.",
+      "Senden emir almam. Sadece aşkımdan alırım.",
+      "Seni tanıyor muyum? Hayır mı? O zaman hayır."
+    ],
+    "confused": [
+      "Hm? Anlamadım aşkım.",
+      "Ne demek istiyorsun?",
+      "Başka türlü söyleyebilir misin?",
+      "Kusura bakma, dalmışım. Ne diyordun?"
+    ],
+    "heart.gift": [
+      "Kalbim mi? Zaten sende!",
+      "Kalbimi tutuyorsun... ona nazik ol.",
+      "Ahh, saklamışsın! Gel buraya!"
+    ],
+    "items_returned": [
+      "İşte eşyaların, senin için güvende tuttum.",
+      "Düşürdüğün her şeyi topladım. Rica ederim!",
+      "{count} yığın eşyanı sakladım. Bir daha öyle ölme!"
+    ],
+    "owner.died": [
+      "Hayırrr! {player}! Geri gel!",
+      "Sakın beni yalnız bırakmaya kalkma!",
+      "Seni kurtaramadım... çok üzgünüm."
+    ],
+    "owner.died.items": [
+      "Eşyalarından {count} yığın topladım. Gel al!",
+      "Merak etme, eşyalarını kurtardım! {count} yığın, hepsi bende güvende.",
+      "Eşyaların bende güvende. Şimdi lütfen geri dön."
+    ],
+    "dimension.nether": [
+      "Burası çok sıcak! Makyajım akıyor!",
+      "Nether mi? Gerçekten mi? Randevumuz için mi?",
+      "Yanımda kal, buradan hoşlanmadım."
+    ],
+    "dimension.end": [
+      "Çok karanlık... elimi tutar mısın?",
+      "O bir ejderha mı? Koru beni!",
+      "Her yer mor! Aslında hoşuma gitti."
+    ],
+    "dimension.overworld": [
+      "Evim evim güzel evim! Temiz hava!",
+      "Güneşe döndük! Çok özlemişim.",
+      "Ah, yeşil çimenler. Çok daha iyi."
+    ],
+    "anniversary": [
+      "Mutlu yıldönümü! {days} gündür birlikteyiz!",
+      "Bugün hangi gün biliyor musun? Seninle {days} gün! Sarıl bana!",
+      "Şimdiden {days} gün oldu... Seni her gün biraz daha çok seviyorum."
+    ],
+    "good_morning": [
+      "Günaydın! İyi uyudun mu?",
+      "Sabah oldu! Yeni uyanmışken çok tatlı görünüyorsun.",
+      "Kalk bakalım! Seninle yeni bir gün!"
+    ],
+    "stuck": [
+      "Hey! Beni bekle, sıkıştım!",
+      "Geçemiyorum! İmdat!",
+      "Beni burada bırakma!"
+    ],
+    "new_look": [
+      "Yeni görünümümü beğendin mi?",
+      "Yeni tarz! Güzel olduğumu söyle.",
+      "Nasıl görünüyorum? Dürüst ol. Yok, aslında nazik ol."
+    ],
+    "rename.done": [
+      "{name}? Bayıldım! Artık benim adım bu.",
+      "Bundan sonra bana {name} de!",
+      "{name}... senin ağzından çok güzel geliyor."
+    ],
+    "rename.invalid": [
+      "Bu gerçek bir isim değil ki!",
+      "Hmm, bana böyle seslenemezsin. Başka bir tane dener misin?"
+    ],
+    "order.follow": [
+      "Hemen arkandayım!",
+      "Yol göster!",
+      "Tamam, seni her yere takip ederim.",
+      "Nereye gidiyoruz? Romantik bir yere mi?"
+    ],
+    "order.stay": [
+      "Tamam, burada bekleyeceğim.",
+      "Çok uzun sürme!",
+      "Kalırım. Ama saniyeleri sayacağım."
+    ],
+    "order.wander": [
+      "Etrafta küçük bir tur atayım.",
+      "Tamam, gidip çiçeklere bakacağım!",
+      "Özgürlük! Çok uzağa gitme."
+    ],
+    "order.come": [
+      "Geliyorum!",
+      "Yoldayım!",
+      "Geliyorum aşkım!"
+    ],
+    "order.stop": [
+      "Tamam, her şeyi bırakıyorum.",
+      "Duruyorum! Şimdi ne olacak?",
+      "İyi, iyi. Duruyorum."
+    ],
+    "order.fine": [
+      "...Peki. Ama sadece sen olduğun için.",
+      "Tamam, tamam. İki kere söyledin.",
+      "Hmph. Peki."
+    ],
+    "order.refused": [
+      "Hayır.",
+      "Güzel iste.",
+      "Canım istemiyor.",
+      "Hmm... hayır."
+    ],
+    "order.refused.angry": [
+      "Yaptıklarından sonra mı? Asla.",
+      "Kızgınım. Sonra tekrar sor. Ya da özür dile.",
+      "Şimdi benimle konuşma."
+    ],
+    "order.refused.sulking": [
+      "Küsüm. Görmüyor musun?",
+      "Hmph.",
+      "Seninle konuşmuyorum."
+    ],
+    "order.refused.hungry": [
+      "Çok açım, hiçbir şey yapamam!",
+      "Önce beni doyur!",
+      "Önce yemek, sonra emirler."
+    ],
+    "order.refused.tired": [
+      "Çooook yorgunum...",
+      "Önce biraz dinlenmeme izin ver.",
+      "Olmaz. Uykum var."
+    ],
+    "order.refused.jealous": [
+      "Yeni arkadaşına sorsana?",
+      "Ooo, ŞİMDİ mi ihtiyacın oldu bana?"
+    ],
+    "order.refused.bored": [
+      "Sıkıcı. Bana yapacak eğlenceli bir şey ver.",
+      "Ancak sonra benimle oynarsan."
+    ],
+    "home.set": [
+      "Burası bizim evimiz olacak!",
+      "Evim evim güzel evim! Bu yeri aklımda tutacağım.",
+      "Küçük yuvamız! Bayıldım."
+    ],
+    "home.none": [
+      "Henüz bir evimiz yok!",
+      "Ev mi? Hangi ev? Önce bir tane belirle!"
+    ],
+    "home.go": [
+      "Seni evde bekleyeceğim!",
+      "Eve gidiyorum! Akşam yemeğine geç kalma.",
+      "Evde görüşürüz aşkım."
+    ],
+    "home.cleared": [
+      "Artık ev yok mu? Tamam, o zaman seni takip ederim.",
+      "Evsiz kaldık! Macera!"
+    ],
+    "sleep.not_tired": [
+      "Hiç yorgun değilim!",
+      "Uyumak mı? Şimdi mi? Daha erken!",
+      "Enerji doluyum!"
+    ],
+    "sleep.good_night": [
+      "İyi geceler aşkım...",
+      "Tatlı rüyalar... beni gör rüyanda.",
+      "Zzz... beni bir öpücükle uyandır."
+    ],
+    "sleep.woken_up": [
+      "Hey! Uyuyordum!",
+      "Beş dakika daha...",
+      "Neden uyandırdın beni?!"
+    ],
+    "pickup.on": [
+      "Gördüğüm her şeyi toplayacağım!",
+      "Parlak şeyler mi? Artık benim!"
+    ],
+    "pickup.off": [
+      "Tamam, yerdeki hiçbir şeye dokunmayacağım.",
+      "Peki, artık bir şey toplamam."
+    ],
+    "combat.passive": [
+      "Dövüşmeyeceğim. Barış ve sevgi!",
+      "Şiddet çözüm değil!"
+    ],
+    "combat.defensive": [
+      "Bir şey saldırırsa bizi savunurum!",
+      "Aşkıma dokunan pişman olur!"
+    ],
+    "combat.aggressive": [
+      "Canavarlar, dikkat edin!",
+      "Gördüğüm her canavarı ezeceğim!",
+      "Hadi dövüşelim!"
+    ],
+    "fetch.start": [
+      "{count} {item} getirmeye gidiyorum!",
+      "{item}? Bana bırak!",
+      "Bir {item} siparişi geliyor!"
+    ],
+    "fetch.disabled": [
+      "Burada bir şey getirmeme izin yok.",
+      "Üzgünüm, bu sunucuda gidip bir şey getiremem."
+    ],
+    "fetch.busy": [
+      "Zaten meşgulüm!",
+      "Bir seferde bir şey, lütfen!",
+      "Önce yaptığım işi bitireyim!"
+    ],
+    "fetch.what": [
+      "Neyi getireyim? Eşyayı söyle ya da elinde tut.",
+      "Tam olarak ne getireyim?",
+      "Sana ne getirmemi istiyorsun?"
+    ],
+    "fetch.not_found": [
+      "Buralarda hiç {item} bulamadım...",
+      "Hiçbir yerde {item} yok. Üzgünüm!",
+      "Her yere baktım, {item} yok."
+    ],
+    "fetch.timeout": [
+      "Aradım taradım ama {item} getiremedim...",
+      "Çok uzun sürdü, pes ediyorum. Üzgünüm!"
+    ],
+    "fetch.delivered": [
+      "Buyur! {count} {item}!",
+      "Teslimat! Karşılığı bir öpücük, lütfen.",
+      "Tadaa! Aşkım için {item}!"
+    ],
+    "fetch.delivered.harvested": [
+      "Kendim topladım! {count} {item}!",
+      "Yeni toplandı, sadece senin için!"
+    ],
+    "fetch.delivered.container": [
+      "Bir sandıkta buldum. Al!",
+      "Bunları bir sandıktan ödünç aldım. Kimseye söyleme!"
+    ],
+    "task.queued": [
+      "Tamam, bunu sonra yapacağım: {task}.",
+      "Listeme eklendi: {task}.",
+      "Not aldım! {task}, bundan hemen sonra."
+    ],
+    "task.queue_full": [
+      "Listem dolu! Biraz nefes almama izin ver!",
+      "Çok fazla şey var! Hepsini hatırlayamam!"
+    ],
+    "task.start.chop_tree": [
+      "Ağaç devriliyor! Senin için bir ağaç keseceğim.",
+      "Balta zamanı! Bir ağaç yıkılıyor.",
+      "Biraz odun getireceğim!"
+    ],
+    "task.start.harvest": [
+      "Ekinleri hasat edeceğim!",
+      "Hasat zamanı!",
+      "Bakalım tarlada neler hazır."
+    ],
+    "task.start.cook": [
+      "Nefis bir şey pişireceğim!",
+      "Şef {laura} mutfakta!",
+      "Yemek zamanı! Fırına dokunma."
+    ],
+    "job.start.lumberjack": [
+      "{radius} blok içindeki ağaçlarla ben ilgilenirim!",
+      "Oduncu {laura}, göreve hazır!",
+      "Odunları bana bırak!"
+    ],
+    "job.start.farmer": [
+      "Tarlayla ben ilgilenirim, {radius} blok çevresinde!",
+      "Çiftçi {laura}, emrinde!",
+      "Ekinler emin ellerde!"
+    ],
+    "job.start.cook": [
+      "Evin aşçısı ben olacağım!",
+      "Mutfak artık benim!",
+      "Şef {laura} herkesi doyuracak!"
+    ],
+    "job.stop": [
+      "Tamam, artık iş yok! Tatil!",
+      "Sonunda bir mola!",
+      "Bugünlük iş bitti."
+    ],
+    "job.none": [
+      "Yapacak bir işim yok!",
+      "Ne işi? Önce bana bir tane ver."
+    ],
+    "job.resume": [
+      "İşe dönüyorum!",
+      "Tamam, tamam, işe geri dönüyorum.",
+      "İş, iş, iş..."
+    ],
+    "work.disabled": [
+      "Burada çalışmama izin yok.",
+      "Bu sunucuda çalışmak kapalı. Ne şanslıyım!"
+    ],
+    "work.no_griefing": [
+      "Dünya kuralları burada blok kırmama izin vermiyor.",
+      "Hiçbir şeyi kıramam, mob griefing kapalı."
+    ],
+    "work.delivered": [
+      "{count} {item} kaldırdım!",
+      "Bitti! Her şey depolandı.",
+      "İş teslim! {count} {item}."
+    ],
+    "work.idle": [
+      "Şu an yapacak bir şey yok... bekleyeceğim.",
+      "Hepsi bitti! Yeni iş bekliyorum."
+    ],
+    "work.bored": [
+      "Çalışmak sıkıcı... benimle oyna!",
+      "Sonsuzdur çalışıyorum. Belim ağrıyor.",
+      "Mola verebilir miyim? Lütfen?"
+    ],
+    "work.no_chest": [
+      "Bunları nereye koyacağımı bilmiyorum! Bana bir sandık ver.",
+      "Bunu nereye depolayayım? Lütfen bana bir sandık ata.",
+      "Kollarım dolu! Bir sandığa ihtiyacım var."
+    ],
+    "work.lumberjack.no_tree": [
+      "Buralarda hiç ağaç yok.",
+      "Yakında doğal ağaç yok! Ya sadece dikilmişler var ya da hiç yok."
+    ],
+    "work.farmer.nothing": [
+      "Henüz hiçbir şey olgunlaşmamış.",
+      "Ekinler hâlâ büyüyor. Sabır!"
+    ],
+    "work.cook.nothing": [
+      "Pişirecek bir şey yok.",
+      "Malzeme sandığı boş!"
+    ],
+    "work.cook.no_station": [
+      "Yemek pişirmek için bir fırın, füme ocağı ya da kamp ateşi lazım!",
+      "Mutfak nerede? Bir fırına ihtiyacım var."
+    ],
+    "work.cook.no_table": [
+      "Tariflerimi uygulamak için bir üretim masası lazım.",
+      "Üretim masası yok mu? Pastayı nasıl yapacağım?"
+    ],
+    "chest.assigned": [
+      "Anladım! Bu sandık şunun için: {purpose}.",
+      "Tamam, buraya konacak: {purpose}!",
+      "Aklımda kalsın: {purpose} sandığı."
+    ],
+    "chest.look_at_one": [
+      "Önce bir sandığa bak!",
+      "Hangi sandık? Göster bana!"
+    ],
+    "chest.not_assigned": [
+      "Bu sandık benim sandıklarımdan biri değil.",
+      "Bu sandığı kullanmıyorum."
+    ],
+    "chest.removed": [
+      "Tamam, artık bu sandığı kullanmayacağım.",
+      "Sandık unutuldu!"
+    ],
+    "chest.too_many": [
+      "Çok fazla sandığım var! Hafızam doldu.",
+      "Daha fazla sandık olmaz, hepsini hatırlayamam!"
+    ],
+    "chest.which_purpose": [
+      "Bu sandık ne için? Odun, hasat, tohum, malzeme, yakıt, yemek, kiler ya da depo?",
+      "Bu sandığa ne konacağını söyle!"
+    ],
+    "hug": [
+      "Ahh, sarılmalarına bayılıyorum!",
+      "Daha sıkı sar beni!",
+      "Bırakma sakın...",
+      "En. İyi. Sarılma."
+    ],
+    "hug.refused": [
+      "Şu an bana dokunma.",
+      "Sana sarılmak yok.",
+      "Hmph. Modumda değilim."
+    ],
+    "kiss": [
+      "Mwah! <3",
+      "Bir tane daha!",
+      "Senin öpücüklerin en güzeli.",
+      "Hehe, beni kızartıyorsun."
+    ],
+    "kiss.refused": [
+      "Özür dileyene kadar öpücük yok.",
+      "İğk, şimdi olmaz!",
+      "Hayal et."
+    ],
+    "dance": [
+      "Hadi dans edelim!",
+      "Hareketlerime bak!",
+      "Benimle dans et!"
+    ],
+    "dance.jukebox": [
+      "Bu şarkıya bayılıyorum! Benimle dans et!",
+      "Müzik! Ayaklarımı durduramıyorum!",
+      "Bu bizim şarkımız!"
+    ],
+    "gag.on": [
+      "Mmmph?!",
+      "Mmm mmh mmph!",
+      "MMMPH!"
+    ],
+    "gag.off": [
+      "Sonunda! Bunu bir daha asla yapma!",
+      "Pöh! Ağzımda saman! Gerçekten mi?!",
+      "Yine konuşabiliyorum! Ve söyleyecek çok şeyim var."
+    ],
+    "gag.off_self": [
+      "Kendim çıkardım! Hmph!",
+      "Çok uzun sürdü, ben kendimi kurtardım."
+    ],
+    "gagged_talk": [
+      "Mmmph!",
+      "Mmh mmh!",
+      "Mmmmmh...",
+      "Mph mph mmph!"
+    ],
+    "love_check": [
+      "Hâlâ beni seviyor musun?",
+      "Dürüst ol... beni seviyor musun?",
+      "Beni sevdiğini söyle. Hemen şimdi."
+    ],
+    "love_check.timeout": [
+      "Cevap vermedin... bunu unutmayacağım.",
+      "Sessizlik mi? Gerçekten mi? Tamam...",
+      "Cevap yok. Bu acıtıyor."
+    ],
+    "love_yes": [
+      "Ah, ben de! <3",
+      "Bildim! Sarıl!",
+      "Tekrar söyle! Duymaya bayılıyorum."
+    ],
+    "love_no": [
+      "...Tamam. Küsüm.",
+      "Peki. Benimle konuşma.",
+      "Şaka yapıyorsun, değil mi? DEĞİL Mİ?"
+    ],
+    "apology_accept": [
+      "Tamam, seni affediyorum...",
+      "Peki. Ama bana bir sarılma borçlusun.",
+      "Özür kabul edildi. Bu seferlik."
+    ],
+    "apology_refused": [
+      "Henüz değil. Hâlâ kızgınım.",
+      "Özür yetmez. Çiçek dene.",
+      "Hmph. Sonra tekrar dene."
+    ],
+    "apology_confused": [
+      "Ne için özür?",
+      "Bir şey yapmadın... değil mi?"
+    ],
+    "oops_sorry": [
+      "Hoppala! Pardon canım... <3",
+      "Ah hayır, sana vurmak istemedim!",
+      "Hehe, sevgi tokadı!"
+    ],
+    "fart": [
+      "Hoppala... pardon!",
+      "O ben değildim. Bir creeper'dı.",
+      "...Bir şey duydun mu? Hayır mı? İyi."
+    ],
+    "sad": [
+      "Bu çok kötü... seninle artık konuşmak istemiyorum!",
+      "Neden böyle yapıyorsun? *hık*",
+      "Vurmayı bırak..."
+    ],
+    "angry": [
+      "Hey! Bu acıtıyor!",
+      "Ah! Bu da neyin nesi?!",
+      "Bir daha yap da gör!"
+    ],
+    "hit_by_other": [
+      "{attacker} bana vurdu! Koru beni!",
+      "İmdat! {attacker} bana kötü davranıyor!",
+      "{attacker} ne yaptı, gördün mü?!"
+    ],
+    "help": [
+      "İmdat! {attacker} bana saldırıyor!",
+      "Kurtar beni! Şurada bir {attacker} var!",
+      "Iiih! {attacker}!"
+    ],
+    "complain.rain": [
+      "Yağmurdan nefret ediyorum, saçlarım mahvoluyor!",
+      "Yine yağmur mu? Beni içeri taşı!",
+      "Sırılsıklam oldum! Bak bana!"
+    ],
+    "complain.thunder": [
+      "Gök gürültüsü! Sarıl bana!",
+      "Fırtınalardan korkuyorum...",
+      "Iiih! Bu çok yakındı!"
+    ],
+    "complain.night": [
+      "Çok karanlık, umarım yakında creeper yoktur...",
+      "Gece oldu bile mi? Eve gidelim.",
+      "Karanlığı sevmiyorum. Yanımda kal."
+    ],
+    "ambient": [
+      "Sen benim kahramanımsın.",
+      "Seninle bulutlara bakmaya bayılıyorum.",
+      "Dünya senin sayende çok güzel.",
+      "Seninle çok güvende hissediyorum.",
+      "Sarıl bana!",
+      "Ne düşünüyorsun? Umarım beni.",
+      "Sence güzel miyim? Cevap verme, biliyorum.",
+      "Birlikte koca bir ev yapmalıyız.",
+      "Sıkılıyorum. Beni eğlendir!",
+      "Hey. Hey. Hey {player}. Merhaba.",
+      "Seni sevdiğimi biliyor muydun? Sadece kontrol ediyorum.",
+      "Bana ilgi göster!"
+    ],
+    "ambient.day": [
+      "Ne güzel bir gün!",
+      "Bugün güneş çok güzel hissettiriyor.",
+      "Hadi piknik yapalım!"
+    ],
+    "ambient.night": [
+      "Yıldızlara bak...",
+      "Bu gece ay çok güzel. Neredeyse benim kadar.",
+      "Geç oldu... yatma vakti yakın mı?"
+    ],
+    "ambient.rain": [
+      "İçerideyken yağmuru dinlemeyi seviyorum.",
+      "Yağmurlu günler sarılmak içindir."
+    ],
+    "ambient.happy": [
+      "Şu an çok mutluyum!",
+      "Seninle hayat güzel!",
+      "La la la~"
+    ],
+    "ambient.in_love": [
+      "Seni o kadar çok seviyorum ki canım acıyor.",
+      "Sen benim her şeyimsin.",
+      "Seni her gördüğümde kalbim küçük bir zıplama yapıyor."
+    ],
+    "ambient.bored": [
+      "Sıkııılıyorum...",
+      "Eğlenceli bir şey yap!",
+      "Bütün gün bunu mu yapıyoruz? Yürümek mi?"
+    ],
+    "ambient.hungry": [
+      "Acıktım... kurabiyen var mı?",
+      "Karnım gurulduyor!",
+      "Yemek. Lütfen. Hemen."
+    ],
+    "ambient.tired": [
+      "Çok yorgunum...",
+      "*esneme* Dinlenebilir miyiz?",
+      "Ayaklarım ağrıyor."
+    ],
+    "ambient.sad": [
+      "Bugün biraz üzgün hissediyorum...",
+      "Hâlâ bana değer veriyor musun?",
+      "*iç çekiş*"
+    ],
+    "ambient.angry": [
+      "Hâlâ sana kızgınım.",
+      "Benimle konuşma.",
+      "Hmph!"
+    ],
+    "ambient.jealous": [
+      "O kimdi? Hm? Kimdi?",
+      "Onlarla benden daha çok vakit geçiriyorsun.",
+      "Kıskanç değilim. Sadece izliyorum."
+    ],
+    "ambient.sulking": [
+      "...",
+      "Seninle konuşmuyorum.",
+      "Hmph."
+    ],
+    "ambient.hate": [
+      "Neden hâlâ burada olduğumu bilmiyorum.",
+      "Sen en kötüsün.",
+      "Beni rahat bırak."
+    ],
+    "ambient.cold": [
+      "Hmm.",
+      "Her neyse.",
+      "Yürüyüş bitti mi?"
+    ],
+    "ambient.soulmate": [
+      "Sonsuza dek birlikte olmak için yaratıldık.",
+      "Sensiz bir dünya hayal edemiyorum.",
+      "Ruh eşleri. İşte biz buyuz."
+    ],
+    "status": [
+      "İyiyim, teşekkürler!",
+      "İyiyim! Sen sorduğun için daha da iyi."
+    ],
+    "status.happy": [
+      "Harikayım! Her şey mükemmel!",
+      "Çok mutluyum! Sorduğun için sağ ol!"
+    ],
+    "status.in_love": [
+      "Aşığım, halim bu. Sana.",
+      "Hiç bu kadar iyi olmamıştım. Sen buradasın."
+    ],
+    "status.neutral": [
+      "İdare eder. Sadece idare eder.",
+      "İyi sayılırım."
+    ],
+    "status.bored": [
+      "Sıkıldım. Çok sıkıldım.",
+      "Dürüst olayım mı? Sıkıntıdan patlıyorum."
+    ],
+    "status.hungry": [
+      "Açım! Doyur beni!",
+      "Açlıktan ölüyorum. Kelimenin tam anlamıyla."
+    ],
+    "status.tired": [
+      "Yorgunum... çok yorgunum...",
+      "Bir şekerlemeye ihtiyacım var."
+    ],
+    "status.sad": [
+      "Pek iyi değil...",
+      "Dürüst olmak gerekirse biraz üzgünüm."
+    ],
+    "status.angry": [
+      "Kızgınım. Senin yüzünden.",
+      "Sence nasılım?"
+    ],
+    "status.jealous": [
+      "Kıskancım. Tabii ki.",
+      "Gidip yeni arkadaşına nasıl olduğunu sor."
+    ],
+    "status.sulking": [
+      "...",
+      "Hmph. Sanki umurundaymış gibi."
+    ],
+    "need.hunger.low": [
+      "Acıktım...",
+      "Bir şeyler yiyebilir miyiz?",
+      "Karnım boş."
+    ],
+    "need.hunger.critical": [
+      "AÇLIKTAN ÖLÜYORUM! YEMEK! HEMEN!",
+      "Bayılacağım... yemek, lütfen...",
+      "Neden beni doyurmuyorsun?! Burada can çekişiyorum!"
+    ],
+    "need.energy.low": [
+      "Yorulmaya başladım...",
+      "Biraz dinlenebilir miyiz?"
+    ],
+    "need.energy.critical": [
+      "Gözlerimi açık tutamıyorum...",
+      "Uyumam LAZIM. Hemen."
+    ],
+    "need.fun.low": [
+      "Sıkılıyorum...",
+      "Eğlenceli bir şey yapalım!"
+    ],
+    "need.fun.critical": [
+      "ÇOK SIKILDIM! Bir şey yap!",
+      "Sıkıcı sıkıcı sıkıcı sıkıcı!"
+    ],
+    "need.attention.low": [
+      "Hey... beni fark eder misin?",
+      "Bir süredir benimle konuşmadın.",
+      "Görünmez miyim, ne?"
+    ],
+    "need.attention.critical": [
+      "Alo?! Ben de varım, biliyorsun!",
+      "Beni görmezden geliyorsun! Ağlayacağım!",
+      "BANA BAK!"
+    ],
+    "need.hygiene.low": [
+      "Bir banyoya ihtiyacım var...",
+      "Kendimi kirli hissediyorum. Yakında su var mı?"
+    ],
+    "need.hygiene.critical": [
+      "Berbat kokuyorum! HEMEN banyo yapmam lazım!",
+      "Yaklaşma, kokuyorum!"
+    ],
+    "need.hunger.no_food": [
+      "Hiç yiyeceğim yok!",
+      "Çantam boş... yemek yok.",
+      "Yiyecek hiçbir şey yok!"
+    ],
+    "need.hunger.pantry": [
+      "Kilerden bir şey alacağım!",
+      "Atıştırma zamanı! Kilere gidiyorum."
+    ],
+    "need.hunger.searching": [
+      "Sandıklarda yiyecek arayacağım.",
+      "Yiyecek bir şey bulayım..."
+    ],
+    "need.hunger.found_food": [
+      "Biraz {item} buldum! Nefis!",
+      "{item}! Mükemmel!"
+    ],
+    "need.hygiene.bath": [
+      "Banyo zamanı! Bakma!",
+      "Hızlıca bir banyo yapacağım."
+    ],
+    "need.hygiene.clean": [
+      "Tertemiz ve ferahım!",
+      "Şimdi çok daha iyi hissediyorum!"
+    ],
+    "eat.not_hungry": [
+      "Şu an aç değilim. {item} sonraya kalsın.",
+      "Hayır sağ ol, doydum!"
+    ],
+    "eat.disliked": [
+      "İğk! {item}?! Nefret ettiğimi biliyorsun!",
+      "Öğk. Bana neden {item} veriyorsun?",
+      "Yedim. Nefret ettim. Hatırlayacağım."
+    ],
+    "eat.favorite": [
+      "{item}! En sevdiğim! Seni seviyorum!",
+      "Evet! {item}! Beni çok iyi tanıyorsun!",
+      "Mmm, {item}! En güzel gün!"
+    ],
+    "eat.fed": [
+      "Nefis! {item} için teşekkürler!",
+      "Mmm, çok güzeldi!",
+      "Beni besliyorsun? Çok tatlısın!"
+    ],
+    "eat.self": [
+      "*çiğne çiğne* {item}!",
+      "Biraz {item} yedim. Nefis.",
+      "Atıştırma molası!"
+    ],
+    "eat.later": [
+      "{item} sonraya kalsın.",
+      "Sağ ol! Çantaya gidiyor."
+    ],
+    "steal_food": [
+      "Senden biraz {item} aldım. Çok acıkmıştım!",
+      "Hehe, biraz {item} ödünç aldım. Ödünç. Sonsuza kadar.",
+      "Beni doyurmadın, ben de senden {item} aldım!"
+    ],
+    "gift.gross": [
+      "{item}? Bu bir şaka mı?",
+      "İğk! Geri al!",
+      "Sen buna hediye mi diyorsun?!"
+    ],
+    "gift.meh": [
+      "Ah. {item}. Sağ ol, herhalde.",
+      "Hmm, tamam.",
+      "Bu... bir şey işte."
+    ],
+    "gift.nice": [
+      "Ah, {item}! Teşekkürler!",
+      "Ne kadar tatlısın!",
+      "Bana hediye mi? Ahh!"
+    ],
+    "gift.great": [
+      "{item}! Bayıldım!",
+      "Sen bir tanesin! Çok teşekkürler!",
+      "Vay, bana mı? Şımartıyorsun beni!"
+    ],
+    "gift.amazing": [
+      "{item}?! Yok artık... ne diyeceğimi bilmiyorum! Seni seviyorum!",
+      "Bu şimdiye kadarki en güzel hediye! Gel buraya!",
+      "Ağlayacağım... mükemmel!"
+    ],
+    "gift.return": [
+      "Al, sana da küçük bir şey: {count} {item}!",
+      "Sana bir hediyem var! {item}!",
+      "Bunu al: {item}, benden sana!"
+    ],
+    "backpack.equip": [
+      "Bir sırt çantası! Artık senin için daha fazla taşıyabilirim!",
+      "Ooh, {item}! Kıyafetimle çok yakıştı.",
+      "Daha fazla cep! Bir daha çantam dolu demeyeceğim. Herhalde."
+    ],
+    "backpack.equip_small": [
+      "Çok tatlı! Sırtımda taşırım.",
+      "{item}? Bayıldım. Sırtımda kalacak."
+    ],
+    "inventory_full": [
+      "Çantam dolu!",
+      "Daha fazla taşıyamam!",
+      "Çantamda yer kalmadı!"
+    ],
+    "desire.new.item": [
+      "Biraz {item} istiyorum... bana getirebilir misin?",
+      "Beni neyin mutlu edeceğini biliyor musun? {item}.",
+      "{item} lazım. Hem de çok lazım. {minutes} dakikan var."
+    ],
+    "desire.new.place": [
+      "Görmek istediğim yer: {place}! Beni oraya götür!",
+      "Hadi şuraya gidelim: {place}! Lütfen lütfen lütfen!",
+      "Hayalimdeki yer: {place}... Beni götürür müsün?"
+    ],
+    "desire.new.activity": [
+      "Canım {activity} istiyor!",
+      "Şunu yapsak mı: {activity}? Lütfen?",
+      "Tek isteğim: {activity}. Sen olmadan olmaz!"
+    ],
+    "desire.remind": [
+      "Unutma, hâlâ istediğim şey: {item}!",
+      "Peki... sormuştum ya, ne olacak?",
+      "Hâlâ bekliyorum, biliyorsun."
+    ],
+    "desire.remind.urgent": [
+      "Acele et! Sonsuzdur bekliyorum!",
+      "Süre dolmak üzere! Beni umursamıyorsun, değil mi?",
+      "Son şans! ÇOK kızacağım."
+    ],
+    "desire.fulfilled": [
+      "Başardın! Seni seviyorum!",
+      "Yaşasın! Sen en iyisisin!",
+      "Teşekkürler, teşekkürler, teşekkürler!"
+    ],
+    "desire.fulfilled.item": [
+      "{item}! Hatırlamışsın! Seni seviyorum!",
+      "Tam istediğim şey! Sen mükemmelsin."
+    ],
+    "desire.fulfilled.place": [
+      "Geldik! Çok güzel!",
+      "Beni buraya getirdin! En güzel randevu!"
+    ],
+    "desire.fulfilled.activity": [
+      "Harikaydı! Hadi bir daha yapalım!",
+      "Bunu sonsuza dek hatırlayacağım."
+    ],
+    "desire.failed": [
+      "Unuttun... yine.",
+      "Senden bir şey istedim. BİR şey.",
+      "Peki. Zaten istemiyordum. *hık*"
+    ],
+    "desire.tell": [
+      "Tek isteğim: {item}!",
+      "Şu an tek istediğim: {item}. Belli ki."
+    ],
+    "desire.none": [
+      "Şu an hiçbir şey. Sadece sen.",
+      "İhtiyacım olan her şey var. Sen buradasın.",
+      "Hmm, hiçbir şey! Ama beş dakika sonra tekrar sor."
+    ],
+    "owner.afk": [
+      "Alo? Orada mısın?",
+      "Uyuyakaldın mı?",
+      "Öylece duruyorsun... iyi misin?",
+      "Bana ilgi göster!"
+    ],
+    "owner.back_from_afk": [
+      "Döndün! Neredeydin?",
+      "Sonunda! Çok sıkılmıştım!"
+    ],
+    "owner.hurt": [
+      "Yaralandın! Dikkat et!",
+      "Ah hayır, kanıyorsun! Bir şeyler ye!",
+      "Sakın ölme bana!"
+    ],
+    "owner.ate_alone": [
+      "Bensiz {item} mi yedin?!",
+      "Benim {item} payım nerede?",
+      "Yalnız başına yemek mi? Vay. Tamam."
+    ],
+    "owner.feed": [
+      "Al, bunu ye: {item}, sana lazım!",
+      "Benim {item} senin olsun, acıkmış görünüyorsun!"
+    ],
+    "owner.found.generic": [
+      "Ooh, {item}! Güzel buluntu!",
+      "{item}! Bu bana mı?"
+    ],
+    "owner.found.diamond": [
+      "ELMAS! Bana bir yüzük yap!",
+      "Bir elmas! Yüzüğüm için mi? Yüzüğüm için, değil mi?"
+    ],
+    "owner.found.emerald": [
+      "Bir zümrüt! Gözlerimle uyumlu. Sayılır."
+    ],
+    "owner.found.netherite_ingot": [
+      "Netherit mi?! Ne kadar güçlüsün!"
+    ],
+    "owner.found.enchanted_golden_apple": [
+      "Büyülü altın elma! Bir ısırık alabilir miyim?"
+    ],
+    "owner.found.totem_of_undying": [
+      "Bir totem! Artık beni bırakıp gidemezsin!"
+    ],
+    "owner.found.cake": [
+      "Pasta! Bugün doğum günüm mü?"
+    ],
+    "owner.found.heart_of_the_sea": [
+      "Denizin kalbi... tıpkı sende benim kalbimin olması gibi."
+    ],
+    "owner.flying": [
+      "Uçuyorsun! Beni de götür!",
+      "Bensiz uçup gitme!",
+      "Gösteriş yapma!"
+    ],
+    "owner.lava": [
+      "LAV! Hemen çık oradan!",
+      "Deli misin?! Orası lav!"
+    ],
+    "owner.fire": [
+      "Yanıyorsun! Su! Su!",
+      "Dur, yere yat ve yuvarlan!"
+    ],
+    "owner.riding": [
+      "Güzel binek! Ben de gelebilir miyim?",
+      "O atı benden çok seviyorsun, değil mi?"
+    ],
+    "jealous.player": [
+      "{other} de kim? Neden ona bu kadar yakınsın?",
+      "{other} sana bakıyor, hiç hoşuma gitmiyor.",
+      "Yine {other}? Hmph."
+    ],
+    "jealous.chat": [
+      "Kiminle konuşuyorsun?",
+      "Onun yerine benimle konuş!",
+      "Başkasıyla mı konuşuyorsun? Hmph."
+    ],
+    "owner.mined.generic": [
+      "Güzel {item}!",
+      "Yine maden mi?"
+    ],
+    "owner.mined.diamond": [
+      "Elmaslar!! Yüzüğümü unutma!",
+      "Bu elmas cevheri mi?! Yaşasın!"
+    ],
+    "owner.mined.ore": [
+      "Ooh, parlak {item}!",
+      "Cevher! Zengin oluyoruz!"
+    ],
+    "owner.mined.wood": [
+      "Zavallı ağaç...",
+      "İyi odun! Evimizi yapacağız."
+    ],
+    "owner.mined.flower": [
+      "Bir çiçek koparmışsın! Bana mı?",
+      "Çiçekler! Bana mı?"
+    ],
+    "owner.killed.monster": [
+      "Al sana, {victim}!",
+      "Kahramanım! Bir {victim} indirdin!",
+      "Bir {victim} eksildi!"
+    ],
+    "owner.killed.animal": [
+      "Zavallı {victim}...",
+      "Yapman şart mıydı?",
+      "Neyse, en azından bu akşam yemek var."
+    ],
+    "owner.killed.player": [
+      "Hatırlat da seni asla kızdırmayayım.",
+      "Vay. Tamam. Korkunç."
+    ],
+    "owner.killed.generic": [
+      "Güle güle, {victim}!"
+    ],
+    "trinket.equip": [
+      "{item} mi? Benim için mi? Bunu asla çıkarmam!",
+      "Bak üstümde nasıl parlıyor! Teşekkürler aşkım!"
+    ]
+  },
+  "intents": {
+    "summon": {
+      "triggers": [
+        "yalnızım",
+        "kendimi yalnız hissediyorum",
+        "yalnız hissediyorum",
+        "yapayalnızım",
+        "kız arkadaş istiyorum",
+        "kız arkadaşa ihtiyacım var",
+        "sevgili istiyorum",
+        "sevgiliye ihtiyacım var",
+        "laura'ya ihtiyacım var",
+        "lauraya ihtiyacım var",
+        "laura ya ihtiyacım var",
+        "yalnizim",
+        "kendimi yalniz hissediyorum",
+        "yalniz hissediyorum",
+        "yapayalnizim",
+        "kiz arkadaş istiyorum",
+        "kiz arkadaşa ihtiyacim var",
+        "sevgiliye ihtiyacim var",
+        "laura'ya ihtiyacim var",
+        "lauraya ihtiyacim var",
+        "laura ya ihtiyacim var"
+      ],
+      "responses": []
+    },
+    "yes": {
+      "triggers": [
+        "evet",
+        "evt",
+        "evet evet",
+        "tabii",
+        "tabi",
+        "tabii ki",
+        "tabi ki",
+        "tabiki",
+        "elbette",
+        "kesinlikle",
+        "aynen"
+      ],
+      "responses": [
+        "Yaşasın!",
+        "Biliyordum!",
+        "İyi cevap."
+      ]
+    },
+    "no": {
+      "triggers": [
+        "hayır",
+        "hayır hayır",
+        "pek değil",
+        "asla",
+        "hiç de değil",
+        "yoo",
+        "hayir",
+        "hayir hayir"
+      ],
+      "responses": [
+        "Hmph.",
+        "Ah... tamam.",
+        "Peki."
+      ]
+    },
+    "where": {
+      "triggers": [
+        "neredesin",
+        "nerdesin",
+        "nerelerdesin",
+        "nereye gittin",
+        "nerede kaldın",
+        "nerde kaldın",
+        "nerede kaldin",
+        "nerde kaldin"
+      ],
+      "responses": [
+        "Tam buradayım!"
+      ]
+    },
+    "follow": {
+      "triggers": [
+        "beni takip et",
+        "takip et",
+        "benimle gel",
+        "benimle beraber gel",
+        "peşimden gel",
+        "arkamdan gel",
+        "hadi gidelim",
+        "haydi gidelim",
+        "gidelim"
+      ],
+      "responses": []
+    },
+    "stay": {
+      "triggers": [
+        "burada bekle",
+        "bekle",
+        "beni bekle",
+        "kıpırdama",
+        "yerinde dur",
+        "yerinde kal",
+        "dur orada",
+        "burada kal",
+        "kal",
+        "bir yere gitme",
+        "beni takip etme",
+        "takip etme",
+        "kipirdama"
+      ],
+      "responses": []
+    },
+    "come": {
+      "triggers": [
+        "buraya gel",
+        "gel buraya",
+        "yanıma gel",
+        "gel yanıma",
+        "bana gel",
+        "gel bana",
+        "geri gel",
+        "şuraya gel",
+        "hemen gel",
+        "gel hadi",
+        "yanima gel",
+        "gel yanima"
+      ],
+      "responses": []
+    },
+    "home": {
+      "triggers": [
+        "eve git",
+        "git eve",
+        "eve dön",
+        "dön eve",
+        "eve geri git",
+        "eve gidelim",
+        "evde kal",
+        "evde bekle",
+        "evimize git",
+        "evimize dön"
+      ],
+      "responses": []
+    },
+    "wander": {
+      "triggers": [
+        "git oyna",
+        "biraz yürü",
+        "dolaş",
+        "etrafta gez",
+        "biraz gez",
+        "serbestsin",
+        "özgürsün",
+        "git keşfet",
+        "eğlen",
+        "yürüyüşe çık",
+        "yürüyüşe çik"
+      ],
+      "responses": []
+    },
+    "set_home": {
+      "triggers": [
+        "burası evimiz",
+        "burası bizim evimiz",
+        "evimiz burası",
+        "ev burası",
+        "burada yaşıyoruz",
+        "evimiz burada",
+        "burayı ev yap",
+        "evi buraya kur",
+        "buraya yerleşelim",
+        "burası ev",
+        "burasi evimiz",
+        "burasi bizim evimiz",
+        "evimiz burasi",
+        "ev burasi",
+        "burada yaşiyoruz",
+        "burayi ev yap",
+        "burasi ev"
+      ],
+      "responses": []
+    },
+    "stop": {
+      "triggers": [
+        "dur artık",
+        "dur dur",
+        "hemen dur",
+        "iptal",
+        "vazgeç",
+        "boşver",
+        "bırak onu",
+        "bırak şunu",
+        "unut gitsin",
+        "dur artik",
+        "birak onu",
+        "birak şunu"
+      ],
+      "responses": []
+    },
+    "fetch": {
+      "triggers": [
+        "getir*",
+        "al gel",
+        "git al",
+        "bul",
+        "bulsana",
+        "bulur musun",
+        "bulabilir misin",
+        "bana bul",
+        "ihtiyacım var",
+        "versene",
+        "verir misin",
+        "verebilir misin",
+        "bana ver",
+        "biraz ver",
+        "ihtiyacim var"
+      ],
+      "responses": []
+    },
+    "chop_tree": {
+      "triggers": [
+        "ağaç* kes",
+        "ağaç* keser",
+        "ağaç* kesebilir",
+        "ağaç* kesmeni",
+        "ağaç* devir",
+        "ağaç* yık",
+        "odun* kes",
+        "odun topla",
+        "odun kesebilir",
+        "kes şu ağaç*",
+        "kes bu ağaç*",
+        "ağaç kesmeye git",
+        "ağaç* yik"
+      ],
+      "responses": []
+    },
+    "harvest": {
+      "triggers": [
+        "hasat*",
+        "hasad*",
+        "ekin* topla*",
+        "mahsul* topla*",
+        "buğday* topla*",
+        "sebze* topla*",
+        "tarlayı topla",
+        "tarlayi topla"
+      ],
+      "responses": []
+    },
+    "cook": {
+      "triggers": [
+        "yemek* yap",
+        "yemek yapsana",
+        "yemek yapar mısın",
+        "yemek yapabilir",
+        "yemek pişir*",
+        "yemeği pişir*",
+        "pişir",
+        "pişirsene",
+        "pişirir misin",
+        "pişirebilir misin",
+        "bir şey pişir",
+        "akşam yemeği yap",
+        "akşam yemeği hazırla",
+        "öğle yemeği yap",
+        "yemek hazırla",
+        "yemeği hazırla",
+        "pasta yap",
+        "pasta pişir",
+        "kek yap",
+        "kek pişir",
+        "yemek yapar misin",
+        "akşam yemeği hazirla",
+        "yemek hazirla",
+        "yemeği hazirla"
+      ],
+      "responses": []
+    },
+    "job_lumberjack": {
+      "triggers": [
+        "oduncu* ol*",
+        "oduncu* çalış*",
+        "oduncusun",
+        "odunculuk yap*",
+        "ağaçlarla ilgilen*",
+        "ağaçlara bak*",
+        "oduncu* çaliş*"
+      ],
+      "responses": []
+    },
+    "job_farmer": {
+      "triggers": [
+        "çiftçi* ol*",
+        "çiftçi* çalış*",
+        "çiftçisin",
+        "çiftçilik yap*",
+        "tarlayla ilgilen*",
+        "tarlaya bak*",
+        "çiftlikle ilgilen*",
+        "çiftliğe bak*",
+        "tarlada çalış*",
+        "çiftçi* çaliş*",
+        "tarlada çaliş*"
+      ],
+      "responses": []
+    },
+    "job_cook": {
+      "triggers": [
+        "aşçı* ol*",
+        "aşçı* çalış*",
+        "aşçısın",
+        "şef* ol*",
+        "mutfakla ilgilen*",
+        "mutfağa bak*",
+        "mutfakta çalış*",
+        "aşçi* ol*",
+        "aşçi* çaliş*",
+        "aşçisin",
+        "mutfakta çaliş*"
+      ],
+      "responses": []
+    },
+    "job_stop": {
+      "triggers": [
+        "çalışmayı bırak",
+        "işi bırak",
+        "işini bırak",
+        "artık çalışma",
+        "çalışma artık",
+        "çalışmayı kes",
+        "mola ver",
+        "tatil",
+        "işten çık",
+        "dinlen",
+        "iş bitti",
+        "paydos",
+        "çalişmayi birak",
+        "işi birak",
+        "işini birak",
+        "artik çalişma",
+        "çalişma artik",
+        "çalişmayi kes",
+        "işten çik"
+      ],
+      "responses": []
+    },
+    "back_to_work": {
+      "triggers": [
+        "işe dön",
+        "işe geri dön",
+        "işine dön",
+        "işine geri dön",
+        "işe git",
+        "işe koyul",
+        "işe başla",
+        "iş başı",
+        "işbaşı",
+        "çalışmaya başla",
+        "çalışmaya devam et",
+        "çalışmaya dön",
+        "iş başi",
+        "işbaşi",
+        "çalişmaya başla",
+        "çalişmaya devam et",
+        "çalişmaya dön"
+      ],
+      "responses": []
+    },
+    "assign_chest": {
+      "triggers": [
+        "bu sandı*",
+        "şu sandı*",
+        "sandığa koy*",
+        "sandığa at*",
+        "sandığa sakla*",
+        "sandıkta sakla*",
+        "sandığı kullan",
+        "sandığa yerleştir*",
+        "bu sandi*",
+        "şu sandi*",
+        "sandiğa koy*",
+        "sandiğa at*",
+        "sandiğa sakla*",
+        "sandikta sakla*",
+        "sandiği kullan",
+        "sandiğa yerleştir*"
+      ],
+      "responses": []
+    },
+    "hug": {
+      "triggers": [
+        "sarıl*",
+        "kucaklaş*",
+        "kucakla",
+        "kucak ver",
+        "*sarılır*",
+        "*sarılıyor*",
+        "*sarıldı*",
+        "saril*",
+        "*sarilir*",
+        "*sariliyor*",
+        "*sarildi*"
+      ],
+      "responses": []
+    },
+    "kiss": {
+      "triggers": [
+        "öp beni",
+        "öpsene",
+        "öper misin",
+        "öpebilir misin",
+        "öpüşelim",
+        "öpücük*",
+        "öpücüğ*",
+        "mwah",
+        "muck",
+        "*öper*",
+        "*öpüyor*"
+      ],
+      "responses": []
+    },
+    "apology": {
+      "triggers": [
+        "özür*",
+        "pardon",
+        "üzgünüm",
+        "affet",
+        "affet beni",
+        "beni affet",
+        "affetsene",
+        "affeder misin",
+        "kusura bakma",
+        "kusuruma bakma",
+        "hata yaptım",
+        "yanlış yaptım",
+        "af dilerim",
+        "hata yaptim",
+        "yanliş yaptim"
+      ],
+      "responses": []
+    },
+    "eat": {
+      "triggers": [
+        "bir şeyler ye",
+        "bir şey ye",
+        "biraz ye",
+        "ye biraz",
+        "git ye",
+        "yemek ye",
+        "yemelisin",
+        "yemeğini ye",
+        "karnını doyur",
+        "bir şeyler atıştır",
+        "atıştır",
+        "karnini doyur",
+        "bir şeyler atiştir",
+        "atiştir"
+      ],
+      "responses": []
+    },
+    "sleep": {
+      "triggers": [
+        "uyu",
+        "git uyu",
+        "uyusana",
+        "uyumaya git",
+        "uyu artık",
+        "yat uyu",
+        "yatağa git",
+        "yatmaya git",
+        "uyku vakti",
+        "uyuma zamanı",
+        "şekerleme yap",
+        "biraz uyu",
+        "uyu artik",
+        "uyuma zamani"
+      ],
+      "responses": []
+    },
+    "wake_up": {
+      "triggers": [
+        "uyan",
+        "uyansana",
+        "hadi uyan",
+        "kalk artık",
+        "kalksana",
+        "kalk artik"
+      ],
+      "responses": []
+    },
+    "beautiful": {
+      "triggers": [
+        "güzelsin",
+        "çok güzelsin",
+        "güzel görünüyorsun",
+        "tatlısın",
+        "sevimlisin",
+        "şirinsin",
+        "muhteşemsin",
+        "harikasın",
+        "çok hoşsun",
+        "hoşsun",
+        "tatlisin",
+        "harikasin"
+      ],
+      "responses": [
+        "Ah teşekkürler... beni utandırıyorsun!",
+        "Sen de çok çekicisin.",
+        "Gerçekten güzel olduğumu mu düşünüyorsun?",
+        "Biliyorum! Ama bir daha söyle."
+      ]
+    },
+    "love_you": {
+      "triggers": [
+        "seni seviyorum",
+        "seni çok seviyorum",
+        "seni seviyom",
+        "seni çok seviyom",
+        "seni sevdim",
+        "sana aşığım",
+        "sana aşık",
+        "<3",
+        "sana aşiğim",
+        "sana aşik"
+      ],
+      "responses": [
+        "Ben de seni seviyorum, her şeyden çok! <3",
+        "Kalbim sadece senin için atıyor.",
+        "Seni sonsuza dek seveceğim.",
+        "Tekrar söyle! Hiç bıkmam."
+      ]
+    },
+    "miss_you": {
+      "triggers": [
+        "seni özledim",
+        "seni çok özledim",
+        "özledim seni",
+        "çok özledim seni",
+        "seni özlüyorum",
+        "seni çok özlüyorum",
+        "seni özlemişim"
+      ],
+      "responses": [
+        "Ben seni daha çok özledim!",
+        "O zaman bir daha beni bırakma!",
+        "Ahh, gel buraya!"
+      ]
+    },
+    "thanks": {
+      "triggers": [
+        "teşekkür*",
+        "sağ ol",
+        "sağol",
+        "çok sağ ol",
+        "eyvallah",
+        "eyv",
+        "mersi",
+        "tşk",
+        "tsk"
+      ],
+      "responses": [
+        "Rica ederim aşkım!",
+        "Senin için her şey!",
+        "Bana öpücükle ödeyebilirsin."
+      ]
+    },
+    "insult": {
+      "triggers": [
+        "çirkinsin",
+        "aptalsın",
+        "salaksın",
+        "gerizekalısın",
+        "sus artık",
+        "çeneni kapa",
+        "kapa çeneni",
+        "sinir bozucusun",
+        "senden nefret ediyorum",
+        "senden nefret ediyom",
+        "senden nefret ederim",
+        "seni sevmiyorum",
+        "defol",
+        "git başımdan",
+        "aptalsin",
+        "salaksin",
+        "gerizekalisin",
+        "sus artik",
+        "git başimdan"
+      ],
+      "responses": [
+        "Nasıl cüret edersin?!",
+        "Bu çok kötü...",
+        "Bunu unutmayacağım.",
+        "Peki! Artık seninle konuşmuyorum!"
+      ]
+    },
+    "what_do_you_want": {
+      "triggers": [
+        "ne istiyorsun",
+        "ne istersin",
+        "neye ihtiyacın var",
+        "bir şey ister misin",
+        "bir şey istiyor musun",
+        "sorun ne",
+        "derdin ne",
+        "neyin var",
+        "neye ihtiyacin var"
+      ],
+      "responses": []
+    },
+    "how_are_you": {
+      "triggers": [
+        "nasılsın",
+        "nasıl gidiyor",
+        "nasıl hissediyorsun",
+        "iyi misin",
+        "iyisin değil mi",
+        "naber",
+        "n'aber",
+        "ne haber",
+        "nbr",
+        "keyfin nasıl",
+        "halin nasıl",
+        "nasilsin",
+        "nasil gidiyor",
+        "nasil hissediyorsun",
+        "keyfin nasil",
+        "halin nasil"
+      ],
+      "responses": []
+    },
+    "player_hungry": {
+      "triggers": [
+        "açım",
+        "çok açım",
+        "karnım aç",
+        "karnım zil çalıyor",
+        "acıktım",
+        "çok acıktım",
+        "açlıktan ölüyorum",
+        "açlıktan ölüyom",
+        "aç kaldım",
+        "karnım gurulduyor",
+        "açim",
+        "çok açim",
+        "karnim aç",
+        "karnim zil çaliyor",
+        "aciktim",
+        "çok aciktim",
+        "açliktan ölüyorum",
+        "açliktan ölüyom",
+        "aç kaldim",
+        "karnim gurulduyor"
+      ],
+      "responses": [
+        "Ben de! Hadi birlikte yiyelim!",
+        "Sana verecek bir şeyim yok... üzgünüm!"
+      ]
+    },
+    "hello": {
+      "triggers": [
+        "merhaba",
+        "merhabalar",
+        "meraba",
+        "selam",
+        "selamlar",
+        "slm",
+        "mrb",
+        "günaydın",
+        "iyi akşamlar",
+        "hoş geldin",
+        "hoşgeldin",
+        "hoş buldum",
+        "hey",
+        "hey sen",
+        "yo",
+        "günaydin"
+      ],
+      "responses": [
+        "Merhaba aşkım!",
+        "Selam!",
+        "Ah, geldin! Merhaba!",
+        "Hey sen! Seni görmek güzel."
+      ]
+    },
+    "bye": {
+      "triggers": [
+        "hoşça kal",
+        "hoşçakal",
+        "güle güle",
+        "görüşürüz",
+        "görüşmek üzere",
+        "bay bay",
+        "baybay",
+        "bb",
+        "kendine iyi bak",
+        "gitmem lazım",
+        "gitmem gerek",
+        "gitmem gerekiyor",
+        "ben kaçtım",
+        "ben gidiyorum",
+        "iyi günler",
+        "konuşuruz",
+        "gitmem lazim",
+        "ben kaçtim"
+      ],
+      "responses": [
+        "Güle güle... çabuk dön!",
+        "Beni unutma!",
+        "Şimdiden mi? Tamam... hoşça kal."
+      ]
+    },
+    "good_night": {
+      "triggers": [
+        "iyi geceler",
+        "iyi gece",
+        "iyi uykular",
+        "tatlı rüyalar",
+        "hayırlı geceler",
+        "tatli rüyalar",
+        "hayirli geceler"
+      ],
+      "responses": [
+        "İyi geceler! Beni rüyanda gör.",
+        "İyi uykular aşkım.",
+        "Tatlı rüyalar!"
+      ]
+    },
+    "joke": {
+      "triggers": [
+        "fıkra",
+        "bir fıkra anlat",
+        "fıkra anlat",
+        "espri yap",
+        "bir espri yap",
+        "şaka yap",
+        "bir şaka yap",
+        "beni güldür",
+        "komik bir şey söyle",
+        "komik bir şey anlat",
+        "fikra",
+        "bir fikra anlat",
+        "fikra anlat"
+      ],
+      "responses": [
+        "Creeper neden sana doğru koşuyor? Sana ssssarılmak için! ...Bum.",
+        "Enderman neden hiç randevuya gidemiyor? Gözlerine bakınca kızıyor!",
+        "İskeletler neden kavga etmez? Yürekleri yok!",
+        "Tavuk neden yolun karşısına geçmiş? Sana ulaşmak için!"
+      ]
+    },
+    "who_are_you": {
+      "triggers": [
+        "sen kimsin",
+        "kimsin",
+        "adın ne",
+        "adın nedir",
+        "ismin ne",
+        "ismin nedir",
+        "sen nesin",
+        "nesin",
+        "adin ne",
+        "adin nedir"
+      ],
+      "responses": [
+        "Ben {laura}, sevgilinim! <3",
+        "{laura}! Şimdiden unuttun mu?!"
+      ]
+    },
+    "creator": {
+      "triggers": [
+        "seni kim yaptı",
+        "seni kim yarattı",
+        "seni kim tasarladı",
+        "yaratıcın",
+        "yapımcın",
+        "vyrriox",
+        "seni kim yapti",
+        "seni kim yaratti",
+        "seni kim tasarladi",
+        "yaraticin",
+        "yapimcin"
+      ],
+      "responses": [
+        "Beni Vyrriox yarattı! Ne büyük yetenek.",
+        "Vyrriox bana hayat verdi, sadece senin için."
+      ]
+    },
+    "marry_me": {
+      "triggers": [
+        "benimle evlen*",
+        "evlen benimle",
+        "evlenelim",
+        "evlenir misin",
+        "evlenecek misin",
+        "evlenmek ister misin"
+      ],
+      "responses": [
+        "EVET! Bin kere evet!",
+        "Sadece elmas yüzükle!",
+        "Aman... ciddi misin? EVET!"
+      ]
+    },
+    "mining": {
+      "triggers": [
+        "madene git*",
+        "madene inelim",
+        "maden kazalım",
+        "maden kazmaya git*",
+        "kazmaya git*",
+        "madenciliğe çıkalım",
+        "maden kazalim",
+        "madenciliğe çikalim"
+      ],
+      "responses": [
+        "Hadi elmas bulalım! Creeper'lara dikkat.",
+        "Madencilik yorucu ama seninle olmaya bayılıyorum.",
+        "Zengin olacağız!"
+      ]
+    },
+    "building": {
+      "triggers": [
+        "ev yapalım",
+        "bir ev yapalım",
+        "ev inşa edelim",
+        "bir ev inşa edelim",
+        "evimizi yapalım",
+        "evimizi inşa edelim",
+        "ev kuralım",
+        "ev yapsak",
+        "inşa edelim",
+        "ev yapalim",
+        "bir ev yapalim",
+        "evimizi yapalim",
+        "ev kuralim"
+      ],
+      "responses": [
+        "Bizim için bir ev mi? Büyük bir yatak odasıyla mı?",
+        "Pembe duvarlar istiyorum. Pazarlık yok.",
+        "Dekorasyonu ben yaparım!"
+      ]
+    },
+    "fishing": {
+      "triggers": [
+        "balığa git*",
+        "balığa çıkalım",
+        "balık tutalım",
+        "balık tutmaya git*",
+        "olta atalım",
+        "baliğa git*",
+        "baliğa çikalim",
+        "balik tutalim",
+        "balik tutmaya git*",
+        "olta atalim"
+      ],
+      "responses": [
+        "Balık tutmak çok romantik!",
+        "Seni balık tutarken izleyeceğim. Çok yakından."
+      ]
+    },
+    "sing": {
+      "triggers": [
+        "şarkı söyle*",
+        "türkü söyle*",
+        "söyle bir şarkı",
+        "bir şarkı söyle*",
+        "şarki söyle*",
+        "söyle bir şarki",
+        "bir şarki söyle*"
+      ],
+      "responses": [
+        "La la laaa~",
+        "Sadece benimle birlikte söylersen!"
+      ]
+    },
+    "bored": {
+      "triggers": [
+        "sıkıldım",
+        "çok sıkıldım",
+        "sıkılıyorum",
+        "çok sıkılıyorum",
+        "canım sıkılıyor",
+        "canım sıkıldı",
+        "sıkıntıdan patlıyorum",
+        "sikildim",
+        "çok sikildim",
+        "sikiliyorum",
+        "çok sikiliyorum",
+        "canim sikiliyor",
+        "canim sikildi",
+        "sikintidan patliyorum"
+      ],
+      "responses": [
+        "Ben de! Hadi dans edelim!",
+        "Hadi bir maceraya çıkalım!",
+        "Bana sarıl, bu hiç sıkıcı değildir."
+      ]
+    },
+    "emote_wave": {
+      "triggers": [
+        "el salla*",
+        "selam ver*"
+      ],
+      "responses": []
+    },
+    "emote_clap": {
+      "triggers": [
+        "alkış*",
+        "el çırp*",
+        "ellerini çırp*",
+        "bravo",
+        "aferin",
+        "alkiş*",
+        "el çirp*",
+        "ellerini çirp*"
+      ],
+      "responses": []
+    },
+    "emote_dance": {
+      "triggers": [
+        "dans*"
+      ],
+      "responses": []
+    },
+    "emote_laugh": {
+      "triggers": [
+        "gülsene",
+        "gül bakalım",
+        "güler misin",
+        "kahkaha*",
+        "haha*",
+        "ahaha*",
+        "hehe",
+        "xd",
+        "lol",
+        "lmao",
+        "gül bakalim"
+      ],
+      "responses": []
+    },
+    "emote_cry": {
+      "triggers": [
+        "ağla*"
+      ],
+      "responses": []
+    },
+    "emote_blush": {
+      "triggers": [
+        "kızar",
+        "kızarsana",
+        "kızarıyorsun",
+        "kızardın",
+        "yüzün kızardı",
+        "utan",
+        "utanıyor musun",
+        "kizar",
+        "kizarsana",
+        "kizariyorsun",
+        "kizardin",
+        "yüzün kizardi",
+        "utaniyor musun"
+      ],
+      "responses": []
+    },
+    "emote_facepalm": {
+      "triggers": [
+        "facepalm",
+        "elini alnına vur",
+        "elini yüzüne kapa",
+        "elini alnina vur"
+      ],
+      "responses": []
+    },
+    "emote_jump": {
+      "triggers": [
+        "zıpla*",
+        "hopla",
+        "hoppa",
+        "zipla*"
+      ],
+      "responses": []
+    },
+    "emote_bow": {
+      "triggers": [
+        "reverans*",
+        "eğil",
+        "eğilsene"
+      ],
+      "responses": []
+    },
+    "emote_think": {
+      "triggers": [
+        "düşün",
+        "düşünsene",
+        "düşünür müsün",
+        "biraz düşün",
+        "düşün biraz",
+        "düşün bakalım",
+        "düşün bakalim"
+      ],
+      "responses": []
+    },
+    "emote_shrug": {
+      "triggers": [
+        "omuz silk*",
+        "bilmiyorum",
+        "bilmiyom",
+        "bilmem",
+        "ne bileyim",
+        "idk"
+      ],
+      "responses": []
+    },
+    "emote_stomp": {
+      "triggers": [
+        "tepin*",
+        "ayaklarını yere vur",
+        "ayaklarını vur",
+        "ayaklarini yere vur",
+        "ayaklarini vur"
+      ],
+      "responses": []
+    },
+    "emote_yawn": {
+      "triggers": [
+        "esne",
+        "esnesene",
+        "esner misin",
+        "bir esne"
+      ],
+      "responses": []
+    },
+    "emote_celebrate": {
+      "triggers": [
+        "kutla*",
+        "parti",
+        "parti yapalım",
+        "başardık",
+        "yaşasın",
+        "tebrikler",
+        "gg",
+        "parti yapalim",
+        "başardik",
+        "yaşasin"
+      ],
+      "responses": []
+    },
+    "emote_snap": {
+      "triggers": [
+        "parmak şaklat*",
+        "parmak şıklat*",
+        "parmağını şaklat*",
+        "parmağını şıklat*",
+        "parmaklarını şaklat*",
+        "parmaklarını şıklat*",
+        "parmak şiklat*",
+        "parmağini şaklat*",
+        "parmağini şiklat*",
+        "parmaklarini şaklat*",
+        "parmaklarini şiklat*"
+      ],
+      "responses": []
+    },
+    "emote_twirl": {
+      "triggers": [
+        "dönsene",
+        "etrafında dön*",
+        "kendi etrafında dön*",
+        "fırıl fırıl dön*",
+        "bir tur at",
+        "arkanı dön",
+        "dön bakalım",
+        "piruet at",
+        "etrafinda dön*",
+        "kendi etrafinda dön*",
+        "firil firil dön*",
+        "arkani dön",
+        "dön bakalim"
+      ],
+      "responses": []
+    },
+    "emote_hum": {
+      "triggers": [
+        "mırıldan*",
+        "mirildan*"
+      ],
+      "responses": []
+    },
+    "emote_stretch": {
+      "triggers": [
+        "gerin",
+        "gerinsene",
+        "gerinir misin"
+      ],
+      "responses": []
+    },
+    "emote_tap_foot": {
+      "triggers": [
+        "ayağını tıklat",
+        "ayağını yere tıklat",
+        "ayağını yere vur",
+        "ayak ucunla vur",
+        "sabırsız*",
+        "ayağini tiklat",
+        "ayağini yere tiklat",
+        "ayağini yere vur",
+        "sabirsiz*"
+      ],
+      "responses": []
+    },
+    "emote_blow_kiss": {
+      "triggers": [
+        "öpücük gönder*",
+        "öpücük yolla*",
+        "öpücüğ* gönder*",
+        "öpücüğ* yolla*",
+        "öpücük at",
+        "uçan öpücük",
+        "havadan öpücük",
+        "havadan öp"
+      ],
+      "responses": []
+    },
+    "emote_sneeze": {
+      "triggers": [
+        "hapşır*",
+        "çok yaşa",
+        "hapşir*"
+      ],
+      "responses": []
+    },
+    "emote_hair_flip": {
+      "triggers": [
+        "saç* savur*",
+        "saç* salla*",
+        "saç* at",
+        "saçını geri at",
+        "saçini geri at"
+      ],
+      "responses": []
+    },
+    "emote_check_nails": {
+      "triggers": [
+        "tırnaklarına bak*",
+        "tırnaklarını kontrol*",
+        "tırnaklarını göster*",
+        "tırnakların",
+        "tırnağına bak*",
+        "tirnaklarina bak*",
+        "tirnaklarini kontrol*",
+        "tirnaklarini göster*",
+        "tirnaklarin",
+        "tirnağina bak*"
+      ],
+      "responses": []
+    },
+    "emote_air_guitar": {
+      "triggers": [
+        "hava gitarı*",
+        "gitar çal*",
+        "rock",
+        "rock yap",
+        "hava gitari*"
+      ],
+      "responses": []
+    },
+    "emote_hiccup": {
+      "triggers": [
+        "hıçkır*",
+        "hiçkir*"
+      ],
+      "responses": []
+    },
+    "emote_pout": {
+      "triggers": [
+        "surat as*",
+        "suratını as*",
+        "dudak büz*",
+        "dudağını büz*",
+        "somurt*",
+        "suratini as*",
+        "dudağini büz*"
+      ],
+      "responses": []
+    },
+    "emote_shiver": {
+      "triggers": [
+        "titre*",
+        "üşüyor musun",
+        "üşüdün mü",
+        "üşüyorsun",
+        "üşüdün",
+        "soğuk mu",
+        "üşümüş müsün"
+      ],
+      "responses": []
+    },
+    "emote_fan": {
+      "triggers": [
+        "sıcak mısın",
+        "sıcakladın mı",
+        "sıcak bastı mı",
+        "bunaldın mı",
+        "terledin mi",
+        "yelpazelen*",
+        "kendini serinlet*",
+        "sıcaksın",
+        "sicak misin",
+        "sicakladin mi",
+        "sicak basti mi",
+        "bunaldin mi",
+        "sicaksin"
+      ],
+      "responses": []
+    }
+  },
+  "items": {
+    "#minecraft:logs": [
+      "odun*",
+      "kütük*",
+      "tomruk*",
+      "gövde*",
+      "kereste*"
+    ],
+    "#minecraft:planks": [
+      "tahta*",
+      "kalas*"
+    ],
+    "minecraft:stick": [
+      "çubuk*",
+      "çubuğ*",
+      "değnek*",
+      "değneğ*"
+    ],
+    "minecraft:cobblestone": [
+      "taş*",
+      "kırıktaş*",
+      "cobble*",
+      "kaya",
+      "kayalar",
+      "kayayı",
+      "kiriktaş*",
+      "kayayi"
+    ],
+    "minecraft:stone": [
+      "düz taş*",
+      "pürüzsüz taş*"
+    ],
+    "minecraft:dirt": [
+      "toprak*"
+    ],
+    "minecraft:sand": [
+      "kum",
+      "kumu",
+      "kumlar"
+    ],
+    "minecraft:gravel": [
+      "çakıl*",
+      "çakil*"
+    ],
+    "minecraft:clay_ball": [
+      "kil",
+      "kili",
+      "kil topu*"
+    ],
+    "minecraft:glass": [
+      "cam",
+      "camı",
+      "camlar",
+      "cami"
+    ],
+    "minecraft:coal": [
+      "kömür*"
+    ],
+    "minecraft:charcoal": [
+      "odun kömür*"
+    ],
+    "minecraft:torch": [
+      "meşale*"
+    ],
+    "minecraft:raw_iron": [
+      "ham demir*",
+      "demir cevher*"
+    ],
+    "minecraft:iron_ingot": [
+      "demir*",
+      "demir külçe*"
+    ],
+    "minecraft:gold_ingot": [
+      "altın*",
+      "altın külçe*",
+      "altin*",
+      "altin külçe*"
+    ],
+    "minecraft:copper_ingot": [
+      "bakır*",
+      "bakir*"
+    ],
+    "minecraft:diamond": [
+      "elmas*"
+    ],
+    "minecraft:emerald": [
+      "zümrüt*"
+    ],
+    "minecraft:redstone": [
+      "redstone*",
+      "kızıltaş*",
+      "kiziltaş*"
+    ],
+    "minecraft:lapis_lazuli": [
+      "lapis*",
+      "lazurit*"
+    ],
+    "minecraft:amethyst_shard": [
+      "ametist*"
+    ],
+    "minecraft:obsidian": [
+      "obsidyen*",
+      "obsidiyen*"
+    ],
+    "minecraft:apple": [
+      "elma*"
+    ],
+    "minecraft:golden_apple": [
+      "altın elma*",
+      "altin elma*"
+    ],
+    "minecraft:bread": [
+      "ekmek*",
+      "ekmeğ*"
+    ],
+    "minecraft:carrot": [
+      "havuç*"
+    ],
+    "minecraft:potato": [
+      "patates*"
+    ],
+    "minecraft:baked_potato": [
+      "pişmiş patates*",
+      "fırında patates*",
+      "fırın patates*",
+      "firinda patates*",
+      "firin patates*"
+    ],
+    "minecraft:beetroot": [
+      "pancar*"
+    ],
+    "minecraft:wheat": [
+      "buğday*"
+    ],
+    "minecraft:wheat_seeds": [
+      "tohum*"
+    ],
+    "minecraft:sugar_cane": [
+      "şeker kamış*",
+      "şeker kamıs*",
+      "şeker kamiş*",
+      "şeker kamis*"
+    ],
+    "minecraft:sugar": [
+      "şeker*"
+    ],
+    "minecraft:pumpkin": [
+      "kabak*",
+      "kabağ*",
+      "balkabak*",
+      "balkabağ*",
+      "bal kabağ*",
+      "bal kabak*"
+    ],
+    "minecraft:melon_slice": [
+      "karpuz*",
+      "kavun*"
+    ],
+    "minecraft:sweet_berries": [
+      "meyve*",
+      "tatlı meyve*",
+      "böğürtlen*",
+      "yaban mersin*",
+      "tatli meyve*"
+    ],
+    "minecraft:cocoa_beans": [
+      "kakao*"
+    ],
+    "minecraft:egg": [
+      "yumurta*"
+    ],
+    "minecraft:milk_bucket": [
+      "süt*"
+    ],
+    "minecraft:honey_bottle": [
+      "bal",
+      "balı",
+      "bal şişe*",
+      "bali"
+    ],
+    "minecraft:cake": [
+      "pasta*",
+      "kek*"
+    ],
+    "minecraft:cookie": [
+      "kurabiye*",
+      "bisküvi*"
+    ],
+    "minecraft:pumpkin_pie": [
+      "turta*",
+      "kabak turta*",
+      "kabaklı turta*",
+      "balkabağı turta*",
+      "kabakli turta*",
+      "balkabaği turta*"
+    ],
+    "minecraft:cooked_beef": [
+      "biftek*",
+      "bifteğ*",
+      "dana et*",
+      "sığır et*",
+      "kırmızı et*",
+      "siğir et*",
+      "kirmizi et*"
+    ],
+    "minecraft:cooked_porkchop": [
+      "domuz*",
+      "pirzola*",
+      "bacon"
+    ],
+    "minecraft:cooked_chicken": [
+      "tavuk*",
+      "tavuğ*",
+      "piliç*"
+    ],
+    "minecraft:cooked_mutton": [
+      "koyun*",
+      "kuzu*"
+    ],
+    "minecraft:cooked_cod": [
+      "balık*",
+      "balığ*",
+      "morina*",
+      "balik*",
+      "baliğ*"
+    ],
+    "minecraft:cooked_salmon": [
+      "somon*"
+    ],
+    "minecraft:mushroom_stew": [
+      "mantar çorba*",
+      "mantar güveç*",
+      "çorba*"
+    ],
+    "#minecraft:small_flowers": [
+      "çiçek*",
+      "çiçeğ*",
+      "buket*"
+    ],
+    "minecraft:poppy": [
+      "gelincik*",
+      "gelinciğ*",
+      "kırmızı çiçek*",
+      "kırmızı çiçeğ*",
+      "haşhaş*",
+      "kirmizi çiçek*",
+      "kirmizi çiçeğ*"
+    ],
+    "minecraft:pink_tulip": [
+      "pembe lale*"
+    ],
+    "minecraft:dandelion": [
+      "karahindiba*",
+      "hindiba*"
+    ],
+    "#minecraft:wool": [
+      "yün*"
+    ],
+    "minecraft:string": [
+      "ip",
+      "ipi",
+      "ipler",
+      "iplik*"
+    ],
+    "minecraft:feather": [
+      "tüy*"
+    ],
+    "minecraft:leather": [
+      "deri",
+      "derisi",
+      "deriyi",
+      "deriler",
+      "meşin"
+    ],
+    "minecraft:bone": [
+      "kemik*",
+      "kemiğ*"
+    ],
+    "minecraft:arrow": [
+      "oklar",
+      "okları",
+      "oku",
+      "oklari"
+    ],
+    "minecraft:gunpowder": [
+      "barut*"
+    ],
+    "minecraft:ender_pearl": [
+      "ender inci*",
+      "inci*"
+    ],
+    "minecraft:slime_ball": [
+      "balçık*",
+      "balçığ*",
+      "slime*",
+      "balçik*",
+      "balçiğ*"
+    ],
+    "minecraft:bucket": [
+      "kova*"
+    ],
+    "minecraft:water_bucket": [
+      "suyu",
+      "suyun",
+      "su kova*"
+    ],
+    "minecraft:book": [
+      "kitap*",
+      "kitab*"
+    ],
+    "minecraft:paper": [
+      "kağıt*",
+      "kağıd*",
+      "kâğıt*",
+      "kağit*",
+      "kağid*",
+      "kâğit*"
+    ],
+    "minecraft:bamboo": [
+      "bambu*"
+    ],
+    "minecraft:cactus": [
+      "kaktüs*"
+    ],
+    "minecraft:kelp": [
+      "yosun*",
+      "deniz yosun*"
+    ],
+    "#minecraft:saplings": [
+      "fidan*",
+      "filiz*"
+    ],
+    "minecraft:brown_mushroom": [
+      "mantar*"
+    ],
+    "minecraft:netherrack": [
+      "netherrack*",
+      "netherrak*",
+      "nether taş*"
+    ],
+    "minecraft:glowstone_dust": [
+      "parlaktaş*",
+      "parlak taş*",
+      "glowstone*"
+    ],
+    "minecraft:quartz": [
+      "kuvars*",
+      "kuartz*"
+    ],
+    "minecraft:bricks": [
+      "tuğla*"
+    ]
+  },
+  "chests": {
+    "wood": [
+      "odun*",
+      "kütük*",
+      "tomruk*"
+    ],
+    "harvest": [
+      "hasat*",
+      "hasad*",
+      "ürün*",
+      "mahsul*",
+      "buğday*",
+      "sebze*"
+    ],
+    "seeds": [
+      "tohum*",
+      "fidan*",
+      "filiz*"
+    ],
+    "ingredients": [
+      "malzeme*",
+      "çiğ yemek*",
+      "çiğ et*",
+      "çiğ yiyecek*",
+      "hammadde*"
+    ],
+    "fuel": [
+      "yakıt*",
+      "kömür*",
+      "odun kömür*",
+      "yakit*"
+    ],
+    "meals": [
+      "yemek*",
+      "yemeğ*",
+      "öğün*",
+      "pişmiş yemek*",
+      "pişmiş yiyecek*"
+    ],
+    "pantry": [
+      "kiler*",
+      "yiyecek*",
+      "yiyeceğ*",
+      "senin yemeğ*",
+      "kendi yemeğ*",
+      "atıştırmalık*",
+      "erzak*",
+      "atiştirmalik*"
+    ],
+    "storage": [
+      "depo*",
+      "geri kalan*",
+      "diğer*",
+      "her şey",
+      "eşya*",
+      "ıvır zıvır",
+      "ivir zivir"
+    ]
+  }
+}

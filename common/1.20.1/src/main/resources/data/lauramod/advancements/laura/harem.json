@@ -1,0 +1,23 @@
+{
+  "parent": "lauramod:laura/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:pink_petals"
+    },
+    "title": {
+      "translate": "advancements.lauramod.harem.title"
+    },
+    "description": {
+      "translate": "advancements.lauramod.harem.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

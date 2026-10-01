@@ -1,0 +1,23 @@
+{
+  "parent": "lauramod:laura/emote_first",
+  "display": {
+    "icon": {
+      "item": "minecraft:music_disc_pigstep"
+    },
+    "title": {
+      "translate": "advancements.lauramod.emote_all.title"
+    },
+    "description": {
+      "translate": "advancements.lauramod.emote_all.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

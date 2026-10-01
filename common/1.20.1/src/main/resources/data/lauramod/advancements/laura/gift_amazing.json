@@ -1,0 +1,23 @@
+{
+  "parent": "lauramod:laura/gift_first",
+  "display": {
+    "icon": {
+      "item": "minecraft:amethyst_shard"
+    },
+    "title": {
+      "translate": "advancements.lauramod.gift_amazing.title"
+    },
+    "description": {
+      "translate": "advancements.lauramod.gift_amazing.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

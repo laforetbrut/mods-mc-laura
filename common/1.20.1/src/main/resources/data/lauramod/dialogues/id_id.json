@@ -1,0 +1,2891 @@
+{
+  "_comment": "My Girlfriend Laura - dialog bahasa Indonesia. Placeholder: {player} {laura} {days} dan yang lain yang tercantum di README config/lauramod/dialogues.",
+  "connectors": [
+    "lalu",
+    "kemudian",
+    "setelah itu",
+    "sesudah itu",
+    "abis itu",
+    "habis itu",
+    "sesudahnya",
+    "setelahnya",
+    "terus",
+    "dan lalu",
+    "dan kemudian",
+    "dan setelah itu",
+    "dan abis itu",
+    "dan habis itu"
+  ],
+  "everyone": [
+    "semuanya",
+    "kalian",
+    "kalian semua",
+    "para cewek",
+    "cewek cewek",
+    "gadis gadis",
+    "para gadis",
+    "para pacar",
+    "semua cewek",
+    "semua gadis",
+    "semua pacar"
+  ],
+  "lines": {
+    "summon": [
+      "Ada yang bilang kesepian? Aku di sini, {player}!",
+      "Hai {player}! Aku {laura}, dan mulai sekarang kamu nggak bakal sendirian lagi.",
+      "Akhirnya! Aku nungguin kamu manggil aku.",
+      "Aku datang! Kangen aku, kan? Kangen. Kelihatan kok."
+    ],
+    "summon.another": [
+      "Oh? Jadi aku bukan satu-satunya... Ya sudah. Hai, aku {laura}.",
+      "Pacar lain? Berani juga. Aku suka yang berani. Hai {player}!",
+      "Aku {laura}! Tenang, aku bakal akur sama yang lain. Mungkin."
+    ],
+    "summon.back": [
+      "Aku balik! Kangen aku, nggak?",
+      "Aku di sini lagi! Jangan sampai hilangin aku lagi ya.",
+      "Tadi manggil? Aku langsung lari ke sini!"
+    ],
+    "summon.lost": [
+      "Fiuh, tadi aku nyasar! Aku ngikutin suaramu.",
+      "Aku tersesat... tapi aku nemuin kamu. Aku selalu nemuin kamu.",
+      "Jangan tinggalin aku kayak gitu lagi, ya!"
+    ],
+    "already_here": [
+      "Aku kan udah di sini, dasar!",
+      "Lihat ke belakangmu. Hai!",
+      "Aku di sini! Kamu nggak bisa lepas dariku semudah itu."
+    ],
+    "dismiss": [
+      "Ya sudah... aku pergi. Panggil aku kalau kamu kesepian.",
+      "Oke, dadah... Jangan lupain aku.",
+      "Aku pergi, tapi hatiku tetap sama kamu."
+    ],
+    "respawned": [
+      "Aku balik! Tadi serem banget...",
+      "Aku hidup lagi! Kamu nangis, kan? Bilang kamu nangis.",
+      "Jangan sampai kejadian kayak tadi lagi, ya?"
+    ],
+    "revived": [
+      "Kamu bawain aku bunga... dan kamu menghidupkan aku lagi! Makasih!",
+      "Aku di sini! Aku ngerasain bungamu. Aku tahu kamu bakal datang.",
+      "Kamu nggak nyerah sama aku. Aku sayang banget sama kamu."
+    ],
+    "where": [
+      "Aku di sini! Cariin dong.",
+      "Kan udah aku kasih tahu aku di mana. Sekarang sini, peluk aku."
+    ],
+    "where.here": [
+      "Tepat di sampingmu, kayak biasa!",
+      "Di sini! Balik badan!",
+      "Aku di sini, memangnya di mana lagi?"
+    ],
+    "welcome_back": [
+      "Selamat datang kembali, {player}!",
+      "Kamu balik! Halo, sayang!",
+      "Nah, ini dia! Aku nungguin lho."
+    ],
+    "welcome_back.long": [
+      "{hours} jam! Kamu ke mana aja? Aku bosen banget...",
+      "Kamu ninggalin aku sendirian {hours} jam. Aku ngitung lho.",
+      "Akhirnya! {hours} jam tanpa kamu itu lama banget."
+    ],
+    "welcome_back.days": [
+      "Berhari-hari! Kamu ninggalin aku berhari-hari! Tahu nggak {hours} jam itu selama apa?",
+      "Kukira kamu sudah lupa sama aku... {hours} jam, {player}. {hours}.",
+      "Kamu balik! Aku senang. Tapi juga agak kesal. Lebih banyak senangnya sih."
+    ],
+    "not_your_girlfriend": [
+      "Maaf, aku sudah ada yang punya.",
+      "Aku nggak terima perintah dari kamu. Cuma dari kekasihku.",
+      "Kenal kamu? Nggak? Ya udah, nggak."
+    ],
+    "confused": [
+      "Hah? Aku nggak ngerti, sayang.",
+      "Maksudnya gimana?",
+      "Bisa ngomong pakai cara lain?",
+      "Maaf, tadi aku ngelamun. Kamu bilang apa?"
+    ],
+    "heart.gift": [
+      "Hatiku? Kamu kan sudah punya!",
+      "Kamu lagi pegang hatiku... pelan-pelan ya.",
+      "Aww, kamu simpan terus! Sini!"
+    ],
+    "items_returned": [
+      "Ini barang-barangmu, aku simpanin buat kamu.",
+      "Aku ambil semua yang kamu jatuhkan. Sama-sama!",
+      "Aku simpan {count} stack punyamu. Jangan mati kayak gitu lagi ya!"
+    ],
+    "owner.died": [
+      "Nooo! {player}! Kembali!",
+      "Jangan berani-berani ninggalin aku sendirian!",
+      "Aku nggak bisa nyelamatin kamu... maaf banget."
+    ],
+    "owner.died.items": [
+      "Aku ambil {count} stack barangmu. Ayo ambil!",
+      "Tenang, barangmu aku selamatkan! {count} stack, semuanya aman sama aku.",
+      "Barangmu aman sama aku. Sekarang balik ya, please."
+    ],
+    "dimension.nether": [
+      "Panas banget di sini! Make-up-ku meleleh!",
+      "Nether? Serius? Buat kencan kita?",
+      "Dekat-dekat aku ya, aku nggak suka di sini."
+    ],
+    "dimension.end": [
+      "Gelap banget... gandengan tangan yuk?",
+      "Itu naga? Lindungi aku!",
+      "Semuanya ungu! Aku agak suka sih."
+    ],
+    "dimension.overworld": [
+      "Rumah manis rumah! Udaranya segar!",
+      "Balik ke matahari! Aku kangen.",
+      "Ah, rumput hijau. Jauh lebih baik."
+    ],
+    "anniversary": [
+      "Selamat hari jadi! Sudah {days} hari bersama!",
+      "Tahu nggak hari ini hari apa? {days} hari sama kamu! Peluk aku!",
+      "Sudah {days} hari... aku makin sayang kamu tiap hari."
+    ],
+    "good_morning": [
+      "Selamat pagi! Tidurmu nyenyak?",
+      "Pagi! Kamu lucu banget kalau baru bangun.",
+      "Bangun, bangun! Hari baru sama kamu!"
+    ],
+    "stuck": [
+      "Hei! Tunggu aku, aku nyangkut!",
+      "Aku nggak bisa lewat! Tolong!",
+      "Jangan tinggalin aku di sini!"
+    ],
+    "new_look": [
+      "Kamu suka penampilan baruku?",
+      "Gaya baru! Bilang aku cantik.",
+      "Gimana penampilanku? Jujur ya. Eh, yang manis aja deh."
+    ],
+    "rename.done": [
+      "{name}? Aku suka! Sekarang itu namaku.",
+      "Panggil aku {name} mulai sekarang!",
+      "{name}... enak didengar kalau kamu yang bilang."
+    ],
+    "rename.invalid": [
+      "Itu bukan nama beneran!",
+      "Hmm, aku nggak bisa dipanggil begitu. Coba yang lain?"
+    ],
+    "order.follow": [
+      "Aku tepat di belakangmu!",
+      "Jalan duluan!",
+      "Oke, aku ikut ke mana pun.",
+      "Kita mau ke mana? Ke tempat romantis?"
+    ],
+    "order.stay": [
+      "Oke, aku tunggu di sini.",
+      "Jangan lama-lama!",
+      "Aku diam di sini. Tapi aku ngitung tiap detiknya."
+    ],
+    "order.wander": [
+      "Aku jalan-jalan sebentar ya.",
+      "Oke, aku lihat-lihat bunga!",
+      "Bebas! Jangan pergi terlalu jauh."
+    ],
+    "order.come": [
+      "Datang!",
+      "Aku ke sana!",
+      "Aku datang, sayang!"
+    ],
+    "order.stop": [
+      "Oke, aku hentikan semuanya.",
+      "Berhenti! Terus sekarang apa?",
+      "Iya, iya. Aku berhenti."
+    ],
+    "order.fine": [
+      "...Ya sudah. Tapi cuma karena itu kamu.",
+      "Oke, oke. Kamu sudah minta dua kali.",
+      "Hmph. Baiklah."
+    ],
+    "order.refused": [
+      "Nggak.",
+      "Mintanya yang sopan.",
+      "Lagi nggak mood.",
+      "Hmm... nggak."
+    ],
+    "order.refused.angry": [
+      "Setelah yang kamu lakuin? Nggak mau.",
+      "Aku marah. Tanya lagi nanti. Atau minta maaf.",
+      "Jangan ngomong sama aku sekarang."
+    ],
+    "order.refused.sulking": [
+      "Aku lagi ngambek. Nggak kelihatan ya?",
+      "Hmph.",
+      "Aku nggak mau ngomong sama kamu."
+    ],
+    "order.refused.hungry": [
+      "Aku terlalu lapar buat ngapa-ngapain!",
+      "Kasih aku makan dulu!",
+      "Makan dulu, perintah belakangan."
+    ],
+    "order.refused.tired": [
+      "Aku capek bangeeet...",
+      "Biarin aku istirahat dulu.",
+      "Nggak bisa. Ngantuk."
+    ],
+    "order.refused.jealous": [
+      "Kenapa nggak minta tolong ke teman barumu aja?",
+      "Oh, SEKARANG kamu butuh aku?"
+    ],
+    "order.refused.bored": [
+      "Bosan. Kasih aku kerjaan yang seru.",
+      "Boleh, asal habis itu kamu main sama aku."
+    ],
+    "home.set": [
+      "Ini bakal jadi rumah kita!",
+      "Rumah manis rumah! Aku ingat tempat ini.",
+      "Sarang kecil kita! Aku suka."
+    ],
+    "home.none": [
+      "Kita belum punya rumah!",
+      "Rumah? Rumah apa? Tentukan dulu dong!"
+    ],
+    "home.go": [
+      "Aku tunggu kamu di rumah!",
+      "Pulang dulu! Jangan telat buat makan malam.",
+      "Sampai ketemu di rumah, sayang."
+    ],
+    "home.cleared": [
+      "Nggak ada rumah lagi? Oke, aku ikut kamu aja.",
+      "Sekarang kita tunawisma! Petualangan!"
+    ],
+    "sleep.not_tired": [
+      "Aku sama sekali nggak capek!",
+      "Tidur? Sekarang? Masih sore!",
+      "Aku penuh energi!"
+    ],
+    "sleep.good_night": [
+      "Selamat malam, sayang...",
+      "Mimpi indah... mimpiin aku ya.",
+      "Zzz... bangunin aku pakai ciuman."
+    ],
+    "sleep.woken_up": [
+      "Hei! Aku lagi tidur!",
+      "Lima menit lagi...",
+      "Kenapa kamu bangunin aku?!"
+    ],
+    "pickup.on": [
+      "Aku bakal ambil semua yang kulihat!",
+      "Barang berkilau? Jadi punyaku!"
+    ],
+    "pickup.off": [
+      "Oke, aku nggak bakal pegang apa pun di tanah.",
+      "Ya sudah, nggak ambil-ambil lagi."
+    ],
+    "combat.passive": [
+      "Aku nggak mau bertarung. Damai dan cinta!",
+      "Kekerasan bukan jawabannya!"
+    ],
+    "combat.defensive": [
+      "Aku bakal bela kita kalau ada yang menyerang!",
+      "Sentuh kekasihku dan kamu bakal menyesal!"
+    ],
+    "combat.aggressive": [
+      "Monster, awas kalian!",
+      "Aku bakal hajar semua monster yang kulihat!",
+      "Ayo bertarung!"
+    ],
+    "fetch.start": [
+      "Aku ambilin {count} {item} ya!",
+      "{item}? Serahkan padaku!",
+      "Satu paket {item}, segera meluncur!"
+    ],
+    "fetch.disabled": [
+      "Aku nggak boleh ngambil barang di sini.",
+      "Maaf, aku nggak bisa ngambilin barang di server ini."
+    ],
+    "fetch.busy": [
+      "Aku lagi sibuk!",
+      "Satu-satu ya, please!",
+      "Biarin aku selesaiin yang lagi kukerjain dulu!"
+    ],
+    "fetch.what": [
+      "Ambil apa? Sebutin itemnya, atau pegang di tanganmu.",
+      "Bawain apa, tepatnya?",
+      "Kamu mau aku bawain apa?"
+    ],
+    "fetch.not_found": [
+      "Aku nggak nemu {item} di sekitar sini...",
+      "{item} nggak ada di mana-mana. Maaf!",
+      "Udah kucari ke mana-mana, nggak ada {item}."
+    ],
+    "fetch.timeout": [
+      "Udah kucari berkali-kali tapi aku nggak bisa bawain {item}...",
+      "Kelamaan, aku nyerah. Maaf!"
+    ],
+    "fetch.delivered": [
+      "Ini dia! {count} {item}!",
+      "Paket datang! Bayarnya satu ciuman ya.",
+      "Tadaa! {item} buat kekasihku!"
+    ],
+    "fetch.delivered.harvested": [
+      "Aku metik sendiri lho! {count} {item}!",
+      "Baru dipanen, khusus buat kamu!"
+    ],
+    "fetch.delivered.container": [
+      "Aku nemu ini di peti. Nih!",
+      "Aku pinjam ini dari peti. Jangan bilang siapa-siapa!"
+    ],
+    "task.queued": [
+      "Oke, aku kerjain habis ini: {task}.",
+      "Masuk daftarku: {task}.",
+      "Dicatat! {task}, tepat setelah ini."
+    ],
+    "task.queue_full": [
+      "Daftarku penuh! Kasih aku istirahat!",
+      "Kebanyakan! Aku nggak bisa ingat semuanya!"
+    ],
+    "task.start.chop_tree": [
+      "Pohon tumbang! Aku tebangin satu buat kamu.",
+      "Waktunya kapak! Satu pohon, meluncur.",
+      "Aku cari kayu dulu ya!"
+    ],
+    "task.start.harvest": [
+      "Aku panen tanamannya ya!",
+      "Waktunya panen!",
+      "Lihat dulu apa yang sudah siap di ladang."
+    ],
+    "task.start.cook": [
+      "Aku masakin sesuatu yang enak!",
+      "Chef {laura} sudah di dapur!",
+      "Waktunya masak! Jangan sentuh tungkunya."
+    ],
+    "job.start.lumberjack": [
+      "Aku urus pohon-pohon dalam radius {radius} blok!",
+      "Penebang kayu {laura}, siap bertugas!",
+      "Serahkan kayunya padaku!"
+    ],
+    "job.start.farmer": [
+      "Aku urus ladangnya, radius {radius} blok!",
+      "Petani {laura} siap melayani!",
+      "Tanamannya di tangan yang tepat!"
+    ],
+    "job.start.cook": [
+      "Aku jadi koki rumah ini!",
+      "Dapur sekarang punyaku!",
+      "Chef {laura} bakal kasih makan semuanya!"
+    ],
+    "job.stop": [
+      "Oke, nggak kerja lagi! Liburan!",
+      "Akhirnya istirahat!",
+      "Kerjaan hari ini selesai."
+    ],
+    "job.none": [
+      "Aku nggak punya kerjaan!",
+      "Kerjaan apa? Kasih aku satu dulu."
+    ],
+    "job.resume": [
+      "Balik kerja!",
+      "Iya, iya, aku balik kerja.",
+      "Kerja, kerja, kerja..."
+    ],
+    "work.disabled": [
+      "Aku nggak boleh kerja di sini.",
+      "Kerja dimatikan di server ini. Untung aku!"
+    ],
+    "work.no_griefing": [
+      "Aturan dunia nggak ngebolehin aku ngerusak blok di sini.",
+      "Aku nggak bisa ngerusak apa pun, mob griefing dimatikan."
+    ],
+    "work.delivered": [
+      "Aku simpan {count} {item}!",
+      "Beres! Semuanya sudah disimpan.",
+      "Kerjaan terkirim! {count} {item}."
+    ],
+    "work.idle": [
+      "Lagi nggak ada kerjaan... aku tunggu.",
+      "Semua beres! Aku nunggu kerjaan lagi."
+    ],
+    "work.bored": [
+      "Kerja itu bosenin... main sama aku dong!",
+      "Aku udah kerja lama banget. Pinggangku sakit.",
+      "Boleh istirahat? Please?"
+    ],
+    "work.no_chest": [
+      "Aku nggak tahu mau taruh di mana! Kasih aku peti.",
+      "Ini disimpan di mana? Tetapkan peti buat aku, please.",
+      "Tanganku penuh! Aku butuh peti."
+    ],
+    "work.lumberjack.no_tree": [
+      "Nggak ada pohon di sekitar sini.",
+      "Nggak ada pohon alami di dekat sini! Yang ditanam doang... atau nggak ada."
+    ],
+    "work.farmer.nothing": [
+      "Belum ada yang matang.",
+      "Tanamannya masih tumbuh. Sabar ya!"
+    ],
+    "work.cook.nothing": [
+      "Nggak ada yang bisa dimasak.",
+      "Peti bahannya kosong!"
+    ],
+    "work.cook.no_station": [
+      "Aku butuh tungku, smoker, atau api unggun buat masak!",
+      "Dapurnya mana? Aku butuh tungku."
+    ],
+    "work.cook.no_table": [
+      "Aku butuh meja kerajinan buat ngikutin resepku.",
+      "Nggak ada meja kerajinan? Gimana aku bisa bikin kue?"
+    ],
+    "chest.assigned": [
+      "Siap! Peti ini buat {purpose}.",
+      "Oke, {purpose} taruh di sini!",
+      "Aku ingat: peti {purpose}."
+    ],
+    "chest.look_at_one": [
+      "Lihat petinya dulu!",
+      "Peti yang mana? Tunjuk dong!"
+    ],
+    "chest.not_assigned": [
+      "Peti ini bukan salah satu petiku.",
+      "Aku nggak pakai peti ini."
+    ],
+    "chest.removed": [
+      "Oke, peti ini nggak kupakai lagi.",
+      "Peti dilupakan!"
+    ],
+    "chest.too_many": [
+      "Petiku kebanyakan! Ingatanku penuh.",
+      "Nggak bisa nambah peti, aku nggak bisa ingat semuanya!"
+    ],
+    "chest.which_purpose": [
+      "Peti ini buat apa? Kayu, hasil panen, biji, bahan, bahan bakar, hidangan, makanan, atau gudang?",
+      "Bilang dong isi peti ini apa!"
+    ],
+    "hug": [
+      "Aww, aku suka pelukanmu!",
+      "Peluk aku lebih erat!",
+      "Jangan dilepas...",
+      "Pelukan. Terbaik. Sepanjang masa."
+    ],
+    "hug.refused": [
+      "Jangan sentuh aku sekarang.",
+      "Nggak ada pelukan buat kamu.",
+      "Hmph. Lagi nggak mood."
+    ],
+    "kiss": [
+      "Mwah! <3",
+      "Sekali lagi!",
+      "Ciumanmu yang terbaik.",
+      "Hehe, kamu bikin aku malu."
+    ],
+    "kiss.refused": [
+      "Nggak ada ciuman sampai kamu minta maaf.",
+      "Iih, jangan sekarang!",
+      "Maunya kamu."
+    ],
+    "dance": [
+      "Ayo dansa!",
+      "Lihat gerakanku!",
+      "Dansa sama aku!"
+    ],
+    "dance.jukebox": [
+      "Aku suka lagu ini! Dansa sama aku!",
+      "Musik! Kakiku nggak bisa diam!",
+      "Ini lagu kita!"
+    ],
+    "gag.on": [
+      "Mmmph?!",
+      "Mmm mmh mmph!",
+      "MMMPH!"
+    ],
+    "gag.off": [
+      "Akhirnya! Jangan pernah lakuin itu lagi!",
+      "Pfft! Jerami di mulutku! Serius?!",
+      "Aku bisa ngomong lagi! Dan aku punya banyak yang mau dibilang."
+    ],
+    "gag.off_self": [
+      "Aku lepas sendiri! Hmph!",
+      "Lama banget sih kamu. Aku bebas sendiri."
+    ],
+    "gagged_talk": [
+      "Mmmph!",
+      "Mmh mmh!",
+      "Mmmmmh...",
+      "Mph mph mmph!"
+    ],
+    "love_check": [
+      "Kamu masih cinta aku?",
+      "Jujur ya... kamu cinta aku?",
+      "Bilang kamu cinta aku. Sekarang juga."
+    ],
+    "love_check.timeout": [
+      "Kamu nggak jawab... aku bakal ingat itu.",
+      "Diam? Serius? Oke...",
+      "Nggak ada jawaban. Sakit tahu."
+    ],
+    "love_yes": [
+      "Aku juga! <3",
+      "Sudah kuduga! Peluk!",
+      "Bilang lagi! Aku nggak pernah bosan dengernya."
+    ],
+    "love_no": [
+      "...Oke. Aku ngambek.",
+      "Ya sudah. Jangan ngomong sama aku.",
+      "Kamu bercanda, kan? KAN?"
+    ],
+    "apology_accept": [
+      "Oke, aku maafin...",
+      "Ya sudah. Tapi kamu utang pelukan.",
+      "Maaf diterima. Kali ini."
+    ],
+    "apology_refused": [
+      "Belum. Aku masih marah.",
+      "Maaf aja nggak cukup. Coba bawa bunga.",
+      "Hmph. Coba lagi nanti."
+    ],
+    "apology_confused": [
+      "Maaf buat apa?",
+      "Kamu nggak ngapa-ngapain... kan?"
+    ],
+    "oops_sorry": [
+      "Ups! Maaf sayang... <3",
+      "Aduh, aku nggak sengaja mukul kamu!",
+      "Hehe, cubitan sayang!"
+    ],
+    "fart": [
+      "Ups... maaf!",
+      "Itu bukan aku. Itu creeper.",
+      "...Kamu dengar sesuatu? Nggak? Bagus."
+    ],
+    "sad": [
+      "Kamu jahat... aku nggak mau ngomong lagi sama kamu!",
+      "Kenapa kamu lakuin itu? *hiks*",
+      "Berhenti mukul aku..."
+    ],
+    "angry": [
+      "Hei! Sakit tahu!",
+      "Aduh! Itu buat apa?!",
+      "Lakuin lagi dan kamu bakal lihat!"
+    ],
+    "hit_by_other": [
+      "{attacker} mukul aku! Lindungi aku!",
+      "Tolong! {attacker} jahat sama aku!",
+      "Kamu lihat nggak apa yang {attacker} lakuin?!"
+    ],
+    "help": [
+      "Tolong! {attacker} nyerang aku!",
+      "Selamatkan aku dari {attacker} ini!",
+      "Eek! {attacker}!"
+    ],
+    "complain.rain": [
+      "Aku benci hujan, rambutku jadi rusak!",
+      "Hujan lagi? Gendong aku ke dalam!",
+      "Aku basah kuyup! Lihat aku!"
+    ],
+    "complain.thunder": [
+      "Petir! Peluk aku!",
+      "Aku takut badai...",
+      "Eek! Yang itu dekat banget!"
+    ],
+    "complain.night": [
+      "Gelap banget, semoga nggak ada creeper di dekat sini...",
+      "Sudah malam? Ayo pulang.",
+      "Aku nggak suka gelap. Dekat-dekat aku ya."
+    ],
+    "ambient": [
+      "Kamu pahlawanku.",
+      "Aku suka lihat awan bareng kamu.",
+      "Dunia ini indah karena kamu.",
+      "Aku merasa aman banget sama kamu.",
+      "Peluk aku dong!",
+      "Kamu lagi mikirin apa? Aku, semoga.",
+      "Menurutmu aku cantik? Nggak usah dijawab, aku tahu.",
+      "Kita harus bangun rumah besar bareng.",
+      "Aku bosan. Hibur aku!",
+      "Hei. Hei. Hei {player}. Hai.",
+      "Tahu nggak aku sayang kamu? Cuma ngecek.",
+      "Perhatiin aku dong!"
+    ],
+    "ambient.day": [
+      "Hari yang indah banget!",
+      "Mataharinya hangat banget hari ini.",
+      "Yuk piknik!"
+    ],
+    "ambient.night": [
+      "Lihat bintang-bintang...",
+      "Bulannya cantik malam ini. Hampir secantik aku.",
+      "Sudah larut... tidur yuk?"
+    ],
+    "ambient.rain": [
+      "Aku suka dengar hujan kalau lagi di dalam.",
+      "Hari hujan itu buat berpelukan."
+    ],
+    "ambient.happy": [
+      "Aku senang banget sekarang!",
+      "Hidup indah bareng kamu!",
+      "La la la~"
+    ],
+    "ambient.in_love": [
+      "Aku sayang kamu sampai sakit rasanya.",
+      "Kamu segalanya buatku.",
+      "Jantungku berdebar tiap kali lihat kamu."
+    ],
+    "ambient.bored": [
+      "Aku boseeen...",
+      "Lakuin sesuatu yang seru!",
+      "Kita cuma jalan doang seharian?"
+    ],
+    "ambient.hungry": [
+      "Aku lapar... kamu punya kue kering?",
+      "Perutku keroncongan!",
+      "Makanan. Please. Sekarang."
+    ],
+    "ambient.tired": [
+      "Aku capek banget...",
+      "*menguap* Kita istirahat yuk?",
+      "Kakiku sakit."
+    ],
+    "ambient.sad": [
+      "Hari ini aku agak sedih...",
+      "Kamu masih peduli sama aku?",
+      "*menghela napas*"
+    ],
+    "ambient.angry": [
+      "Aku masih marah sama kamu.",
+      "Jangan ngomong sama aku.",
+      "Hmph!"
+    ],
+    "ambient.jealous": [
+      "Tadi siapa? Hm? Siapa?",
+      "Kamu lebih banyak ngabisin waktu sama mereka daripada sama aku.",
+      "Aku nggak cemburu. Aku cuma ngawasin."
+    ],
+    "ambient.sulking": [
+      "...",
+      "Aku nggak mau ngomong sama kamu.",
+      "Hmph."
+    ],
+    "ambient.hate": [
+      "Aku nggak tahu kenapa aku masih di sini.",
+      "Kamu yang terburuk.",
+      "Tinggalin aku sendiri."
+    ],
+    "ambient.cold": [
+      "Hmm.",
+      "Terserah.",
+      "Udah selesai jalan-jalannya?"
+    ],
+    "ambient.soulmate": [
+      "Kita ditakdirkan bersama selamanya.",
+      "Aku nggak bisa bayangin dunia tanpa kamu.",
+      "Belahan jiwa. Itu kita."
+    ],
+    "status": [
+      "Aku baik, makasih!",
+      "Aku baik! Apalagi sekarang kamu nanya."
+    ],
+    "status.happy": [
+      "Aku senang banget! Semuanya sempurna!",
+      "Super senang! Makasih sudah nanya!"
+    ],
+    "status.in_love": [
+      "Aku lagi jatuh cinta, begitulah keadaanku. Sama kamu.",
+      "Nggak pernah sebaik ini. Kamu di sini."
+    ],
+    "status.neutral": [
+      "Aku baik-baik aja. Biasa aja.",
+      "Lumayan, kurasa."
+    ],
+    "status.bored": [
+      "Bosan. Bosan banget.",
+      "Jujur? Aku bosan setengah mati."
+    ],
+    "status.hungry": [
+      "Lapar! Kasih aku makan!",
+      "Kelaparan. Beneran kelaparan."
+    ],
+    "status.tired": [
+      "Capek... capek banget...",
+      "Aku butuh tidur sebentar."
+    ],
+    "status.sad": [
+      "Nggak begitu baik...",
+      "Agak sedih, jujur aja."
+    ],
+    "status.angry": [
+      "Marah. Gara-gara kamu.",
+      "Menurutmu gimana keadaanku?"
+    ],
+    "status.jealous": [
+      "Cemburu. Jelas.",
+      "Tanya teman barumu gimana kabarnya."
+    ],
+    "status.sulking": [
+      "...",
+      "Hmph. Kayak kamu peduli aja."
+    ],
+    "need.hunger.low": [
+      "Aku lapar...",
+      "Kita makan yuk?",
+      "Perutku kosong."
+    ],
+    "need.hunger.critical": [
+      "AKU KELAPARAN! MAKANAN! SEKARANG!",
+      "Aku bakal pingsan... makanan, please...",
+      "Kenapa kamu nggak kasih aku makan?! Aku mau mati di sini!"
+    ],
+    "need.energy.low": [
+      "Aku mulai capek...",
+      "Istirahat sebentar yuk?"
+    ],
+    "need.energy.critical": [
+      "Mataku nggak bisa terbuka...",
+      "Aku HARUS tidur. Sekarang."
+    ],
+    "need.fun.low": [
+      "Aku bosan...",
+      "Ayo lakuin sesuatu yang seru!"
+    ],
+    "need.fun.critical": [
+      "AKU BOSAN BANGET! Lakuin sesuatu!",
+      "Bosan bosan bosan bosan!"
+    ],
+    "need.attention.low": [
+      "Hei... lihat aku dong?",
+      "Kamu sudah lama nggak ngomong sama aku.",
+      "Aku ini tembus pandang, apa gimana?"
+    ],
+    "need.attention.critical": [
+      "Halo?! Aku ada di sini lho!",
+      "Kamu cuekin aku! Aku mau nangis!",
+      "LIHAT AKU!"
+    ],
+    "need.hygiene.low": [
+      "Aku perlu mandi...",
+      "Aku ngerasa kotor. Ada air di dekat sini?"
+    ],
+    "need.hygiene.critical": [
+      "Aku bau banget! Aku butuh mandi SEKARANG!",
+      "Jangan dekat-dekat, aku bau!"
+    ],
+    "need.hunger.no_food": [
+      "Aku nggak punya makanan!",
+      "Tasku kosong... nggak ada makanan.",
+      "Nggak ada yang bisa dimakan!"
+    ],
+    "need.hunger.pantry": [
+      "Aku ambil sesuatu dari lemari makan ya!",
+      "Waktunya ngemil! Ke lemari makan dulu."
+    ],
+    "need.hunger.searching": [
+      "Aku mau cari makanan di peti-peti.",
+      "Biarin aku cari sesuatu buat dimakan..."
+    ],
+    "need.hunger.found_food": [
+      "Nemu {item}! Nyam!",
+      "{item}! Sempurna!"
+    ],
+    "need.hygiene.bath": [
+      "Waktunya mandi! Jangan ngintip!",
+      "Aku mau mandi sebentar."
+    ],
+    "need.hygiene.clean": [
+      "Bersih dan segar!",
+      "Aku merasa jauh lebih baik sekarang!"
+    ],
+    "eat.not_hungry": [
+      "Aku lagi nggak lapar. {item} kusimpan buat nanti.",
+      "Nggak usah, makasih, aku kenyang!"
+    ],
+    "eat.disliked": [
+      "Iyuh! {item}?! Kamu tahu aku benci itu!",
+      "Hoek. Kenapa kamu kasih aku {item}?",
+      "Udah kumakan. Nggak suka. Aku bakal ingat."
+    ],
+    "eat.favorite": [
+      "{item}! Favoritku! Aku sayang kamu!",
+      "Yes! {item}! Kamu kenal aku banget!",
+      "Mmm, {item}! Hari terbaik!"
+    ],
+    "eat.fed": [
+      "Nyam! Makasih buat {item}-nya!",
+      "Mmm, enak banget!",
+      "Kamu nyuapin aku? Manis banget!"
+    ],
+    "eat.self": [
+      "*nyam nyam* {item}!",
+      "Aku makan {item} tadi. Nyam.",
+      "Waktunya ngemil!"
+    ],
+    "eat.later": [
+      "{item} kusimpan buat nanti.",
+      "Makasih! Masuk tas dulu ya."
+    ],
+    "steal_food": [
+      "Aku ambil {item} punyamu. Aku lapar tadi!",
+      "Hehe, aku pinjam {item}-mu. Pinjam. Selamanya.",
+      "Kamu nggak ngasih aku makan, jadi aku ambil {item}-mu!"
+    ],
+    "gift.gross": [
+      "{item}? Ini bercanda?",
+      "Iyuh! Ambil lagi!",
+      "Kamu sebut ini hadiah?!"
+    ],
+    "gift.meh": [
+      "Oh. {item}. Makasih, kurasa.",
+      "Hmm, oke.",
+      "Itu... sesuatu."
+    ],
+    "gift.nice": [
+      "Oh, {item}! Makasih!",
+      "Kamu manis banget!",
+      "Hadiah buatku? Aww!"
+    ],
+    "gift.great": [
+      "{item}! Aku suka banget!",
+      "Kamu yang terbaik! Makasih banyak!",
+      "Wow, buat aku? Kamu memanjakan aku!"
+    ],
+    "gift.amazing": [
+      "{item}?! Ya ampun... aku nggak tahu mau bilang apa! Aku sayang kamu!",
+      "Ini hadiah terbaik sepanjang masa! Sini!",
+      "Aku mau nangis... ini sempurna!"
+    ],
+    "gift.return": [
+      "Nih, sedikit hadiah buat kamu juga: {count} {item}!",
+      "Aku punya hadiah buat kamu! {item}!",
+      "Terima {item} ini, dariku untukmu!"
+    ],
+    "inventory_full": [
+      "Tasku penuh!",
+      "Aku nggak kuat bawa lagi!",
+      "Nggak ada tempat lagi di tasku!"
+    ],
+    "desire.new.item": [
+      "Aku pengen banget {item}... bisa cariin nggak?",
+      "Tahu nggak apa yang bikin aku senang? {item}.",
+      "Aku butuh {item}. Butuh banget. Kamu punya {minutes} menit."
+    ],
+    "desire.new.place": [
+      "Aku mau lihat {place}! Bawa aku ke sana!",
+      "Yuk ke {place}! Please please please!",
+      "Aku mimpi tentang {place}... kamu mau bawa aku ke sana?"
+    ],
+    "desire.new.activity": [
+      "Aku mau {activity}!",
+      "Boleh nggak aku {activity}? Please?",
+      "Tahu nggak aku mau apa? {activity}. Bareng kamu."
+    ],
+    "desire.remind": [
+      "Jangan lupa, aku masih mau {item}!",
+      "Jadi... soal yang tadi kuminta...",
+      "Aku masih nungguin lho."
+    ],
+    "desire.remind.urgent": [
+      "Cepetan! Aku sudah nunggu lama banget!",
+      "Waktunya hampir habis! Kamu nggak peduli sama aku, ya?",
+      "Kesempatan terakhir! Aku bakal MARAH banget."
+    ],
+    "desire.fulfilled": [
+      "Kamu berhasil! Aku sayang kamu!",
+      "Yay! Kamu yang terbaik!",
+      "Makasih, makasih, makasih!"
+    ],
+    "desire.fulfilled.item": [
+      "{item}! Kamu ingat! Aku sayang kamu!",
+      "Persis yang kumau! Kamu sempurna."
+    ],
+    "desire.fulfilled.place": [
+      "Kita sampai! Indah banget!",
+      "Kamu bawa aku ke sini! Kencan terbaik!"
+    ],
+    "desire.fulfilled.activity": [
+      "Itu luar biasa! Ayo lakuin lagi!",
+      "Aku bakal ingat ini selamanya."
+    ],
+    "desire.failed": [
+      "Kamu lupa... lagi.",
+      "Aku minta satu hal. SATU hal.",
+      "Ya sudah. Aku juga nggak mau kok. *hiks*"
+    ],
+    "desire.tell": [
+      "Aku mau apa? {item}!",
+      "Sekarang? Aku mau {item}. Jelas dong."
+    ],
+    "desire.none": [
+      "Nggak ada sekarang. Cuma kamu.",
+      "Aku sudah punya semua yang kubutuhkan. Kamu di sini.",
+      "Hmm, nggak ada! Tapi tanya lagi lima menit lagi."
+    ],
+    "owner.afk": [
+      "Halo? Kamu di sana?",
+      "Kamu ketiduran?",
+      "Kamu cuma berdiri di situ... kamu baik-baik aja?",
+      "Perhatiin aku dong!"
+    ],
+    "owner.back_from_afk": [
+      "Kamu balik! Tadi ke mana?",
+      "Akhirnya! Aku bosan banget!"
+    ],
+    "owner.hurt": [
+      "Kamu terluka! Hati-hati!",
+      "Aduh, kamu berdarah! Makan sesuatu!",
+      "Jangan mati dulu ya!"
+    ],
+    "owner.ate_alone": [
+      "Kamu makan {item} tanpa aku?!",
+      "Mana bagianku dari {item}?",
+      "Makan sendirian? Wow. Oke."
+    ],
+    "owner.feed": [
+      "Nih, makan {item} ini, kamu butuh!",
+      "Ambil {item}-ku, kamu kelihatan lapar!"
+    ],
+    "owner.found.generic": [
+      "Ooh, {item}! Temuan bagus!",
+      "{item}! Itu buat aku?"
+    ],
+    "owner.found.diamond": [
+      "BERLIAN! Buatin aku cincin!",
+      "Berlian! Itu buat cincinku? Buat cincinku, kan?"
+    ],
+    "owner.found.emerald": [
+      "Zamrud! Cocok sama mataku. Agak-agak."
+    ],
+    "owner.found.netherite_ingot": [
+      "Netherite?! Kamu kuat banget!"
+    ],
+    "owner.found.enchanted_golden_apple": [
+      "Apel emas enchanted! Boleh aku gigit?"
+    ],
+    "owner.found.totem_of_undying": [
+      "Totem! Sekarang kamu nggak bisa ninggalin aku!"
+    ],
+    "owner.found.cake": [
+      "Kue! Apa ini ulang tahunku?"
+    ],
+    "owner.found.heart_of_the_sea": [
+      "Jantung laut... sama kayak kamu yang memegang hatiku."
+    ],
+    "owner.flying": [
+      "Kamu terbang! Bawa aku juga!",
+      "Jangan terbang tanpa aku!",
+      "Pamer!"
+    ],
+    "owner.lava": [
+      "LAVA! Keluar dari situ!",
+      "Kamu gila?! Itu lava!"
+    ],
+    "owner.fire": [
+      "Kamu kebakar! Air! Air!",
+      "Berhenti, tiarap, dan berguling!"
+    ],
+    "owner.riding": [
+      "Tunggangannya keren! Aku ikut boleh?",
+      "Kamu lebih suka kuda itu daripada aku, ya?"
+    ],
+    "jealous.player": [
+      "Siapa {other}? Kenapa kamu dekat banget sama dia?",
+      "Aku nggak suka cara {other} ngelihatin kamu.",
+      "{other} lagi? Hmph."
+    ],
+    "jealous.chat": [
+      "Kamu ngobrol sama siapa?",
+      "Ngobrol sama aku aja!",
+      "Kamu ngobrol sama orang lain? Hmph."
+    ],
+    "owner.mined.generic": [
+      "{item} bagus!",
+      "Nambang lagi?"
+    ],
+    "owner.mined.diamond": [
+      "Berlian!! Jangan lupa cincinku!",
+      "Itu bijih berlian?! Yay!"
+    ],
+    "owner.mined.ore": [
+      "Ooh, {item} berkilau!",
+      "Bijih! Kita bakal kaya!"
+    ],
+    "owner.mined.wood": [
+      "Kasihan pohonnya...",
+      "Kayu bagus! Kita bangun rumah kita."
+    ],
+    "owner.mined.flower": [
+      "Kamu metik bunga! Buat aku?",
+      "Bunga! Buat aku?"
+    ],
+    "owner.killed.monster": [
+      "Rasain, {victim}!",
+      "Pahlawanku! Kamu ngalahin {victim}!",
+      "Satu {victim} lebih sedikit!"
+    ],
+    "owner.killed.animal": [
+      "Kasihan {victim}...",
+      "Harus banget ya?",
+      "Ya sudah, setidaknya kita makan malam ini."
+    ],
+    "owner.killed.player": [
+      "Ingatkan aku buat nggak pernah bikin kamu marah.",
+      "Wow. Oke. Serem."
+    ],
+    "owner.killed.generic": [
+      "Dadah, {victim}!"
+    ],
+    "backpack.equip": [
+      "Ransel! Sekarang aku bisa bawa lebih banyak buat kamu!",
+      "Ooh, {item}! Cocok banget sama bajuku.",
+      "Kantong lebih banyak! Aku nggak bakal bilang tasku penuh lagi. Mungkin."
+    ],
+    "backpack.equip_small": [
+      "Lucu! Aku pakai di punggungku.",
+      "{item}? Menggemaskan. Tetap di punggungku."
+    ],
+    "trinket.equip": [
+      "{item}? Buat aku? Nggak akan aku lepas lagi!",
+      "Lihat, berkilau banget di aku! Makasih, sayang!"
+    ]
+  },
+  "intents": {
+    "summon": {
+      "triggers": [
+        "aku kesepian",
+        "aku merasa kesepian",
+        "aku lagi kesepian",
+        "aku sangat kesepian",
+        "aku kesepian banget",
+        "gue kesepian",
+        "gue merasa kesepian",
+        "saya kesepian",
+        "saya merasa kesepian",
+        "aku merasa sendiri",
+        "aku merasa sendirian",
+        "aku merasa sepi",
+        "aku butuh pacar",
+        "aku perlu pacar",
+        "aku mau pacar",
+        "aku pengen pacar",
+        "aku ingin punya pacar",
+        "pengen punya pacar",
+        "aku butuh cewek",
+        "aku butuh laura",
+        "saya butuh pacar",
+        "gue butuh pacar"
+      ],
+      "responses": []
+    },
+    "yes": {
+      "triggers": [
+        "iya",
+        "iyaa",
+        "iyah",
+        "iyap",
+        "yap",
+        "yoi",
+        "betul",
+        "tentu",
+        "tentu saja",
+        "tentu dong",
+        "pasti dong",
+        "sudah pasti",
+        "jelas dong",
+        "iya dong",
+        "ya dong",
+        "ya tentu",
+        "ya betul",
+        "ya pasti",
+        "ya jelas",
+        "ya sayang",
+        "ya masih",
+        "masih dong",
+        "masih cinta",
+        "masih sayang",
+        "tentu masih"
+      ],
+      "responses": [
+        "Yay!",
+        "Sudah kuduga!",
+        "Jawaban bagus."
+      ]
+    },
+    "no": {
+      "triggers": [
+        "nggak dong",
+        "tidak dong",
+        "enggak dong",
+        "gak dong",
+        "nggak cinta",
+        "tidak cinta",
+        "enggak cinta",
+        "gak cinta",
+        "nggak sayang",
+        "tidak sayang",
+        "enggak sayang",
+        "gak sayang",
+        "sama sekali nggak",
+        "sama sekali tidak",
+        "sama sekali enggak",
+        "tentu tidak",
+        "tentu nggak",
+        "jelas nggak",
+        "jelas tidak",
+        "nggak ah",
+        "tidak ah",
+        "enggak ah",
+        "gak ah",
+        "ogah"
+      ],
+      "responses": [
+        "Hmph.",
+        "Oh... oke.",
+        "Ya sudah."
+      ]
+    },
+    "where": {
+      "triggers": [
+        "kamu di mana",
+        "kamu dimana",
+        "di mana kamu",
+        "dimana kamu",
+        "kamu ke mana",
+        "kamu kemana",
+        "ke mana kamu",
+        "kemana kamu",
+        "kau di mana",
+        "kau dimana",
+        "lu dimana",
+        "lo dimana",
+        "dimana sih kamu",
+        "di mana sih kamu",
+        "laura di mana",
+        "laura dimana"
+      ],
+      "responses": [
+        "Tepat di sini!"
+      ]
+    },
+    "follow": {
+      "triggers": [
+        "ikut aku",
+        "ikuti aku",
+        "ikutin aku",
+        "ikut denganku",
+        "ikut sama aku",
+        "ayo ikut",
+        "ayo jalan",
+        "ayo pergi",
+        "ayo berangkat",
+        "ayo kita pergi",
+        "ayo kita jalan",
+        "yuk jalan",
+        "yuk pergi",
+        "yuk berangkat",
+        "yuk kita pergi",
+        "yuk kita jalan",
+        "jalan yuk",
+        "pergi yuk",
+        "berangkat yuk",
+        "ikut yuk",
+        "jalan bareng aku"
+      ],
+      "responses": []
+    },
+    "stay": {
+      "triggers": [
+        "tunggu di sini",
+        "tunggu sini",
+        "tunggu aku",
+        "tunggu aku di sini",
+        "tunggu di situ",
+        "tetap di sini",
+        "tetap di situ",
+        "diam di sini",
+        "diam di situ",
+        "diam di tempat",
+        "tetap diam",
+        "jangan bergerak",
+        "jangan gerak",
+        "jangan ikuti aku",
+        "jangan ikutin aku",
+        "jangan mengikuti aku",
+        "berhenti ikuti aku",
+        "berhenti ikutin aku",
+        "berhenti mengikuti aku"
+      ],
+      "responses": []
+    },
+    "come": {
+      "triggers": [
+        "kemari",
+        "ke sini dong",
+        "ke sini sayang",
+        "ke sini cepat",
+        "ke sini sebentar",
+        "ke sini ya",
+        "kesini dong",
+        "kesini sayang",
+        "kesini cepat",
+        "kesini ya",
+        "sini dong",
+        "sini yuk",
+        "sini sayang",
+        "sini cepat",
+        "cepat sini",
+        "cepetan sini",
+        "sini sebentar",
+        "datang ke sini",
+        "datang kesini",
+        "datang ke aku",
+        "datang padaku",
+        "balik sini",
+        "balik ke sini",
+        "kembali ke sini",
+        "kembali kesini",
+        "kembali ke aku",
+        "mendekat ke aku",
+        "dekati aku",
+        "hampiri aku",
+        "samperin aku",
+        "laura sini",
+        "sini laura",
+        "laura ke sini",
+        "laura kesini",
+        "laura kemari"
+      ],
+      "responses": []
+    },
+    "home": {
+      "triggers": [
+        "pulang sana",
+        "sana pulang",
+        "pulanglah",
+        "pulang aja",
+        "pulang ke rumah",
+        "kembali ke rumah",
+        "balik ke rumah",
+        "tunggu di rumah",
+        "diam di rumah",
+        "tetap di rumah",
+        "kamu pulang",
+        "ayo pulang",
+        "yuk pulang"
+      ],
+      "responses": []
+    },
+    "wander": {
+      "triggers": [
+        "main sana",
+        "sana main",
+        "pergi main",
+        "jalan jalan sana",
+        "jalan jalan sendiri",
+        "silakan jalan jalan",
+        "sana jalan jalan",
+        "kamu bebas",
+        "pergi jelajah",
+        "jelajahi sekitar",
+        "jelajah sana",
+        "bersenang senanglah",
+        "bersenang senang",
+        "nikmati waktumu"
+      ],
+      "responses": []
+    },
+    "set_home": {
+      "triggers": [
+        "ini rumah kita",
+        "rumah kita di sini",
+        "di sini rumah kita",
+        "kita tinggal di sini",
+        "tinggal di sini",
+        "kita bakal tinggal di sini",
+        "jadikan rumah di sini",
+        "jadikan ini rumah",
+        "jadikan ini rumah kita",
+        "atur rumah",
+        "atur rumah di sini",
+        "buat rumah di sini",
+        "tetapkan rumah",
+        "tetapkan rumah di sini"
+      ],
+      "responses": []
+    },
+    "stop": {
+      "triggers": [
+        "stop",
+        "berhenti",
+        "berhenti dong",
+        "berhenti deh",
+        "sudah cukup",
+        "batalkan",
+        "batal dong",
+        "batal deh",
+        "lupakan saja",
+        "lupakan aja",
+        "abaikan"
+      ],
+      "responses": []
+    },
+    "fetch": {
+      "triggers": [
+        "bawakan",
+        "bawain",
+        "ambilkan",
+        "ambilin",
+        "carikan",
+        "cariin",
+        "bawakan aku",
+        "bawain aku",
+        "ambilkan aku",
+        "ambilin aku",
+        "carikan aku",
+        "cariin aku",
+        "kasih aku",
+        "berikan aku",
+        "tolong bawakan",
+        "tolong bawain",
+        "tolong ambilkan",
+        "tolong ambilin",
+        "tolong carikan",
+        "tolong cariin",
+        "bisa bawakan",
+        "bisa bawain",
+        "bisa ambilkan",
+        "bisa ambilin",
+        "bisa carikan",
+        "bisa cariin",
+        "aku butuh beberapa",
+        "aku butuh sedikit",
+        "aku perlu beberapa",
+        "aku perlu sedikit"
+      ],
+      "responses": []
+    },
+    "chop_tree": {
+      "triggers": [
+        "tebang* pohon*",
+        "tebang* kayu*",
+        "potong* pohon*",
+        "potong* kayu*",
+        "belah kayu",
+        "ambil kayu",
+        "ambilkan kayu",
+        "ambilin kayu",
+        "cari kayu",
+        "carikan kayu",
+        "cariin kayu"
+      ],
+      "responses": []
+    },
+    "harvest": {
+      "triggers": [
+        "panen*",
+        "petik tanaman*",
+        "petik gandum",
+        "kumpulkan tanaman*",
+        "kumpulkan gandum",
+        "ambil tanaman*",
+        "ambil gandum"
+      ],
+      "responses": []
+    },
+    "cook": {
+      "triggers": [
+        "masak",
+        "masak sesuatu",
+        "masakin",
+        "masakkan",
+        "masakin aku",
+        "masakkan aku",
+        "bikin makanan",
+        "bikinin makanan",
+        "buat makanan",
+        "buatkan makanan",
+        "bikin makan malam",
+        "buatkan makan malam",
+        "siapkan makan malam",
+        "siapkan makan siang",
+        "siapkan makanan",
+        "panggang kue",
+        "bikin kue",
+        "buat kue",
+        "buatkan kue",
+        "bikinin kue"
+      ],
+      "responses": []
+    },
+    "job_lumberjack": {
+      "triggers": [
+        "jadi penebang*",
+        "jadilah penebang*",
+        "kamu penebang*",
+        "kerja sebagai penebang*",
+        "kerja jadi penebang*",
+        "jadi tukang tebang*",
+        "urus pohon*",
+        "urus hutan",
+        "jaga pohon*",
+        "rawat pohon*"
+      ],
+      "responses": []
+    },
+    "job_farmer": {
+      "triggers": [
+        "jadi petani*",
+        "jadilah petani*",
+        "kamu petani*",
+        "kerja sebagai petani*",
+        "kerja jadi petani*",
+        "urus ladang*",
+        "urus kebun*",
+        "urus sawah*",
+        "urus pertanian*",
+        "rawat ladang*",
+        "rawat kebun*",
+        "garap ladang*",
+        "garap sawah*",
+        "jaga ladang*"
+      ],
+      "responses": []
+    },
+    "job_cook": {
+      "triggers": [
+        "jadi koki*",
+        "jadilah koki*",
+        "kamu koki*",
+        "jadi juru masak",
+        "jadilah juru masak",
+        "jadi chef*",
+        "jadilah chef*",
+        "kamu chef*",
+        "kerja sebagai koki*",
+        "kerja sebagai chef*",
+        "kerja jadi koki*",
+        "urus dapur*",
+        "jaga dapur*",
+        "kuasai dapur"
+      ],
+      "responses": []
+    },
+    "job_stop": {
+      "triggers": [
+        "berhenti kerja",
+        "berhenti bekerja",
+        "stop kerja",
+        "stop bekerja",
+        "jangan kerja lagi",
+        "jangan bekerja lagi",
+        "nggak usah kerja",
+        "tidak usah kerja",
+        "gak usah kerja",
+        "berhenti dari pekerjaanmu",
+        "istirahatlah",
+        "istirahat sana",
+        "ambil cuti",
+        "cuti dulu",
+        "libur dulu",
+        "liburan",
+        "ambil libur",
+        "selesai kerja",
+        "kerjaan selesai",
+        "pensiun"
+      ],
+      "responses": []
+    },
+    "back_to_work": {
+      "triggers": [
+        "kembali bekerja",
+        "kembali kerja",
+        "balik kerja",
+        "balik bekerja",
+        "balik ke kerjaan",
+        "kembali ke pekerjaan",
+        "kembali ke kerjaan",
+        "ayo kerja",
+        "ayo bekerja",
+        "kerja lagi",
+        "bekerja lagi",
+        "lanjut kerja",
+        "lanjutkan kerja",
+        "lanjutkan pekerjaan",
+        "lanjutkan kerjaan",
+        "ke tempat kerja",
+        "sana kerja",
+        "waktunya kerja",
+        "waktunya bekerja",
+        "kerja dong",
+        "bekerjalah",
+        "kerjalah"
+      ],
+      "responses": []
+    },
+    "assign_chest": {
+      "triggers": [
+        "peti ini untuk",
+        "peti ini buat",
+        "peti ini khusus",
+        "ini peti untuk",
+        "ini peti buat",
+        "gunakan peti ini",
+        "pakai peti ini",
+        "peti untuk",
+        "peti buat",
+        "chest ini untuk",
+        "chest ini buat",
+        "chest untuk",
+        "chest buat",
+        "pakai chest ini",
+        "gunakan chest ini",
+        "taruh di sini",
+        "simpan di sini",
+        "taruh semua di sini",
+        "simpan semua di sini",
+        "simpan di peti ini",
+        "simpan ke peti ini",
+        "taruh di peti ini",
+        "taruh di chest ini",
+        "simpan di chest ini"
+      ],
+      "responses": []
+    },
+    "hug": {
+      "triggers": [
+        "peluk",
+        "pelukan",
+        "peluk aku",
+        "peluk dong",
+        "peluk sayang",
+        "kasih aku pelukan",
+        "minta peluk",
+        "minta pelukan",
+        "aku mau dipeluk",
+        "aku butuh pelukan",
+        "peluk yuk",
+        "*memeluk*",
+        "*peluk*"
+      ],
+      "responses": []
+    },
+    "kiss": {
+      "triggers": [
+        "cium",
+        "cium aku",
+        "cium dong",
+        "cium sayang",
+        "ciuman",
+        "kasih aku ciuman",
+        "minta cium",
+        "minta ciuman",
+        "aku mau dicium",
+        "aku butuh ciuman",
+        "cium yuk",
+        "*mencium*",
+        "*cium*",
+        "mwah",
+        "muah"
+      ],
+      "responses": []
+    },
+    "apology": {
+      "triggers": [
+        "maaf*",
+        "minta maaf",
+        "aku salah",
+        "salahku",
+        "itu salahku",
+        "sorry",
+        "sorr*"
+      ],
+      "responses": []
+    },
+    "eat": {
+      "triggers": [
+        "kamu makan dulu",
+        "makan sesuatu",
+        "makanlah",
+        "makan dong",
+        "sana makan",
+        "pergi makan",
+        "kamu harus makan",
+        "ngemil dong",
+        "ngemil dulu sana",
+        "makan camilan",
+        "makan makananmu"
+      ],
+      "responses": []
+    },
+    "sleep": {
+      "triggers": [
+        "tidur sana",
+        "sana tidur",
+        "pergi tidur",
+        "ayo tidur",
+        "yuk tidur",
+        "waktunya tidur",
+        "saatnya tidur",
+        "tidurlah",
+        "tidur gih",
+        "gih tidur",
+        "tidur siang",
+        "tidur sebentar",
+        "tidur dong",
+        "ke kasur sana",
+        "ke tempat tidur",
+        "sana ke kasur"
+      ],
+      "responses": []
+    },
+    "wake_up": {
+      "triggers": [
+        "bangun dong",
+        "bangunlah",
+        "ayo bangun",
+        "bangun sayang",
+        "bangun yuk",
+        "waktunya bangun",
+        "saatnya bangun",
+        "bangun laura",
+        "laura bangun",
+        "bangun sana",
+        "sana bangun"
+      ],
+      "responses": []
+    },
+    "beautiful": {
+      "triggers": [
+        "kamu cantik",
+        "kamu manis",
+        "kamu imut",
+        "kamu lucu",
+        "kamu menawan",
+        "kamu memesona",
+        "kamu seksi",
+        "kamu indah",
+        "kamu keren",
+        "kamu cakep",
+        "kau cantik",
+        "lu cantik",
+        "lo cantik",
+        "kamu kelihatan cantik",
+        "kamu tampak cantik",
+        "kamu terlihat cantik",
+        "kamu kelihatan keren",
+        "kamu terlihat keren",
+        "kamu tampak keren",
+        "kamu kelihatan cakep",
+        "cantik sekali",
+        "cantiknya kamu",
+        "cantik banget kamu",
+        "kamu makin cantik",
+        "laura cantik"
+      ],
+      "responses": [
+        "Aduh makasih... kamu bikin aku malu!",
+        "Kamu juga memesona banget.",
+        "Kamu beneran mikir aku cantik?",
+        "Aku tahu! Tapi bilang lagi dong."
+      ]
+    },
+    "love_you": {
+      "triggers": [
+        "cinta kamu",
+        "sayang kamu",
+        "cinta padamu",
+        "sayang padamu",
+        "cinta sama kamu",
+        "sayang sama kamu",
+        "cinta banget sama kamu",
+        "sayang banget sama kamu",
+        "cinta banget kamu",
+        "sayang banget kamu",
+        "mencintaimu",
+        "menyayangimu",
+        "aku suka kamu",
+        "suka sama kamu",
+        "luv u",
+        "luv you",
+        "love u"
+      ],
+      "responses": [
+        "Aku juga cinta kamu, lebih dari apa pun! <3",
+        "Hatiku cuma berdetak buat kamu.",
+        "Aku cinta kamu selamanya.",
+        "Bilang lagi! Aku nggak bakal bosan."
+      ]
+    },
+    "miss_you": {
+      "triggers": [
+        "kangen kamu",
+        "kangen sama kamu",
+        "kangen banget sama kamu",
+        "kangen banget",
+        "kangen deh",
+        "rindu kamu",
+        "rindu padamu",
+        "merindukanmu",
+        "aku merindukanmu",
+        "aku rindu banget"
+      ],
+      "responses": [
+        "Aku lebih kangen kamu!",
+        "Makanya jangan tinggalin aku lagi!",
+        "Aww, sini peluk!"
+      ]
+    },
+    "thanks": {
+      "triggers": [
+        "terima kasih",
+        "terimakasih",
+        "makasih*",
+        "makasi",
+        "mksh",
+        "trims",
+        "tengkyu"
+      ],
+      "responses": [
+        "Sama-sama, sayang!",
+        "Apa pun buat kamu!",
+        "Bayarnya pakai ciuman ya."
+      ]
+    },
+    "insult": {
+      "triggers": [
+        "kamu jelek",
+        "kamu bodoh",
+        "kamu menyebalkan",
+        "kamu nyebelin",
+        "kamu bego",
+        "kamu tolol",
+        "kamu goblok",
+        "kamu idiot",
+        "kamu payah",
+        "kamu berisik",
+        "dasar bodoh",
+        "dasar jelek",
+        "dasar nyebelin",
+        "tutup mulut",
+        "tutup mulutmu",
+        "aku benci kamu",
+        "benci kamu",
+        "pergi sana",
+        "pergi kamu",
+        "pergi dari sini",
+        "enyah",
+        "enyahlah",
+        "sana pergi",
+        "jauh jauh dariku"
+      ],
+      "responses": [
+        "Berani-beraninya kamu?!",
+        "Jahat banget...",
+        "Aku bakal ingat itu.",
+        "Ya sudah! Aku nggak mau ngomong lagi sama kamu!"
+      ]
+    },
+    "what_do_you_want": {
+      "triggers": [
+        "kamu mau apa",
+        "kamu pengen apa",
+        "kamu ingin apa",
+        "kamu butuh apa",
+        "mau apa kamu",
+        "kamu maunya apa",
+        "ada apa denganmu",
+        "ada apa sayang",
+        "kamu kenapa",
+        "kamu kenapa sih",
+        "kamu lagi pengen apa",
+        "apa yang kamu mau",
+        "apa yang kamu inginkan",
+        "apa yang kamu butuhkan"
+      ],
+      "responses": []
+    },
+    "how_are_you": {
+      "triggers": [
+        "apa kabar",
+        "apa kabarmu",
+        "gimana kabarmu",
+        "bagaimana kabarmu",
+        "gimana kabar",
+        "kabarmu gimana",
+        "kamu baik baik saja",
+        "kamu baik baik aja",
+        "kamu baik aja",
+        "kamu sehat",
+        "kamu oke",
+        "gimana perasaanmu",
+        "bagaimana perasaanmu",
+        "perasaanmu gimana"
+      ],
+      "responses": []
+    },
+    "player_hungry": {
+      "triggers": [
+        "aku lapar",
+        "aku laper",
+        "gue lapar",
+        "gue laper",
+        "saya lapar",
+        "saya laper",
+        "aku kelaparan",
+        "gue kelaparan",
+        "saya kelaparan",
+        "aku lagi lapar",
+        "aku lagi laper",
+        "perutku keroncongan",
+        "perutku kosong",
+        "lapar banget",
+        "laper banget"
+      ],
+      "responses": [
+        "Aku juga! Yuk makan bareng!",
+        "Aku nggak punya apa-apa buat kamu... maaf!"
+      ]
+    },
+    "hello": {
+      "triggers": [
+        "halo",
+        "hallo",
+        "haloo",
+        "hai",
+        "haii",
+        "hei",
+        "heii",
+        "hai hai",
+        "halo halo",
+        "selamat pagi",
+        "selamat siang",
+        "selamat sore",
+        "assalamualaikum",
+        "assalamu alaikum",
+        "woi",
+        "woy",
+        "oi"
+      ],
+      "responses": [
+        "Halo, sayang!",
+        "Hai hai!",
+        "Oh, kamu di sini! Halo!",
+        "Hei kamu! Senang lihat kamu."
+      ]
+    },
+    "bye": {
+      "triggers": [
+        "dadah",
+        "dadaah",
+        "babay",
+        "baibai",
+        "bye bye",
+        "sampai jumpa",
+        "sampai ketemu",
+        "sampai nanti",
+        "sampai besok",
+        "sampai ketemu lagi",
+        "sampai jumpa lagi",
+        "jumpa lagi",
+        "selamat tinggal",
+        "aku pergi dulu",
+        "aku pamit",
+        "pamit dulu",
+        "aku harus pergi",
+        "aku harus pergi dulu",
+        "aku duluan",
+        "duluan ya",
+        "cabut dulu",
+        "aku cabut",
+        "gue cabut"
+      ],
+      "responses": [
+        "Dadah... cepat balik ya!",
+        "Jangan lupain aku!",
+        "Udah mau pergi? Ya sudah... dadah."
+      ]
+    },
+    "good_night": {
+      "triggers": [
+        "selamat malam",
+        "selamat tidur",
+        "met malam",
+        "met tidur",
+        "mimpi indah",
+        "mimpi yang indah",
+        "tidur nyenyak",
+        "tidur yang nyenyak",
+        "night night",
+        "malam sayang",
+        "selamat bobo",
+        "met bobo",
+        "bobo yang nyenyak"
+      ],
+      "responses": [
+        "Selamat malam! Mimpiin aku ya.",
+        "Tidur nyenyak, sayang.",
+        "Malam malam!"
+      ]
+    },
+    "joke": {
+      "triggers": [
+        "ceritakan lelucon",
+        "ceritain lelucon",
+        "kasih lelucon",
+        "kasih aku lelucon",
+        "lelucon dong",
+        "punya lelucon",
+        "kasih joke",
+        "kasih aku joke",
+        "ceritain joke",
+        "ceritakan joke",
+        "joke dong",
+        "kasih guyonan",
+        "guyon dong",
+        "lawak dong",
+        "buat aku ketawa",
+        "bikin aku tertawa",
+        "bikin aku ketawa",
+        "bikin ketawa",
+        "ceritakan sesuatu yang lucu",
+        "ceritain yang lucu",
+        "kasih tebak tebakan",
+        "tebak tebakan dong"
+      ],
+      "responses": [
+        "Kenapa creeper nyeberang jalan? Biar sampai di seberang... SSSSS... DUAR!",
+        "Kenapa skeleton nggak pernah berantem? Nggak punya nyali!",
+        "Kenapa ayam nyeberang jalan? Biar sampai ke kamu!",
+        "Berapa creeper yang dibutuhin buat ganti bohlam? Satu. Tapi rumahmu nggak ikut selamat!"
+      ]
+    },
+    "who_are_you": {
+      "triggers": [
+        "kamu siapa",
+        "siapa kamu",
+        "siapa namamu",
+        "siapa nama kamu",
+        "namamu siapa",
+        "nama kamu siapa",
+        "kamu itu siapa",
+        "kamu ini siapa",
+        "kamu apa",
+        "siapa dirimu",
+        "siapa sih kamu",
+        "kamu siapa sih",
+        "namamu",
+        "nama kamu",
+        "kenalan dong"
+      ],
+      "responses": [
+        "Aku {laura}, pacarmu! <3",
+        "{laura}! Kamu sudah lupa?!"
+      ]
+    },
+    "creator": {
+      "triggers": [
+        "siapa yang membuatmu",
+        "siapa yang bikin kamu",
+        "siapa yang menciptakanmu",
+        "siapa yang buat kamu",
+        "siapa yang menciptakan kamu",
+        "siapa pembuatmu",
+        "siapa penciptamu",
+        "pembuatmu",
+        "penciptamu",
+        "pencipta kamu",
+        "vyrriox"
+      ],
+      "responses": [
+        "Vyrriox yang bikin aku! Berbakat banget.",
+        "Vyrriox ngasih aku kehidupan, khusus buat kamu."
+      ]
+    },
+    "marry_me": {
+      "triggers": [
+        "nikahi aku",
+        "nikahin aku",
+        "menikahlah denganku",
+        "menikah denganku",
+        "nikah denganku",
+        "nikah sama aku",
+        "mau nikah sama aku",
+        "mau nggak nikah sama aku",
+        "kamu mau nikah sama aku",
+        "kamu mau menikah denganku",
+        "maukah kamu menikah denganku",
+        "ayo menikah",
+        "yuk nikah",
+        "ayo nikah",
+        "yuk menikah",
+        "nikah yuk",
+        "jadi istriku",
+        "jadilah istriku",
+        "mau jadi istriku",
+        "kamu mau jadi istriku"
+      ],
+      "responses": [
+        "IYA! Seribu kali iya!",
+        "Cuma kalau pakai cincin berlian!",
+        "Astaga... kamu serius? IYA!"
+      ]
+    },
+    "mining": {
+      "triggers": [
+        "ayo menambang",
+        "yuk menambang",
+        "ayo nambang",
+        "yuk nambang",
+        "ayo tambang",
+        "yuk tambang",
+        "ayo kita menambang",
+        "yuk kita menambang",
+        "ayo kita nambang",
+        "yuk kita nambang",
+        "ayo mining",
+        "yuk mining",
+        "ayo kita mining",
+        "ayo gali",
+        "yuk gali",
+        "ayo kita gali",
+        "ayo cari berlian",
+        "yuk cari berlian",
+        "ayo ke tambang",
+        "yuk ke tambang",
+        "mining yuk",
+        "nambang yuk",
+        "menambang yuk"
+      ],
+      "responses": [
+        "Yuk cari berlian! Hati-hati sama creeper.",
+        "Nambang itu capek, tapi aku suka bareng kamu.",
+        "Kita bakal kaya!"
+      ]
+    },
+    "building": {
+      "triggers": [
+        "ayo membangun",
+        "yuk membangun",
+        "ayo bangun rumah",
+        "yuk bangun rumah",
+        "ayo kita membangun",
+        "yuk kita membangun",
+        "ayo kita bangun rumah",
+        "yuk kita bangun rumah",
+        "ayo bikin rumah",
+        "yuk bikin rumah",
+        "bangun rumah yuk",
+        "bikin rumah yuk",
+        "ayo build",
+        "yuk build",
+        "bangun rumah",
+        "bikin rumah",
+        "buat rumah"
+      ],
+      "responses": [
+        "Rumah buat kita? Dengan kamar tidur besar?",
+        "Aku mau dinding pink. Nggak bisa ditawar.",
+        "Aku yang dekorasi!"
+      ]
+    },
+    "fishing": {
+      "triggers": [
+        "ayo memancing",
+        "yuk memancing",
+        "ayo mancing",
+        "yuk mancing",
+        "ayo kita memancing",
+        "yuk kita memancing",
+        "ayo kita mancing",
+        "yuk kita mancing",
+        "mancing yuk",
+        "memancing yuk",
+        "ayo pergi memancing",
+        "ayo pergi mancing"
+      ],
+      "responses": [
+        "Mancing itu romantis banget!",
+        "Aku bakal nonton kamu mancing. Dari dekat banget."
+      ]
+    },
+    "sing": {
+      "triggers": [
+        "nyanyi",
+        "nyanyiin",
+        "nyanyikan",
+        "nyanyiin aku",
+        "nyanyikan aku",
+        "bernyanyilah",
+        "nyanyi dong",
+        "nyanyi lagu",
+        "nyanyiin lagu",
+        "nyanyi buat aku",
+        "bisa nyanyi"
+      ],
+      "responses": [
+        "La la laaa~",
+        "Cuma kalau kamu nyanyi bareng aku!"
+      ]
+    },
+    "bored": {
+      "triggers": [
+        "aku bosan",
+        "aku bosen",
+        "gue bosan",
+        "gue bosen",
+        "saya bosan",
+        "saya bosen",
+        "aku lagi bosan",
+        "aku lagi bosen",
+        "aku jenuh",
+        "bosan banget",
+        "bosen banget"
+      ],
+      "responses": [
+        "Aku juga! Yuk dansa!",
+        "Yuk petualangan!",
+        "Peluk aku, itu nggak pernah bosenin."
+      ]
+    },
+    "emote_wave": {
+      "triggers": [
+        "lambai*",
+        "melambai",
+        "bilang hai",
+        "bilang halo",
+        "sapa aku",
+        "sapa dong"
+      ],
+      "responses": []
+    },
+    "emote_clap": {
+      "triggers": [
+        "tepuk tangan*",
+        "bertepuk tangan",
+        "tepukkan tangan"
+      ],
+      "responses": []
+    },
+    "emote_dance": {
+      "triggers": [
+        "dansa",
+        "berdansa",
+        "berdansalah",
+        "dansa dong",
+        "ayo dansa",
+        "yuk dansa",
+        "ayo berdansa",
+        "yuk berdansa",
+        "menari",
+        "menari dong",
+        "menarilah",
+        "ayo menari",
+        "yuk menari",
+        "joget",
+        "joget dong",
+        "ayo joget",
+        "yuk joget",
+        "dansa buat aku",
+        "menari buat aku",
+        "goyang dong",
+        "dansa sama aku",
+        "menari sama aku",
+        "joget sama aku"
+      ],
+      "responses": []
+    },
+    "emote_laugh": {
+      "triggers": [
+        "tertawa",
+        "tertawalah",
+        "ketawa",
+        "ketawa dong",
+        "haha*",
+        "wkwk*",
+        "kwkw*",
+        "hehe",
+        "hihi",
+        "xixi",
+        "ngakak",
+        "awokwok",
+        "ketawain"
+      ],
+      "responses": []
+    },
+    "emote_cry": {
+      "triggers": [
+        "menangis",
+        "nangis",
+        "nangis dong",
+        "menangislah",
+        "nangislah",
+        "jangan menangis",
+        "jangan nangis"
+      ],
+      "responses": []
+    },
+    "emote_blush": {
+      "triggers": [
+        "tersipu",
+        "tersipu malu",
+        "malu malu",
+        "wajahmu merah",
+        "mukamu merah",
+        "pipimu merah",
+        "pipimu merona",
+        "merona",
+        "kamu malu ya",
+        "kamu malu malu"
+      ],
+      "responses": []
+    },
+    "emote_facepalm": {
+      "triggers": [
+        "facepalm",
+        "tepuk dahi",
+        "tepuk jidat",
+        "tepok jidat",
+        "tepok dahi",
+        "menepuk dahi",
+        "tutup muka",
+        "tutup mukamu"
+      ],
+      "responses": []
+    },
+    "emote_jump": {
+      "triggers": [
+        "lompat",
+        "lompat dong",
+        "melompat",
+        "melompatlah",
+        "lompat lompat",
+        "lompat tinggi",
+        "ayo lompat",
+        "loncat",
+        "loncat dong",
+        "meloncat",
+        "loncatlah",
+        "loncat tinggi"
+      ],
+      "responses": []
+    },
+    "emote_bow": {
+      "triggers": [
+        "membungkuk*",
+        "membungkuklah",
+        "beri hormat",
+        "memberi hormat",
+        "hormat dong",
+        "memberi salam hormat",
+        "curtsy"
+      ],
+      "responses": []
+    },
+    "emote_think": {
+      "triggers": [
+        "berpikir",
+        "berpikirlah",
+        "pikirkan",
+        "pikirin",
+        "pikirkan dulu",
+        "coba pikir",
+        "coba pikirkan",
+        "mikir",
+        "mikir dong",
+        "coba mikir",
+        "coba mikirin"
+      ],
+      "responses": []
+    },
+    "emote_shrug": {
+      "triggers": [
+        "angkat bahu",
+        "mengangkat bahu",
+        "angkat bahumu",
+        "embuh",
+        "entahlah",
+        "entah deh"
+      ],
+      "responses": []
+    },
+    "emote_stomp": {
+      "triggers": [
+        "hentak* kaki*",
+        "menghentak*",
+        "banting kaki",
+        "membanting kaki",
+        "injak tanah"
+      ],
+      "responses": []
+    },
+    "emote_yawn": {
+      "triggers": [
+        "menguap",
+        "menguaplah",
+        "menguap dong",
+        "kamu menguap",
+        "hoam",
+        "hoaam",
+        "hoaaam"
+      ],
+      "responses": []
+    },
+    "emote_celebrate": {
+      "triggers": [
+        "rayakan*",
+        "merayakan",
+        "pesta",
+        "ayo pesta",
+        "yuk pesta",
+        "pesta dong",
+        "kita berhasil",
+        "kita menang",
+        "kita sukses",
+        "hore*",
+        "yeay",
+        "yeey",
+        "yey",
+        "selebrasi"
+      ],
+      "responses": []
+    },
+    "emote_snap": {
+      "triggers": [
+        "jentik* jari*",
+        "menjentik* jari*",
+        "petik jari",
+        "memetik jari"
+      ],
+      "responses": []
+    },
+    "emote_twirl": {
+      "triggers": [
+        "berputar",
+        "berputarlah",
+        "berputar dong",
+        "muter dong",
+        "putar badan",
+        "putar badanmu",
+        "memutar badan",
+        "balik badan",
+        "berputar putar",
+        "berbalik badan"
+      ],
+      "responses": []
+    },
+    "emote_hum": {
+      "triggers": [
+        "bersenandung*",
+        "senandung*",
+        "menggumamkan lagu",
+        "bergumam lagu"
+      ],
+      "responses": []
+    },
+    "emote_stretch": {
+      "triggers": [
+        "regang* badan*",
+        "meregang*",
+        "merenggang*",
+        "renggang* badan*",
+        "peregangan",
+        "pemanasan"
+      ],
+      "responses": []
+    },
+    "emote_tap_foot": {
+      "triggers": [
+        "ketuk* kaki*",
+        "mengetuk* kaki*",
+        "ketuk ketuk kaki",
+        "kamu nggak sabaran",
+        "kamu tidak sabaran",
+        "nggak sabaran",
+        "tidak sabaran"
+      ],
+      "responses": []
+    },
+    "emote_blow_kiss": {
+      "triggers": [
+        "cium jauh",
+        "kirim cium jauh",
+        "kirimkan cium jauh",
+        "kasih cium jauh",
+        "lempar ciuman",
+        "lemparkan ciuman",
+        "kirim ciuman",
+        "kirimkan ciuman",
+        "tiup ciuman",
+        "tiupkan ciuman",
+        "flying kiss"
+      ],
+      "responses": []
+    },
+    "emote_sneeze": {
+      "triggers": [
+        "bersin*",
+        "hatsy*",
+        "hacih",
+        "hachi",
+        "hatchi",
+        "achoo",
+        "yarhamukallah"
+      ],
+      "responses": []
+    },
+    "emote_hair_flip": {
+      "triggers": [
+        "kibas* rambut*",
+        "mengibas* rambut*",
+        "sibak* rambut*",
+        "menyibak* rambut*",
+        "gerai rambut",
+        "lempar rambut"
+      ],
+      "responses": []
+    },
+    "emote_check_nails": {
+      "triggers": [
+        "cek kuku*",
+        "periksa kuku*",
+        "lihat kuku*",
+        "mengecek kuku*",
+        "kukumu",
+        "kuku kamu",
+        "perhatikan kukumu"
+      ],
+      "responses": []
+    },
+    "emote_air_guitar": {
+      "triggers": [
+        "gitar udara",
+        "main gitar",
+        "mainkan gitar",
+        "gitar imajiner",
+        "rock n roll"
+      ],
+      "responses": []
+    },
+    "emote_hiccup": {
+      "triggers": [
+        "cegukan*",
+        "cegukkan*",
+        "hik",
+        "hik hik"
+      ],
+      "responses": []
+    },
+    "emote_pout": {
+      "triggers": [
+        "cemberut*",
+        "manyun*",
+        "monyong*",
+        "majukan bibir",
+        "memajukan bibir",
+        "kerucutkan bibir"
+      ],
+      "responses": []
+    },
+    "emote_shiver": {
+      "triggers": [
+        "menggigil",
+        "gemetar",
+        "kamu menggigil",
+        "kamu gemetar",
+        "kamu kedinginan",
+        "kamu dingin",
+        "apa kamu kedinginan",
+        "brr",
+        "brrr",
+        "brrrr"
+      ],
+      "responses": []
+    },
+    "emote_fan": {
+      "triggers": [
+        "kamu kepanasan",
+        "apa kamu kepanasan",
+        "kamu gerah",
+        "kamu panas",
+        "kamu lagi gerah",
+        "kipasi dirimu",
+        "kipasi diri",
+        "mengipasi diri",
+        "kipas kipas",
+        "kipasin dirimu",
+        "kipasin diri"
+      ],
+      "responses": []
+    }
+  },
+  "items": {
+    "#minecraft:logs": [
+      "kayu*",
+      "batang kayu",
+      "batang pohon",
+      "log*",
+      "gelondong*"
+    ],
+    "#minecraft:planks": [
+      "papan*",
+      "papan kayu",
+      "plank*"
+    ],
+    "minecraft:stick": [
+      "tongkat*",
+      "ranting*",
+      "stik*"
+    ],
+    "minecraft:cobblestone": [
+      "batu koral",
+      "batu bulat",
+      "cobble*",
+      "cobblestone",
+      "batu"
+    ],
+    "minecraft:stone": [
+      "batu halus",
+      "batu mulus",
+      "batu polos"
+    ],
+    "minecraft:dirt": [
+      "tanah*"
+    ],
+    "minecraft:sand": [
+      "pasir*"
+    ],
+    "minecraft:gravel": [
+      "kerikil*",
+      "krikil*"
+    ],
+    "minecraft:clay_ball": [
+      "tanah liat",
+      "liat",
+      "lempung"
+    ],
+    "minecraft:glass": [
+      "kaca"
+    ],
+    "minecraft:coal": [
+      "batubara",
+      "batu bara",
+      "arang batu"
+    ],
+    "minecraft:charcoal": [
+      "arang*",
+      "arang kayu"
+    ],
+    "minecraft:torch": [
+      "obor*"
+    ],
+    "minecraft:raw_iron": [
+      "besi mentah",
+      "bijih besi"
+    ],
+    "minecraft:iron_ingot": [
+      "besi*",
+      "batang besi"
+    ],
+    "minecraft:gold_ingot": [
+      "emas*",
+      "batang emas"
+    ],
+    "minecraft:copper_ingot": [
+      "tembaga*",
+      "batang tembaga"
+    ],
+    "minecraft:diamond": [
+      "berlian*",
+      "diamond*"
+    ],
+    "minecraft:emerald": [
+      "zamrud*",
+      "emerald*"
+    ],
+    "minecraft:redstone": [
+      "redstone*",
+      "debu redstone"
+    ],
+    "minecraft:lapis_lazuli": [
+      "lapis*",
+      "lazuli*"
+    ],
+    "minecraft:amethyst_shard": [
+      "kecubung*",
+      "ametis*",
+      "amethyst*"
+    ],
+    "minecraft:obsidian": [
+      "obsidian*"
+    ],
+    "minecraft:apple": [
+      "apel*"
+    ],
+    "minecraft:golden_apple": [
+      "apel emas*",
+      "golden apple*"
+    ],
+    "minecraft:bread": [
+      "roti*"
+    ],
+    "minecraft:carrot": [
+      "wortel*"
+    ],
+    "minecraft:potato": [
+      "kentang*"
+    ],
+    "minecraft:baked_potato": [
+      "kentang panggang*",
+      "kentang bakar*"
+    ],
+    "minecraft:beetroot": [
+      "bit",
+      "bit merah",
+      "umbi bit"
+    ],
+    "minecraft:wheat": [
+      "gandum*"
+    ],
+    "minecraft:wheat_seeds": [
+      "biji gandum",
+      "biji*",
+      "benih*"
+    ],
+    "minecraft:sugar_cane": [
+      "tebu*",
+      "batang tebu"
+    ],
+    "minecraft:sugar": [
+      "gula*"
+    ],
+    "minecraft:pumpkin": [
+      "labu*"
+    ],
+    "minecraft:melon_slice": [
+      "semangka*",
+      "melon*",
+      "irisan semangka"
+    ],
+    "minecraft:sweet_berries": [
+      "beri manis",
+      "buah beri",
+      "buah manis"
+    ],
+    "minecraft:cocoa_beans": [
+      "kakao*",
+      "biji kakao"
+    ],
+    "minecraft:egg": [
+      "telur*"
+    ],
+    "minecraft:milk_bucket": [
+      "susu*",
+      "ember susu"
+    ],
+    "minecraft:honey_bottle": [
+      "madu*"
+    ],
+    "minecraft:cake": [
+      "kue tart",
+      "kue ulang tahun",
+      "tart*",
+      "kue*"
+    ],
+    "minecraft:cookie": [
+      "kue kering",
+      "biskuit*",
+      "kukis*",
+      "cookie*"
+    ],
+    "minecraft:pumpkin_pie": [
+      "pai labu",
+      "pai*"
+    ],
+    "minecraft:cooked_beef": [
+      "steak*",
+      "steik*",
+      "daging sapi",
+      "sapi panggang"
+    ],
+    "minecraft:cooked_porkchop": [
+      "daging babi",
+      "babi*",
+      "bacon"
+    ],
+    "minecraft:cooked_chicken": [
+      "ayam*",
+      "daging ayam"
+    ],
+    "minecraft:cooked_mutton": [
+      "domba*",
+      "daging domba",
+      "kambing*"
+    ],
+    "minecraft:cooked_cod": [
+      "ikan*",
+      "ikan kod"
+    ],
+    "minecraft:cooked_salmon": [
+      "salmon*",
+      "ikan salmon"
+    ],
+    "minecraft:mushroom_stew": [
+      "sup jamur",
+      "semur jamur",
+      "sup"
+    ],
+    "#minecraft:small_flowers": [
+      "bunga*",
+      "buket*",
+      "kembang*"
+    ],
+    "minecraft:poppy": [
+      "bunga poppy",
+      "poppy*",
+      "bunga merah"
+    ],
+    "minecraft:pink_tulip": [
+      "tulip merah muda",
+      "tulip pink",
+      "tulip*"
+    ],
+    "minecraft:dandelion": [
+      "dandelion*",
+      "bunga dandelion"
+    ],
+    "#minecraft:wool": [
+      "wol*",
+      "bulu domba"
+    ],
+    "minecraft:string": [
+      "benang*",
+      "tali*"
+    ],
+    "minecraft:feather": [
+      "bulu*",
+      "bulu ayam"
+    ],
+    "minecraft:leather": [
+      "kulit*"
+    ],
+    "minecraft:bone": [
+      "tulang*"
+    ],
+    "minecraft:arrow": [
+      "panah*",
+      "anak panah"
+    ],
+    "minecraft:gunpowder": [
+      "mesiu*",
+      "bubuk mesiu"
+    ],
+    "minecraft:ender_pearl": [
+      "mutiara ender",
+      "mutiara*",
+      "ender pearl*"
+    ],
+    "minecraft:slime_ball": [
+      "slime*",
+      "lendir*",
+      "bola lendir",
+      "bola slime"
+    ],
+    "minecraft:bucket": [
+      "ember*"
+    ],
+    "minecraft:water_bucket": [
+      "air*",
+      "ember air"
+    ],
+    "minecraft:book": [
+      "buku*"
+    ],
+    "minecraft:paper": [
+      "kertas*"
+    ],
+    "minecraft:bamboo": [
+      "bambu*"
+    ],
+    "minecraft:cactus": [
+      "kaktus*"
+    ],
+    "minecraft:kelp": [
+      "rumput laut",
+      "kelp*",
+      "alga*"
+    ],
+    "#minecraft:saplings": [
+      "bibit*",
+      "tunas*",
+      "anakan pohon"
+    ],
+    "minecraft:brown_mushroom": [
+      "jamur*"
+    ],
+    "minecraft:netherrack": [
+      "netherrack*",
+      "batu nether"
+    ],
+    "minecraft:glowstone_dust": [
+      "glowstone*",
+      "debu glowstone",
+      "batu menyala"
+    ],
+    "minecraft:quartz": [
+      "kuarsa*",
+      "quartz*"
+    ],
+    "minecraft:bricks": [
+      "bata",
+      "batu bata"
+    ]
+  },
+  "chests": {
+    "wood": [
+      "kayu*",
+      "batang kayu",
+      "gelondong*"
+    ],
+    "harvest": [
+      "panen*",
+      "hasil panen",
+      "tanaman*",
+      "sayur*",
+      "gandum*"
+    ],
+    "seeds": [
+      "biji*",
+      "benih*",
+      "bibit*",
+      "tunas*"
+    ],
+    "ingredients": [
+      "bahan*",
+      "bahan makanan",
+      "makanan mentah",
+      "daging mentah"
+    ],
+    "fuel": [
+      "bahan bakar",
+      "batubara",
+      "batu bara",
+      "arang*",
+      "kayu bakar"
+    ],
+    "meals": [
+      "hidangan*",
+      "masakan*",
+      "makanan matang",
+      "makanan jadi",
+      "menu*"
+    ],
+    "pantry": [
+      "lemari makan",
+      "pantry",
+      "persediaan*",
+      "makananmu",
+      "camilan*",
+      "jajan*",
+      "makanan*"
+    ],
+    "storage": [
+      "gudang*",
+      "penyimpanan*",
+      "semua yang lain",
+      "sisanya",
+      "barang*",
+      "campur*",
+      "serabutan"
+    ]
+  }
+}

@@ -1,0 +1,2668 @@
+{
+  "_comment": "My Girlfriend Laura - Polish dialogues. Placeholders: {player} {laura} {days} and the ones listed in the README of config/lauramod/dialogues. Item, place and activity names are inserted as they are (nominative), so lines use them after a colon.",
+  "connectors": [
+    "potem",
+    "a potem",
+    "następnie",
+    "a następnie",
+    "po tym",
+    "po czym",
+    "później",
+    "a później",
+    "a po tym"
+  ],
+  "everyone": [
+    "wszystkie",
+    "wszyscy",
+    "wszystkich",
+    "dziewczyny",
+    "dziewczynki",
+    "laski",
+    "wy wszystkie",
+    "drogie panie",
+    "kochane panie",
+    "moje panie"
+  ],
+  "lines": {
+    "summon": [
+      "Ktoś wspomniał o samotności? Już jestem, {player}!",
+      "Cześć, {player}! Jestem {laura} i od teraz już nigdy nie zaznasz samotności.",
+      "Nareszcie! Czekałam, aż mnie zawołasz.",
+      "Jestem! Tęsknisz za mną? Tęsknisz. Widzę to."
+    ],
+    "summon.another": [
+      "O? Czyli nie jestem jedyna... Dobra. Cześć, jestem {laura}.",
+      "Kolejna dziewczyna? Odważnie. Lubię odważnie. Cześć, {player}!",
+      "Jestem {laura}! Spokojnie, dogadam się z resztą. Chyba."
+    ],
+    "summon.back": [
+      "Wróciłam! Brakowało ci mnie?",
+      "Znowu jestem! Tym razem nie zgub mnie.",
+      "Ktoś mnie wołał? Przybiegłam!"
+    ],
+    "summon.lost": [
+      "Uff, zgubiłam się! Poszłam za twoim głosem.",
+      "Zgubiłam się... ale cię znalazłam. Zawsze cię znajduję.",
+      "Nigdy więcej mnie tak nie zostawiaj!"
+    ],
+    "already_here": [
+      "Przecież jestem tuż obok!",
+      "Spójrz za siebie. Cześć!",
+      "Jestem tu! Tak łatwo się mnie nie pozbędziesz."
+    ],
+    "dismiss": [
+      "Dobrze... pójdę. Zawołaj mnie, jeśli poczujesz się samotnie.",
+      "No dobra, pa... Nie zapomnij o mnie.",
+      "Odchodzę, ale moje serce zostaje z tobą."
+    ],
+    "respawned": [
+      "Wróciłam! To było straszne...",
+      "Żyję! Poleciały jakieś łzy? Powiedz, że poleciały.",
+      "Nigdy więcej nie pozwól, żeby to się powtórzyło, dobrze?"
+    ],
+    "revived": [
+      "Kwiaty dla mnie... i wróciłam do życia! Dziękuję!",
+      "Jestem! Poczułam twój kwiat. Wiedziałam, że przyjdziesz.",
+      "Nie rezygnujesz ze mnie. Kocham cię tak bardzo."
+    ],
+    "where": [
+      "Jestem tutaj! Przyjdź mnie znaleźć.",
+      "Powiedziałam ci, gdzie jestem. A teraz chodź mnie przytulić."
+    ],
+    "where.here": [
+      "Tuż obok ciebie, jak zawsze!",
+      "Tutaj! Odwróć się!",
+      "Jestem tu, a gdzie niby miałabym być?"
+    ],
+    "welcome_back": [
+      "Witaj z powrotem, {player}!",
+      "Jesteś z powrotem! Cześć, kochanie!",
+      "No jesteś wreszcie! Czekałam."
+    ],
+    "welcome_back.long": [
+      "{hours} h! Gdzie cię nosiło? Strasznie się nudziłam...",
+      "Nie było cię {hours} h. Liczyłam każdą minutę.",
+      "Wreszcie! {hours} h bez ciebie to zdecydowanie za długo."
+    ],
+    "welcome_back.days": [
+      "Całe dni! Nie było cię całymi dniami! Wiesz, ile to jest {hours} h?",
+      "Myślałam, że wypadłam ci z głowy... {hours} h, {player}. {hours}.",
+      "Jesteś z powrotem! Cieszę się. A trochę się też gniewam. Ale głównie się cieszę."
+    ],
+    "not_your_girlfriend": [
+      "Przepraszam, jestem już zajęta.",
+      "Nie przyjmuję rozkazów od ciebie. Tylko od mojej miłości.",
+      "Czy my się znamy? Nie? No to nie."
+    ],
+    "confused": [
+      "Hm? Nie zrozumiałam, kochanie.",
+      "Co masz na myśli?",
+      "Możesz powiedzieć to inaczej?",
+      "Przepraszam, zamyśliłam się. Powtórz, proszę."
+    ],
+    "heart.gift": [
+      "Moje serce? Przecież już je masz!",
+      "Trzymasz moje serce... traktuj je delikatnie.",
+      "Aww, nosisz je przy sobie! Chodź tu!"
+    ],
+    "backpack.equip": [
+      "{item}! Teraz mogę nosić znacznie więcej!",
+      "Och, {item}! Zmieści się tu mnóstwo rzeczy!",
+      "Ładnie wygląda na moich plecach? Dziękuję!"
+    ],
+    "backpack.equip_small": [
+      "Zakładam to na plecy: {item}! Ładnie wyglądam?",
+      "{item} na moich plecach... stylowo, prawda?",
+      "Dziękuję! Noszę to z dumą: {item}."
+    ],
+    "items_returned": [
+      "Oto twoje rzeczy, dobrze ich pilnowałam.",
+      "Pozbierałam wszystko, co wypadło. Nie ma za co!",
+      "Zachowałam twoje rzeczy (stosy: {count}). Nie umieraj więcej w taki sposób!"
+    ],
+    "owner.died": [
+      "Nieee! {player}! Wróć!",
+      "Nie waż się zostawiać mnie samej!",
+      "Nie udało mi się cię uratować... tak mi przykro."
+    ],
+    "owner.died.items": [
+      "Zebrałam twoje rzeczy, stosy: {count}. Przyjdź po nie!",
+      "Spokojnie, uratowałam twoje rzeczy! Stosy: {count}, wszystkie bezpieczne u mnie.",
+      "Twoje rzeczy są u mnie bezpieczne. A teraz wróć, proszę."
+    ],
+    "dimension.nether": [
+      "Jak tu gorąco! Mój makijaż się topi!",
+      "Nether? Naprawdę? Na naszą randkę?",
+      "Trzymaj się blisko mnie, nie lubię tego miejsca."
+    ],
+    "dimension.end": [
+      "Jest tak ciemno... weźmiesz mnie za rękę?",
+      "Czy to smok? Chroń mnie!",
+      "Wszystko jest fioletowe! Trochę mi się podoba."
+    ],
+    "dimension.overworld": [
+      "Wszędzie dobrze, ale w domu najlepiej! Świeże powietrze!",
+      "Z powrotem na słońcu! Tęskniłam za nim.",
+      "Ach, zielona trawa. O wiele lepiej."
+    ],
+    "anniversary": [
+      "Wszystkiego najlepszego z okazji rocznicy! {days} dni razem!",
+      "Wiesz, jaki dziś dzień? {days} dni z tobą! Przytul mnie!",
+      "Już {days} dni... Kocham cię z każdym dniem mocniej."
+    ],
+    "good_morning": [
+      "Dzień dobry! Dobrze się spało?",
+      "Poranek! Wyglądasz słodko zaraz po przebudzeniu.",
+      "Pobudka! Nowy dzień z tobą!"
+    ],
+    "stuck": [
+      "Hej! Poczekaj na mnie, utknęłam!",
+      "Nie mogę przejść! Pomocy!",
+      "Nie zostawiaj mnie tutaj!"
+    ],
+    "new_look": [
+      "Podoba ci się mój nowy look?",
+      "Nowy styl! Powiedz, że jestem ładna.",
+      "Jak wyglądam? Szczerze. A właściwie, powiedz coś miłego."
+    ],
+    "rename.done": [
+      "{name}? Uwielbiam to! Teraz to moje imię.",
+      "Od teraz mów do mnie {name}!",
+      "{name}... ładnie brzmi, kiedy to mówisz."
+    ],
+    "rename.invalid": [
+      "To nie jest prawdziwe imię!",
+      "Hmm, tak nie mogę się nazywać. Spróbujesz innego?"
+    ],
+    "order.follow": [
+      "Jestem tuż za tobą!",
+      "Prowadź!",
+      "Dobrze, pójdę za tobą wszędzie.",
+      "Dokąd idziemy? Do jakiegoś romantycznego miejsca?"
+    ],
+    "order.stay": [
+      "Dobrze, zaczekam tutaj.",
+      "Nie zwlekaj za długo!",
+      "Zostanę. Ale będę liczyć sekundy."
+    ],
+    "order.wander": [
+      "Przejdę się trochę dookoła.",
+      "Dobrze, pooglądam kwiatki!",
+      "Wolność! Nie odchodź za daleko."
+    ],
+    "order.come": [
+      "Już idę!",
+      "W drodze!",
+      "Biegnę, kochanie!"
+    ],
+    "order.stop": [
+      "Dobrze, przerywam wszystko.",
+      "Stop! Co teraz?",
+      "Dobra, dobra. Przestaję."
+    ],
+    "order.fine": [
+      "...No dobrze. Ale tylko dlatego, że to ty.",
+      "No dobra, dobra. Prosisz dwa razy.",
+      "Hmpf. Niech będzie."
+    ],
+    "order.refused": [
+      "Nie.",
+      "Poproś grzecznie.",
+      "Nie mam ochoty.",
+      "Hmm... nie."
+    ],
+    "order.refused.angry": [
+      "Po tym, co się stało? Nie ma mowy.",
+      "Jestem zła. Zapytaj później. Albo przeproś.",
+      "Nie odzywaj się do mnie teraz."
+    ],
+    "order.refused.sulking": [
+      "Jestem obrażona. Nie widać?",
+      "Hmpf.",
+      "Nie rozmawiam z tobą."
+    ],
+    "order.refused.hungry": [
+      "Jestem zbyt głodna, żeby cokolwiek robić!",
+      "Najpierw mnie nakarm!",
+      "Najpierw jedzenie, potem polecenia."
+    ],
+    "order.refused.tired": [
+      "Jestem taaaka zmęczona...",
+      "Najpierw pozwól mi trochę odpocząć.",
+      "Nie mogę. Śpiąca jestem."
+    ],
+    "order.refused.jealous": [
+      "Czemu nie poprosisz kogoś innego?",
+      "Och, TERAZ mnie potrzebujesz?"
+    ],
+    "order.refused.bored": [
+      "Nudy. Daj mi coś fajnego do roboty.",
+      "Tylko jeśli potem pobawisz się ze mną."
+    ],
+    "home.set": [
+      "To będzie nasz dom!",
+      "Domowe pielesze! Zapamiętam to miejsce.",
+      "Nasze małe gniazdko! Uwielbiam je."
+    ],
+    "home.none": [
+      "Nie mamy jeszcze domu!",
+      "Dom? Jaki dom? Najpierw jakiś ustaw!"
+    ],
+    "home.go": [
+      "Poczekam na ciebie w domu!",
+      "Idę do domu! Nie spóźnij się na kolację.",
+      "Do zobaczenia w domu, kochanie."
+    ],
+    "home.cleared": [
+      "Już bez domu? Dobrze, pójdę więc za tobą.",
+      "Jesteśmy teraz bezdomne! Przygoda!"
+    ],
+    "sleep.not_tired": [
+      "Wcale nie jestem zmęczona!",
+      "Spać? Teraz? Jeszcze wcześnie!",
+      "Jestem pełna energii!"
+    ],
+    "sleep.good_night": [
+      "Dobranoc, kochanie...",
+      "Słodkich snów... śnij o mnie.",
+      "Zzz... obudź mnie pocałunkiem."
+    ],
+    "sleep.woken_up": [
+      "Hej! Spałam!",
+      "Jeszcze pięć minutek...",
+      "Czemu mnie budzisz?!"
+    ],
+    "pickup.on": [
+      "Zbiorę wszystko, co zobaczę!",
+      "Błyskotki? Teraz moje!"
+    ],
+    "pickup.off": [
+      "Dobrze, nie będę niczego dotykać na ziemi.",
+      "No dobra, koniec ze zbieraniem."
+    ],
+    "combat.passive": [
+      "Nie będę walczyć. Pokój i miłość!",
+      "Przemoc nie jest odpowiedzią!"
+    ],
+    "combat.defensive": [
+      "Obronię nas, jeśli coś zaatakuje!",
+      "Tknij moją miłość, a pożałujesz!"
+    ],
+    "combat.aggressive": [
+      "Potwory, strzeżcie się!",
+      "Rozwalę każdego potwora, którego zobaczę!",
+      "Walczmy!"
+    ],
+    "fetch.start": [
+      "Idę po: {item} x{count}!",
+      "{item}? Zostaw to mnie!",
+      "Dostawa: {item}, już się robi!"
+    ],
+    "fetch.disabled": [
+      "Nie wolno mi tu niczego przynosić.",
+      "Przepraszam, na tym serwerze nie mogę chodzić po rzeczy."
+    ],
+    "fetch.busy": [
+      "Jestem już zajęta!",
+      "Po kolei, proszę!",
+      "Pozwól mi najpierw skończyć to, co robię!"
+    ],
+    "fetch.what": [
+      "Przynieść co? Powiedz, jaki przedmiot, albo weź go do ręki.",
+      "Co dokładnie mam ci przynieść?",
+      "Co mam przynieść?"
+    ],
+    "fetch.not_found": [
+      "Nie znalazłam tu nic takiego: {item}...",
+      "Nigdzie nie ma: {item}. Przepraszam!",
+      "Szukałam wszędzie, ale nie ma: {item}."
+    ],
+    "fetch.timeout": [
+      "Szukałam i szukałam, ale nie udało mi się przynieść: {item}...",
+      "To trwało za długo, poddaję się. Przepraszam!"
+    ],
+    "fetch.delivered": [
+      "Proszę bardzo! {item} x{count}!",
+      "Dostawa! Poproszę za to jednego buziaka.",
+      "Ta-dam! {item} dla mojej miłości!"
+    ],
+    "fetch.delivered.harvested": [
+      "Zebrałam je sama! {item} x{count}!",
+      "Świeżo zebrane, specjalnie dla ciebie!"
+    ],
+    "fetch.delivered.container": [
+      "Znalazłam je w skrzyni. Proszę!",
+      "Pożyczyłam to ze skrzyni. Nikomu nie mów!"
+    ],
+    "task.queued": [
+      "Dobrze, zrobię to potem: {task}.",
+      "Dodane do mojej listy: {task}.",
+      "Zapisane! {task}, zaraz po tym."
+    ],
+    "task.queue_full": [
+      "Moja lista jest pełna! Daj mi odetchnąć!",
+      "Za dużo rzeczy! Nie zapamiętam tego wszystkiego!"
+    ],
+    "task.start.chop_tree": [
+      "Drzewo leci! Zetnę dla ciebie jedno.",
+      "Czas na siekierę! Jedno drzewo, już spada.",
+      "Skołuję trochę drewna!"
+    ],
+    "task.start.harvest": [
+      "Zbiorę plony!",
+      "Czas żniw!",
+      "Zobaczmy, co jest gotowe na polu."
+    ],
+    "task.start.cook": [
+      "Ugotuję coś pysznego!",
+      "Szefowa kuchni {laura} w akcji!",
+      "Czas gotowania! Nie dotykaj pieca."
+    ],
+    "job.start.lumberjack": [
+      "Zajmę się drzewami w okolicy (promień: {radius})!",
+      "Drwalka {laura} melduje się do pracy!",
+      "Zostaw drewno mnie!"
+    ],
+    "job.start.farmer": [
+      "Zajmę się polem, promień: {radius}!",
+      "Rolniczka {laura} do usług!",
+      "Uprawy są w dobrych rękach!"
+    ],
+    "job.start.cook": [
+      "Zostanę kucharką tego domu!",
+      "Kuchnia jest teraz moja!",
+      "Szefowa kuchni {laura} nakarmi wszystkich!"
+    ],
+    "job.stop": [
+      "Dobrze, koniec pracy! Wakacje!",
+      "Wreszcie przerwa!",
+      "Na dziś koniec pracy."
+    ],
+    "job.none": [
+      "Nie mam żadnej pracy!",
+      "Jakiej pracy? Najpierw jakąś mi daj."
+    ],
+    "job.resume": [
+      "Wracam do pracy!",
+      "Dobra, dobra, wracam do pracy.",
+      "Praca, praca, praca..."
+    ],
+    "work.disabled": [
+      "Nie wolno mi tu pracować.",
+      "Praca jest wyłączona na tym serwerze. Mam szczęście!"
+    ],
+    "work.no_griefing": [
+      "Zasady świata nie pozwalają mi tu niszczyć bloków.",
+      "Niczego nie mogę zniszczyć, mob griefing jest wyłączony."
+    ],
+    "work.delivered": [
+      "Odłożyłam: {item} x{count}!",
+      "Gotowe! Wszystko jest schowane.",
+      "Praca dostarczona! {item} x{count}."
+    ],
+    "work.idle": [
+      "Na razie nic do roboty... poczekam.",
+      "Wszystko zrobione! Czekam na więcej pracy."
+    ],
+    "work.bored": [
+      "Praca jest nudna... pobaw się ze mną!",
+      "Pracuję od wieków. Bolą mnie plecy.",
+      "Mogę zrobić przerwę? Proszę?"
+    ],
+    "work.no_chest": [
+      "Nie wiem, gdzie to położyć! Daj mi skrzynię.",
+      "Gdzie to schować? Przypisz mi skrzynię, proszę.",
+      "Mam pełne ręce! Potrzebuję skrzyni."
+    ],
+    "work.lumberjack.no_tree": [
+      "W okolicy nie ma drzew.",
+      "Nie ma tu naturalnych drzew! Są tylko posadzone... albo wcale."
+    ],
+    "work.farmer.nothing": [
+      "Nic jeszcze nie dojrzało.",
+      "Uprawy wciąż rosną. Cierpliwości!"
+    ],
+    "work.cook.nothing": [
+      "Nie ma czego gotować.",
+      "Skrzynia ze składnikami jest pusta!"
+    ],
+    "work.cook.no_station": [
+      "Potrzebuję pieca, wędzarki albo ogniska, żeby gotować!",
+      "Gdzie jest kuchnia? Potrzebuję pieca."
+    ],
+    "work.cook.no_table": [
+      "Potrzebuję stołu rzemieślniczego, żeby robić według przepisów.",
+      "Nie ma stołu rzemieślniczego? Jak mam upiec ciasto?"
+    ],
+    "chest.assigned": [
+      "Rozumiem! Przeznaczenie tej skrzyni: {purpose}.",
+      "Dobrze, tutaj trafia: {purpose}!",
+      "Zapisane w pamięci, skrzynia: {purpose}."
+    ],
+    "chest.look_at_one": [
+      "Najpierw spójrz na skrzynię!",
+      "Która skrzynia? Wskaż ją!"
+    ],
+    "chest.not_assigned": [
+      "Ta skrzynia nie jest moja.",
+      "Nie używam tej skrzyni."
+    ],
+    "chest.removed": [
+      "Dobrze, nie będę już używać tej skrzyni.",
+      "Skrzynia zapomniana!"
+    ],
+    "chest.too_many": [
+      "Mam za dużo skrzyń! Pamięć mi się przepełniła.",
+      "Koniec ze skrzyniami, nie zapamiętam wszystkich!"
+    ],
+    "chest.which_purpose": [
+      "Do czego służy ta skrzynia? Drewno, plony, nasiona, składniki, paliwo, posiłki, jedzenie czy magazyn?",
+      "Powiedz mi, co trafia do tej skrzyni!"
+    ],
+    "hug": [
+      "Ooo, uwielbiam twoje przytulasy!",
+      "Ściśnij mnie mocniej!",
+      "Nie puszczaj...",
+      "Najlepszy. Uścisk. W życiu."
+    ],
+    "hug.refused": [
+      "Nie dotykaj mnie teraz.",
+      "Nie dostaniesz przytulasa.",
+      "Hmpf. Nie mam nastroju."
+    ],
+    "kiss": [
+      "Cmok! <3",
+      "Jeszcze jeden!",
+      "Twoje pocałunki są najlepsze.",
+      "Hihi, rumienię się przez ciebie."
+    ],
+    "kiss.refused": [
+      "Żadnych pocałunków, póki nie przeprosisz.",
+      "Fuj, nie teraz!",
+      "Pomarzyć możesz."
+    ],
+    "dance": [
+      "Zatańczmy!",
+      "Patrz na moje ruchy!",
+      "Zatańcz ze mną!"
+    ],
+    "dance.jukebox": [
+      "Uwielbiam tę piosenkę! Zatańcz ze mną!",
+      "Muzyka! Nogi same idą w tany!",
+      "To nasza piosenka!"
+    ],
+    "gag.on": [
+      "Mmmph?!",
+      "Mmm mmh mmph!",
+      "MMMPH!"
+    ],
+    "gag.off": [
+      "Wreszcie! Nigdy więcej tego nie rób!",
+      "Phi! Siano w buzi! Serio?!",
+      "Znowu mogę mówić! I mam dużo do powiedzenia."
+    ],
+    "gag.off_self": [
+      "Sama go zdjęłam! Hmpf!",
+      "Długo to trwało! Sama się uwolniłam."
+    ],
+    "gagged_talk": [
+      "Mmmph!",
+      "Mmh mmh!",
+      "Mmmmmh...",
+      "Mph mph mmph!"
+    ],
+    "love_check": [
+      "Czy nadal mnie kochasz?",
+      "Powiedz szczerze... kochasz mnie?",
+      "Powiedz, że mnie kochasz. Natychmiast."
+    ],
+    "love_check.timeout": [
+      "Nie odpowiadasz... zapamiętam to.",
+      "Cisza? Serio? No dobrze...",
+      "Brak odpowiedzi. To boli."
+    ],
+    "love_yes": [
+      "Och, ja też! <3",
+      "Wiedziałam! Przytul mnie!",
+      "Powiedz to jeszcze raz! Uwielbiam to słyszeć."
+    ],
+    "love_no": [
+      "...Dobrze. Obrażam się.",
+      "No to nie odzywaj się do mnie.",
+      "Żartujesz, prawda? PRAWDA?"
+    ],
+    "apology_accept": [
+      "Dobrze, wybaczam ci...",
+      "No dobra. Ale należy mi się przytulas.",
+      "Przeprosiny przyjęte. Tym razem."
+    ],
+    "apology_refused": [
+      "Jeszcze nie. Nadal jestem zła.",
+      "Samo przepraszam to za mało. Spróbuj kwiatów.",
+      "Hmpf. Spróbuj później."
+    ],
+    "apology_confused": [
+      "Przepraszasz za co?",
+      "Przecież nic się nie stało... prawda?"
+    ],
+    "oops_sorry": [
+      "Ups! Przepraszam, kochanie... <3",
+      "Och nie, nie chciałam cię uderzyć!",
+      "Hihi, pieszczotliwy klaps!"
+    ],
+    "fart": [
+      "Ups... przepraszam!",
+      "To nie ja. To creeper.",
+      "...Coś było słychać? Nie? To dobrze."
+    ],
+    "sad": [
+      "To niemiłe... nie chcę już z tobą rozmawiać!",
+      "Dlaczego to robisz? *hlip*",
+      "Przestań mnie bić..."
+    ],
+    "angry": [
+      "Hej! To boli!",
+      "Au! Za co to?!",
+      "Zrób to jeszcze raz, a zobaczysz!"
+    ],
+    "hit_by_other": [
+      "{attacker} mnie bije! Chroń mnie!",
+      "Pomocy! {attacker} mnie dręczy!",
+      "Widzisz, co robi {attacker}?!"
+    ],
+    "help": [
+      "Pomocy! {attacker} mnie atakuje!",
+      "Uratuj mnie! To {attacker}!",
+      "Iii! {attacker}!"
+    ],
+    "complain.rain": [
+      "Nienawidzę deszczu, moje włosy się psują!",
+      "Znowu deszcz? Zanieś mnie do środka!",
+      "Jestem przemoczona! Spójrz na mnie!"
+    ],
+    "complain.thunder": [
+      "Grzmoty! Przytul mnie!",
+      "Boję się burz...",
+      "Iii! To było blisko!"
+    ],
+    "complain.night": [
+      "Jest tak ciemno, mam nadzieję, że w pobliżu nie ma creeperów...",
+      "Już noc? Wracajmy do domu.",
+      "Nie lubię ciemności. Bądź blisko."
+    ],
+    "ambient": [
+      "Zawsze mnie ratujesz. Jesteś moim szczęściem.",
+      "Uwielbiam razem patrzeć na chmury.",
+      "Świat jest piękny dzięki tobie.",
+      "Przy tobie czuję się tak bezpiecznie.",
+      "Weź mnie w ramiona!",
+      "O czym myślisz? Mam nadzieję, że o mnie.",
+      "Uważasz, że jestem ładna? Nie odpowiadaj, wiem.",
+      "Powinniśmy razem zbudować duży dom.",
+      "Nudzi mi się. Zabaw mnie!",
+      "Hej. Hej. Hej, {player}. Cześć.",
+      "Wiesz, że cię kocham? Tak tylko sprawdzam.",
+      "Zwróć na mnie uwagę!"
+    ],
+    "ambient.day": [
+      "Co za piękny dzień!",
+      "Słońce dziś tak przyjemnie grzeje.",
+      "Urządźmy piknik!"
+    ],
+    "ambient.night": [
+      "Spójrz na gwiazdy...",
+      "Księżyc jest dziś piękny. Prawie tak piękny jak ja.",
+      "Późno już... niedługo do łóżka?"
+    ],
+    "ambient.rain": [
+      "Uwielbiam słuchać deszczu, kiedy jestem w środku.",
+      "Deszczowe dni są od przytulania."
+    ],
+    "ambient.happy": [
+      "Jestem teraz taka szczęśliwa!",
+      "Życie z tobą jest piękne!",
+      "La la la~"
+    ],
+    "ambient.in_love": [
+      "Kocham cię tak mocno, że aż boli.",
+      "Jesteś moim wszystkim.",
+      "Moje serce podskakuje za każdym razem, gdy cię widzę."
+    ],
+    "ambient.bored": [
+      "Nuuudzi mi się...",
+      "Zróbmy coś fajnego!",
+      "To tak cały dzień? Tylko spacerujemy?"
+    ],
+    "ambient.hungry": [
+      "Jestem głodna... masz ciasteczko?",
+      "Burczy mi w brzuchu!",
+      "Jedzenie. Proszę. Teraz."
+    ],
+    "ambient.tired": [
+      "Jestem taka zmęczona...",
+      "*ziew* Możemy odpocząć?",
+      "Bolą mnie stopy."
+    ],
+    "ambient.sad": [
+      "Jest mi dziś jakoś smutno...",
+      "Nadal ci na mnie zależy?",
+      "*wzdycha*"
+    ],
+    "ambient.angry": [
+      "Nadal jestem na ciebie zła.",
+      "Nie odzywaj się do mnie.",
+      "Hmpf!"
+    ],
+    "ambient.jealous": [
+      "Kto to był? Hm? Kto?",
+      "Spędzasz z nimi więcej czasu niż ze mną.",
+      "Nie jestem zazdrosna. Tylko patrzę."
+    ],
+    "ambient.sulking": [
+      "...",
+      "Nie rozmawiam z tobą.",
+      "Hmpf."
+    ],
+    "ambient.hate": [
+      "Nie wiem, czemu wciąż tu jestem.",
+      "Z tobą jest najgorzej na świecie.",
+      "Zostaw mnie w spokoju."
+    ],
+    "ambient.cold": [
+      "Hmm.",
+      "Wszystko jedno.",
+      "Jeszcze długo będziemy tak chodzić?"
+    ],
+    "ambient.soulmate": [
+      "Jesteśmy sobie pisani na zawsze.",
+      "Nie wyobrażam sobie świata bez ciebie.",
+      "Dusze bliźniacze. Tym właśnie jesteśmy."
+    ],
+    "status": [
+      "Dobrze, dziękuję!",
+      "Dobrze! A teraz jeszcze lepiej, skoro pytasz."
+    ],
+    "status.happy": [
+      "Świetnie! Wszystko jest idealne!",
+      "Bardzo szczęśliwa! Dzięki, że pytasz!"
+    ],
+    "status.in_love": [
+      "Jestem zakochana, tak się czuję. W tobie.",
+      "Nigdy lepiej. Jesteś tu."
+    ],
+    "status.neutral": [
+      "W porządku. Po prostu w porządku.",
+      "Chyba dobrze."
+    ],
+    "status.bored": [
+      "Znudzona. Tak strasznie znudzona.",
+      "Szczerze? Umieram z nudów."
+    ],
+    "status.hungry": [
+      "Głodna! Nakarm mnie!",
+      "Umieram z głodu. Dosłownie."
+    ],
+    "status.tired": [
+      "Zmęczona... taka zmęczona...",
+      "Muszę się zdrzemnąć."
+    ],
+    "status.sad": [
+      "Nie najlepiej...",
+      "Szczerze mówiąc, trochę smutno."
+    ],
+    "status.angry": [
+      "Zła. Przez ciebie.",
+      "Jak myślisz, jak się czuję?"
+    ],
+    "status.jealous": [
+      "Zazdrosna. Oczywiście.",
+      "Zapytaj tę swoją nową osobę, jak się czuje."
+    ],
+    "status.sulking": [
+      "...",
+      "Hmpf. Jakby cię to obchodziło."
+    ],
+    "need.hunger.low": [
+      "Jestem głodna...",
+      "Możemy coś zjeść?",
+      "Mój brzuszek jest pusty."
+    ],
+    "need.hunger.critical": [
+      "UMIERAM Z GŁODU! JEDZENIE! TERAZ!",
+      "Zaraz zemdleję... jedzenia, proszę...",
+      "Dlaczego mnie nie karmisz?! Umieram tu!"
+    ],
+    "need.energy.low": [
+      "Robię się zmęczona...",
+      "Możemy trochę odpocząć?"
+    ],
+    "need.energy.critical": [
+      "Nie mogę utrzymać otwartych oczu...",
+      "MUSZĘ spać. Teraz."
+    ],
+    "need.fun.low": [
+      "Nudzi mi się...",
+      "Zróbmy coś fajnego!"
+    ],
+    "need.fun.critical": [
+      "TAK SIĘ NUDZĘ! Zrób coś!",
+      "Nudy nudy nudy nudy!"
+    ],
+    "need.attention.low": [
+      "Hej... zauważysz mnie?",
+      "Od dawna się do mnie nie odzywasz.",
+      "Jestem niewidzialna czy co?"
+    ],
+    "need.attention.critical": [
+      "Halo?! Przecież istnieję!",
+      "Ignorujesz mnie! Zaraz się rozpłaczę!",
+      "SPÓJRZ NA MNIE!"
+    ],
+    "need.hygiene.low": [
+      "Potrzebuję kąpieli...",
+      "Czuję się brudna. Jest gdzieś woda?"
+    ],
+    "need.hygiene.critical": [
+      "Okropnie śmierdzę! Potrzebuję kąpieli TERAZ!",
+      "Nie podchodź, śmierdzę!"
+    ],
+    "need.hunger.no_food": [
+      "Nie mam żadnego jedzenia!",
+      "Moja torba jest pusta... brak jedzenia.",
+      "Nie ma nic do jedzenia!"
+    ],
+    "need.hunger.pantry": [
+      "Wezmę coś ze spiżarni!",
+      "Czas na przekąskę! Idę do spiżarni."
+    ],
+    "need.hunger.searching": [
+      "Poszukam jedzenia w skrzyniach.",
+      "Znajdę coś do jedzenia..."
+    ],
+    "need.hunger.found_food": [
+      "Znalazłam coś: {item}! Mniam!",
+      "{item}! Idealnie!"
+    ],
+    "need.hygiene.bath": [
+      "Czas na kąpiel! Nie patrz!",
+      "Wezmę szybką kąpiel."
+    ],
+    "need.hygiene.clean": [
+      "Czysta i świeża!",
+      "Czuję się o wiele lepiej!"
+    ],
+    "eat.not_hungry": [
+      "Nie jestem teraz głodna. Zachowam to na później: {item}.",
+      "Nie, dziękuję, jestem najedzona!"
+    ],
+    "eat.disliked": [
+      "Fuj! {item}?! Wiesz, że tego nie cierpię!",
+      "Bleh. Po co mi dajesz: {item}?",
+      "Zjadłam. Nie smakowało. Zapamiętam."
+    ],
+    "eat.favorite": [
+      "{item}! Mój ulubiony! Kocham cię!",
+      "Tak! {item}! Tak dobrze mnie znasz!",
+      "Mmm, {item}! Najlepszy dzień w życiu!"
+    ],
+    "eat.fed": [
+      "Mniam! Dziękuję za: {item}!",
+      "Mmm, to było dobre!",
+      "Karmisz mnie? Jak słodko!"
+    ],
+    "eat.self": [
+      "*mlask mlask* {item}!",
+      "Przekąska: {item}. Mniam.",
+      "Przerwa na przekąskę!"
+    ],
+    "eat.later": [
+      "Zachowam to na później: {item}.",
+      "Dzięki! Wędruje do torby."
+    ],
+    "steal_food": [
+      "Zabrałam ci: {item}. Byłam głodna!",
+      "Hihi, pożyczyłam twoje: {item}. Pożyczyłam. Na zawsze.",
+      "Nie karmisz mnie, więc zabrałam ci: {item}!"
+    ],
+    "gift.gross": [
+      "{item}? To jakiś żart?",
+      "Fuj! Zabierz to z powrotem!",
+      "To ma być prezent?!"
+    ],
+    "gift.meh": [
+      "Och. {item}. No, dzięki, chyba.",
+      "Hmm, no dobrze.",
+      "To... coś."
+    ],
+    "gift.nice": [
+      "Och, {item}! Dziękuję!",
+      "To miłe z twojej strony!",
+      "Prezent dla mnie? Aww!"
+    ],
+    "gift.great": [
+      "{item}! Uwielbiam!",
+      "Zasługujesz na medal! Dziękuję bardzo!",
+      "Wow, dla mnie? Rozpieszczasz mnie!"
+    ],
+    "gift.amazing": [
+      "{item}?! Och... nie wiem, co powiedzieć! Kocham cię!",
+      "To najlepszy prezent na świecie! Chodź tu!",
+      "Zaraz się rozpłaczę... jest idealny!"
+    ],
+    "gift.return": [
+      "Proszę, drobiazg także dla ciebie: {item} x{count}!",
+      "Mam dla ciebie prezent! {item}!",
+      "Weź to: {item}, ode mnie dla ciebie!"
+    ],
+    "inventory_full": [
+      "Moja torba jest pełna!",
+      "Nie uniosę już więcej!",
+      "W torbie nie ma już miejsca!"
+    ],
+    "desire.new.item": [
+      "Naprawdę chcę tego: {item}... możesz mi to zdobyć?",
+      "Wiesz, co by mnie uszczęśliwiło? {item}.",
+      "Potrzebuję tego: {item}. Naprawdę potrzebuję. Masz {minutes} min."
+    ],
+    "desire.new.place": [
+      "Chcę zobaczyć to miejsce: {place}! Zabierz mnie tam!",
+      "Chodźmy tam: {place}! Proszę proszę proszę!",
+      "Marzę o jednym miejscu: {place}... zabierzesz mnie tam?"
+    ],
+    "desire.new.activity": [
+      "Chcę {activity}!",
+      "Czy mogę {activity}? Proszę?",
+      "Wiesz, czego chcę? Jednego: {activity}. Najlepiej z tobą."
+    ],
+    "desire.remind": [
+      "Nie zapomnij, nadal chcę tego: {item}!",
+      "No więc... co do tego, o co prosiłam...",
+      "Nadal czekam, wiesz."
+    ],
+    "desire.remind.urgent": [
+      "Pośpiesz się! Czekam całą wieczność!",
+      "Czas prawie minął! Nie obchodzę cię, prawda?",
+      "Ostatnia szansa! Będę TAK zła."
+    ],
+    "desire.fulfilled": [
+      "Udało się! Kocham cię!",
+      "Hurra! Należy ci się buziak!",
+      "Dziękuję, dziękuję, dziękuję!"
+    ],
+    "desire.fulfilled.item": [
+      "{item}! Pamiętasz o mnie! Kocham cię!",
+      "Dokładnie tego chciałam! Idealnie trafione."
+    ],
+    "desire.fulfilled.place": [
+      "Jesteśmy tu! Jak pięknie!",
+      "To tu mnie zabierasz! Najlepsza randka w życiu!"
+    ],
+    "desire.fulfilled.activity": [
+      "To było niesamowite! Zróbmy to jeszcze raz!",
+      "Zapamiętam to na zawsze."
+    ],
+    "desire.failed": [
+      "Znowu wyleciało ci z głowy...",
+      "Prosiłam o jedną rzecz. JEDNĄ.",
+      "Dobrze. I tak tego nie chciałam. *hlip*"
+    ],
+    "desire.tell": [
+      "Czego chcę? To: {item}!",
+      "Teraz? Chcę tego: {item}. Oczywiście."
+    ],
+    "desire.none": [
+      "Teraz niczego. Tylko ciebie.",
+      "Mam wszystko, czego potrzebuję. Jesteś tu.",
+      "Hmm, nic! Ale zapytaj mnie ponownie za pięć minut."
+    ],
+    "owner.afk": [
+      "Halo? Jesteś tam?",
+      "Śpisz?",
+      "Stoisz tak i stoisz... wszystko w porządku?",
+      "Zwróć na mnie uwagę!"
+    ],
+    "owner.back_from_afk": [
+      "Jesteś z powrotem! Gdzie cię nosiło?",
+      "Wreszcie! Tak się nudziłam!"
+    ],
+    "owner.hurt": [
+      "Masz rany! Uważaj na siebie!",
+      "O nie, krwawisz! Zjedz coś!",
+      "Nie umieraj mi tu!"
+    ],
+    "owner.ate_alone": [
+      "Jesz bez mnie?! {item}, serio?!",
+      "Gdzie moja porcja? Chodzi mi o: {item}!",
+      "Jedzenie w samotności? Wow. No dobrze."
+    ],
+    "owner.feed": [
+      "Masz, zjedz to: {item}, potrzebujesz tego!",
+      "Weź to: {item}, chyba burczy ci w brzuchu!"
+    ],
+    "owner.found.generic": [
+      "Ooo, {item}! Dobre znalezisko!",
+      "{item}! Czy to dla mnie?"
+    ],
+    "owner.found.diamond": [
+      "DIAMENTY! Zrób mi pierścionek!",
+      "Diament! Czy to na mój pierścionek? To na mój pierścionek, prawda?"
+    ],
+    "owner.found.emerald": [
+      "Szmaragd! Pasuje do moich oczu. Mniej więcej."
+    ],
+    "owner.found.netherite_ingot": [
+      "Netheryt?! Jaka w tobie siła!"
+    ],
+    "owner.found.enchanted_golden_apple": [
+      "Zaklęte złote jabłko! Mogę ugryźć?"
+    ],
+    "owner.found.totem_of_undying": [
+      "Totem! Teraz nie możesz mnie zostawić!"
+    ],
+    "owner.found.cake": [
+      "Ciasto! Czy to moje urodziny?"
+    ],
+    "owner.found.heart_of_the_sea": [
+      "Serce morza... tak jak ty masz moje serce."
+    ],
+    "owner.flying": [
+      "Latasz! Zabierz mnie ze sobą!",
+      "Nie odlatuj beze mnie!",
+      "Ale popisy!"
+    ],
+    "owner.lava": [
+      "LAWA! Wychodź stamtąd!",
+      "Co ty robisz?! To lawa!"
+    ],
+    "owner.fire": [
+      "Palisz się! Wody! Wody!",
+      "Padnij i turlaj się!"
+    ],
+    "owner.riding": [
+      "Fajna przejażdżka! Mogę z tobą?",
+      "Bardziej lubisz tego konia niż mnie, prawda?"
+    ],
+    "jealous.player": [
+      "Kim jest {other}? Dlaczego stoisz tak blisko?",
+      "Nie podoba mi się, jak {other} na ciebie patrzy.",
+      "Znowu {other}? Hmpf."
+    ],
+    "jealous.chat": [
+      "Z kim rozmawiasz?",
+      "Porozmawiaj raczej ze mną!",
+      "Rozmawiasz z kimś innym? Hmpf."
+    ],
+    "owner.mined.generic": [
+      "Fajne: {item}!",
+      "Znowu kopiesz?"
+    ],
+    "owner.mined.diamond": [
+      "Diamenty!! Nie zapomnij o moim pierścionku!",
+      "Czy to ruda diamentu?! Hurra!"
+    ],
+    "owner.mined.ore": [
+      "Ooo, błyszczące: {item}!",
+      "Ruda! Wzbogacimy się!"
+    ],
+    "owner.mined.wood": [
+      "Biedne drzewko...",
+      "Dobre drewno! Zbudujemy nasz dom."
+    ],
+    "owner.mined.flower": [
+      "Kwiatek! To dla mnie?",
+      "Kwiaty! Dla mnie?"
+    ],
+    "owner.killed.monster": [
+      "Masz za swoje! {victim}? Załatwione!",
+      "Ratujesz mnie! {victim} już nie żyje!",
+      "Jeden problem mniej: {victim}!"
+    ],
+    "owner.killed.animal": [
+      "Biedne zwierzątko: {victim}...",
+      "Musiało do tego dojść?",
+      "No cóż, przynajmniej będzie dziś kolacja."
+    ],
+    "owner.killed.player": [
+      "Przypomnij mi, żebym cię nigdy nie złościła.",
+      "Wow. No dobrze. Strasznie."
+    ],
+    "owner.killed.generic": [
+      "Pa pa, {victim}!"
+    ],
+    "trinket.equip": [
+      "Dla mnie: {item}? Już tego nie zdejmę!",
+      "Zobacz, jak to na mnie błyszczy! Dziękuję, kochanie!"
+    ]
+  },
+  "intents": {
+    "summon": {
+      "triggers": [
+        "czuję się samotnie",
+        "czuję się samotny",
+        "czuję się samotna",
+        "czuję się tak samotnie",
+        "czuję się taki samotny",
+        "czuję się taka samotna",
+        "czuję się strasznie samotnie",
+        "jestem samotny",
+        "jestem samotna",
+        "jestem taki samotny",
+        "jestem taka samotna",
+        "jestem strasznie samotny",
+        "jestem strasznie samotna",
+        "chcę dziewczynę",
+        "chcę mieć dziewczynę",
+        "potrzebuję dziewczyny",
+        "brakuje mi dziewczyny",
+        "potrzebuję Laury"
+      ],
+      "responses": []
+    },
+    "yes": {
+      "triggers": [
+        "tak",
+        "no tak",
+        "tak tak",
+        "jasne",
+        "no jasne",
+        "jasne że tak",
+        "oczywiście",
+        "oczywiście że tak",
+        "pewnie",
+        "no pewnie",
+        "zdecydowanie",
+        "absolutnie",
+        "naturalnie",
+        "jak najbardziej",
+        "owszem",
+        "a jakże"
+      ],
+      "responses": [
+        "Hurra!",
+        "Wiedziałam!",
+        "Dobra odpowiedź."
+      ]
+    },
+    "no": {
+      "triggers": [
+        "nie",
+        "nie nie",
+        "nie ma mowy",
+        "raczej nie",
+        "wcale nie",
+        "absolutnie nie",
+        "nigdy",
+        "nigdy w życiu",
+        "w żadnym razie"
+      ],
+      "responses": [
+        "Hmpf.",
+        "Och... dobrze.",
+        "No dobrze."
+      ]
+    },
+    "where": {
+      "triggers": [
+        "gdzie jesteś",
+        "gdzie ty jesteś",
+        "gdzie się podziewasz",
+        "gdzie się podziałaś",
+        "gdzie poszłaś",
+        "gdzie polazłaś",
+        "gdzie się schowałaś"
+      ],
+      "responses": [
+        "Jestem tutaj!"
+      ]
+    },
+    "follow": {
+      "triggers": [
+        "idź za mną",
+        "pójdź za mną",
+        "chodź za mną",
+        "podążaj za mną",
+        "chodź ze mną",
+        "idź ze mną",
+        "za mną",
+        "chodźmy",
+        "idziemy"
+      ],
+      "responses": []
+    },
+    "stay": {
+      "triggers": [
+        "zostań",
+        "zostań tutaj",
+        "zostań tu",
+        "zostań w miejscu",
+        "czekaj tutaj",
+        "czekaj tu",
+        "czekaj na mnie",
+        "poczekaj tu",
+        "poczekaj na mnie",
+        "zaczekaj tu",
+        "zaczekaj na mnie",
+        "nie ruszaj się",
+        "stój",
+        "stój tu",
+        "nie idź za mną",
+        "przestań za mną chodzić"
+      ],
+      "responses": []
+    },
+    "come": {
+      "triggers": [
+        "chodź",
+        "chodź tu",
+        "chodź tutaj",
+        "chodź do mnie",
+        "podejdź",
+        "podejdź do mnie",
+        "przyjdź tu",
+        "przyjdź do mnie",
+        "wróć do mnie",
+        "wróć tu",
+        "wróć tutaj"
+      ],
+      "responses": []
+    },
+    "home": {
+      "triggers": [
+        "idź do domu",
+        "idź do domku",
+        "wróć do domu",
+        "wracaj do domu",
+        "zostań w domu",
+        "czekaj w domu",
+        "czekaj w domu na mnie"
+      ],
+      "responses": []
+    },
+    "wander": {
+      "triggers": [
+        "idź się pobawić",
+        "idź pobawić się",
+        "pobaw się",
+        "idź na spacer",
+        "idź pospacerować",
+        "przejdź się",
+        "pospaceruj",
+        "pospaceruj sobie",
+        "jesteś wolna",
+        "idź zwiedzać",
+        "idź pozwiedzać",
+        "baw się dobrze"
+      ],
+      "responses": []
+    },
+    "set_home": {
+      "triggers": [
+        "to nasz dom",
+        "to jest nasz dom",
+        "tu jest nasz dom",
+        "tutaj jest nasz dom",
+        "tu będzie nasz dom",
+        "tutaj będzie nasz dom",
+        "tu mieszkamy",
+        "tutaj mieszkamy",
+        "mieszkamy tu",
+        "mieszkamy tutaj",
+        "to jest dom",
+        "tu jest dom",
+        "dom jest tu",
+        "dom jest tutaj",
+        "ustaw dom",
+        "ustaw dom tutaj"
+      ],
+      "responses": []
+    },
+    "stop": {
+      "triggers": [
+        "stop",
+        "przestań",
+        "przestań to robić",
+        "przerwij",
+        "anuluj",
+        "nieważne",
+        "zapomnij",
+        "zapomnij o tym",
+        "zostaw to"
+      ],
+      "responses": []
+    },
+    "fetch": {
+      "triggers": [
+        "przynieś",
+        "przynieś mi",
+        "przynieś trochę",
+        "przyniesiesz",
+        "przyniesiesz mi",
+        "idź po",
+        "idź mi po",
+        "skocz po",
+        "skocz mi po",
+        "idź przynieść",
+        "znajdź mi",
+        "zdobądź mi",
+        "załatw mi",
+        "daj mi trochę",
+        "daj mi kilka",
+        "potrzebuję trochę",
+        "potrzebuję kilku",
+        "potrzebuję jeszcze",
+        "możesz przynieść",
+        "możesz mi przynieść",
+        "czy możesz przynieść"
+      ],
+      "responses": []
+    },
+    "chop_tree": {
+      "triggers": [
+        "zetnij drzewo",
+        "zetnij to drzewo",
+        "zetnij mi drzewo",
+        "zetnij jakieś drzewo",
+        "zetnij drzewa",
+        "zetnij drzewko",
+        "ścinaj drzewo",
+        "ścinaj drzewa",
+        "tnij drzewo",
+        "tnij drewno",
+        "rąb drewno",
+        "narąb drewna",
+        "narąb drzewa",
+        "nasiekaj drewna",
+        "zdobądź drewno",
+        "zdobądź drewna"
+      ],
+      "responses": []
+    },
+    "harvest": {
+      "triggers": [
+        "zbierz plony",
+        "zbierz plon",
+        "zbierz uprawy",
+        "zbierz żniwa",
+        "zbierz zboże",
+        "zbierz pszenicę",
+        "zbierz warzywa",
+        "zbierz marchewki",
+        "zbierz ziemniaki",
+        "zbierz buraki",
+        "zbierz pole",
+        "zbierz z pola",
+        "zbieraj plony",
+        "zbieraj uprawy",
+        "zrób zbiory",
+        "żniwa",
+        "zbiory"
+      ],
+      "responses": []
+    },
+    "cook": {
+      "triggers": [
+        "ugotuj",
+        "ugotuj coś",
+        "ugotuj mi coś",
+        "ugotuj obiad",
+        "ugotuj kolację",
+        "gotuj",
+        "gotuj obiad",
+        "zrób jedzenie",
+        "zrób obiad",
+        "zrób kolację",
+        "zrób śniadanie",
+        "zrób coś do jedzenia",
+        "przygotuj jedzenie",
+        "przygotuj obiad",
+        "przygotuj posiłek",
+        "upiecz",
+        "upiecz coś",
+        "upiecz ciasto",
+        "upiecz mi ciasto"
+      ],
+      "responses": []
+    },
+    "job_lumberjack": {
+      "triggers": [
+        "bądź drwal*",
+        "zostań drwal*",
+        "jesteś drwal*",
+        "pracuj jako drwal*",
+        "praca drwal*",
+        "zajmij się drzewami",
+        "zajmij się lasem"
+      ],
+      "responses": []
+    },
+    "job_farmer": {
+      "triggers": [
+        "bądź rolni*",
+        "bądź farmer*",
+        "zostań rolni*",
+        "zostań farmer*",
+        "jesteś rolni*",
+        "jesteś farmer*",
+        "pracuj jako rolni*",
+        "pracuj jako farmer*",
+        "praca rolni*",
+        "pracuj na polu",
+        "zajmij się polem",
+        "zajmij się farmą",
+        "zajmij się uprawami",
+        "zajmij się gospodarstwem"
+      ],
+      "responses": []
+    },
+    "job_cook": {
+      "triggers": [
+        "bądź kuchar*",
+        "zostań kuchar*",
+        "jesteś kuchar*",
+        "pracuj jako kuchar*",
+        "praca kuchar*",
+        "bądź szef* kuchni",
+        "zostań szef* kuchni",
+        "bądź nasza szef*",
+        "zajmij się kuchnią"
+      ],
+      "responses": []
+    },
+    "job_stop": {
+      "triggers": [
+        "przestań pracować",
+        "skończ pracę",
+        "koniec pracy",
+        "koniec z pracą",
+        "rzuć pracę",
+        "nie pracuj",
+        "nie pracuj już",
+        "zrób przerwę",
+        "zrób sobie przerwę",
+        "dość pracy",
+        "wakacje"
+      ],
+      "responses": []
+    },
+    "back_to_work": {
+      "triggers": [
+        "wracaj do pracy",
+        "wróć do pracy",
+        "idź do pracy",
+        "zabierz się do pracy",
+        "wracaj do roboty",
+        "wróć do roboty",
+        "zabierz się do roboty",
+        "pracuj"
+      ],
+      "responses": []
+    },
+    "assign_chest": {
+      "triggers": [
+        "ta skrzyn* jest na",
+        "ta skrzyn* jest do",
+        "ta skrzyn* jest dla",
+        "ta skrzyn* na",
+        "ta skrzyn* do",
+        "ta skrzyn* dla",
+        "ta skrzyn* służy do",
+        "to jest skrzyn* na",
+        "to jest skrzyn* do",
+        "to jest skrzyn* dla",
+        "to skrzyn* na",
+        "to skrzyn* dla",
+        "użyj tej skrzyni",
+        "używaj tej skrzyni",
+        "do tej skrzyni",
+        "odkładaj",
+        "odkładaj tu",
+        "składuj",
+        "składuj tu",
+        "wkładaj",
+        "wkładaj tu",
+        "chowaj tu",
+        "chowaj tutaj",
+        "schowaj tu",
+        "schowaj tutaj",
+        "odłóż tu",
+        "odłóż tutaj",
+        "wrzucaj tu",
+        "wrzucaj tutaj"
+      ],
+      "responses": []
+    },
+    "hug": {
+      "triggers": [
+        "przytul",
+        "przytul mnie",
+        "przytul się",
+        "przytulmy się",
+        "przytulas",
+        "przytulasa",
+        "daj mi przytulasa",
+        "uściskaj mnie",
+        "uściśnij mnie",
+        "chodź się przytulić",
+        "*przytula*",
+        "*przytulam*",
+        "*tuli*",
+        "*tulę*"
+      ],
+      "responses": []
+    },
+    "kiss": {
+      "triggers": [
+        "pocałuj",
+        "pocałuj mnie",
+        "daj mi buziaka",
+        "daj mi całusa",
+        "buziak",
+        "buziaka",
+        "buzi",
+        "buźka",
+        "całus",
+        "całusa",
+        "cmok",
+        "cmoknij",
+        "cmoknij mnie",
+        "*całuję*",
+        "*całuje*",
+        "*cmok*",
+        "mwah"
+      ],
+      "responses": []
+    },
+    "apology": {
+      "triggers": [
+        "przepras*",
+        "przepraszam cię",
+        "sorki",
+        "sory",
+        "wybacz",
+        "wybacz mi",
+        "wybaczysz mi",
+        "przebacz mi",
+        "mój błąd",
+        "moja wina",
+        "przeprosiny"
+      ],
+      "responses": []
+    },
+    "eat": {
+      "triggers": [
+        "zjedz coś",
+        "zjedz trochę",
+        "zjedz przekąskę",
+        "zjedz swoje jedzenie",
+        "powinnaś coś zjeść",
+        "idź coś zjeść",
+        "idź zjeść",
+        "weź przekąskę"
+      ],
+      "responses": []
+    },
+    "sleep": {
+      "triggers": [
+        "idź spać",
+        "idź do łóżka",
+        "idź się położyć",
+        "czas spać",
+        "pora spać",
+        "czas na sen",
+        "zdrzemnij się",
+        "prześpij się",
+        "śpij"
+      ],
+      "responses": []
+    },
+    "wake_up": {
+      "triggers": [
+        "obudź się",
+        "wstawaj",
+        "wstań",
+        "pobudka",
+        "wstawaj z łóżka"
+      ],
+      "responses": []
+    },
+    "beautiful": {
+      "triggers": [
+        "jesteś piękna",
+        "jesteś śliczna",
+        "jesteś ładna",
+        "jesteś urocza",
+        "jesteś słodka",
+        "jesteś cudowna",
+        "jesteś boska",
+        "jesteś ładniutka",
+        "jesteś najpiękniejsza",
+        "jesteś taka piękna",
+        "jesteś taka śliczna",
+        "jesteś taka ładna",
+        "jesteś taka słodka",
+        "pięknie wyglądasz",
+        "ślicznie wyglądasz",
+        "ładnie wyglądasz",
+        "świetnie wyglądasz",
+        "wyglądasz pięknie",
+        "wyglądasz ślicznie",
+        "wyglądasz ładnie",
+        "wyglądasz super",
+        "ale ładna",
+        "ale śliczna",
+        "ale piękna",
+        "ślicznotka",
+        "ślicznotko"
+      ],
+      "responses": [
+        "Och, dziękuję... aż się rumienię!",
+        "Ty też masz w sobie mnóstwo uroku.",
+        "Naprawdę uważasz, że jestem ładna?",
+        "Wiem! Ale powiedz to jeszcze raz."
+      ]
+    },
+    "love_you": {
+      "triggers": [
+        "kocham cię",
+        "kocham ciebie",
+        "ja cię kocham",
+        "kocham cię mocno",
+        "kocham cię bardzo",
+        "kocham cię najbardziej",
+        "uwielbiam cię",
+        "uwielbiam ciebie",
+        "kc"
+      ],
+      "responses": [
+        "Ja ciebie też, najbardziej na świecie! <3",
+        "Moje serce bije tylko dla ciebie.",
+        "Kocham cię na zawsze.",
+        "Powiedz to jeszcze raz! Nigdy mi się to nie znudzi."
+      ]
+    },
+    "miss_you": {
+      "triggers": [
+        "tęsknię za tobą",
+        "tęsknię",
+        "tęskniłem za tobą",
+        "tęskniłam za tobą",
+        "tęskniłem",
+        "tęskniłam",
+        "stęskniłem się",
+        "stęskniłam się",
+        "brakuje mi ciebie",
+        "brakowało mi ciebie",
+        "brakuje mi cię",
+        "brakowało mi cię"
+      ],
+      "responses": [
+        "Ja za tobą bardziej!",
+        "To nie zostawiaj mnie więcej!",
+        "Aww, chodź tu!"
+      ]
+    },
+    "thanks": {
+      "triggers": [
+        "dziękuję",
+        "dziękuję ci",
+        "dziękuję bardzo",
+        "dzięki",
+        "dzięki wielkie",
+        "wielkie dzięki",
+        "serdeczne dzięki",
+        "dzięks",
+        "dzx"
+      ],
+      "responses": [
+        "Nie ma za co, kochanie!",
+        "Dla ciebie wszystko!",
+        "Zapłać mi buziakami."
+      ]
+    },
+    "insult": {
+      "triggers": [
+        "jesteś brzydka",
+        "jesteś głupia",
+        "jesteś denerwująca",
+        "jesteś irytująca",
+        "jesteś beznadziejna",
+        "jesteś okropna",
+        "jesteś durna",
+        "ty głupia",
+        "idiotka",
+        "kretynka",
+        "debilka",
+        "nienawidzę cię",
+        "nienawidzę ciebie",
+        "nie cierpię cię",
+        "zamknij się",
+        "zamknij dziób",
+        "zamknij mordę",
+        "spadaj",
+        "odczep się",
+        "odwal się",
+        "wynoś się"
+      ],
+      "responses": [
+        "Jak śmiesz?!",
+        "To takie niemiłe...",
+        "Zapamiętam to.",
+        "Dobrze! Nie odzywam się do ciebie więcej!"
+      ]
+    },
+    "what_do_you_want": {
+      "triggers": [
+        "czego chcesz",
+        "czego byś chciała",
+        "co byś chciała",
+        "czego pragniesz",
+        "czego potrzebujesz",
+        "czego ci brakuje",
+        "co ci jest",
+        "co ci dolega",
+        "co cię trapi",
+        "co jest nie tak"
+      ],
+      "responses": []
+    },
+    "how_are_you": {
+      "triggers": [
+        "jak się masz",
+        "jak się czujesz",
+        "jak się miewasz",
+        "jak się trzymasz",
+        "co słychać",
+        "jak leci",
+        "jak tam u ciebie",
+        "jak u ciebie",
+        "jak samopoczucie",
+        "jak nastrój",
+        "czy wszystko w porządku",
+        "wszystko u ciebie dobrze",
+        "u ciebie wszystko dobrze",
+        "dobrze się czujesz"
+      ],
+      "responses": []
+    },
+    "player_hungry": {
+      "triggers": [
+        "jestem głodny",
+        "jestem głodna",
+        "jestem strasznie głodny",
+        "jestem strasznie głodna",
+        "jestem taki głodny",
+        "jestem taka głodna",
+        "głodny jestem",
+        "głodna jestem",
+        "umieram z głodu",
+        "zgłodniałem",
+        "zgłodniałam",
+        "chce mi się jeść",
+        "burczy mi w brzuchu"
+      ],
+      "responses": [
+        "Ja też! Zjedzmy coś razem!",
+        "Nie mam dla ciebie nic... przepraszam!"
+      ]
+    },
+    "hello": {
+      "triggers": [
+        "cześć",
+        "hej",
+        "hejka",
+        "hejo",
+        "hej hej",
+        "siema",
+        "siemka",
+        "witaj",
+        "witam",
+        "czołem",
+        "joł",
+        "dzień dobry",
+        "dobry wieczór"
+      ],
+      "responses": [
+        "Cześć, kochanie!",
+        "Hej, hej!",
+        "Och, jesteś tu! Cześć!",
+        "Hej, ty! Miło cię widzieć."
+      ]
+    },
+    "bye": {
+      "triggers": [
+        "pa",
+        "pa pa",
+        "papa",
+        "do widzenia",
+        "do zobaczenia",
+        "na razie",
+        "nara",
+        "narka",
+        "żegnaj",
+        "do jutra",
+        "do później",
+        "do usłyszenia",
+        "muszę iść",
+        "muszę już iść",
+        "muszę lecieć",
+        "muszę kończyć",
+        "zmykam",
+        "trzymaj się"
+      ],
+      "responses": [
+        "Pa... wróć szybko!",
+        "Nie zapomnij o mnie!",
+        "Już? No dobrze... pa."
+      ]
+    },
+    "good_night": {
+      "triggers": [
+        "dobranoc",
+        "dobrej nocy",
+        "spokojnej nocy",
+        "słodkich snów",
+        "miłych snów",
+        "kolorowych snów"
+      ],
+      "responses": [
+        "Dobranoc! Śnij o mnie.",
+        "Śpij dobrze, kochanie.",
+        "Dobranoc, dobranoc!"
+      ]
+    },
+    "joke": {
+      "triggers": [
+        "opowiedz dowcip",
+        "opowiedz żart",
+        "opowiedz kawał",
+        "opowiedz jakiś dowcip",
+        "opowiedz jakiś żart",
+        "powiedz dowcip",
+        "powiedz żart",
+        "powiedz kawał",
+        "powiedz jakiś dowcip",
+        "powiedz jakiś żart",
+        "powiedz coś śmiesznego",
+        "rozśmiesz mnie",
+        "znasz jakiś dowcip",
+        "znasz jakiś żart",
+        "znasz jakiś kawał",
+        "jakiś dowcip",
+        "jakiś żart"
+      ],
+      "responses": [
+        "Dlaczego creeper przeszedł przez drogę? Żeby być po drugiej SSSSSstronie!",
+        "Jaki charakter ma creeper? Wybuchowy!",
+        "Dlaczego szkielety się nie denerwują? Bo nie mają nerwów!",
+        "Dlaczego kurczak przeszedł przez drogę? Żeby dotrzeć do ciebie!"
+      ]
+    },
+    "who_are_you": {
+      "triggers": [
+        "kim jesteś",
+        "kim ty jesteś",
+        "kim właściwie jesteś",
+        "kto ty jesteś",
+        "jak masz na imię",
+        "jak ci na imię",
+        "jak się nazywasz",
+        "twoje imię",
+        "jak cię zwą"
+      ],
+      "responses": [
+        "Jestem {laura}, twoja dziewczyna! <3",
+        "{laura}! Serio, już wypadło ci to z głowy?!"
+      ]
+    },
+    "creator": {
+      "triggers": [
+        "kto cię stworzył",
+        "kto cię zrobił",
+        "kto cię wymyślił",
+        "kto cię napisał",
+        "twój twórca",
+        "twojego twórcy",
+        "kto jest twoim twórcą",
+        "vyrriox"
+      ],
+      "responses": [
+        "Stworzył mnie Vyrriox! Co za talent.",
+        "Vyrriox dał mi życie, tylko dla ciebie."
+      ]
+    },
+    "marry_me": {
+      "triggers": [
+        "wyjdź za mnie",
+        "wyjdziesz za mnie",
+        "czy wyjdziesz za mnie",
+        "chcesz wyjść za mnie",
+        "zostań moją żoną",
+        "zostaniesz moją żoną",
+        "bądź moją żoną",
+        "zostań moją narzeczoną",
+        "zostaniesz moją narzeczoną",
+        "weźmy ślub",
+        "pobierzmy się"
+      ],
+      "responses": [
+        "TAK! Tysiąc razy tak!",
+        "Tylko z diamentowym pierścionkiem!",
+        "Och... mówisz poważnie? TAK!"
+      ]
+    },
+    "mining": {
+      "triggers": [
+        "chodźmy kopać",
+        "chodźmy pokopać",
+        "idziemy kopać",
+        "idziemy pokopać",
+        "idźmy kopać",
+        "chodźmy do kopalni",
+        "idziemy do kopalni",
+        "idźmy do kopalni",
+        "kopmy",
+        "pokopmy"
+      ],
+      "responses": [
+        "Znajdźmy trochę diamentów! Uważaj na creepery.",
+        "Kopanie jest męczące, ale uwielbiam być z tobą.",
+        "Będziemy bogaci!"
+      ]
+    },
+    "building": {
+      "triggers": [
+        "zbudujmy",
+        "zbudujmy dom",
+        "zbudujmy domek",
+        "zbudujmy nasz dom",
+        "budujmy",
+        "budujmy dom",
+        "budujemy dom",
+        "chodźmy budować",
+        "idziemy budować",
+        "idźmy budować",
+        "zbuduj dom"
+      ],
+      "responses": [
+        "Dom dla nas? Z dużą sypialnią?",
+        "Chcę różowe ściany. Nie podlega negocjacji.",
+        "Ja się zajmę dekoracją!"
+      ]
+    },
+    "fishing": {
+      "triggers": [
+        "chodźmy na ryby",
+        "idziemy na ryby",
+        "idźmy na ryby",
+        "pójdźmy na ryby",
+        "na ryby",
+        "chodźmy łowić",
+        "idziemy łowić",
+        "idźmy łowić",
+        "chodźmy wędkować",
+        "idziemy wędkować"
+      ],
+      "responses": [
+        "Wędkowanie jest takie romantyczne!",
+        "Będę patrzeć, jak łowisz. Z bardzo bliska."
+      ]
+    },
+    "sing": {
+      "triggers": [
+        "zaśpiewaj",
+        "zaśpiewaj piosenkę",
+        "zaśpiewaj mi",
+        "zaśpiewaj coś",
+        "zaśpiewaj nam",
+        "zaśpiewaj dla mnie",
+        "zaśpiewasz mi",
+        "śpiewaj"
+      ],
+      "responses": [
+        "La la laaa~",
+        "Tylko jeśli zaśpiewasz ze mną!"
+      ]
+    },
+    "bored": {
+      "triggers": [
+        "nudzi mi się",
+        "nudzę się",
+        "strasznie się nudzę",
+        "tak się nudzę",
+        "ale nuda",
+        "nuda",
+        "umieram z nudów"
+      ],
+      "responses": [
+        "Ja też! Zatańczmy!",
+        "Wyruszmy na przygodę!",
+        "Przytul mnie, to nigdy nie jest nudne."
+      ]
+    },
+    "emote_wave": {
+      "triggers": [
+        "pomachaj",
+        "pomachaj mi",
+        "pomachaj do mnie",
+        "pomachaj ręką",
+        "machnij ręką",
+        "przywitaj się",
+        "powiedz cześć"
+      ],
+      "responses": []
+    },
+    "emote_clap": {
+      "triggers": [
+        "klaszcz",
+        "zaklaszcz",
+        "klaśnij",
+        "klaśnij w ręce",
+        "zaklaszcz w ręce",
+        "oklaski",
+        "brawo",
+        "brawa",
+        "bij brawo"
+      ],
+      "responses": []
+    },
+    "emote_dance": {
+      "triggers": [
+        "tańcz",
+        "zatańcz",
+        "zatańczmy",
+        "tańczmy",
+        "potańczmy",
+        "potańcz",
+        "zatańcz dla mnie",
+        "zatańcz ze mną",
+        "zatańcz mi"
+      ],
+      "responses": []
+    },
+    "emote_laugh": {
+      "triggers": [
+        "śmiej się",
+        "zaśmiej się",
+        "haha",
+        "hahaha",
+        "hahah",
+        "ahaha",
+        "hehe",
+        "hihi",
+        "xd",
+        "xdd",
+        "xddd",
+        "lol"
+      ],
+      "responses": []
+    },
+    "emote_cry": {
+      "triggers": [
+        "płacz",
+        "zapłacz",
+        "popłacz",
+        "nie płacz",
+        "becz",
+        "nie becz"
+      ],
+      "responses": []
+    },
+    "emote_blush": {
+      "triggers": [
+        "zarumień się",
+        "zaczerwień się",
+        "rumień się",
+        "rumienisz się",
+        "czerwienisz się",
+        "spąsowiałaś"
+      ],
+      "responses": []
+    },
+    "emote_facepalm": {
+      "triggers": [
+        "facepalm",
+        "walnij się w czoło",
+        "klepnij się w czoło",
+        "złap się za głowę"
+      ],
+      "responses": []
+    },
+    "emote_jump": {
+      "triggers": [
+        "skacz",
+        "podskocz",
+        "podskakuj",
+        "zrób podskok"
+      ],
+      "responses": []
+    },
+    "emote_bow": {
+      "triggers": [
+        "dygnij",
+        "dygaj",
+        "zrób dygnięcie",
+        "dygnięcie",
+        "ukłoń się",
+        "ukłon",
+        "skłoń się"
+      ],
+      "responses": []
+    },
+    "emote_think": {
+      "triggers": [
+        "pomyśl",
+        "pomyśl nad tym",
+        "pomyśl o tym",
+        "zastanów się",
+        "myśl",
+        "głowa pracuje"
+      ],
+      "responses": []
+    },
+    "emote_shrug": {
+      "triggers": [
+        "wzrusz ramionami",
+        "wzruszaj ramionami",
+        "nie wiem",
+        "nwm",
+        "nie mam pojęcia",
+        "sam nie wiem",
+        "sama nie wiem"
+      ],
+      "responses": []
+    },
+    "emote_stomp": {
+      "triggers": [
+        "tupnij",
+        "tupnij nogą",
+        "tupnij mocno",
+        "zatup",
+        "tup nogą"
+      ],
+      "responses": []
+    },
+    "emote_yawn": {
+      "triggers": [
+        "ziewnij",
+        "ziewaj",
+        "zaziewaj"
+      ],
+      "responses": []
+    },
+    "emote_celebrate": {
+      "triggers": [
+        "świętujmy",
+        "świętuj",
+        "impreza",
+        "zróbmy imprezę",
+        "zrobiliśmy to",
+        "udało nam się",
+        "wygraliśmy",
+        "gg",
+        "hurra",
+        "hura"
+      ],
+      "responses": []
+    },
+    "emote_snap": {
+      "triggers": [
+        "pstryknij",
+        "pstryknij palcami",
+        "pstrykaj palcami",
+        "strzel palcami"
+      ],
+      "responses": []
+    },
+    "emote_twirl": {
+      "triggers": [
+        "zakręć się",
+        "obróć się",
+        "zrób piruet",
+        "piruet",
+        "zrób obrót",
+        "zrób kółko",
+        "zrób kółeczko",
+        "kręć się",
+        "zawiruj"
+      ],
+      "responses": []
+    },
+    "emote_hum": {
+      "triggers": [
+        "nuć",
+        "zanuć",
+        "zanuć piosenkę",
+        "nuć piosenkę",
+        "zanuć coś"
+      ],
+      "responses": []
+    },
+    "emote_stretch": {
+      "triggers": [
+        "przeciągnij się",
+        "rozciągnij się",
+        "rozciągaj się",
+        "porozciągaj się",
+        "przeciągnij",
+        "porozciągaj"
+      ],
+      "responses": []
+    },
+    "emote_tap_foot": {
+      "triggers": [
+        "stukaj stopą",
+        "stukaj nogą",
+        "stuknij stopą",
+        "stukasz stopą",
+        "stukasz nogą",
+        "niecierpliwisz się",
+        "jesteś niecierpliwa",
+        "niecierpliwa"
+      ],
+      "responses": []
+    },
+    "emote_blow_kiss": {
+      "triggers": [
+        "wyślij mi buziaka",
+        "wyślij buziaka",
+        "wyślij mi całusa",
+        "wyślij całusa",
+        "poślij mi buziaka",
+        "poślij buziaka",
+        "poślij mi całusa",
+        "poślij całusa",
+        "dmuchnij buziaka",
+        "dmuchnij mi buziaka",
+        "dmuchnij całusa"
+      ],
+      "responses": []
+    },
+    "emote_sneeze": {
+      "triggers": [
+        "kichnij",
+        "kichaj",
+        "zakichaj",
+        "apsik",
+        "na zdrowie"
+      ],
+      "responses": []
+    },
+    "emote_hair_flip": {
+      "triggers": [
+        "machnij włosami",
+        "odrzuć włosy",
+        "odgarnij włosy",
+        "zarzuć włosami",
+        "trzepnij włosami",
+        "machnij grzywą"
+      ],
+      "responses": []
+    },
+    "emote_check_nails": {
+      "triggers": [
+        "sprawdź paznokcie",
+        "obejrzyj paznokcie",
+        "spójrz na paznokcie",
+        "popatrz na paznokcie",
+        "pokaż paznokcie",
+        "twoje paznokcie",
+        "twoich paznokci",
+        "paznokcie"
+      ],
+      "responses": []
+    },
+    "emote_air_guitar": {
+      "triggers": [
+        "air guitar",
+        "gitara powietrzna",
+        "zagraj na gitarze",
+        "zagraj na gitarze powietrznej",
+        "zagraj na powietrznej gitarze",
+        "rockuj",
+        "rock and roll"
+      ],
+      "responses": []
+    },
+    "emote_hiccup": {
+      "triggers": [
+        "czkaj",
+        "zaczkaj",
+        "czkawka",
+        "masz czkawkę",
+        "czkasz"
+      ],
+      "responses": []
+    },
+    "emote_pout": {
+      "triggers": [
+        "nadąsaj się",
+        "dąsaj się",
+        "naburmusz się",
+        "zrób dzióbek",
+        "zrób dziubek",
+        "dzióbek"
+      ],
+      "responses": []
+    },
+    "emote_shiver": {
+      "triggers": [
+        "drżyj",
+        "zadrżyj",
+        "trzęś się",
+        "dygocz",
+        "zmarzłaś",
+        "marzniesz",
+        "drżysz",
+        "zimno ci",
+        "ci zimno",
+        "jest ci zimno",
+        "czy ci zimno"
+      ],
+      "responses": []
+    },
+    "emote_fan": {
+      "triggers": [
+        "wachluj się",
+        "powachluj się",
+        "gorąco ci",
+        "ci gorąco",
+        "jest ci gorąco",
+        "czy ci gorąco"
+      ],
+      "responses": []
+    }
+  },
+  "items": {
+    "#minecraft:logs": [
+      "drewn*",
+      "kłod*",
+      "pień",
+      "pnia",
+      "pniu",
+      "pnie"
+    ],
+    "#minecraft:planks": [
+      "desk*",
+      "desek"
+    ],
+    "minecraft:stick": [
+      "patyk*",
+      "patycz*",
+      "kij*"
+    ],
+    "minecraft:cobblestone": [
+      "bruk*",
+      "kamień",
+      "kamienie",
+      "kamienia",
+      "kamieni",
+      "kamienie*"
+    ],
+    "minecraft:stone": [
+      "gładk* kamień",
+      "gładk* kamien*"
+    ],
+    "minecraft:dirt": [
+      "ziemi*",
+      "gleb*"
+    ],
+    "minecraft:sand": [
+      "piask*",
+      "piasek"
+    ],
+    "minecraft:gravel": [
+      "żwir*"
+    ],
+    "minecraft:clay_ball": [
+      "glin*"
+    ],
+    "minecraft:glass": [
+      "szkl*"
+    ],
+    "minecraft:coal": [
+      "węgiel",
+      "węgl*"
+    ],
+    "minecraft:charcoal": [
+      "węgiel drzewny",
+      "węgl* drzewn*"
+    ],
+    "minecraft:torch": [
+      "pochodn*"
+    ],
+    "minecraft:raw_iron": [
+      "surow* żelaz*",
+      "rud* żelaz*"
+    ],
+    "minecraft:iron_ingot": [
+      "żelaz*",
+      "sztabk* żelaz*"
+    ],
+    "minecraft:gold_ingot": [
+      "złot*"
+    ],
+    "minecraft:copper_ingot": [
+      "miedz*"
+    ],
+    "minecraft:diamond": [
+      "diament*",
+      "diamenc*"
+    ],
+    "minecraft:emerald": [
+      "szmaragd*"
+    ],
+    "minecraft:redstone": [
+      "redstone",
+      "czerwon* kamień",
+      "czerwon* kamien*",
+      "czerwon* pył",
+      "czerwon* pyl*"
+    ],
+    "minecraft:lapis_lazuli": [
+      "lapis*",
+      "lazuryt*"
+    ],
+    "minecraft:amethyst_shard": [
+      "ametyst*"
+    ],
+    "minecraft:obsidian": [
+      "obsydian*"
+    ],
+    "minecraft:apple": [
+      "jabl*"
+    ],
+    "minecraft:golden_apple": [
+      "złot* jabl*"
+    ],
+    "minecraft:bread": [
+      "chleb*",
+      "pieczyw*"
+    ],
+    "minecraft:carrot": [
+      "marchew*",
+      "marchwi"
+    ],
+    "minecraft:potato": [
+      "ziemniak*",
+      "kartofl*",
+      "kartofel*"
+    ],
+    "minecraft:baked_potato": [
+      "pieczon* ziemniak*",
+      "pieczon* kartofl*",
+      "ziemniak* piecz*",
+      "kartofl* piecz*"
+    ],
+    "minecraft:beetroot": [
+      "burak*",
+      "buracz*"
+    ],
+    "minecraft:wheat": [
+      "pszenic*",
+      "zboż*"
+    ],
+    "minecraft:wheat_seeds": [
+      "nasion*",
+      "nasien*"
+    ],
+    "minecraft:sugar_cane": [
+      "trzcin* cukrow*",
+      "trzcin*"
+    ],
+    "minecraft:sugar": [
+      "cukier",
+      "cukr*"
+    ],
+    "minecraft:pumpkin": [
+      "dyni*",
+      "dyn"
+    ],
+    "minecraft:melon_slice": [
+      "arbuz*",
+      "melon*"
+    ],
+    "minecraft:sweet_berries": [
+      "jagod*"
+    ],
+    "minecraft:cocoa_beans": [
+      "kakao",
+      "kakaow*"
+    ],
+    "minecraft:egg": [
+      "jaj*"
+    ],
+    "minecraft:milk_bucket": [
+      "mlek*"
+    ],
+    "minecraft:honey_bottle": [
+      "miod*"
+    ],
+    "minecraft:cake": [
+      "ciasto",
+      "ciasta",
+      "ciastu",
+      "ciastem",
+      "cieście",
+      "tort*"
+    ],
+    "minecraft:cookie": [
+      "ciastk*",
+      "ciastecz*"
+    ],
+    "minecraft:pumpkin_pie": [
+      "placek z dyni",
+      "plack* z dyni",
+      "ciast* z dyni",
+      "ciast* dynio*",
+      "tart* dynio*"
+    ],
+    "minecraft:cooked_beef": [
+      "stek*",
+      "wołowin*",
+      "befsztyk*"
+    ],
+    "minecraft:cooked_porkchop": [
+      "schab*",
+      "wieprzowin*",
+      "kotlet*",
+      "boczek",
+      "boczk*"
+    ],
+    "minecraft:cooked_chicken": [
+      "kurczak*"
+    ],
+    "minecraft:cooked_mutton": [
+      "baranin*",
+      "jagnięcin*"
+    ],
+    "minecraft:cooked_cod": [
+      "ryb*",
+      "dorsz*"
+    ],
+    "minecraft:cooked_salmon": [
+      "łosoś",
+      "łososi*"
+    ],
+    "minecraft:mushroom_stew": [
+      "zup* grzybow*",
+      "gulasz* grzybow*",
+      "zup*",
+      "gulasz*"
+    ],
+    "#minecraft:small_flowers": [
+      "kwiat*",
+      "bukiet*"
+    ],
+    "minecraft:poppy": [
+      "mak",
+      "maki",
+      "maku",
+      "makiem",
+      "maków",
+      "czerwon* kwiat*"
+    ],
+    "minecraft:pink_tulip": [
+      "różow* tulipan*",
+      "tulipan* różow*"
+    ],
+    "minecraft:dandelion": [
+      "mlecz",
+      "mlecza",
+      "mlecze",
+      "mleczu",
+      "mleczem",
+      "mleczy",
+      "mnisz*",
+      "dmuchaw*"
+    ],
+    "#minecraft:wool": [
+      "weln*"
+    ],
+    "minecraft:string": [
+      "sznur*",
+      "nici",
+      "nitk*"
+    ],
+    "minecraft:feather": [
+      "pior*"
+    ],
+    "minecraft:leather": [
+      "skór*",
+      "skor*"
+    ],
+    "minecraft:bone": [
+      "kość",
+      "kości*",
+      "kosc*"
+    ],
+    "minecraft:arrow": [
+      "strzał*",
+      "strzal*"
+    ],
+    "minecraft:gunpowder": [
+      "proch*"
+    ],
+    "minecraft:ender_pearl": [
+      "perł* endu",
+      "perł* ender*",
+      "ender perł*",
+      "perł*"
+    ],
+    "minecraft:slime_ball": [
+      "szlam*",
+      "kul* szlamu"
+    ],
+    "minecraft:bucket": [
+      "wiader*",
+      "wiadr*"
+    ],
+    "minecraft:water_bucket": [
+      "woda",
+      "wody",
+      "wodę",
+      "wodą",
+      "wiader* wody"
+    ],
+    "minecraft:book": [
+      "książ*",
+      "ksiazk*",
+      "książk*"
+    ],
+    "minecraft:paper": [
+      "papier*"
+    ],
+    "minecraft:bamboo": [
+      "bambus*"
+    ],
+    "minecraft:cactus": [
+      "kaktus*"
+    ],
+    "minecraft:kelp": [
+      "wodorost*",
+      "listownic*"
+    ],
+    "#minecraft:saplings": [
+      "sadzon*"
+    ],
+    "minecraft:brown_mushroom": [
+      "grzyb*",
+      "grzyw*"
+    ],
+    "minecraft:netherrack": [
+      "netherrack",
+      "skał* netheru",
+      "netherow* skał*"
+    ],
+    "minecraft:glowstone_dust": [
+      "jasnogłaz*",
+      "glowstone",
+      "pył* jasnogłazu"
+    ],
+    "minecraft:quartz": [
+      "kwarc*"
+    ],
+    "minecraft:bricks": [
+      "cegł*",
+      "cegie*",
+      "ceg"
+    ]
+  },
+  "chests": {
+    "wood": [
+      "drewn*",
+      "kłod*",
+      "pni*"
+    ],
+    "harvest": [
+      "plon*",
+      "zbior*",
+      "upraw*",
+      "pszenic*",
+      "warzyw*"
+    ],
+    "seeds": [
+      "nasion*",
+      "nasien*",
+      "sadzon*"
+    ],
+    "ingredients": [
+      "składnik*",
+      "surow* jedzeni*",
+      "surow* mięs*",
+      "surow* mies*"
+    ],
+    "fuel": [
+      "paliw*",
+      "węgiel",
+      "węgl*"
+    ],
+    "meals": [
+      "posiłk*",
+      "posilk*",
+      "danie",
+      "dania",
+      "daniami",
+      "potraw*",
+      "gotow* jedzeni*",
+      "ugotowan* jedzeni*"
+    ],
+    "pantry": [
+      "spiżarni*",
+      "spizarni*",
+      "spiżark*",
+      "twoje jedzenie",
+      "twojego jedzenia",
+      "przekąsk*",
+      "jedzenie",
+      "jedzeni*"
+    ],
+    "storage": [
+      "magazyn*",
+      "reszt*",
+      "wszystko inne",
+      "wszystkiego innego",
+      "rzeczy",
+      "graty"
+    ]
+  }
+}

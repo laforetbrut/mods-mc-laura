@@ -1,0 +1,23 @@
+{
+  "parent": "lauramod:laura/feed",
+  "display": {
+    "icon": {
+      "id": "minecraft:sweet_berries"
+    },
+    "title": {
+      "translate": "advancements.lauramod.steal_food.title"
+    },
+    "description": {
+      "translate": "advancements.lauramod.steal_food.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

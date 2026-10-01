@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": "minecraft:pink_tulip",
+  "result": {
+    "id": "lauramod:laura_heart",
+    "count": 1
+  },
+  "experience": 0.7,
+  "cookingtime": 200
+}

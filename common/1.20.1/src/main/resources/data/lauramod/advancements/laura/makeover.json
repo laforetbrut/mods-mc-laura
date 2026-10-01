@@ -1,0 +1,23 @@
+{
+  "parent": "lauramod:laura/new_look",
+  "display": {
+    "icon": {
+      "item": "minecraft:armor_stand"
+    },
+    "title": {
+      "translate": "advancements.lauramod.makeover.title"
+    },
+    "description": {
+      "translate": "advancements.lauramod.makeover.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

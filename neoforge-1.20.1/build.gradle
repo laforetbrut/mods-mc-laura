@@ -1,0 +1,230 @@
+plugins {
+    id 'java-library'
+    id 'idea'
+    id 'net.neoforged.moddev.legacyforge' version '2.0.147'
+}
+
+version = mod_version
+group = mod_group_id
+
+base {
+    archivesName = "${mod_id}-neoforge-${minecraft_version}"
+}
+
+// Minecraft 1.20.1 ships Java 17 to players.
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+// Loader-independent code for this Minecraft version lives in ../common on the main branch.
+// On the per-target branches it is merged into src/main, so this block does nothing there.
+def commonDir = file("../common/${minecraft_version}/src/main")
+if (commonDir.isDirectory()) {
+    sourceSets.main.java.srcDir(new File(commonDir, 'java'))
+    sourceSets.main.resources.srcDir(new File(commonDir, 'resources'))
+}
+
+sourceSets.main.resources {
+    exclude('**/*.bbmodel.license')
+}
+
+def withCompatMods = providers.gradleProperty('withCompatMods').isPresent()
+
+legacyForge {
+    // NeoForge for Minecraft 1.20.1 is the 47.1 fork of Forge (net.neoforged:forge), built here
+    // with the legacy plugin of ModDevGradle.
+    enable {
+        neoForgeVersion = "${project.minecraft_version}-${project.neo_version}"
+    }
+
+    parchment {
+        mappingsVersion = project.parchment_mappings_version
+        minecraftVersion = project.parchment_minecraft_version
+    }
+
+    runs {
+        client {
+            client()
+        }
+        server {
+            server()
+            programArgument '--nogui'
+        }
+        // Client that opens every screen of the mod in the quick play world laura_test and saves screenshots.
+        clienttest {
+            client()
+            gameDirectory = project.file('run-clienttest')
+            programArguments.addAll('--quickPlaySingleplayer', 'laura_test')
+            systemProperty 'lauramod.clienttest', 'true'
+        }
+        // Dedicated server that runs the mod's self tests, writes lauramod-selftest.json and stops.
+        selftest {
+            server()
+            programArgument '--nogui'
+            gameDirectory = project.file('run-selftest')
+            systemProperty 'lauramod.selftest', 'true'
+            // -PselftestOnly=name runs only the tests whose name contains it.
+            def only = providers.gradleProperty('selftestOnly')
+            if (only.isPresent()) {
+                systemProperty 'lauramod.selftest.only', only.get()
+            }
+            if (withCompatMods) {
+                // A world remembers the registries of the mods it was created with: one world per mod set.
+                programArguments.addAll('--world', 'world-compat')
+            }
+        }
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            logLevel = org.slf4j.event.Level.INFO
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+        }
+    }
+}
+
+repositories {
+    maven {
+        name = 'ModMaven (Applied Energistics 2 API)'
+        url = 'https://modmaven.dev/'
+        content {
+            includeGroup 'appeng'
+        }
+    }
+    maven {
+        name = 'Modrinth (compat test mods)'
+        url = 'https://api.modrinth.com/maven'
+        content {
+            includeGroup 'maven.modrinth'
+        }
+    }
+    maven {
+        name = 'Latvian (KubeJS)'
+        url = 'https://maven.latvian.dev/releases'
+        content {
+            includeGroup 'dev.latvian.mods'
+        }
+    }
+    maven {
+        name = 'Architectury (KubeJS dependency)'
+        url = 'https://maven.architectury.dev/'
+        content {
+            includeGroup 'dev.architectury'
+        }
+    }
+    maven {
+        name = 'Illusive Soulworks (Curios API)'
+        url = 'https://maven.theillusivec4.top/'
+        content {
+            includeGroup 'top.theillusivec4.curios'
+        }
+    }
+}
+
+dependencies {
+    // Optional integrations: compiled against their public APIs, never bundled in the jar.
+    // These mods publish one jar for Forge and NeoForge 1.20.1. The mod* configurations remap
+    // it from SRG names to the development mappings and never pull transitive dependencies.
+    modCompileOnly "appeng:appliedenergistics2-forge:${ae2_version}:api"
+    modCompileOnly "top.theillusivec4.curios:curios-forge:${curios_version}:api"
+    modCompileOnly "maven.modrinth:farmers-delight:${farmers_delight_version}"
+    modCompileOnly "dev.latvian.mods:kubejs-forge:${kubejs_version}"
+    modCompileOnly "dev.latvian.mods:rhino-forge:${rhino_version}"
+    // Mods loaded only in dev runs started with -PwithCompatMods, to test the integrations for real.
+    if (withCompatMods) {
+        modRuntimeOnly "maven.modrinth:farmers-delight:${farmers_delight_version}"
+        modRuntimeOnly "dev.latvian.mods:kubejs-forge:${kubejs_version}"
+        modRuntimeOnly "dev.latvian.mods:rhino-forge:${rhino_version}"
+        modRuntimeOnly "dev.architectury:architectury-forge:${architectury_version}"
+    }
+}
+
+var generateModMetadata = tasks.register('generateModMetadata', ProcessResources) {
+    var replaceProperties = [
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            neo_version            : neo_version,
+            neo_version_range      : neo_version_range,
+            loader_version_range   : loader_version_range,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version,
+            mod_authors            : mod_authors,
+            mod_description        : mod_description,
+    ]
+    inputs.properties replaceProperties
+    expand replaceProperties
+    from 'src/main/templates'
+    into 'build/generated/sources/modMetadata'
+}
+sourceSets.main.resources.srcDir generateModMetadata
+legacyForge.ideSyncTask generateModMetadata
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-Xlint:deprecation'
+}
+
+// The license file sits at the repository root on main and at the project root on a target branch.
+def licenseFile = commonDir.isDirectory() ? file('../LICENSE') : file('LICENSE')
+def licenseName = "LICENSE_${mod_id}"
+// NeoForge 47.1 runs on SRG names outside of development: the plugin remaps this jar with its
+// reobfJar task, which writes the jar to release in build/libs (the plain one goes to build/devlibs).
+tasks.named('jar', Jar).configure {
+    from(licenseFile) {
+        rename { licenseName }
+    }
+    manifest {
+        attributes([
+                'Specification-Title'   : mod_id,
+                'Specification-Vendor'  : mod_authors,
+                'Specification-Version' : '1',
+                'Implementation-Title'  : mod_name,
+                'Implementation-Version': mod_version,
+                'Implementation-Vendor' : mod_authors
+        ])
+    }
+}
+
+// The self test server runs in run-selftest, which is not in git: this task writes what it needs.
+// A Minecraft server only starts once its EULA (https://aka.ms/MinecraftEULA) is accepted: pass
+// -PacceptEula, or create run-selftest/eula.txt with eula=true yourself.
+tasks.register('prepareSelftest') {
+    def dir = layout.projectDirectory.dir('run-selftest').asFile
+    def port = providers.gradleProperty('selftest_port').get()
+    def acceptEula = providers.gradleProperty('acceptEula').isPresent()
+    // Scripts of the optional mods loaded with -PwithCompatMods (the KubeJS test script).
+    def fixtures = layout.projectDirectory.dir('src/selftest').asFile
+    def compatMods = withCompatMods
+    doLast {
+        dir.mkdirs()
+        def eula = new File(dir, 'eula.txt')
+        if (acceptEula) {
+            eula.text = 'eula=true\n'
+        } else if (!eula.isFile() || !eula.text.contains('eula=true')) {
+            throw new GradleException('The self test starts a Minecraft server. Read https://aka.ms/MinecraftEULA, then run again with -PacceptEula (or create run-selftest/eula.txt with eula=true).')
+        }
+        def properties = new File(dir, 'server.properties')
+        if (!properties.isFile()) {
+            properties.text = ['online-mode=false', 'level-type=minecraft\\:flat', 'spawn-protection=0', 'max-tick-time=-1',
+                               "server-port=${port}", "query.port=${port}"].join('\n') + '\n'
+        }
+        if (compatMods && fixtures.isDirectory()) {
+            fixtures.eachFileRecurse(groovy.io.FileType.FILES) { source ->
+                def target = new File(dir, fixtures.toPath().relativize(source.toPath()).toString())
+                target.parentFile.mkdirs()
+                target.bytes = source.bytes
+            }
+        }
+    }
+}
+tasks.matching { it.name == 'runSelftest' }.configureEach { dependsOn 'prepareSelftest' }
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}

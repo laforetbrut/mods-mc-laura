@@ -1,0 +1,23 @@
+{
+  "parent": "lauramod:laura/days_100",
+  "display": {
+    "icon": {
+      "item": "minecraft:enchanted_golden_apple"
+    },
+    "title": {
+      "translate": "advancements.lauramod.days_365.title"
+    },
+    "description": {
+      "translate": "advancements.lauramod.days_365.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

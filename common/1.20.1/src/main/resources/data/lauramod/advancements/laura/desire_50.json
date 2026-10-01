@@ -1,0 +1,23 @@
+{
+  "parent": "lauramod:laura/desire_10",
+  "display": {
+    "icon": {
+      "item": "minecraft:nether_star"
+    },
+    "title": {
+      "translate": "advancements.lauramod.desire_50.title"
+    },
+    "description": {
+      "translate": "advancements.lauramod.desire_50.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

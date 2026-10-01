@@ -1,0 +1,23 @@
+{
+  "parent": "lauramod:laura/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:firework_star"
+    },
+    "title": {
+      "translate": "advancements.lauramod.desire_fulfilled.title"
+    },
+    "description": {
+      "translate": "advancements.lauramod.desire_fulfilled.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

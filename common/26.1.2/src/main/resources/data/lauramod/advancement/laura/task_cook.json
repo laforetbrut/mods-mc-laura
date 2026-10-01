@@ -1,0 +1,23 @@
+{
+  "parent": "lauramod:laura/job",
+  "display": {
+    "icon": {
+      "id": "minecraft:smoker"
+    },
+    "title": {
+      "translate": "advancements.lauramod.task_cook.title"
+    },
+    "description": {
+      "translate": "advancements.lauramod.task_cook.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

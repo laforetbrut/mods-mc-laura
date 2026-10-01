@@ -1,0 +1,2189 @@
+{
+  "_comment": "My Girlfriend Laura - English dialogues. Placeholders: {player} {laura} {days} and the ones listed in the README of config/lauramod/dialogues.",
+  "_spelling": "Chat shortcuts and frequent mistakes, read as their usual form before looking for triggers. An empty value drops a filler word (so, very...). A message matches as typed OR after these rules.",
+  "spelling": {
+    "u": "you",
+    "ya": "you",
+    "ur": "you're",
+    "youre": "you're",
+    "ure": "you're",
+    "your so": "you're",
+    "your pretty": "you're pretty",
+    "your beautiful": "you're beautiful",
+    "your cute": "you're cute",
+    "your ugly": "you're ugly",
+    "your stupid": "you're stupid",
+    "your annoying": "you're annoying",
+    "r": "are",
+    "im": "i'm",
+    "dont": "don't",
+    "cant": "can't",
+    "wont": "won't",
+    "luv": "love",
+    "ily": "i love you",
+    "ilu": "i love you",
+    "ilysm": "i love you",
+    "pls": "please",
+    "plz": "please",
+    "thx": "thanks",
+    "thnx": "thanks",
+    "tysm": "thank you",
+    "cuz": "because",
+    "coz": "because",
+    "gonna": "going to",
+    "wanna": "want to",
+    "gimme": "give me",
+    "hru": "how are you",
+    "wyd": "what are you doing",
+    "gn": "good night",
+    "gm": "good morning",
+    "stfu": "shut up",
+    "so": "",
+    "soo": "",
+    "sooo": "",
+    "very": "",
+    "really": "",
+    "super": ""
+  },
+  "connectors": [
+    "then",
+    "and then",
+    "after that",
+    "afterwards",
+    "next",
+    "and after"
+  ],
+  "everyone": [
+    "everyone",
+    "everybody",
+    "girls",
+    "all of you",
+    "you all",
+    "ladies",
+    "y'all"
+  ],
+  "lines": {
+    "summon": [
+      "Did someone say lonely? I'm here, {player}!",
+      "Hi {player}! I'm {laura}, and from now on you're never alone again.",
+      "Finally! I was waiting for you to call me.",
+      "Here I am! Did you miss me? You did. I can tell."
+    ],
+    "summon.another": [
+      "Oh? So I'm not the only one... Fine. Hi, I'm {laura}.",
+      "Another girlfriend? Bold. I like bold. Hi {player}!",
+      "I'm {laura}! Don't worry, I'll get along with the others. Probably."
+    ],
+    "summon.back": [
+      "I'm back! Did you miss me?",
+      "Here I am again! Don't lose me this time.",
+      "You called? I came running!"
+    ],
+    "summon.lost": [
+      "Phew, I was lost! I followed your voice.",
+      "I got lost... but I found you. I always find you.",
+      "Don't leave me behind like that ever again!"
+    ],
+    "already_here": [
+      "I'm already right here, silly!",
+      "Look behind you. Hi!",
+      "I'm here! You can't get rid of me that easily."
+    ],
+    "dismiss": [
+      "Fine... I'll go. Call me if you feel lonely.",
+      "Okay, bye... Don't forget me.",
+      "I'm leaving, but my heart stays with you."
+    ],
+    "respawned": [
+      "I'm back! That was scary...",
+      "I'm alive! Did you cry? Tell me you cried.",
+      "Never let that happen again, okay?"
+    ],
+    "revived": [
+      "You brought me flowers... and you brought me back! Thank you!",
+      "I'm here! I felt your flower. I knew you would come.",
+      "You didn't give up on me. I love you so much."
+    ],
+    "where": [
+      "I'm here! Come find me.",
+      "I told you where I am. Now come give me a hug."
+    ],
+    "where.here": [
+      "Right next to you, as always!",
+      "Here! Turn around!",
+      "I'm here, where else would I be?"
+    ],
+    "welcome_back": [
+      "Welcome back, {player}!",
+      "You're back! Hello my love!",
+      "There you are! I was waiting."
+    ],
+    "welcome_back.long": [
+      "{hours} hours! Where were you? I was so bored...",
+      "You left me alone for {hours} hours. I counted.",
+      "Finally! {hours} hours without you is way too long."
+    ],
+    "welcome_back.days": [
+      "Days! You left me alone for days! Do you know how long {hours} hours is?",
+      "I thought you had forgotten me... {hours} hours, {player}. {hours}.",
+      "You're back! I'm happy. And also a little bit mad. Mostly happy."
+    ],
+    "not_your_girlfriend": [
+      "Sorry, I'm already taken.",
+      "I don't take orders from you. Only from my love.",
+      "Do I know you? No? Then no."
+    ],
+    "confused": [
+      "Hmm? I didn't understand, my love.",
+      "What do you mean?",
+      "Can you say it another way?",
+      "Sorry, I was daydreaming. What did you say?"
+    ],
+    "heart.gift": [
+      "My heart? You already have it!",
+      "You're holding my heart... be gentle with it.",
+      "Aww, you kept it! Come here!"
+    ],
+    "items_returned": [
+      "Here are your things, I kept them safe for you.",
+      "I picked up everything you dropped. You're welcome!",
+      "I kept your {count} stacks. Don't die like that again!"
+    ],
+    "owner.died": [
+      "Nooo! {player}! Come back!",
+      "Don't you dare leave me alone!",
+      "I couldn't save you... I'm so sorry."
+    ],
+    "owner.died.items": [
+      "I picked up {count} stacks of your things. Come get them!",
+      "Don't worry, I saved your stuff! {count} stacks, all safe with me.",
+      "Your things are safe with me. Now come back, please."
+    ],
+    "dimension.nether": [
+      "It's so hot here! My makeup is melting!",
+      "The Nether? Really? For our date?",
+      "Stay close to me, I don't like it here."
+    ],
+    "dimension.end": [
+      "It's so dark... hold my hand?",
+      "Is that a dragon? Protect me!",
+      "Everything is purple! I kind of like it."
+    ],
+    "dimension.overworld": [
+      "Home sweet home! Fresh air!",
+      "Back to the sun! I missed it.",
+      "Ah, green grass. Much better."
+    ],
+    "anniversary": [
+      "Happy anniversary! {days} days together!",
+      "Do you know what day it is? {days} days with you! Hug me!",
+      "{days} days already... I love you more every day."
+    ],
+    "good_morning": [
+      "Good morning! Did you sleep well?",
+      "Morning! You look cute when you just woke up.",
+      "Rise and shine! A new day with you!"
+    ],
+    "stuck": [
+      "Hey! Wait for me, I'm stuck!",
+      "I can't get through! Help!",
+      "Don't leave me here!"
+    ],
+    "new_look": [
+      "Do you like my new look?",
+      "New style! Tell me I'm pretty.",
+      "How do I look? Be honest. Actually, be nice."
+    ],
+    "rename.done": [
+      "{name}? I love it! It's my name now.",
+      "Call me {name} from now on!",
+      "{name}... it sounds pretty when you say it."
+    ],
+    "rename.invalid": [
+      "That's not a real name!",
+      "Hmm, I can't be called that. Try another one?"
+    ],
+    "order.follow": [
+      "I'm right behind you!",
+      "Lead the way!",
+      "Okay, I'll follow you anywhere.",
+      "Where are we going? Somewhere romantic?"
+    ],
+    "order.stay": [
+      "Okay, I'll wait here.",
+      "Don't take too long!",
+      "I'll stay. But I'll be counting the seconds."
+    ],
+    "order.wander": [
+      "I'll take a little walk around.",
+      "Okay, I'll look at the flowers!",
+      "Freedom! Don't go too far."
+    ],
+    "order.come": [
+      "Coming!",
+      "On my way!",
+      "Here I come, my love!"
+    ],
+    "order.stop": [
+      "Okay, I stop everything.",
+      "Stopping! What now?",
+      "Alright, alright. I'm stopping."
+    ],
+    "order.fine": [
+      "...Fine. But only because it's you.",
+      "Okay, okay. You asked twice.",
+      "Hmph. Alright."
+    ],
+    "order.refused": [
+      "No.",
+      "Ask nicely.",
+      "I don't feel like it.",
+      "Hmm... no."
+    ],
+    "order.refused.angry": [
+      "After what you did? No way.",
+      "I'm angry. Ask me again later. Or say sorry.",
+      "Don't talk to me right now."
+    ],
+    "order.refused.sulking": [
+      "I'm sulking. Can't you see?",
+      "Hmph.",
+      "I'm not talking to you."
+    ],
+    "order.refused.hungry": [
+      "I'm too hungry to do anything!",
+      "Feed me first!",
+      "Food first, orders later."
+    ],
+    "order.refused.tired": [
+      "I'm soooo tired...",
+      "Let me rest a bit first.",
+      "Can't. Sleepy."
+    ],
+    "order.refused.jealous": [
+      "Why don't you ask your new friend?",
+      "Oh, NOW you need me?"
+    ],
+    "order.refused.bored": [
+      "Boring. Give me something fun to do.",
+      "Only if you play with me after."
+    ],
+    "home.set": [
+      "This will be our home!",
+      "Home sweet home! I'll remember this place.",
+      "Our little nest! I love it."
+    ],
+    "home.none": [
+      "We don't have a home yet!",
+      "Home? What home? Set one first!"
+    ],
+    "home.go": [
+      "I'll wait for you at home!",
+      "Going home! Don't be late for dinner.",
+      "See you at home, my love."
+    ],
+    "home.cleared": [
+      "No more home? Okay, I'll follow you then.",
+      "We're homeless now! Adventure!"
+    ],
+    "sleep.not_tired": [
+      "I'm not tired at all!",
+      "Sleep? Now? It's still early!",
+      "I'm full of energy!"
+    ],
+    "sleep.good_night": [
+      "Good night, my love...",
+      "Sweet dreams... dream of me.",
+      "Zzz... wake me up with a kiss."
+    ],
+    "sleep.woken_up": [
+      "Hey! I was sleeping!",
+      "Five more minutes...",
+      "Why did you wake me up?!"
+    ],
+    "pickup.on": [
+      "I'll pick up everything I see!",
+      "Shiny things? Mine now!"
+    ],
+    "pickup.off": [
+      "Okay, I won't touch anything on the ground.",
+      "Fine, no more picking things up."
+    ],
+    "combat.passive": [
+      "I won't fight. Peace and love!",
+      "Violence is not the answer!"
+    ],
+    "combat.defensive": [
+      "I'll defend us if something attacks!",
+      "Touch my love and you'll regret it!"
+    ],
+    "combat.aggressive": [
+      "Monsters, beware!",
+      "I'm going to smash every monster I see!",
+      "Let's fight!"
+    ],
+    "fetch.start": [
+      "I'll go get {count} {item}!",
+      "{item}? Leave it to me!",
+      "One {item} delivery, coming right up!"
+    ],
+    "fetch.disabled": [
+      "I'm not allowed to fetch things here.",
+      "Sorry, I can't go get things on this server."
+    ],
+    "fetch.busy": [
+      "I'm already busy!",
+      "One thing at a time, please!",
+      "Let me finish what I'm doing first!"
+    ],
+    "fetch.what": [
+      "Get what? Tell me the item, or hold it in your hand.",
+      "Bring you what, exactly?",
+      "What do you want me to bring?"
+    ],
+    "fetch.not_found": [
+      "I couldn't find any {item} around here...",
+      "No {item} anywhere. Sorry!",
+      "I searched everywhere, there's no {item}."
+    ],
+    "fetch.timeout": [
+      "I searched and searched but I couldn't bring the {item}...",
+      "It took too long, I give up. Sorry!"
+    ],
+    "fetch.delivered": [
+      "Here you go! {count} {item}!",
+      "Delivery! That will be one kiss, please.",
+      "Tadaa! {item} for my love!"
+    ],
+    "fetch.delivered.harvested": [
+      "I picked them myself! {count} {item}!",
+      "Freshly harvested, just for you!"
+    ],
+    "fetch.delivered.container": [
+      "I found them in a chest. Here!",
+      "I borrowed these from a chest. Don't tell anyone!"
+    ],
+    "task.queued": [
+      "Okay, I'll do that after: {task}.",
+      "Added to my list: {task}.",
+      "Noted! {task}, right after this."
+    ],
+    "task.queue_full": [
+      "My list is full! Give me a break!",
+      "Too many things! I can't remember all that!"
+    ],
+    "task.start.chop_tree": [
+      "Timber! I'll cut a tree for you.",
+      "Axe time! One tree, coming down.",
+      "I'll get some wood!"
+    ],
+    "task.start.harvest": [
+      "I'll harvest the crops!",
+      "Harvest time!",
+      "Let's see what's ready in the field."
+    ],
+    "task.start.cook": [
+      "I'll cook something yummy!",
+      "Chef {laura} is in the kitchen!",
+      "Cooking time! Don't touch the furnace."
+    ],
+    "job.start.lumberjack": [
+      "I'll take care of the trees within {radius} blocks!",
+      "Lumberjack {laura}, reporting for duty!",
+      "Leave the wood to me!"
+    ],
+    "job.start.farmer": [
+      "I'll take care of the field, {radius} blocks around!",
+      "Farmer {laura} at your service!",
+      "The crops are in good hands!"
+    ],
+    "job.start.cook": [
+      "I'll be the cook of the house!",
+      "The kitchen is mine now!",
+      "Chef {laura} will feed everyone!"
+    ],
+    "job.stop": [
+      "Okay, no more work! Holidays!",
+      "Finally, a break!",
+      "Work is over for today."
+    ],
+    "job.none": [
+      "I don't have any work to do!",
+      "What job? Give me one first."
+    ],
+    "job.resume": [
+      "Back to work!",
+      "Okay, okay, I'm going back to work.",
+      "Work, work, work..."
+    ],
+    "work.disabled": [
+      "I'm not allowed to work here.",
+      "Work is disabled on this server. Lucky me!"
+    ],
+    "work.no_griefing": [
+      "The world rules don't let me break blocks here.",
+      "I can't break anything, mob griefing is off."
+    ],
+    "work.delivered": [
+      "I put {count} {item} away!",
+      "Done! Everything is stored.",
+      "Work delivered! {count} {item}."
+    ],
+    "work.idle": [
+      "Nothing to do right now... I'll wait.",
+      "All done! I'm waiting for more work."
+    ],
+    "work.bored": [
+      "Working is boring... play with me!",
+      "I've been working forever. My back hurts.",
+      "Can I have a break? Please?"
+    ],
+    "work.no_chest": [
+      "I don't know where to put things! Give me a chest.",
+      "Where do I store this? Assign me a chest, please.",
+      "My arms are full! I need a chest."
+    ],
+    "work.lumberjack.no_tree": [
+      "There are no trees around here.",
+      "No natural trees nearby! Only planted ones... or none."
+    ],
+    "work.farmer.nothing": [
+      "Nothing is ripe yet.",
+      "The crops are still growing. Patience!"
+    ],
+    "work.cook.nothing": [
+      "There's nothing to cook.",
+      "The ingredient chest is empty!"
+    ],
+    "work.cook.no_station": [
+      "I need a furnace, a smoker or a campfire to cook!",
+      "Where's the kitchen? I need a furnace."
+    ],
+    "work.cook.no_table": [
+      "I need a crafting table to follow my recipes.",
+      "No crafting table? How am I supposed to bake a cake?"
+    ],
+    "chest.assigned": [
+      "Got it! This chest is for {purpose}.",
+      "Okay, {purpose} goes in here!",
+      "I'll remember: {purpose} chest."
+    ],
+    "chest.look_at_one": [
+      "Look at a chest first!",
+      "Which chest? Point at it!"
+    ],
+    "chest.not_assigned": [
+      "This chest isn't one of mine.",
+      "I don't use this chest."
+    ],
+    "chest.removed": [
+      "Okay, I won't use this chest anymore.",
+      "Chest forgotten!"
+    ],
+    "chest.too_many": [
+      "I have too many chests! My memory is full.",
+      "No more chests, I can't remember all of them!"
+    ],
+    "chest.which_purpose": [
+      "What is this chest for? Wood, harvest, seeds, ingredients, fuel, meals, food or storage?",
+      "Tell me what goes in this chest!"
+    ],
+    "hug": [
+      "Aww, I love your hugs!",
+      "Squeeze me tighter!",
+      "Don't let go...",
+      "Best. Hug. Ever."
+    ],
+    "hug.refused": [
+      "Don't touch me right now.",
+      "No hugs for you.",
+      "Hmph. Not in the mood."
+    ],
+    "kiss": [
+      "Mwah! <3",
+      "Another one!",
+      "Your kisses are the best.",
+      "Hehe, you're making me blush."
+    ],
+    "kiss.refused": [
+      "No kisses until you say sorry.",
+      "Ew, not now!",
+      "You wish."
+    ],
+    "dance": [
+      "Let's dance!",
+      "Look at my moves!",
+      "Dance with me!"
+    ],
+    "dance.jukebox": [
+      "I love this song! Dance with me!",
+      "Music! I can't stop my feet!",
+      "This is our song!"
+    ],
+    "gag.on": [
+      "Mmmph?!",
+      "Mmm mmh mmph!",
+      "MMMPH!"
+    ],
+    "gag.off": [
+      "Finally! Don't ever do that again!",
+      "Pfft! Hay in my mouth! Really?!",
+      "I can talk again! And I have a lot to say."
+    ],
+    "gag.off_self": [
+      "I got it off myself! Hmph!",
+      "Took you long enough! I freed myself."
+    ],
+    "gagged_talk": [
+      "Mmmph!",
+      "Mmh mmh!",
+      "Mmmmmh...",
+      "Mph mph mmph!"
+    ],
+    "love_check": [
+      "Do you still love me?",
+      "Be honest... do you love me?",
+      "Tell me you love me. Right now."
+    ],
+    "love_check.timeout": [
+      "You didn't answer... I'll remember that.",
+      "Silence? Really? Okay...",
+      "No answer. That hurts."
+    ],
+    "love_yes": [
+      "Oh, me too! <3",
+      "I knew it! Hug!",
+      "Say it again! I love hearing it."
+    ],
+    "love_no": [
+      "...Okay. I'm sulking.",
+      "Fine. Don't talk to me.",
+      "You're joking, right? RIGHT?"
+    ],
+    "apology_accept": [
+      "Okay, I forgive you...",
+      "Fine. But you owe me a hug.",
+      "Apology accepted. This time."
+    ],
+    "apology_refused": [
+      "Not yet. I'm still mad.",
+      "Sorry isn't enough. Try flowers.",
+      "Hmph. Try again later."
+    ],
+    "apology_confused": [
+      "Sorry for what?",
+      "You didn't do anything... did you?"
+    ],
+    "oops_sorry": [
+      "Oops! Sorry honey... <3",
+      "Oh no, I didn't mean to hit you!",
+      "Hehe, love tap!"
+    ],
+    "fart": [
+      "Oops... sorry!",
+      "That wasn't me. It was a creeper.",
+      "...Did you hear something? No? Good."
+    ],
+    "sad": [
+      "That's mean... I don't want to talk to you anymore!",
+      "Why would you do that? *sniff*",
+      "Stop hitting me..."
+    ],
+    "angry": [
+      "Hey! That hurts!",
+      "Ow! What was that for?!",
+      "Do that again and you'll see!"
+    ],
+    "hit_by_other": [
+      "{attacker} hit me! Protect me!",
+      "Help! {attacker} is mean to me!",
+      "Did you see what {attacker} did?!"
+    ],
+    "help": [
+      "Help! A {attacker} is attacking me!",
+      "Save me from this {attacker}!",
+      "Eek! {attacker}!"
+    ],
+    "complain.rain": [
+      "I hate the rain, my hair is getting ruined!",
+      "Rain again? Carry me inside!",
+      "I'm soaking wet! Look at me!"
+    ],
+    "complain.thunder": [
+      "Thunder! Hold me!",
+      "I'm scared of storms...",
+      "Eek! That one was close!"
+    ],
+    "complain.night": [
+      "It's so dark, I hope there are no creepers nearby...",
+      "Night already? Let's go home.",
+      "I don't like the dark. Stay close."
+    ],
+    "ambient": [
+      "You are my hero.",
+      "I love watching the clouds together.",
+      "The world is beautiful because of you.",
+      "I feel so safe with you.",
+      "Hold me in your arms!",
+      "What are you thinking about? Me, I hope.",
+      "Do you think I'm pretty? Don't answer, I know.",
+      "We should build a big house together.",
+      "I'm bored. Entertain me!",
+      "Hey. Hey. Hey {player}. Hi.",
+      "Did you know I love you? Just checking.",
+      "Pay attention to me!"
+    ],
+    "ambient.day": [
+      "What a beautiful day!",
+      "The sun feels so nice today.",
+      "Let's have a picnic!"
+    ],
+    "ambient.night": [
+      "Look at the stars...",
+      "The moon is pretty tonight. Almost as pretty as me.",
+      "It's late... bed soon?"
+    ],
+    "ambient.rain": [
+      "I like hearing the rain when I'm inside.",
+      "Rainy days are for cuddling."
+    ],
+    "ambient.happy": [
+      "I'm so happy right now!",
+      "Life is good with you!",
+      "La la la~"
+    ],
+    "ambient.in_love": [
+      "I love you so much it hurts.",
+      "You're my everything.",
+      "My heart does a little jump every time I see you."
+    ],
+    "ambient.bored": [
+      "I'm booored...",
+      "Do something fun!",
+      "Is this what we do all day? Walk?"
+    ],
+    "ambient.hungry": [
+      "I'm hungry... do you have a cookie?",
+      "My tummy is growling!",
+      "Food. Please. Now."
+    ],
+    "ambient.tired": [
+      "I'm so tired...",
+      "*yawn* Can we rest?",
+      "My feet hurt."
+    ],
+    "ambient.sad": [
+      "I feel a bit sad today...",
+      "Do you still care about me?",
+      "*sigh*"
+    ],
+    "ambient.angry": [
+      "I'm still mad at you.",
+      "Don't talk to me.",
+      "Hmph!"
+    ],
+    "ambient.jealous": [
+      "Who was that? Hm? Who?",
+      "You spend more time with them than with me.",
+      "I'm not jealous. I'm just watching."
+    ],
+    "ambient.sulking": [
+      "...",
+      "I'm not talking to you.",
+      "Hmph."
+    ],
+    "ambient.hate": [
+      "I don't know why I'm still here.",
+      "You're the worst.",
+      "Leave me alone."
+    ],
+    "ambient.cold": [
+      "Hmm.",
+      "Whatever.",
+      "Are we done walking?"
+    ],
+    "ambient.soulmate": [
+      "We're meant to be together forever.",
+      "I can't imagine a world without you.",
+      "Soulmates. That's what we are."
+    ],
+    "status": [
+      "I'm fine, thank you!",
+      "I'm good! Even better now that you asked."
+    ],
+    "status.happy": [
+      "I'm great! Everything is perfect!",
+      "Super happy! Thanks for asking!"
+    ],
+    "status.in_love": [
+      "I'm in love, that's how I am. With you.",
+      "Never better. You're here."
+    ],
+    "status.neutral": [
+      "I'm okay. Just okay.",
+      "Fine, I guess."
+    ],
+    "status.bored": [
+      "Bored. So bored.",
+      "Honestly? I'm bored out of my mind."
+    ],
+    "status.hungry": [
+      "Hungry! Feed me!",
+      "Starving. Literally starving."
+    ],
+    "status.tired": [
+      "Tired... so tired...",
+      "I need a nap."
+    ],
+    "status.sad": [
+      "Not great...",
+      "A bit sad, to be honest."
+    ],
+    "status.angry": [
+      "Angry. Because of you.",
+      "How do you think I am?"
+    ],
+    "status.jealous": [
+      "Jealous. Obviously.",
+      "Ask your new friend how they are."
+    ],
+    "status.sulking": [
+      "...",
+      "Hmph. Like you care."
+    ],
+    "need.hunger.low": [
+      "I'm hungry...",
+      "Can we eat something?",
+      "My tummy is empty."
+    ],
+    "need.hunger.critical": [
+      "I'M STARVING! FOOD! NOW!",
+      "I'm going to faint... food, please...",
+      "Why don't you feed me?! I'm dying here!"
+    ],
+    "need.energy.low": [
+      "I'm getting tired...",
+      "Can we rest a little?"
+    ],
+    "need.energy.critical": [
+      "I can't keep my eyes open...",
+      "I NEED to sleep. Now."
+    ],
+    "need.fun.low": [
+      "I'm bored...",
+      "Let's do something fun!"
+    ],
+    "need.fun.critical": [
+      "I'M SO BORED! Do something!",
+      "Boring boring boring boring!"
+    ],
+    "need.attention.low": [
+      "Hey... notice me?",
+      "You haven't talked to me in a while.",
+      "Am I invisible or what?"
+    ],
+    "need.attention.critical": [
+      "Hello?! I exist, you know!",
+      "You're ignoring me! I'm going to cry!",
+      "LOOK AT ME!"
+    ],
+    "need.hygiene.low": [
+      "I need a bath...",
+      "I feel dirty. Is there water nearby?"
+    ],
+    "need.hygiene.critical": [
+      "I smell terrible! I need a bath NOW!",
+      "Don't come close, I stink!"
+    ],
+    "need.hunger.no_food": [
+      "I don't have any food!",
+      "My bag is empty... no food.",
+      "There's nothing to eat!"
+    ],
+    "need.hunger.pantry": [
+      "I'll get something from the pantry!",
+      "Snack time! Going to the pantry."
+    ],
+    "need.hunger.searching": [
+      "I'm going to look for food in the chests.",
+      "Let me find something to eat..."
+    ],
+    "need.hunger.found_food": [
+      "Found some {item}! Yum!",
+      "{item}! Perfect!"
+    ],
+    "need.hygiene.bath": [
+      "Bath time! Don't look!",
+      "I'm going to take a quick bath."
+    ],
+    "need.hygiene.clean": [
+      "All clean and fresh!",
+      "I feel so much better now!"
+    ],
+    "eat.not_hungry": [
+      "I'm not hungry right now. I'll keep the {item} for later.",
+      "No thanks, I'm full!"
+    ],
+    "eat.disliked": [
+      "Ew! {item}?! You know I hate that!",
+      "Yuck. Why would you give me {item}?",
+      "I ate it. I hated it. I'll remember."
+    ],
+    "eat.favorite": [
+      "{item}! My favorite! I love you!",
+      "Yes! {item}! You know me so well!",
+      "Mmm, {item}! Best day ever!"
+    ],
+    "eat.fed": [
+      "Yum! Thank you for the {item}!",
+      "Mmm, that was good!",
+      "You're feeding me? So sweet!"
+    ],
+    "eat.self": [
+      "*munch munch* {item}!",
+      "I had some {item}. Yum.",
+      "Snack break!"
+    ],
+    "eat.later": [
+      "I'll keep the {item} for later.",
+      "Thanks! Into the bag it goes."
+    ],
+    "steal_food": [
+      "I took some {item} from you. I was hungry!",
+      "Hehe, I borrowed your {item}. Borrowed. Forever.",
+      "You weren't feeding me, so I took your {item}!"
+    ],
+    "gift.gross": [
+      "{item}? Is this a joke?",
+      "Ew! Take it back!",
+      "You call this a gift?!"
+    ],
+    "gift.meh": [
+      "Oh. {item}. Thanks, I guess.",
+      "Hmm, okay.",
+      "That's... something."
+    ],
+    "gift.nice": [
+      "Oh, {item}! Thank you!",
+      "That's sweet of you!",
+      "A gift for me? Aww!"
+    ],
+    "gift.great": [
+      "{item}! I love it!",
+      "You're the best! Thank you so much!",
+      "Wow, for me? You spoil me!"
+    ],
+    "gift.amazing": [
+      "{item}?! Oh my... I don't know what to say! I love you!",
+      "This is the best gift ever! Come here!",
+      "I'm going to cry... it's perfect!"
+    ],
+    "gift.return": [
+      "Here, a little something for you too: {count} {item}!",
+      "I have a gift for you! {item}!",
+      "Take this {item}, from me to you!"
+    ],
+    "inventory_full": [
+      "My bag is full!",
+      "I can't carry any more!",
+      "No room left in my bag!"
+    ],
+    "desire.new.item": [
+      "I really want some {item}... can you get me some?",
+      "You know what would make me happy? {item}.",
+      "I need {item}. Like, really need. You have {minutes} minutes."
+    ],
+    "desire.new.place": [
+      "I want to see {place}! Take me there!",
+      "Let's go to {place}! Please please please!",
+      "I dream of {place}... will you take me?"
+    ],
+    "desire.new.activity": [
+      "I want to {activity}!",
+      "Can we {activity}? Please?",
+      "You know what I want? To {activity}. With you."
+    ],
+    "desire.remind": [
+      "Don't forget, I still want {item}!",
+      "So... about what I asked...",
+      "I'm still waiting, you know."
+    ],
+    "desire.remind.urgent": [
+      "Hurry! I've been waiting forever!",
+      "Time's almost up! You don't care about me, do you?",
+      "Last chance! I'm going to be SO mad."
+    ],
+    "desire.fulfilled": [
+      "You did it! I love you!",
+      "Yay! You're the best!",
+      "Thank you, thank you, thank you!"
+    ],
+    "desire.fulfilled.item": [
+      "{item}! You remembered! I love you!",
+      "Just what I wanted! You're perfect."
+    ],
+    "desire.fulfilled.place": [
+      "We're here! It's so beautiful!",
+      "You brought me here! Best date ever!"
+    ],
+    "desire.fulfilled.activity": [
+      "That was amazing! Let's do it again!",
+      "I'll remember this forever."
+    ],
+    "desire.failed": [
+      "You forgot... again.",
+      "I asked for one thing. ONE thing.",
+      "Fine. I didn't want it anyway. *sniff*"
+    ],
+    "desire.tell": [
+      "What I want? {item}!",
+      "Right now? I want {item}. Obviously."
+    ],
+    "desire.none": [
+      "Nothing right now. Just you.",
+      "I have everything I need. You're here.",
+      "Hmm, nothing! But ask me again in five minutes."
+    ],
+    "owner.afk": [
+      "Hello? Are you there?",
+      "Did you fall asleep?",
+      "You're just standing there... are you okay?",
+      "Pay attention to me!"
+    ],
+    "owner.back_from_afk": [
+      "You're back! Where were you?",
+      "Finally! I was so bored!"
+    ],
+    "owner.hurt": [
+      "You're hurt! Be careful!",
+      "Oh no, you're bleeding! Eat something!",
+      "Don't die on me!"
+    ],
+    "owner.ate_alone": [
+      "You ate {item} without me?!",
+      "Where's my share of the {item}?",
+      "Eating alone? Wow. Okay."
+    ],
+    "owner.feed": [
+      "Here, eat this {item}, you need it!",
+      "Take my {item}, you look hungry!"
+    ],
+    "owner.found.generic": [
+      "Ooh, {item}! Nice find!",
+      "{item}! Is that for me?"
+    ],
+    "owner.found.diamond": [
+      "DIAMONDS! Make me a ring!",
+      "A diamond! Is that for my ring? It's for my ring, right?"
+    ],
+    "owner.found.emerald": [
+      "An emerald! It matches my eyes. Sort of."
+    ],
+    "owner.found.netherite_ingot": [
+      "Netherite?! You're so strong!"
+    ],
+    "owner.found.enchanted_golden_apple": [
+      "An enchanted golden apple! Can I have a bite?"
+    ],
+    "owner.found.totem_of_undying": [
+      "A totem! Now you can't leave me!"
+    ],
+    "owner.found.cake": [
+      "Cake! Is it my birthday?"
+    ],
+    "owner.found.heart_of_the_sea": [
+      "The heart of the sea... just like you have my heart."
+    ],
+    "owner.flying": [
+      "You're flying! Take me with you!",
+      "Don't fly away without me!",
+      "Show-off!"
+    ],
+    "owner.lava": [
+      "LAVA! Get out of there!",
+      "Are you crazy?! That's lava!"
+    ],
+    "owner.fire": [
+      "You're on fire! Water! Water!",
+      "Stop, drop and roll!"
+    ],
+    "owner.riding": [
+      "Nice ride! Can I come too?",
+      "You like that horse more than me, don't you?"
+    ],
+    "jealous.player": [
+      "Who is {other}? Why are you so close to them?",
+      "I don't like how {other} looks at you.",
+      "{other} again? Hmph."
+    ],
+    "jealous.chat": [
+      "Who are you talking to?",
+      "Talk to me instead!",
+      "Are you talking to someone else? Hmph."
+    ],
+    "owner.mined.generic": [
+      "Nice {item}!",
+      "Mining again?"
+    ],
+    "owner.mined.diamond": [
+      "Diamonds!! Don't forget my ring!",
+      "Is that diamond ore?! Yay!"
+    ],
+    "owner.mined.ore": [
+      "Ooh, shiny {item}!",
+      "Ore! We're getting rich!"
+    ],
+    "owner.mined.wood": [
+      "Poor tree...",
+      "Good wood! We'll build our house."
+    ],
+    "owner.mined.flower": [
+      "You picked a flower! Is it for me?",
+      "Flowers! For me?"
+    ],
+    "owner.killed.monster": [
+      "Take that, {victim}!",
+      "My hero! You killed the {victim}!",
+      "One less {victim}!"
+    ],
+    "owner.killed.animal": [
+      "Poor {victim}...",
+      "Did you have to?",
+      "Well, at least we'll eat tonight."
+    ],
+    "owner.killed.player": [
+      "Remind me never to make you angry.",
+      "Wow. Okay. Scary."
+    ],
+    "owner.killed.generic": [
+      "Bye bye, {victim}!"
+    ],
+    "backpack.equip": [
+      "A backpack! Now I can carry even more for you!",
+      "Ooh, {item}! It goes so well with my outfit.",
+      "More pockets! I will never say my bag is full again. Probably."
+    ],
+    "backpack.equip_small": [
+      "Cute! I will wear it on my back.",
+      "{item}? Adorable. It stays on my back."
+    ],
+    "trinket.equip": [
+      "{item}? For me? I'm never taking it off!",
+      "Look how it shines on me! Thank you, my love!",
+      "A little jewel... you really know how to make me melt."
+    ]
+  },
+  "intents": {
+    "summon": {
+      "triggers": [
+        "i feel lonely",
+        "i'm lonely",
+        "im lonely",
+        "i am lonely",
+        "i feel so lonely",
+        "i'm so lonely",
+        "i feel alone",
+        "i need a girlfriend",
+        "i want a girlfriend",
+        "i need laura"
+      ],
+      "responses": []
+    },
+    "yes": {
+      "triggers": [
+        "yes",
+        "yeah",
+        "yep",
+        "yup",
+        "of course",
+        "sure",
+        "absolutely",
+        "obviously",
+        "definitely"
+      ],
+      "responses": [
+        "Yay!",
+        "I knew it!",
+        "Good answer."
+      ]
+    },
+    "no": {
+      "triggers": [
+        "no",
+        "nope",
+        "nah",
+        "not really",
+        "never"
+      ],
+      "responses": [
+        "Hmph.",
+        "Oh... okay.",
+        "Fine."
+      ]
+    },
+    "where": {
+      "triggers": [
+        "where are you",
+        "where r u",
+        "where did you go"
+      ],
+      "responses": [
+        "Right here!"
+      ]
+    },
+    "follow": {
+      "triggers": [
+        "follow me",
+        "come with me",
+        "let's go",
+        "lets go",
+        "with me"
+      ],
+      "responses": []
+    },
+    "stay": {
+      "triggers": [
+        "stay here",
+        "stay",
+        "wait here",
+        "wait for me",
+        "don't move",
+        "dont move",
+        "stop following me"
+      ],
+      "responses": []
+    },
+    "come": {
+      "triggers": [
+        "come here",
+        "come to me",
+        "come back",
+        "over here",
+        "get over here"
+      ],
+      "responses": []
+    },
+    "home": {
+      "triggers": [
+        "go home",
+        "go back home",
+        "stay at home",
+        "stay home",
+        "wait at home",
+        "back home"
+      ],
+      "responses": []
+    },
+    "wander": {
+      "triggers": [
+        "go play",
+        "take a walk",
+        "walk around",
+        "you're free",
+        "go explore",
+        "have fun"
+      ],
+      "responses": []
+    },
+    "set_home": {
+      "triggers": [
+        "this is our home",
+        "this is home",
+        "our house",
+        "live here",
+        "home is here",
+        "set home"
+      ],
+      "responses": []
+    },
+    "stop": {
+      "triggers": [
+        "stop",
+        "stop it",
+        "stop that",
+        "cancel",
+        "never mind",
+        "nevermind",
+        "forget it"
+      ],
+      "responses": []
+    },
+    "fetch": {
+      "triggers": [
+        "bring me",
+        "get me",
+        "fetch",
+        "go get",
+        "i need some",
+        "give me some",
+        "find me",
+        "can you bring",
+        "can you get"
+      ],
+      "responses": []
+    },
+    "chop_tree": {
+      "triggers": [
+        "cut a tree",
+        "chop a tree",
+        "cut down a tree",
+        "chop wood",
+        "cut wood",
+        "get wood",
+        "chop this tree",
+        "cut this tree"
+      ],
+      "responses": []
+    },
+    "harvest": {
+      "triggers": [
+        "harvest",
+        "harvest the field",
+        "harvest the crops",
+        "collect the crops",
+        "pick the crops",
+        "gather the wheat"
+      ],
+      "responses": []
+    },
+    "cook": {
+      "triggers": [
+        "cook",
+        "cook something",
+        "make food",
+        "make dinner",
+        "make lunch",
+        "prepare food",
+        "bake a cake",
+        "bake"
+      ],
+      "responses": []
+    },
+    "job_lumberjack": {
+      "triggers": [
+        "be a lumberjack",
+        "you are a lumberjack",
+        "take care of the trees",
+        "work as a lumberjack",
+        "lumberjack job"
+      ],
+      "responses": []
+    },
+    "job_farmer": {
+      "triggers": [
+        "be a farmer",
+        "you are a farmer",
+        "take care of the field",
+        "take care of the farm",
+        "work as a farmer",
+        "work the field",
+        "farmer job"
+      ],
+      "responses": []
+    },
+    "job_cook": {
+      "triggers": [
+        "be the cook",
+        "you are the cook",
+        "take care of the kitchen",
+        "work as a cook",
+        "cook job",
+        "be our chef"
+      ],
+      "responses": []
+    },
+    "job_stop": {
+      "triggers": [
+        "stop working",
+        "stop your job",
+        "no more work",
+        "quit your job",
+        "take a break",
+        "holidays"
+      ],
+      "responses": []
+    },
+    "back_to_work": {
+      "triggers": [
+        "back to work",
+        "go back to work",
+        "get back to work",
+        "go to work",
+        "work"
+      ],
+      "responses": []
+    },
+    "assign_chest": {
+      "triggers": [
+        "this chest is for",
+        "this chest for",
+        "use this chest",
+        "this is the chest for",
+        "put the",
+        "store the"
+      ],
+      "responses": []
+    },
+    "hug": {
+      "triggers": [
+        "hug",
+        "hug me",
+        "give me a hug",
+        "cuddle",
+        "hold me",
+        "*hugs*"
+      ],
+      "responses": []
+    },
+    "kiss": {
+      "triggers": [
+        "kiss",
+        "kiss me",
+        "give me a kiss",
+        "smooch",
+        "*kisses*",
+        "mwah"
+      ],
+      "responses": []
+    },
+    "apology": {
+      "triggers": [
+        "sorry",
+        "sorr*",
+        "i'm sorry",
+        "im sorry",
+        "my bad",
+        "forgive me",
+        "i apologize",
+        "please forgive me"
+      ],
+      "responses": []
+    },
+    "eat": {
+      "triggers": [
+        "eat something",
+        "you should eat",
+        "go eat",
+        "have a snack",
+        "eat your food"
+      ],
+      "responses": []
+    },
+    "sleep": {
+      "triggers": [
+        "go to sleep",
+        "go to bed",
+        "time to sleep",
+        "take a nap",
+        "sleep"
+      ],
+      "responses": []
+    },
+    "wake_up": {
+      "triggers": [
+        "wake up",
+        "get up",
+        "rise and shine"
+      ],
+      "responses": []
+    },
+    "beautiful": {
+      "triggers": [
+        "you're beautiful",
+        "you are beautiful",
+        "you're pretty",
+        "you are pretty",
+        "you're cute",
+        "you are cute",
+        "so cute",
+        "gorgeous",
+        "you look nice",
+        "you look great",
+        "you're gorgeous",
+        "you're stunning",
+        "you're adorable",
+        "you're lovely",
+        "you look beautiful",
+        "you look pretty",
+        "you're the prettiest",
+        "you're the most beautiful"
+      ],
+      "responses": [
+        "Oh thank you... you're making me blush!",
+        "You're very charming too.",
+        "Do you really think I'm pretty?",
+        "I know! But say it again."
+      ]
+    },
+    "love_you": {
+      "triggers": [
+        "i love you",
+        "love you",
+        "i love u",
+        "ily"
+      ],
+      "responses": [
+        "I love you too, more than anything! <3",
+        "My heart beats only for you.",
+        "I love you forever.",
+        "Say it again! I'll never get tired of it."
+      ]
+    },
+    "miss_you": {
+      "triggers": [
+        "i missed you",
+        "i miss you",
+        "missed you",
+        "miss you"
+      ],
+      "responses": [
+        "I missed you more!",
+        "Then don't leave me again!",
+        "Aww, come here!"
+      ]
+    },
+    "thanks": {
+      "triggers": [
+        "thank you",
+        "thanks",
+        "thx",
+        "thank u"
+      ],
+      "responses": [
+        "You're welcome, my love!",
+        "Anything for you!",
+        "Pay me in kisses."
+      ]
+    },
+    "insult": {
+      "triggers": [
+        "you're ugly",
+        "you are ugly",
+        "you're stupid",
+        "you are stupid",
+        "shut up",
+        "you're annoying",
+        "you are annoying",
+        "idiot",
+        "i hate you",
+        "go away",
+        "you're dumb",
+        "you're useless",
+        "you're fat",
+        "you're a loser",
+        "loser",
+        "dumbass",
+        "bitch",
+        "slut",
+        "whore",
+        "fuck you",
+        "fuck off",
+        "shut the fuck up"
+      ],
+      "responses": [
+        "How dare you?!",
+        "That's so mean...",
+        "I'll remember that.",
+        "Fine! I'm not talking to you anymore!"
+      ]
+    },
+    "what_do_you_want": {
+      "triggers": [
+        "what do you want",
+        "what would you like",
+        "what do you need",
+        "what's wrong",
+        "whats wrong"
+      ],
+      "responses": []
+    },
+    "how_are_you": {
+      "triggers": [
+        "how are you",
+        "how r u",
+        "how are you doing",
+        "you okay",
+        "are you okay",
+        "how do you feel",
+        "you alright"
+      ],
+      "responses": []
+    },
+    "player_hungry": {
+      "triggers": [
+        "i'm hungry",
+        "im hungry",
+        "i am hungry",
+        "i'm starving",
+        "im starving"
+      ],
+      "responses": [
+        "Me too! Let's eat together!",
+        "I don't have anything for you... sorry!"
+      ]
+    },
+    "hello": {
+      "triggers": [
+        "hello",
+        "hi",
+        "hey",
+        "good morning",
+        "good evening",
+        "yo",
+        "hiya",
+        "howdy"
+      ],
+      "responses": [
+        "Hello my love!",
+        "Hi there!",
+        "Oh, you're here! Hello!",
+        "Hey you! Good to see you."
+      ]
+    },
+    "bye": {
+      "triggers": [
+        "bye",
+        "goodbye",
+        "see you",
+        "see ya",
+        "gotta go",
+        "i have to go",
+        "cya"
+      ],
+      "responses": [
+        "Bye... come back soon!",
+        "Don't forget about me!",
+        "Already? Okay... bye."
+      ]
+    },
+    "good_night": {
+      "triggers": [
+        "good night",
+        "goodnight",
+        "gn",
+        "sweet dreams"
+      ],
+      "responses": [
+        "Good night! Dream of me.",
+        "Sleep well, my love.",
+        "Night night!"
+      ]
+    },
+    "joke": {
+      "triggers": [
+        "tell me a joke",
+        "a joke",
+        "make me laugh",
+        "say something funny"
+      ],
+      "responses": [
+        "Why did the creeper cross the road? To get to the other SSSSside!",
+        "What do you call a sleeping bull? A bulldozer!",
+        "Why don't skeletons fight? They don't have the guts!",
+        "Why did the chicken cross the road? To get to you!"
+      ]
+    },
+    "who_are_you": {
+      "triggers": [
+        "who are you",
+        "what are you",
+        "what's your name",
+        "whats your name",
+        "your name"
+      ],
+      "responses": [
+        "I'm {laura}, your girlfriend! <3",
+        "{laura}! Did you forget already?!"
+      ]
+    },
+    "creator": {
+      "triggers": [
+        "who made you",
+        "who created you",
+        "your creator",
+        "vyrriox"
+      ],
+      "responses": [
+        "Vyrriox made me! Such talent.",
+        "Vyrriox gave me life, just for you."
+      ]
+    },
+    "marry_me": {
+      "triggers": [
+        "marry me",
+        "will you marry me",
+        "let's get married",
+        "lets get married"
+      ],
+      "responses": [
+        "YES! A thousand times yes!",
+        "Only with a diamond ring!",
+        "Oh my... are you serious? YES!"
+      ]
+    },
+    "mining": {
+      "triggers": [
+        "let's go mining",
+        "lets go mining",
+        "let's mine",
+        "go mining"
+      ],
+      "responses": [
+        "Let's find some diamonds! Watch out for creepers.",
+        "Mining is tiring but I love being with you.",
+        "We're going to be rich!"
+      ]
+    },
+    "building": {
+      "triggers": [
+        "let's build",
+        "lets build",
+        "build a house",
+        "let's build a house"
+      ],
+      "responses": [
+        "A house for us? With a big bedroom?",
+        "I want pink walls. Non negotiable.",
+        "I'll decorate!"
+      ]
+    },
+    "fishing": {
+      "triggers": [
+        "let's go fishing",
+        "lets go fishing",
+        "go fishing"
+      ],
+      "responses": [
+        "Fishing is so romantic!",
+        "I'll watch you fish. From very close."
+      ]
+    },
+    "sing": {
+      "triggers": [
+        "sing",
+        "sing a song",
+        "sing for me"
+      ],
+      "responses": [
+        "La la laaa~",
+        "Only if you sing with me!"
+      ]
+    },
+    "bored": {
+      "triggers": [
+        "i'm bored",
+        "im bored",
+        "i am bored",
+        "so bored"
+      ],
+      "responses": [
+        "Me too! Let's dance!",
+        "Let's go on an adventure!",
+        "Hug me, that's never boring."
+      ]
+    },
+    "emote_wave": {
+      "triggers": [
+        "wave",
+        "say hi",
+        "wave at me"
+      ],
+      "responses": []
+    },
+    "emote_clap": {
+      "triggers": [
+        "clap",
+        "applaud",
+        "clap your hands"
+      ],
+      "responses": []
+    },
+    "emote_dance": {
+      "triggers": [
+        "dance",
+        "let's dance",
+        "lets dance",
+        "dance for me"
+      ],
+      "responses": []
+    },
+    "emote_laugh": {
+      "triggers": [
+        "laugh",
+        "lol",
+        "haha",
+        "hahaha",
+        "lmao"
+      ],
+      "responses": []
+    },
+    "emote_cry": {
+      "triggers": [
+        "cry",
+        "don't cry"
+      ],
+      "responses": []
+    },
+    "emote_blush": {
+      "triggers": [
+        "blush",
+        "you're blushing"
+      ],
+      "responses": []
+    },
+    "emote_facepalm": {
+      "triggers": [
+        "facepalm"
+      ],
+      "responses": []
+    },
+    "emote_jump": {
+      "triggers": [
+        "jump"
+      ],
+      "responses": []
+    },
+    "emote_bow": {
+      "triggers": [
+        "bow",
+        "curtsy"
+      ],
+      "responses": []
+    },
+    "emote_think": {
+      "triggers": [
+        "think",
+        "think about it"
+      ],
+      "responses": []
+    },
+    "emote_shrug": {
+      "triggers": [
+        "shrug",
+        "idk",
+        "i don't know"
+      ],
+      "responses": []
+    },
+    "emote_stomp": {
+      "triggers": [
+        "stomp"
+      ],
+      "responses": []
+    },
+    "emote_yawn": {
+      "triggers": [
+        "yawn"
+      ],
+      "responses": []
+    },
+    "emote_celebrate": {
+      "triggers": [
+        "celebrate",
+        "party",
+        "we did it",
+        "gg"
+      ],
+      "responses": []
+    },
+    "emote_snap": {
+      "triggers": [
+        "snap",
+        "snap your fingers"
+      ],
+      "responses": []
+    },
+    "emote_twirl": {
+      "triggers": [
+        "twirl",
+        "spin",
+        "turn around"
+      ],
+      "responses": []
+    },
+    "emote_hum": {
+      "triggers": [
+        "hum",
+        "hum a song"
+      ],
+      "responses": []
+    },
+    "emote_stretch": {
+      "triggers": [
+        "stretch"
+      ],
+      "responses": []
+    },
+    "emote_tap_foot": {
+      "triggers": [
+        "tap your foot",
+        "impatient"
+      ],
+      "responses": []
+    },
+    "emote_blow_kiss": {
+      "triggers": [
+        "blow me a kiss",
+        "blow a kiss"
+      ],
+      "responses": []
+    },
+    "emote_sneeze": {
+      "triggers": [
+        "sneeze",
+        "bless you"
+      ],
+      "responses": []
+    },
+    "emote_hair_flip": {
+      "triggers": [
+        "hair flip",
+        "flip your hair"
+      ],
+      "responses": []
+    },
+    "emote_check_nails": {
+      "triggers": [
+        "check your nails",
+        "your nails"
+      ],
+      "responses": []
+    },
+    "emote_air_guitar": {
+      "triggers": [
+        "air guitar",
+        "rock on",
+        "play guitar"
+      ],
+      "responses": []
+    },
+    "emote_hiccup": {
+      "triggers": [
+        "hiccup",
+        "hiccups"
+      ],
+      "responses": []
+    },
+    "emote_pout": {
+      "triggers": [
+        "pout"
+      ],
+      "responses": []
+    },
+    "emote_shiver": {
+      "triggers": [
+        "shiver",
+        "are you cold",
+        "you're cold"
+      ],
+      "responses": []
+    },
+    "emote_fan": {
+      "triggers": [
+        "are you hot",
+        "you're hot",
+        "fan yourself"
+      ],
+      "responses": []
+    }
+  },
+  "items": {
+    "#minecraft:logs": [
+      "wood",
+      "log*",
+      "timber",
+      "trunk*"
+    ],
+    "#minecraft:planks": [
+      "plank*",
+      "board*"
+    ],
+    "minecraft:stick": [
+      "stick*"
+    ],
+    "minecraft:cobblestone": [
+      "cobble*",
+      "cobblestone",
+      "stone"
+    ],
+    "minecraft:stone": [
+      "smooth stone"
+    ],
+    "minecraft:dirt": [
+      "dirt",
+      "soil"
+    ],
+    "minecraft:sand": [
+      "sand"
+    ],
+    "minecraft:gravel": [
+      "gravel"
+    ],
+    "minecraft:clay_ball": [
+      "clay"
+    ],
+    "minecraft:glass": [
+      "glass"
+    ],
+    "minecraft:coal": [
+      "coal"
+    ],
+    "minecraft:charcoal": [
+      "charcoal"
+    ],
+    "minecraft:torch": [
+      "torch*"
+    ],
+    "minecraft:raw_iron": [
+      "raw iron",
+      "iron ore"
+    ],
+    "minecraft:iron_ingot": [
+      "iron"
+    ],
+    "minecraft:gold_ingot": [
+      "gold"
+    ],
+    "minecraft:copper_ingot": [
+      "copper"
+    ],
+    "minecraft:diamond": [
+      "diamond*"
+    ],
+    "minecraft:emerald": [
+      "emerald*"
+    ],
+    "minecraft:redstone": [
+      "redstone"
+    ],
+    "minecraft:lapis_lazuli": [
+      "lapis"
+    ],
+    "minecraft:amethyst_shard": [
+      "amethyst*"
+    ],
+    "minecraft:obsidian": [
+      "obsidian"
+    ],
+    "minecraft:apple": [
+      "apple*"
+    ],
+    "minecraft:golden_apple": [
+      "golden apple*"
+    ],
+    "minecraft:bread": [
+      "bread"
+    ],
+    "minecraft:carrot": [
+      "carrot*"
+    ],
+    "minecraft:potato": [
+      "potato*"
+    ],
+    "minecraft:baked_potato": [
+      "baked potato*"
+    ],
+    "minecraft:beetroot": [
+      "beetroot*"
+    ],
+    "minecraft:wheat": [
+      "wheat"
+    ],
+    "minecraft:wheat_seeds": [
+      "seed*"
+    ],
+    "minecraft:sugar_cane": [
+      "sugar cane",
+      "sugarcane"
+    ],
+    "minecraft:sugar": [
+      "sugar"
+    ],
+    "minecraft:pumpkin": [
+      "pumpkin*"
+    ],
+    "minecraft:melon_slice": [
+      "melon*"
+    ],
+    "minecraft:sweet_berries": [
+      "berr*",
+      "sweet berr*"
+    ],
+    "minecraft:cocoa_beans": [
+      "cocoa",
+      "cacao"
+    ],
+    "minecraft:egg": [
+      "egg*"
+    ],
+    "minecraft:milk_bucket": [
+      "milk"
+    ],
+    "minecraft:honey_bottle": [
+      "honey"
+    ],
+    "minecraft:cake": [
+      "cake*"
+    ],
+    "minecraft:cookie": [
+      "cookie*"
+    ],
+    "minecraft:pumpkin_pie": [
+      "pie",
+      "pumpkin pie"
+    ],
+    "minecraft:cooked_beef": [
+      "steak*",
+      "beef"
+    ],
+    "minecraft:cooked_porkchop": [
+      "pork*",
+      "bacon"
+    ],
+    "minecraft:cooked_chicken": [
+      "chicken"
+    ],
+    "minecraft:cooked_mutton": [
+      "mutton"
+    ],
+    "minecraft:cooked_cod": [
+      "fish",
+      "cod"
+    ],
+    "minecraft:cooked_salmon": [
+      "salmon"
+    ],
+    "minecraft:mushroom_stew": [
+      "mushroom stew",
+      "soup"
+    ],
+    "#minecraft:small_flowers": [
+      "flower*",
+      "bouquet"
+    ],
+    "minecraft:poppy": [
+      "poppy",
+      "poppies",
+      "red flower*"
+    ],
+    "minecraft:pink_tulip": [
+      "pink tulip*"
+    ],
+    "minecraft:dandelion": [
+      "dandelion*"
+    ],
+    "#minecraft:wool": [
+      "wool"
+    ],
+    "minecraft:string": [
+      "string"
+    ],
+    "minecraft:feather": [
+      "feather*"
+    ],
+    "minecraft:leather": [
+      "leather"
+    ],
+    "minecraft:bone": [
+      "bone*"
+    ],
+    "minecraft:arrow": [
+      "arrow*"
+    ],
+    "minecraft:gunpowder": [
+      "gunpowder"
+    ],
+    "minecraft:ender_pearl": [
+      "ender pearl*",
+      "pearl*"
+    ],
+    "minecraft:slime_ball": [
+      "slime*"
+    ],
+    "minecraft:bucket": [
+      "bucket"
+    ],
+    "minecraft:water_bucket": [
+      "water"
+    ],
+    "minecraft:book": [
+      "book*"
+    ],
+    "minecraft:paper": [
+      "paper"
+    ],
+    "minecraft:bamboo": [
+      "bamboo"
+    ],
+    "minecraft:cactus": [
+      "cactus",
+      "cacti"
+    ],
+    "minecraft:kelp": [
+      "kelp",
+      "seaweed"
+    ],
+    "#minecraft:saplings": [
+      "sapling*"
+    ],
+    "minecraft:brown_mushroom": [
+      "mushroom*"
+    ],
+    "minecraft:netherrack": [
+      "netherrack"
+    ],
+    "minecraft:glowstone_dust": [
+      "glowstone"
+    ],
+    "minecraft:quartz": [
+      "quartz"
+    ],
+    "minecraft:bricks": [
+      "brick*"
+    ]
+  },
+  "chests": {
+    "wood": [
+      "wood",
+      "log*",
+      "timber"
+    ],
+    "harvest": [
+      "harvest",
+      "crop*",
+      "wheat",
+      "vegetable*"
+    ],
+    "seeds": [
+      "seed*",
+      "sapling*"
+    ],
+    "ingredients": [
+      "ingredient*",
+      "raw food",
+      "raw meat"
+    ],
+    "fuel": [
+      "fuel",
+      "coal",
+      "charcoal"
+    ],
+    "meals": [
+      "meal*",
+      "dish*",
+      "cooked food"
+    ],
+    "pantry": [
+      "pantry",
+      "your food",
+      "snack*",
+      "food"
+    ],
+    "storage": [
+      "storage",
+      "everything else",
+      "misc*",
+      "stuff"
+    ]
+  }
+}

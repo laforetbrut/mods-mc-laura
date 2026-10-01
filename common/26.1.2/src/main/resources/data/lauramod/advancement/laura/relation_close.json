@@ -1,0 +1,23 @@
+{
+  "parent": "lauramod:laura/relation_friend",
+  "display": {
+    "icon": {
+      "id": "minecraft:rose_bush"
+    },
+    "title": {
+      "translate": "advancements.lauramod.relation_close.title"
+    },
+    "description": {
+      "translate": "advancements.lauramod.relation_close.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

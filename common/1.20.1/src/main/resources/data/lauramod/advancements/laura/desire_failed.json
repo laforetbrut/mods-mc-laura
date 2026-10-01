@@ -1,0 +1,23 @@
+{
+  "parent": "lauramod:laura/desire_fulfilled",
+  "display": {
+    "icon": {
+      "item": "minecraft:bone"
+    },
+    "title": {
+      "translate": "advancements.lauramod.desire_failed.title"
+    },
+    "description": {
+      "translate": "advancements.lauramod.desire_failed.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}
