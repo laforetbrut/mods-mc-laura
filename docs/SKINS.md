@@ -63,7 +63,8 @@ Rules:
 - The name is the path inside the folder without `.png`. `skins/summer/beach.png` is named `summer/beach`. The command is `/laura skin file summer/beach`, without quotes.
 - Allowed characters in names: letters, digits, `_`, `-`, `.`, `/` and space. 96 characters at most.
 - A file that is too big or not a valid skin is ignored and reported in the server log.
-- Clients download the file once and keep it in `<game folder>/lauramod/cache/skins`. A client refuses files larger than its own `network.maxSkinDownloadKb` (512 KB).
+- Clients download the file once and keep it in `<game folder>/lauramod/cache/skins`. A client refuses files larger than its own `network.maxSkinDownloadKb` (512 KB). Files of that folder not used for 30 days are deleted when the game starts, and the folder is kept under 64 MB (256 MB for `cache/models`).
+- A companion changes skin at most once every 2 seconds (the same goes for her model). A change asked too soon is refused with a message.
 - `/laura skin list` shows the built-in skins and the files of the server.
 
 ### Player uploads
@@ -76,12 +77,13 @@ Worked example:
 2. Open her menu (K), tab Style, page Skins.
 3. Click `my_dress.png` in the "Your skins" list. You can also drag and drop any `.png` file onto the menu window.
 4. The file is sent to the server. A message at the bottom of the tab confirms it, or explains the refusal (uploads disabled, not allowed to change her look, upload limit reached, file too big, not a valid skin). Nothing is stored on the server when the upload is refused.
-5. The server saves it as `config/lauramod/skins/uploads/<your player name>_my_dress.png` and puts it on her at once.
-6. From now on every player sees `uploads/<your player name>_my_dress` in the "Server skins" list.
+5. The server saves it as `config/lauramod/skins/uploads/<your UUID>_my_dress.png` and puts it on her at once. The UUID of your account is written without dashes (32 characters): two players can never get the same file name, and the name stays yours when the account is renamed.
+6. From now on every player sees `uploads/<your UUID>_my_dress` in the "Server skins" list.
 
 Notes:
 
 - Each player may keep 10 skin files on the server (`skins.maxUploadsPerPlayer`). Sending a file with the same name replaces the old one and is always allowed.
+- A player can send one file every 3 seconds. A file sent too soon is refused with a message.
 - A successful upload counts for the "New Look" advancement.
 - The stored name is cleaned: lower case letters, digits, `_` and `-` only, 32 characters at most for each part.
 - In singleplayer nothing is uploaded: your folder is the server folder, and a click applies the file directly.
@@ -95,7 +97,7 @@ Notes:
 - The address must start with `http` or `https`, be at most 1024 characters long, and its domain must be in `skins.urlDomainWhitelist`. Sub-domains are accepted. `"*"` in the list allows every domain.
 - Default whitelist: `textures.minecraft.net`, `i.imgur.com`, `s.namemc.com`, `namemc.com`, `mc-heads.net`, `minotar.net`, `crafatar.com`, `raw.githubusercontent.com`, `cdn.discordapp.com`, `media.discordapp.net`.
 - Links to a NameMC skin page and to an Imgur page are rewritten to the direct image address.
-- The image is downloaded by each client, not by the server. A client can turn this off with `display.remoteSkins` (the default skin is then shown), limits the size with `network.maxSkinDownloadKb`, follows at most 3 redirects, checks the whitelist at every step and refuses local network addresses.
+- The image is downloaded by each client, not by the server. A client can turn this off with `display.remoteSkins` (the default skin is then shown), limits the size with `network.maxSkinDownloadKb`, follows at most 3 redirects, checks the whitelist at every step and refuses local network addresses (IPv4 and IPv6). It keeps at most 32 downloaded skins in memory.
 - In a command the address is typed as it is, without quotes. Add `true` or `false` after it to choose slim arms (`false` by default for URL skins).
 
 ### Player name skins
@@ -104,7 +106,8 @@ Notes:
 
 - `skins.allowPlayerNameSkins` must be true.
 - The name has 1 to 16 letters, digits or underscores.
-- The server looks the account up through the public Mojang API and keeps the answer for one hour.
+- The server looks the account up through the public Mojang API. It keeps a skin it found for one hour and "no such account" for five minutes; an error or a rate limit of the API is not kept, the next request asks again.
+- A player can ask for one lookup every 5 seconds, and the server runs two lookups at a time. A request made too soon is refused with a message.
 - The result is stored as a URL skin on `textures.minecraft.net`, with the arm model of that account. Keep this domain in `skins.urlDomainWhitelist`, otherwise clients refuse to download it.
 
 ### Default skin
@@ -124,7 +127,7 @@ Notes:
 |---|---|
 | `/laura skin list` | |
 | `/laura skin builtin <name>` | `/laura skin builtin laura_gothic` |
-| `/laura skin file <name> [slim]` | `/laura skin file uploads/vyrriox_my_dress true` |
+| `/laura skin file <name> [slim]` | `/laura skin file summer/beach true` |
 | `/laura skin player <name>` | `/laura skin player vyrriox` |
 | `/laura skin url <url> [slim]` | `/laura skin url <direct link to a PNG> false` |
 | `/laura skin reset` | |
@@ -185,7 +188,8 @@ Règles :
 - Le nom est le chemin dans le dossier, sans `.png`. `skins/summer/beach.png` s'appelle `summer/beach`. La commande est `/laura skin file summer/beach`, sans guillemets.
 - Caractères autorisés dans les noms : lettres, chiffres, `_`, `-`, `.`, `/` et espace. 96 caractères au plus.
 - Un fichier trop lourd ou qui n'est pas un skin valide est ignoré et signalé dans le journal du serveur.
-- Les clients téléchargent le fichier une fois et le gardent dans `<dossier du jeu>/lauramod/cache/skins`. Un client refuse les fichiers plus lourds que son propre `network.maxSkinDownloadKb` (512 Ko).
+- Les clients téléchargent le fichier une fois et le gardent dans `<dossier du jeu>/lauramod/cache/skins`. Un client refuse les fichiers plus lourds que son propre `network.maxSkinDownloadKb` (512 Ko). Les fichiers de ce dossier qui n'ont pas servi depuis 30 jours sont supprimés au lancement du jeu, et le dossier reste sous 64 Mo (256 Mo pour `cache/models`).
+- Une compagne change de skin au plus une fois toutes les 2 secondes (de même pour son modèle). Un changement demandé trop tôt est refusé avec un message.
 - `/laura skin list` affiche les skins intégrés et les fichiers du serveur.
 
 ### Envoi par les joueurs
@@ -198,12 +202,13 @@ Exemple complet :
 2. Ouvrez son menu (K), onglet Style, page Skins.
 3. Cliquez sur `my_dress.png` dans la liste « Tes skins ». Vous pouvez aussi glisser-déposer n'importe quel fichier `.png` sur la fenêtre du menu.
 4. Le fichier est envoyé au serveur. Un message en bas de l'onglet le confirme, ou explique le refus (envois désactivés, pas le droit de changer son apparence, limite d'envois atteinte, fichier trop lourd, skin invalide). Rien n'est enregistré sur le serveur quand l'envoi est refusé.
-5. Le serveur l'enregistre sous `config/lauramod/skins/uploads/<votre pseudo>_my_dress.png` et le lui met aussitôt.
-6. Désormais tous les joueurs voient `uploads/<votre pseudo>_my_dress` dans la liste « Skins du serveur ».
+5. Le serveur l'enregistre sous `config/lauramod/skins/uploads/<votre UUID>_my_dress.png` et le lui met aussitôt. L'UUID de votre compte est écrit sans tirets (32 caractères) : deux joueurs ne peuvent jamais obtenir le même nom de fichier, et le nom reste le vôtre quand le compte change de pseudo.
+6. Désormais tous les joueurs voient `uploads/<votre UUID>_my_dress` dans la liste « Skins du serveur ».
 
 Remarques :
 
 - Chaque joueur peut garder 10 fichiers de skin sur le serveur (`skins.maxUploadsPerPlayer`). Envoyer un fichier du même nom remplace l'ancien et reste toujours possible.
+- Un joueur peut envoyer un fichier toutes les 3 secondes. Un fichier envoyé trop tôt est refusé avec un message.
 - Un envoi réussi compte pour le progrès « Nouveau look ».
 - Le nom enregistré est nettoyé : lettres minuscules, chiffres, `_` et `-` seulement, 32 caractères au plus pour chaque partie.
 - En solo rien n'est envoyé : votre dossier est le dossier du serveur, et un clic applique directement le fichier.
@@ -217,7 +222,7 @@ Remarques :
 - L'adresse doit commencer par `http` ou `https`, faire au plus 1024 caractères, et son domaine doit figurer dans `skins.urlDomainWhitelist`. Les sous-domaines sont acceptés. `"*"` dans la liste autorise tous les domaines.
 - Liste blanche par défaut : `textures.minecraft.net`, `i.imgur.com`, `s.namemc.com`, `namemc.com`, `mc-heads.net`, `minotar.net`, `crafatar.com`, `raw.githubusercontent.com`, `cdn.discordapp.com`, `media.discordapp.net`.
 - Les liens vers une page de skin NameMC et vers une page Imgur sont réécrits en adresse directe de l'image.
-- L'image est téléchargée par chaque client, pas par le serveur. Un client peut désactiver cela avec `display.remoteSkins` (le skin par défaut est alors affiché), limite le poids avec `network.maxSkinDownloadKb`, suit au plus 3 redirections, vérifie la liste blanche à chaque étape et refuse les adresses du réseau local.
+- L'image est téléchargée par chaque client, pas par le serveur. Un client peut désactiver cela avec `display.remoteSkins` (le skin par défaut est alors affiché), limite le poids avec `network.maxSkinDownloadKb`, suit au plus 3 redirections, vérifie la liste blanche à chaque étape et refuse les adresses du réseau local (IPv4 et IPv6). Il garde au plus 32 skins téléchargés en mémoire.
 - Dans une commande, l'adresse s'écrit telle quelle, sans guillemets. Ajoutez `true` ou `false` après elle pour choisir les bras fins (`false` par défaut pour les skins par URL).
 
 ### Skins par pseudo de joueur
@@ -226,7 +231,8 @@ Remarques :
 
 - `skins.allowPlayerNameSkins` doit valoir true.
 - Le pseudo compte de 1 à 16 lettres, chiffres ou tirets bas.
-- Le serveur recherche le compte par l'API publique de Mojang et garde la réponse pendant une heure.
+- Le serveur recherche le compte par l'API publique de Mojang. Il garde un skin trouvé pendant une heure et « compte inconnu » pendant cinq minutes ; une erreur ou une limite de débit de l'API n'est pas gardée, la demande suivante interroge de nouveau.
+- Un joueur peut demander une recherche toutes les 5 secondes, et le serveur mène deux recherches à la fois. Une demande faite trop tôt est refusée avec un message.
 - Le résultat est enregistré comme un skin par URL sur `textures.minecraft.net`, avec le modèle de bras de ce compte. Gardez ce domaine dans `skins.urlDomainWhitelist`, sinon les clients refusent de le télécharger.
 
 ### Skin par défaut
@@ -246,7 +252,7 @@ Remarques :
 |---|---|
 | `/laura skin list` | |
 | `/laura skin builtin <nom>` | `/laura skin builtin laura_gothic` |
-| `/laura skin file <nom> [slim]` | `/laura skin file uploads/vyrriox_my_dress true` |
+| `/laura skin file <nom> [slim]` | `/laura skin file summer/beach true` |
 | `/laura skin player <pseudo>` | `/laura skin player vyrriox` |
 | `/laura skin url <url> [slim]` | `/laura skin url <lien direct vers un PNG> false` |
 | `/laura skin reset` | |

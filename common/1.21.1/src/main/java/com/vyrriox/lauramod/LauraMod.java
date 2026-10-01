@@ -43,13 +43,25 @@ public final class LauraMod {
      * {@code /laura reload}. Item-based files are read here, after registries are frozen.
      */
     public static void reloadAll() {
-        LauraConfig.load();
-        GiftTable.load();
-        com.vyrriox.lauramod.desire.DesireTable.load();
-        com.vyrriox.lauramod.cooking.Cookbook.load();
-        com.vyrriox.lauramod.cooking.CookingSupport.clearCache();
-        DialogueManager.reload();
-        ServerAssetStore.rescan();
+        reload("lauramod-common.json", LauraConfig::load);
+        reload("gifts.json", GiftTable::load);
+        reload("desires.json", com.vyrriox.lauramod.desire.DesireTable::load);
+        reload("recipes.json", com.vyrriox.lauramod.cooking.Cookbook::load);
+        reload("the cooking cache", com.vyrriox.lauramod.cooking.CookingSupport::clearCache);
+        reload("the dialogues", DialogueManager::reload);
+        reload("the skin and model folders", ServerAssetStore::rescan);
+    }
+
+    /**
+     * One file (or a script entry added to it) with a value nobody expected must not stop the others
+     * from loading, the server from starting or a server tick: the previous content stays in use.
+     */
+    private static void reload(String what, Runnable loader) {
+        try {
+            loader.run();
+        } catch (RuntimeException e) {
+            LOGGER.error("Could not load {}, keeping what was loaded before", what, e);
+        }
     }
 
     public static Platform platform() {

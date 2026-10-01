@@ -35,6 +35,15 @@ public interface Platform {
     void sendToPlayer(ServerPlayer player, byte[] data);
 
     /**
+     * Client side: false when the server this client plays on did not announce the mod channel, so
+     * the mod is missing there. Loaders that refuse such a connection by themselves (the channel is
+     * required on NeoForge and Forge) keep the default.
+     */
+    default boolean serverHasChannel() {
+        return true;
+    }
+
+    /**
      * The inventory of a block through the loader's item API (capabilities, Transfer API), which
      * covers modded storage. Null when the loader finds nothing (vanilla containers are then used).
      */
@@ -67,5 +76,14 @@ public interface Platform {
      */
     default boolean equipTrinket(net.minecraft.world.entity.LivingEntity entity, net.minecraft.world.item.ItemStack stack, boolean simulate) {
         return false;
+    }
+
+    /** Copies of the trinkets the entity wears. Empty when no trinket mod is installed. */
+    default java.util.List<net.minecraft.world.item.ItemStack> trinkets(net.minecraft.world.entity.LivingEntity entity) {
+        return java.util.List.of();
+    }
+
+    /** Drops every trinket the entity wears at its feet and empties its trinket slots. */
+    default void dropTrinkets(net.minecraft.world.entity.LivingEntity entity) {
     }
 }

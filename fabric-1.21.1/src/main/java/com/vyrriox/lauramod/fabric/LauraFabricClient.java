@@ -31,6 +31,7 @@ public final class LauraFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         FabricPlatform.setClientSender(data -> ClientPlayNetworking.send(new LauraPayload(data)));
+        FabricPlatform.setServerChannelCheck(() -> ClientPlayNetworking.canSend(LauraPayload.TYPE));
         // Fabric runs play payload handlers on the client thread.
         ClientPlayNetworking.registerGlobalReceiver(LauraPayload.TYPE, (payload, context) -> LauraMod.client().handlePacket(payload.data()));
 

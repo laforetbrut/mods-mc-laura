@@ -446,6 +446,8 @@
   "lauramod.skin.changed": "새로운 모습: %s",
   "lauramod.skin.reset": "그녀의 기본 스킨으로 돌아갔어요.",
   "lauramod.skin.not_allowed": "그녀의 모습을 바꿀 권한이 없어요.",
+  "lauramod.look.cooldown": "너무 빨라요. 외형을 다시 바꾸려면 몇 초 기다려 주세요.",
+  "lauramod.network.server_missing": "이 서버에는 My Girlfriend Laura가 설치되어 있지 않습니다. 이 모드는 서버와 클라이언트 양쪽에 필요합니다. 서버에 추가를 요청하거나, 여기서 플레이하려면 mods 폴더에서 제거하세요.",
   "lauramod.skin.url_disabled": "이 서버에서는 URL 스킨이 비활성화되어 있어요.",
   "lauramod.skin.url_refused": "허용되지 않은 웹사이트예요. 허용: %s",
   "lauramod.skin.file_missing": "서버에 %s라는 이름의 스킨이 없어요.",

@@ -151,6 +151,7 @@ Needs go from 100 (satisfied) to 0 (desperate). The minutes are the time a need 
 | `commentActivities` | `true` | true / false | She comments on what you do (mining, fighting, eating alone, being idle). |
 | `jealousOfPlayers` | `true` | true / false | She gets jealous when you stay close to, or chat with, other players. |
 | `afkMinutes` | `5` | 1 to 1440 | Minutes without moving before she decides you are ignoring her. |
+| `giftCooldownSeconds` | `300` | 0 to 86400 | The same kind of gift or favorite food makes her fonder only once in this time, per companion. In between she still takes the gift and eats the food, and a wish is still fulfilled, but she gains no affection and no fun, and gives nothing back. A gift she dislikes always counts. 0 means no limit. |
 
 Effect of `annoyance`:
 
@@ -509,6 +510,7 @@ Les besoins vont de 100 (satisfait) à 0 (désespéré). Les minutes indiquent l
 | `commentActivities` | `true` | true / false | Elle commente ce que vous faites (miner, combattre, manger seul, rester immobile). |
 | `jealousOfPlayers` | `true` | true / false | Elle devient jalouse quand vous restez près d'autres joueurs ou discutez avec eux. |
 | `afkMinutes` | `5` | 1 à 1440 | Minutes sans bouger avant qu'elle estime que vous l'ignorez. |
+| `giftCooldownSeconds` | `300` | 0 à 86400 | Un même type de cadeau ou de nourriture préférée ne la rend plus affectueuse qu'une fois pendant ce délai, par compagne. Entre-temps elle prend quand même le cadeau et mange la nourriture, et un désir est quand même réalisé, mais elle ne gagne ni affection ni amusement et n'offre rien en retour. Un cadeau qu'elle déteste compte toujours. 0 : aucune limite. |
 
 Effet de `annoyance` :
 

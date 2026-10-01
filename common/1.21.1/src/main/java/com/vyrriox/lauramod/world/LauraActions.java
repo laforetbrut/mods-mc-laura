@@ -76,7 +76,7 @@ public final class LauraActions {
 
     public static void perform(ServerPlayer player, LauraEntity laura, LauraAction action, String arg, Source source) {
         if (!canCommand(player, laura)) {
-            LauraSpeech.say(laura, player, "not_your_girlfriend", LineFormatter.values());
+            LauraSpeech.refuse(laura, player);
             return;
         }
         String a = arg == null ? "" : arg.trim();
@@ -202,6 +202,8 @@ public final class LauraActions {
                     LauraSpeech.say(laura, player, "sleep.not_tired", LineFormatter.values());
                 } else {
                     laura.goToSleep(laura.findFreeBed(laura.blockPosition(), 8));
+                    // An order: the sleep goal ends it when she is rested, whatever her mode.
+                    laura.markSleepOrdered();
                     LauraSpeech.say(laura, player, "sleep.good_night", LineFormatter.values());
                 }
             }

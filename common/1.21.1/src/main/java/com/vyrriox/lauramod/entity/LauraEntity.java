@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 import com.vyrriox.lauramod.LauraMod;
 import com.vyrriox.lauramod.config.LauraConfig;
 import com.vyrriox.lauramod.desire.Desire;
-import com.vyrriox.lauramod.dialogue.LineFormatter;
 import com.vyrriox.lauramod.entity.ai.FetchGoal;
 import com.vyrriox.lauramod.entity.ai.LauraAttentionGoal;
 import com.vyrriox.lauramod.entity.ai.LauraBathGoal;
@@ -116,6 +115,12 @@ public class LauraEntity extends TamableAnimal {
     private final LauraWorkplace workplace = new LauraWorkplace(this);
     private LauraWorkGoal workGoal;
     private final List<ItemStack> keptOwnerItems = new ArrayList<>();
+    /** Saved items that no longer fit in her bag (inventoryRows was lowered): dropped on her first tick. */
+    private final List<ItemStack> overflow = new ArrayList<>();
+    /** Game time of the sleep order she is following, -1 when she sleeps on her own or is awake. */
+    private long sleepOrderedAt = -1;
+    private int lastInteractTick = -1;
+    private java.util.UUID lastInteractPlayer;
     private BlockPos homePos;
     private ResourceKey<Level> homeDimension;
     private BlockPos wanderCenter;
@@ -211,6 +216,12 @@ public class LauraEntity extends TamableAnimal {
         if (gagTicks > 0 && --gagTicks == 0 && isGagged()) {
             LauraActions.ungag(null, this, true);
         }
+        if (!overflow.isEmpty()) {
+            for (ItemStack stack : overflow) {
+                this.spawnAtLocation(stack);
+            }
+            overflow.clear();
+        }
         if ((this.tickCount + tickOffset) % 5 == 0) {
             LauraActions.processQueue(this);
         }
@@ -245,7 +256,9 @@ public class LauraEntity extends TamableAnimal {
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         boolean client = this.level().isClientSide;
-        if (stack.is(Items.NAME_TAG) || stack.is(Items.LEAD)) {
+        // A name tag that reaches this point is an unnamed one (the game already used the named
+        // ones to rename her): it is a gift or a wish like any other item.
+        if (stack.is(Items.LEAD)) {
             return super.mobInteract(player, hand);
         }
         if (!this.isTame() || this.getOwnerUUID() == null) {
@@ -262,8 +275,16 @@ public class LauraEntity extends TamableAnimal {
             return InteractionResult.SUCCESS;
         }
         ServerPlayer serverPlayer = (ServerPlayer) player;
+        // One interaction per player and per tick: a click that reaches the server twice must not
+        // hand over two items (and make her speak twice).
+        int serverTick = serverPlayer.getServer() == null ? this.tickCount : serverPlayer.getServer().getTickCount();
+        if (lastInteractTick == serverTick && serverPlayer.getUUID().equals(lastInteractPlayer)) {
+            return InteractionResult.CONSUME;
+        }
+        lastInteractTick = serverTick;
+        lastInteractPlayer = serverPlayer.getUUID();
         if (!this.isOwnedBy(player) && !LauraConfig.othersCanInteract.get()) {
-            LauraSpeech.say(this, serverPlayer, "not_your_girlfriend", LineFormatter.values());
+            LauraSpeech.refuse(this, serverPlayer);
             return InteractionResult.CONSUME;
         }
         if (LauraConfig.gagEnabled.get() && matchesAny(stack, LauraConfig.gagItems.get())) {
@@ -376,6 +397,10 @@ public class LauraEntity extends TamableAnimal {
             this.spawnAtLocation(stack);
         }
         keptOwnerItems.clear();
+        for (ItemStack stack : overflow) {
+            this.spawnAtLocation(stack);
+        }
+        overflow.clear();
         if (!getBackItem().isEmpty()) {
             this.spawnAtLocation(getBackItem().copy());
             setBackItem(ItemStack.EMPTY);
@@ -765,12 +790,27 @@ public class LauraEntity extends TamableAnimal {
             setState(STATE_FLOOR_SLEEP, false);
             this.setPose(Pose.STANDING);
         }
+        sleepOrderedAt = -1;
     }
 
     @Override
     public void stopSleeping() {
         super.stopSleeping();
         setState(STATE_FLOOR_SLEEP, false);
+        sleepOrderedAt = -1;
+    }
+
+    /** Marks the sleep she just started as an order: it lasts until she is rested, not until the next daylight check. */
+    public void markSleepOrdered() {
+        sleepOrderedAt = this.level().getGameTime();
+    }
+
+    public boolean isSleepOrdered() {
+        return sleepOrderedAt >= 0;
+    }
+
+    public long sleepOrderedAt() {
+        return sleepOrderedAt;
     }
 
     /** Bed within the radius that nobody sleeps in. */
@@ -882,10 +922,18 @@ public class LauraEntity extends TamableAnimal {
         tag.putByte("Combat", (byte) getCombatMode().ordinal());
         tag.putBoolean("Pickup", isPickingUpItems());
         tag.putInt("Affection", getAffection());
-        tag.putInt("GagTicks", isGagged() ? Math.max(gagTicks, 1) : 0);
+        // The real value: 0 means "no timer" (gag.durationSeconds = 0), she keeps the gag after a reload.
+        tag.putInt("GagTicks", isGagged() ? gagTicks : 0);
         tag.putBoolean("Gagged", isGagged());
         tag.putLong("SummonTime", summonGameTime);
-        tag.put("Inventory", inventory.createTag(this.registryAccess()));
+        ListTag items = inventory.createTag(this.registryAccess());
+        for (ItemStack stack : overflow) {
+            if (!stack.isEmpty()) {
+                // Not dropped yet (saved before her first tick): kept, they overflow again at the next load.
+                items.add(stack.save(this.registryAccess()));
+            }
+        }
+        tag.put("Inventory", items);
         if (!getBackItem().isEmpty()) {
             tag.put("BackItem", getBackItem().save(this.registryAccess()));
         }
@@ -936,8 +984,20 @@ public class LauraEntity extends TamableAnimal {
             setGagged(true, tag.getInt("GagTicks"));
         }
         summonGameTime = tag.contains("SummonTime") ? tag.getLong("SummonTime") : this.level().getGameTime();
+        overflow.clear();
         if (tag.contains("Inventory", Tag.TAG_LIST)) {
-            inventory.fromTag(tag.getList("Inventory", Tag.TAG_COMPOUND), this.registryAccess());
+            // Like SimpleContainer.fromTag, but what no longer fits (general.inventoryRows was lowered)
+            // is kept and dropped at her feet on her first tick instead of being deleted.
+            ListTag items = tag.getList("Inventory", Tag.TAG_COMPOUND);
+            inventory.clearContent();
+            for (int i = 0; i < items.size(); i++) {
+                ItemStack.parse(this.registryAccess(), items.getCompound(i)).ifPresent(stack -> {
+                    ItemStack rest = inventory.addItem(stack);
+                    if (!rest.isEmpty()) {
+                        overflow.add(rest);
+                    }
+                });
+            }
         }
         keptOwnerItems.clear();
         setBackItem(tag.contains("BackItem", Tag.TAG_COMPOUND)

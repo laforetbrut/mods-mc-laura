@@ -446,6 +446,8 @@
   "lauramod.skin.changed": "Новий образ: %s",
   "lauramod.skin.reset": "Знову її звичайний скін.",
   "lauramod.skin.not_allowed": "Тобі не можна змінювати її образ.",
+  "lauramod.look.cooldown": "Не так швидко: зачекай кілька секунд, перш ніж знову змінювати її вигляд.",
+  "lauramod.network.server_missing": "My Girlfriend Laura не встановлено на цьому сервері. Мод потрібен з обох боків: попроси сервер додати його або прибери його зі своєї теки mods, щоб грати тут.",
   "lauramod.skin.url_disabled": "Скіни за посиланнями вимкнено на цьому сервері.",
   "lauramod.skin.url_refused": "Цей сайт не дозволено. Дозволені: %s",
   "lauramod.skin.file_missing": "На сервері немає скіна з назвою %s.",

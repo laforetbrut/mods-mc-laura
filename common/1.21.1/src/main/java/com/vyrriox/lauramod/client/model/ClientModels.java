@@ -65,9 +65,15 @@ public final class ClientModels {
                 try {
                     Loaded loaded = fromZip(name, Files.readAllBytes(cachedZip));
                     CACHE.put(ref, Optional.ofNullable(loaded));
+                    com.vyrriox.lauramod.util.CacheFiles.touch(cachedZip);
                     return loaded;
                 } catch (IOException e) {
                     LauraMod.LOGGER.debug("Cached model {} unreadable", name);
+                } catch (RuntimeException e) {
+                    // The cached file is the one the server sent: refused once, refused again, not asked for again.
+                    LauraMod.LOGGER.warn("Model {} from the server is invalid: {}", name, e.getMessage());
+                    CACHE.put(ref, Optional.empty());
+                    return null;
                 }
             }
             if (!REQUESTED.containsKey(ref)) {
@@ -227,6 +233,9 @@ public final class ClientModels {
                 }
             }
         }
+        // Again here: the texture found next to the model was not part of the parser's check, and
+        // models of the config folder and of resource packs never went through the server.
+        ModelParser.checkTextures(data.textures);
         List<ResourceLocation> textures = new ArrayList<>();
         for (byte[] png : data.textures) {
             NativeImage image = NativeImage.read(png);

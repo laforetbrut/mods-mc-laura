@@ -32,8 +32,25 @@ final class FabricPlatform implements Platform {
                 .orElse("unknown");
     }
 
+    /** Installed by the client entry point: tells whether the server announced the mod channel. */
+    private static volatile java.util.function.BooleanSupplier serverChannel;
+
     static void setClientSender(Consumer<byte[]> sender) {
         clientSender = sender;
+    }
+
+    static void setServerChannelCheck(java.util.function.BooleanSupplier check) {
+        serverChannel = check;
+    }
+
+    /**
+     * Fabric lets a client with the mod join a server without it. The mod is needed on both sides,
+     * like on NeoForge and Forge: the common client code leaves such a server with a clear message.
+     */
+    @Override
+    public boolean serverHasChannel() {
+        java.util.function.BooleanSupplier check = serverChannel;
+        return check == null || check.getAsBoolean();
     }
 
     @Override

@@ -116,6 +116,7 @@ dependencies {
             // Only used by KubeJS's client GIF export, and hosted outside the declared repositories.
             exclude group: 'com.github.rtyley'
         }
+        runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
     }
 }
 

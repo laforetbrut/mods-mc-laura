@@ -32,6 +32,9 @@ final class NeoForgePlatform implements Platform {
         this.container = container;
         this.ae2 = ModList.get().isLoaded("ae2");
         this.curios = ModList.get().isLoaded("curios");
+        if (this.curios) {
+            com.vyrriox.lauramod.neoforge.compat.CuriosTrinkets.register();
+        }
     }
 
     @Override
@@ -54,6 +57,18 @@ final class NeoForgePlatform implements Platform {
     @Override
     public boolean equipTrinket(net.minecraft.world.entity.LivingEntity entity, ItemStack stack, boolean simulate) {
         return curios && com.vyrriox.lauramod.neoforge.compat.CuriosTrinkets.equip(entity, stack, simulate);
+    }
+
+    @Override
+    public java.util.List<ItemStack> trinkets(net.minecraft.world.entity.LivingEntity entity) {
+        return curios ? com.vyrriox.lauramod.neoforge.compat.CuriosTrinkets.worn(entity) : java.util.List.of();
+    }
+
+    @Override
+    public void dropTrinkets(net.minecraft.world.entity.LivingEntity entity) {
+        if (curios) {
+            com.vyrriox.lauramod.neoforge.compat.CuriosTrinkets.dropAll(entity);
+        }
     }
 
     @Override

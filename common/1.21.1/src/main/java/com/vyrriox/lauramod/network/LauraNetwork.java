@@ -57,8 +57,30 @@ public final class LauraNetwork {
     public static final int S2C_UPLOAD_RESULT = 107;
 
     private static final Map<UUID, UploadBuffer> UPLOADS = new HashMap<>();
+    /** Menu actions one player may send per second; the rest is dropped without an answer. */
+    public static final int ACTIONS_PER_SECOND = 20;
+    /** Per player: the server tick the current one second window started at, and the actions counted in it. */
+    private static final Map<UUID, int[]> ACTIONS = new HashMap<>();
+    /** A finished upload is checked, hashed and written: one every few seconds per player is plenty. */
+    private static final long UPLOAD_INTERVAL_MS = 3000;
+    private static final Map<UUID, Long> LAST_UPLOAD = new HashMap<>();
 
     private LauraNetwork() {
+    }
+
+    private static boolean actionAllowed(ServerPlayer player) {
+        int tick = player.getServer() == null ? 0 : player.getServer().getTickCount();
+        int[] window = ACTIONS.computeIfAbsent(player.getUUID(), id -> new int[]{tick, 0});
+        if (tick - window[0] >= 20 || tick < window[0]) {
+            window[0] = tick;
+            window[1] = 0;
+        }
+        return ++window[1] <= ACTIONS_PER_SECOND;
+    }
+
+    private static boolean uploadTooSoon(ServerPlayer player) {
+        Long last = LAST_UPLOAD.get(player.getUUID());
+        return last != null && System.currentTimeMillis() - last < UPLOAD_INTERVAL_MS;
     }
 
     public static FriendlyByteBuf buffer(int id) {
@@ -95,7 +117,7 @@ public final class LauraNetwork {
                     LauraAction action = LauraAction.byId(buf.readVarInt());
                     String arg = buf.readUtf(256);
                     LauraEntity laura = lauraById(player, entityId);
-                    if (action != null && laura != null) {
+                    if (action != null && laura != null && actionAllowed(player)) {
                         LauraActions.perform(player, laura, action, arg, LauraActions.Source.MENU);
                     }
                 }
@@ -227,6 +249,11 @@ public final class LauraNetwork {
             UPLOADS.remove(player.getUUID());
             return;
         }
+        if (offset == 0 && uploadTooSoon(player)) {
+            uploadResult(player, false, Component.translatable("lauramod.look.cooldown"));
+            UPLOADS.remove(player.getUUID());
+            return;
+        }
         if (offset == 0 && !SkinService.hasUploadRoom(player, kind, name)) {
             uploadResult(player, false, Component.translatable("lauramod.upload.quota", SkinService.uploadQuota(kind)));
             UPLOADS.remove(player.getUUID());
@@ -250,6 +277,12 @@ public final class LauraNetwork {
         upload.received += chunk.length;
         if (upload.received >= total) {
             UPLOADS.remove(player.getUUID());
+            // Checked again here: chunks can be sent without their first one.
+            if (uploadTooSoon(player)) {
+                uploadResult(player, false, Component.translatable("lauramod.look.cooldown"));
+                return;
+            }
+            LAST_UPLOAD.put(player.getUUID(), System.currentTimeMillis());
             LauraEntity laura = lauraById(player, entityId);
             SkinService.finishUpload(player, laura, kind, name, upload.data, slim);
         }
@@ -264,6 +297,10 @@ public final class LauraNetwork {
 
     public static void forget(ServerPlayer player) {
         UPLOADS.remove(player.getUUID());
+        ACTIONS.remove(player.getUUID());
+        LAST_UPLOAD.remove(player.getUUID());
+        SkinService.forget(player);
+        com.vyrriox.lauramod.entity.LauraSpeech.forget(player);
     }
 
     /** Settings the client needs to build its screens. */

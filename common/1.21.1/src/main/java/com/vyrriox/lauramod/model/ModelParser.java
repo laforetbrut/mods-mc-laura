@@ -24,8 +24,47 @@ import java.util.function.Function;
  */
 public final class ModelParser {
     private static final int MAX_CUBES = 4096;
+    // A file that passes the size check must not be able to freeze or exhaust the clients that render
+    // it: every count a client pays for at each frame, or in memory, has a limit.
+    public static final int MAX_BONES = 1024;
+    public static final int MAX_BONE_DEPTH = 64;
+    public static final int MAX_TEXTURES = 8;
+    /** Largest width or height of a texture, in pixels. */
+    public static final int MAX_TEXTURE_SIZE = 2048;
+    /** Pixels of all the textures of a model together (two textures of the largest size). */
+    public static final long MAX_TEXTURE_PIXELS = 2L * MAX_TEXTURE_SIZE * MAX_TEXTURE_SIZE;
 
     private ModelParser() {
+    }
+
+    /**
+     * Checks the textures of a model from their PNG headers, without decoding them: their number,
+     * the size of each one and their total size. Throws IllegalArgumentException when one is not a
+     * PNG or a limit is exceeded.
+     */
+    public static void checkTextures(List<byte[]> textures) {
+        if (textures.size() > MAX_TEXTURES) {
+            throw new IllegalArgumentException("too many textures (max " + MAX_TEXTURES + ")");
+        }
+        long pixels = 0;
+        for (byte[] png : textures) {
+            if (png == null || png.length < 24 || (png[0] & 0xFF) != 0x89 || png[1] != 'P' || png[2] != 'N' || png[3] != 'G') {
+                throw new IllegalArgumentException("a texture is not a PNG image");
+            }
+            long width = pngInt(png, 16);
+            long height = pngInt(png, 20);
+            if (width <= 0 || height <= 0 || width > MAX_TEXTURE_SIZE || height > MAX_TEXTURE_SIZE) {
+                throw new IllegalArgumentException("a texture is larger than " + MAX_TEXTURE_SIZE + "x" + MAX_TEXTURE_SIZE);
+            }
+            pixels += width * height;
+        }
+        if (pixels > MAX_TEXTURE_PIXELS) {
+            throw new IllegalArgumentException("the textures are too large together");
+        }
+    }
+
+    private static long pngInt(byte[] b, int offset) {
+        return ((long) (b[offset] & 0xFF) << 24) | ((b[offset + 1] & 0xFF) << 16) | ((b[offset + 2] & 0xFF) << 8) | (b[offset + 3] & 0xFF);
     }
 
     /**
@@ -58,6 +97,7 @@ public final class ModelParser {
         if (model.cubeCount() == 0) {
             throw new IllegalArgumentException("the model has no cube");
         }
+        checkTextures(model.textures);
         return model;
     }
 
@@ -99,7 +139,7 @@ public final class ModelParser {
                     addBbCube(model, looseRoot, element, projectBoxUv);
                 }
             } else if (node.isJsonObject()) {
-                parseBbGroup(model, node.getAsJsonObject(), groups, elements, null, projectBoxUv, uuidToBone);
+                parseBbGroup(model, node.getAsJsonObject(), groups, elements, null, projectBoxUv, uuidToBone, 1);
             }
         }
         List<JsonElement> textures = arr(root, "textures");
@@ -118,7 +158,10 @@ public final class ModelParser {
     }
 
     private static void parseBbGroup(ModelData model, JsonObject node, Map<String, JsonObject> groups, Map<String, JsonObject> elements,
-                                     ModelData.Bone parent, boolean projectBoxUv, Map<String, String> uuidToBone) {
+                                     ModelData.Bone parent, boolean projectBoxUv, Map<String, String> uuidToBone, int depth) {
+        if (depth > MAX_BONE_DEPTH) {
+            throw new IllegalArgumentException("groups nested too deep (max " + MAX_BONE_DEPTH + ")");
+        }
         JsonObject data = node;
         if (!node.has("name") && node.has("uuid") && groups.containsKey(node.get("uuid").getAsString())) {
             data = groups.get(node.get("uuid").getAsString());
@@ -148,7 +191,7 @@ public final class ModelParser {
                     addBbCube(model, bone, element, projectBoxUv || mirror && element.has("uv_offset"));
                 }
             } else if (child.isJsonObject()) {
-                parseBbGroup(model, child.getAsJsonObject(), groups, elements, bone, projectBoxUv, uuidToBone);
+                parseBbGroup(model, child.getAsJsonObject(), groups, elements, bone, projectBoxUv, uuidToBone, depth + 1);
             }
         }
     }
@@ -326,6 +369,16 @@ public final class ModelParser {
             String parentName = parents.get(bone);
             ModelData.Bone parent = parentName == null ? null : byName.get(parentName);
             register(model, bone, parent);
+        }
+        // Parents are given by name: a loop (a bone that is its own ancestor) or an endless chain
+        // would hang everything that walks up from a bone.
+        for (ModelData.Bone bone : order) {
+            int depth = 0;
+            for (ModelData.Bone b = bone.parent; b != null; b = b.parent) {
+                if (++depth > MAX_BONE_DEPTH) {
+                    throw new IllegalArgumentException("bones nested too deep or in a loop (max " + MAX_BONE_DEPTH + ")");
+                }
+            }
         }
         computeHeight(model);
         return model;
@@ -610,6 +663,9 @@ public final class ModelParser {
     // ------------------------------------------------------------------ helpers
 
     private static void register(ModelData model, ModelData.Bone bone, ModelData.Bone parent) {
+        if (model.bones.size() >= MAX_BONES) {
+            throw new IllegalArgumentException("too many bones (max " + MAX_BONES + ")");
+        }
         String key = bone.name.toLowerCase(Locale.ROOT);
         if (model.bones.containsKey(key)) {
             key = key + "_" + model.bones.size();

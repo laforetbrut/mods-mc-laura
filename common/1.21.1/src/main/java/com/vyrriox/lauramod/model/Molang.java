@@ -53,16 +53,26 @@ public final class Molang {
     public static final Expr ZERO = new Constant(0);
     public static final Expr ONE = new Constant(1);
 
+    /** Longest expression read. Animations use a few dozen characters. */
+    public static final int MAX_LENGTH = 1024;
+    /** Deepest nesting of parentheses, function calls and unary signs. */
+    public static final int MAX_DEPTH = 48;
+    /** Most dice {@code math.die_roll} throws: the count comes from the file and is evaluated every frame. */
+    public static final int MAX_DIE_ROLLS = 64;
+
     private Molang() {
     }
 
-    /** Parses an expression; invalid input becomes 0 rather than breaking the model. */
+    /**
+     * Parses an expression; invalid input becomes 0 rather than breaking the model. So does an
+     * expression that is too long or nested too deep: it would be parsed and evaluated recursively.
+     */
     public static Expr parse(String source) {
         if (source == null) {
             return ZERO;
         }
         String s = source.trim();
-        if (s.isEmpty()) {
+        if (s.isEmpty() || s.length() > MAX_LENGTH) {
             return ZERO;
         }
         try {
@@ -224,7 +234,8 @@ public final class Molang {
                 case "random_integer" -> Math.floor(a + ThreadLocalRandom.current().nextDouble() * (b - a + 1));
                 case "die_roll" -> {
                     double sum = 0;
-                    for (int i = 0; i < (int) a; i++) {
+                    int rolls = (int) Math.max(0, Math.min(MAX_DIE_ROLLS, a));
+                    for (int i = 0; i < rolls; i++) {
                         sum += b + ThreadLocalRandom.current().nextDouble() * (d - b);
                     }
                     yield sum;
@@ -287,14 +298,26 @@ public final class Molang {
             return false;
         }
 
+        int depth;
+
+        /** Entered for every nested expression; refuses the ones nested too deep. */
+        void enter() {
+            if (++depth > MAX_DEPTH) {
+                throw new IllegalArgumentException("Expression nested too deep");
+            }
+        }
+
         Expr parseTernary() {
+            enter();
             Expr cond = parseCoalesce();
             if (peek() == '?' && !src.startsWith("??", pos)) {
                 pos++;
                 Expr yes = parseTernary();
                 Expr no = eat(":") ? parseTernary() : ZERO;
+                depth--;
                 return new Ternary(cond, yes, no);
             }
+            depth--;
             return cond;
         }
 
@@ -380,17 +403,12 @@ public final class Molang {
 
         Expr parseUnary() {
             char c = peek();
-            if (c == '-') {
+            if (c == '-' || c == '+' || c == '!') {
                 pos++;
-                return new Negate(parseUnary());
-            }
-            if (c == '+') {
-                pos++;
-                return parseUnary();
-            }
-            if (c == '!') {
-                pos++;
-                return new Not(parseUnary());
+                enter();
+                Expr inner = parseUnary();
+                depth--;
+                return c == '-' ? new Negate(inner) : c == '!' ? new Not(inner) : inner;
             }
             return parsePrimary();
         }
