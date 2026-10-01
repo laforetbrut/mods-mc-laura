@@ -1,1 +1,0 @@
-com.vyrriox.lauramod.neoforge.compat.LauraKubeJSPlugin
