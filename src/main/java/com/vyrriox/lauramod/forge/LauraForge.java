@@ -27,6 +27,7 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -34,6 +35,7 @@ import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -143,6 +145,12 @@ public final class LauraForge {
             if (event.getEntity() instanceof ServerPlayer player) {
                 ServerLevel from = player.server.getLevel(event.getFrom());
                 LauraEvents.onPlayerChangedDimension(player, from);
+            }
+        });
+        // Last, once no other mod can refuse the entity any more.
+        game.addListener(EventPriority.LOWEST, (EntityJoinLevelEvent event) -> {
+            if (!event.getLevel().isClientSide()) {
+                LauraEvents.onEntityJoined(event.getEntity());
             }
         });
         game.addListener((EntityLeaveLevelEvent event) -> {

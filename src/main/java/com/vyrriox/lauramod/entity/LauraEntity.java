@@ -77,6 +77,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -224,11 +225,7 @@ public class LauraEntity extends TamableAnimal {
         if (!tracked) {
             // First tick of this entity (loaded, created, or just arrived from another dimension).
             tracked = true;
-            if (arrived) {
-                // Moved by something that did not go through the overrides below (a loader's own teleporter).
-                arrived = false;
-                LauraManager.onChangedDimension(this);
-            } else {
+            if (!reportArrival()) {
                 LauraManager.track(this);
             }
         }
@@ -327,12 +324,17 @@ public class LauraEntity extends TamableAnimal {
     /**
      * Moves her to a place in another level, the way the game teleports an entity there: a copy of
      * her is made in that level and this entity is removed. Returns the copy, which the world
-     * registry already knows about, or null (she is then unchanged) when a second her is already
-     * there (see {@link LauraManager#removeTwin}): the game would not add the one who arrives.
+     * registry already knows about, or null (she is then unchanged) when the trip was refused:
+     * another mod cancelled it, or a second her is already there (see {@link LauraManager#removeTwin})
+     * and the game would not add the one who arrives.
      */
     @Nullable
     public LauraEntity moveToLevel(ServerLevel level, double x, double y, double z, float yRot, float xRot) {
         if (!(this.level() instanceof ServerLevel) || level == this.level() || this.isRemoved() || level.getEntity(this.getUUID()) != null) {
+            return null;
+        }
+        // The game asks nobody before this kind of trip; the loader's portals do, and so does she.
+        if (!LauraMod.platform().mayChangeDimension(this, level.dimension())) {
             return null;
         }
         if (!(this.getType().create(level) instanceof LauraEntity copy)) {
@@ -342,6 +344,8 @@ public class LauraEntity extends TamableAnimal {
         copy.restoreFrom(this);
         copy.moveTo(x, y, z, yRot, Mth.clamp(xRot, -90.0F, 90.0F));
         copy.setYHeadRot(yRot);
+        // She arrives standing still, whatever speed she left with (a fall, a push).
+        copy.setDeltaMovement(Vec3.ZERO);
         this.removeAfterChangingDimensions();
         level.addDuringTeleport(copy);
         copy.arrived = false;
@@ -354,6 +358,22 @@ public class LauraEntity extends TamableAnimal {
     public void restoreFrom(Entity entity) {
         super.restoreFrom(entity);
         this.arrived = true;
+    }
+
+    /**
+     * A copy of her that was just made in another dimension tells the world registry where she is.
+     * True when she was one and had not done it yet. The trips that go through the overrides above
+     * do it themselves. The others are made by a teleporter of the loader (the portals of other
+     * mods on Forge and NeoForge): the loader says when she joins her new level, and her first tick
+     * is the last resort.
+     */
+    public boolean reportArrival() {
+        if (!arrived) {
+            return false;
+        }
+        arrived = false;
+        LauraManager.onChangedDimension(this);
+        return true;
     }
 
     private void applyConfigAttributes() {
