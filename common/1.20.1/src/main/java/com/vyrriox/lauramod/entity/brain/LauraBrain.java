@@ -18,8 +18,11 @@ import com.vyrriox.lauramod.util.ItemSpec;
 import com.vyrriox.lauramod.world.LauraWorldChecks;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -27,6 +30,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.HashMap;
@@ -69,6 +73,11 @@ public final class LauraBrain {
     private String lastRefused = "";
     private long lastRefusedTime;
     private Vec3 lastPos;
+    /** Water that ran over her since she was last dry, in hygiene points. */
+    private float washed;
+    private boolean dirtyBeforeBath;
+    /** The dimension she was last in with her partner. */
+    private ResourceKey<Level> togetherIn;
     private boolean wasRaining;
     private boolean wasThundering;
     private boolean wasNight;
@@ -145,6 +154,7 @@ public final class LauraBrain {
         if (needsOn) {
             decayNeeds(owner, ownerNear);
         }
+        tickBath(needsOn);
         regenerate(needsOn);
         if (needsOn && LauraConfig.autoEat.get() && needs.get(Needs.Need.HUNGER) < 35 && now - lastAte > 200 && !laura.isGagged()) {
             eatFromInventory();
@@ -154,6 +164,9 @@ public final class LauraBrain {
             stealFood(owner);
         }
         updateMood(now);
+        if (ownerNear) {
+            arriveTogether(owner);
+        }
         if (owner != null) {
             if (needsOn && LauraConfig.desiresEnabled.get() && !laura.isAsleep()) {
                 tickDesire(now, owner, ownerNear);
@@ -222,16 +235,78 @@ public final class LauraBrain {
         }
         needs.add(Needs.Need.ATTENTION, (float) -(attention * (asleep ? 0.1 : 1.0)));
 
-        if (laura.isInWater()) {
-            needs.add(Needs.Need.HYGIENE, 5F);
-        } else if (laura.isInWaterOrRain()) {
-            needs.add(Needs.Need.HYGIENE, 1F);
-        } else {
+        // Water and rain clean her instead: see tickBath.
+        if (!laura.isInWaterOrRain()) {
             double hygiene = perSecond(LauraConfig.hygieneMinutes.getInt()) * decay * (fighting ? 2.0 : 1.0);
             needs.add(Needs.Need.HYGIENE, (float) -hygiene);
         }
         if (needs.get(Needs.Need.HYGIENE) < 15 && laura.getRandom().nextInt(4) == 0) {
             laura.spawnParticles(ParticleTypes.MYCELIUM, 3, 0.4);
+        }
+    }
+
+    /** Hygiene points of water that make a bath: 4 seconds in water, or 20 seconds of rain, in a row. */
+    private static final float BATH = 20F;
+
+    /**
+     * Water washes her wherever it comes from: the bath she takes by herself, a pool her partner
+     * leads or pushes her into, the rain. Once enough of it ran over a Laura who was not perfectly
+     * clean, she has had her bath.
+     */
+    private void tickBath(boolean needsOn) {
+        float water = laura.isInWater() ? 5F : laura.isInWaterOrRain() ? 1F : 0F;
+        if (water == 0) {
+            washed = 0;
+            return;
+        }
+        if (washed == 0) {
+            dirtyBeforeBath = !needsOn || Math.round(needs.get(Needs.Need.HYGIENE)) < Needs.MAX;
+        }
+        if (needsOn) {
+            needs.add(Needs.Need.HYGIENE, water);
+        }
+        boolean wasBathing = washed < BATH;
+        washed += water;
+        if (dirtyBeforeBath && wasBathing && washed >= BATH) {
+            onWashed(null);
+        }
+    }
+
+    /**
+     * She is clean again: her line, and the bath advancement. {@code by} is the player who washed
+     * her, null when the water did it (her partner then gets it, wherever he is).
+     */
+    public void onWashed(ServerPlayer by) {
+        ServerPlayer partner = by != null ? by : LauraSpeech.ownerAnywhere(laura);
+        // Water washes her at every river she swims across and every shower of rain: she does not say so each time.
+        if (by != null || ready("washed", 300, false)) {
+            LauraSpeech.say(laura, partner, "need.hygiene.clean", LineFormatter.values());
+        }
+        LauraAdvancements.award(partner, "bath");
+    }
+
+    /**
+     * Together in a dimension they were not in a moment ago, however each of them got there (a
+     * portal taken by one or the other, a call, a command): she says what she thinks of the place,
+     * and the Nether and the End count for their advancements.
+     */
+    private void arriveTogether(ServerPlayer owner) {
+        ResourceKey<Level> here = laura.level().dimension();
+        if (here.equals(togetherIn)) {
+            return;
+        }
+        // No line the first time she is seen at all (a summon, an old save): she did not travel.
+        boolean travelled = togetherIn != null;
+        togetherIn = here;
+        String place = here == Level.NETHER ? "nether" : here == Level.END ? "end" : here == Level.OVERWORLD ? "overworld" : null;
+        if (place == null) {
+            return;
+        }
+        if (travelled) {
+            LauraSpeech.say(laura, owner, "dimension." + place, LineFormatter.values());
+        }
+        if (!place.equals("overworld")) {
+            LauraAdvancements.award(owner, place);
         }
     }
 
@@ -302,6 +377,11 @@ public final class LauraBrain {
 
     public boolean isSulking() {
         return now() < sulkUntil;
+    }
+
+    /** She holds something against her partner: she sulks, or is still angry (a hit, an insult, something disgusting to eat). */
+    public boolean holdsGrudge() {
+        return isSulking() || now() < angryUntil;
     }
 
     public void makeHappy(int seconds) {
@@ -1176,6 +1256,20 @@ public final class LauraBrain {
         return true;
     }
 
+    /**
+     * Same memory as {@link #refuses}, for what she pushes away herself: true when she refused this
+     * very thing less than 20 seconds ago (asking twice works), otherwise the refusal is remembered.
+     */
+    public boolean askedAgain(String order) {
+        if (order.equals(lastRefused) && now() - lastRefusedTime < 20 * 20) {
+            lastRefused = "";
+            return true;
+        }
+        lastRefused = order;
+        lastRefusedTime = now();
+        return false;
+    }
+
     /** Talking to her in chat (any message from her partner). */
     public void onChatFromOwner() {
         if (ready("chat_attention", 8, false)) {
@@ -1243,6 +1337,7 @@ public final class LauraBrain {
         sulkUntil = 0;
         angryUntil = 0;
         jealousUntil = 0;
+        togetherIn = null;
         makeHappy(120);
     }
 
@@ -1268,6 +1363,9 @@ public final class LauraBrain {
             }
         });
         tag.put("GiftCooldowns", rewards);
+        if (togetherIn != null) {
+            tag.putString("TogetherIn", togetherIn.location().toString());
+        }
         return tag;
     }
 
@@ -1287,6 +1385,8 @@ public final class LauraBrain {
         for (String key : rewards.getAllKeys()) {
             rewardCooldowns.put(key, now + rewards.getLong(key));
         }
+        ResourceLocation together = tag.contains("TogetherIn") ? ResourceLocation.tryParse(tag.getString("TogetherIn")) : null;
+        togetherIn = together == null ? null : ResourceKey.create(Registries.DIMENSION, together);
     }
 
     /** Used by chat and the menu: which need is the most urgent, and how urgent. */

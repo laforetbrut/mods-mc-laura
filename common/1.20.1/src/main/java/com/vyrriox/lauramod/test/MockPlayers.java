@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import com.vyrriox.lauramod.world.LauraWorldData;
 import io.netty.channel.embedded.EmbeddedChannel;
 import net.minecraft.network.Connection;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.game.ServerboundClientInformationPacket;
 import net.minecraft.server.MinecraftServer;
@@ -14,6 +15,10 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.ChatVisiblity;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -23,6 +28,9 @@ import java.util.UUID;
  * @author vyrriox
  */
 public final class MockPlayers {
+    /** What the server told each fake player in chat: Laura's lines arrive there. */
+    private static final Map<UUID, List<String>> HEARD = new HashMap<>();
+
     private MockPlayers() {
     }
 
@@ -38,7 +46,14 @@ public final class MockPlayers {
             public boolean isCreative() {
                 return false;
             }
+
+            @Override
+            public void sendSystemMessage(Component message, boolean overlay) {
+                HEARD.computeIfAbsent(id, key -> new ArrayList<>()).add(message.getString());
+                super.sendSystemMessage(message, overlay);
+            }
         };
+        HEARD.remove(id);
         // The UUID is the same on every run: start from a clean slate, whatever an earlier
         // (possibly interrupted) run left in the test world.
         forgetCompanions(level.getServer(), id);
@@ -63,6 +78,11 @@ public final class MockPlayers {
         data.forgetOwner(owner);
     }
 
+    /** The chat messages the fake player received since it was created, oldest first. */
+    public static List<String> heard(ServerPlayer player) {
+        return HEARD.getOrDefault(player.getUUID(), List.of());
+    }
+
     public static void setLanguage(ServerPlayer player, String language) {
         player.updateOptions(new ServerboundClientInformationPacket(language, 8, ChatVisiblity.FULL, true, 0, HumanoidArm.RIGHT, false, false));
     }
@@ -71,5 +91,6 @@ public final class MockPlayers {
         MinecraftServer server = player.getServer();
         server.getPlayerList().remove(player);
         forgetCompanions(server, player.getUUID());
+        HEARD.remove(player.getUUID());
     }
 }

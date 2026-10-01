@@ -13,7 +13,8 @@ import java.util.EnumSet;
 import java.util.Optional;
 
 /**
- * When she feels dirty she walks into the nearest water for a quick bath.
+ * When she feels dirty she walks into the nearest water for a quick bath. What the water does to
+ * her is in {@link com.vyrriox.lauramod.entity.brain.LauraBrain}, whoever brought her to it.
  *
  * @author vyrriox
  */
@@ -61,12 +62,9 @@ public class LauraBathGoal extends Goal {
     public void tick() {
         ticks++;
         if (laura.isInWater()) {
+            // Her brain tells when the water has washed her (line and advancement), as for any bath.
             bathTicks++;
             laura.getNavigation().stop();
-            if (bathTicks == 80) {
-                LauraSpeech.sayToOwner(laura, "need.hygiene.clean", LineFormatter.values());
-                com.vyrriox.lauramod.world.LauraAdvancements.award(LauraSpeech.owner(laura), "bath");
-            }
             return;
         }
         if (ticks % 20 == 1) {

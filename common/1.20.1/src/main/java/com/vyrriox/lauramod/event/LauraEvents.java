@@ -12,6 +12,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -72,6 +73,16 @@ public final class LauraEvents {
 
     public static void onPlayerDeath(ServerPlayer player) {
         LauraManager.onPlayerDeath(player);
+    }
+
+    /**
+     * An entity stops being part of a server level: its chunk unloads, or it is removed. Loaders
+     * forward the event they fire when entity tracking ends (EntityLeaveLevelEvent, ENTITY_UNLOAD).
+     */
+    public static void onEntityUnloaded(Entity entity) {
+        if (entity instanceof LauraEntity laura) {
+            LauraManager.onUnloaded(laura);
+        }
     }
 
     public static void onBlockBroken(ServerPlayer player, BlockState state) {

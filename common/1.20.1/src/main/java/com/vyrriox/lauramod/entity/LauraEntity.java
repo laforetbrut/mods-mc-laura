@@ -44,10 +44,12 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleContainer;
@@ -59,7 +61,9 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.RelativeMovement;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -78,6 +82,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.Set;
 
 /**
  * Laura herself.
@@ -133,6 +139,9 @@ public class LauraEntity extends TamableAnimal {
     private long summonGameTime = -1;
     private FetchGoal fetchGoal;
     private final int tickOffset;
+    private boolean tracked;
+    /** Set on the copy the game makes of her in another dimension, until the world registry has been told. */
+    private boolean arrived;
 
     public LauraEntity(EntityType<? extends TamableAnimal> type, Level level) {
         super(type, level);
@@ -212,6 +221,17 @@ public class LauraEntity extends TamableAnimal {
         if (this.level().isClientSide) {
             return;
         }
+        if (!tracked) {
+            // First tick of this entity (loaded, created, or just arrived from another dimension).
+            tracked = true;
+            if (arrived) {
+                // Moved by something that did not go through the overrides below (a loader's own teleporter).
+                arrived = false;
+                LauraManager.onChangedDimension(this);
+            } else {
+                LauraManager.track(this);
+            }
+        }
         if (emoteEndTick > 0) {
             Emote emote = getEmote();
             int elapsed = emote.duration - (emoteEndTick - this.tickCount);
@@ -243,14 +263,97 @@ public class LauraEntity extends TamableAnimal {
         }
         if ((this.tickCount + tickOffset) % 5 == 0) {
             LauraActions.processQueue(this);
-        }
-        if ((this.tickCount + tickOffset) % 20 == 0) {
-            applyConfigAttributes();
-            brain.tickSecond();
-            if ((this.tickCount + tickOffset) % 100 == 0) {
-                LauraManager.track(this);
+            if (this.isRemoved()) {
+                // A queued order sent her to another dimension: she goes on there, as another entity.
+                return;
             }
         }
+        if ((this.tickCount + tickOffset) % 20 == 0) {
+            if (LauraManager.removeTwin(this)) {
+                return;
+            }
+            applyConfigAttributes();
+            brain.tickSecond();
+            LauraManager.track(this);
+        }
+    }
+
+    // ------------------------------------------------------------------ ownership and dimensions
+
+    /**
+     * By UUID. The vanilla check looks her owner up in her own level, so a partner who is in another
+     * dimension would not be her owner and could not call her.
+     */
+    @Override
+    public boolean isOwnedBy(LivingEntity entity) {
+        return entity != null && entity.getUUID().equals(this.getOwnerUUID());
+    }
+
+    /**
+     * Portals end here. The game replaces her with a copy in the other level: the world registry
+     * learns it at once.
+     */
+    @Nullable
+    @Override
+    public Entity changeDimension(ServerLevel destination) {
+        if (destination != this.level() && destination.getEntity(this.getUUID()) != null) {
+            // A second her is already there (see LauraManager.removeTwin). The game would not add the
+            // one who arrives, and she would be lost: she stays.
+            return null;
+        }
+        Entity moved = super.changeDimension(destination);
+        if (moved instanceof LauraEntity copy && copy != this) {
+            copy.arrived = false;
+            LauraManager.onChangedDimension(copy);
+        }
+        return moved;
+    }
+
+    /** Portals only (commands and calls do not ask): with followAcrossDimensions off she does not wander into another dimension alone. */
+    @Override
+    public boolean canChangeDimensions() {
+        return LauraConfig.followAcrossDimensions.get() && super.canChangeDimensions();
+    }
+
+    /** The vanilla teleport to another level (/tp, /execute in) replaces her without saying by whom: {@link #moveToLevel} does the same and knows the copy. */
+    @Override
+    public boolean teleportTo(ServerLevel level, double x, double y, double z, Set<RelativeMovement> relativeMovements, float yRot, float xRot) {
+        if (level == this.level()) {
+            return super.teleportTo(level, x, y, z, relativeMovements, yRot, xRot);
+        }
+        return moveToLevel(level, x, y, z, yRot, xRot) != null;
+    }
+
+    /**
+     * Moves her to a place in another level, the way the game teleports an entity there: a copy of
+     * her is made in that level and this entity is removed. Returns the copy, which the world
+     * registry already knows about, or null (she is then unchanged) when a second her is already
+     * there (see {@link LauraManager#removeTwin}): the game would not add the one who arrives.
+     */
+    @Nullable
+    public LauraEntity moveToLevel(ServerLevel level, double x, double y, double z, float yRot, float xRot) {
+        if (!(this.level() instanceof ServerLevel) || level == this.level() || this.isRemoved() || level.getEntity(this.getUUID()) != null) {
+            return null;
+        }
+        if (!(this.getType().create(level) instanceof LauraEntity copy)) {
+            return null;
+        }
+        this.unRide();
+        copy.restoreFrom(this);
+        copy.moveTo(x, y, z, yRot, Mth.clamp(xRot, -90.0F, 90.0F));
+        copy.setYHeadRot(yRot);
+        this.removeAfterChangingDimensions();
+        level.addDuringTeleport(copy);
+        copy.arrived = false;
+        LauraManager.onChangedDimension(copy);
+        return copy;
+    }
+
+    /** The game fills the copy it makes of her in another level with this, whatever asked for the trip. */
+    @Override
+    public void restoreFrom(Entity entity) {
+        super.restoreFrom(entity);
+        this.arrived = true;
     }
 
     private void applyConfigAttributes() {
@@ -314,6 +417,10 @@ public class LauraEntity extends TamableAnimal {
             LauraActions.ungag(serverPlayer, this, false);
             return InteractionResult.CONSUME;
         }
+        if (stack.is(Items.WATER_BUCKET)) {
+            LauraActions.wash(serverPlayer, this, hand);
+            return InteractionResult.CONSUME;
+        }
         if (LauraBags.isWearableOnBack(stack) && getBackItem().isEmpty()
                 || !stack.isEmpty() && GiftTable.food(stack) == null && GiftTable.find(stack) == null && LauraMod.platform().equipTrinket(this, stack.copyWithCount(1), true)) {
             LauraActions.giveItem(serverPlayer, this, stack, hand);
@@ -361,6 +468,9 @@ public class LauraEntity extends TamableAnimal {
             return false;
         }
         Entity attacker = source.getEntity();
+        if (attacker instanceof LivingEntity living && !source.isCreativePlayer() && isShieldedFrom(living)) {
+            return false;
+        }
         boolean hurt = super.hurt(source, amount);
         if (hurt) {
             if (isAsleep()) {
@@ -377,6 +487,85 @@ public class LauraEntity extends TamableAnimal {
             }
         }
         return hurt;
+    }
+
+    // ------------------------------------------------------------------ players and their companions
+
+    /** The player behind an entity: the player itself, or the owner of a companion or a pet. */
+    @Nullable
+    private static UUID playerBehind(LivingEntity entity) {
+        if (entity instanceof Player) {
+            return entity.getUUID();
+        }
+        return entity instanceof OwnableEntity owned ? owned.getOwnerUUID() : null;
+    }
+
+    /**
+     * Whether the server lets her side and the side of {@code rival} hurt each other: the PvP
+     * setting first, then the teams (friendly fire).
+     */
+    private boolean pvpAllowedWith(UUID rival, LivingEntity entity) {
+        MinecraftServer server = this.level().getServer();
+        if (server == null || !server.isPvpAllowed()) {
+            return false;
+        }
+        Player rivalPlayer = entity instanceof Player p ? p : this.level().getPlayerByUUID(rival);
+        if (rivalPlayer != null && this.getOwner() instanceof Player partner) {
+            return partner.canHarmPlayer(rivalPlayer);
+        }
+        // One of the two players is away: the teams of the entities decide.
+        return !this.isAlliedTo(entity);
+    }
+
+    /**
+     * Whether she may fight this target. Never her partner, nor her partner's other companions
+     * and pets. A player, or the companion or pet of another player, only when the config allows
+     * it and the server lets the two players fight (PvP setting and teams).
+     */
+    public boolean mayFight(LivingEntity target) {
+        if (target == this || this.isOwnedBy(target)) {
+            return false;
+        }
+        UUID rival = playerBehind(target);
+        if (rival == null) {
+            return true;
+        }
+        if (rival.equals(this.getOwnerUUID())) {
+            return false;
+        }
+        return LauraConfig.attackPlayers.get() && pvpAllowedWith(rival, target);
+    }
+
+    /**
+     * The other side of {@link #mayFight}: where the server forbids fights between players, another
+     * player (or their companion or pet) cannot hurt her either, since she could not answer.
+     */
+    private boolean isShieldedFrom(LivingEntity attacker) {
+        if (!LauraConfig.shieldWithoutPvp.get() || this.getOwnerUUID() == null) {
+            return false;
+        }
+        UUID rival = playerBehind(attacker);
+        return rival != null && !rival.equals(this.getOwnerUUID()) && !pvpAllowedWith(rival, attacker);
+    }
+
+    @Override
+    public boolean canAttack(LivingEntity target) {
+        return mayFight(target) && super.canAttack(target);
+    }
+
+    @Override
+    public boolean wantsToAttack(LivingEntity target, LivingEntity owner) {
+        return mayFight(target);
+    }
+
+    @Override
+    public boolean doHurtTarget(Entity target) {
+        if (target instanceof LivingEntity living && !mayFight(living)) {
+            // The rules changed during the fight (PvP turned off, teams changed).
+            this.setTarget(null);
+            return false;
+        }
+        return super.doHurtTarget(target);
     }
 
     @Override
@@ -675,6 +864,7 @@ public class LauraEntity extends TamableAnimal {
             this.wanderCenter = this.blockPosition();
         }
         this.getNavigation().stop();
+        LauraManager.modeChanged(this);
     }
 
     public CombatMode getCombatMode() {

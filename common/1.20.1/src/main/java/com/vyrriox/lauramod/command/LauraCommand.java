@@ -280,8 +280,7 @@ public final class LauraCommand {
             c.getSource().sendFailure(Component.translatable("lauramod.not_found"));
             return 0;
         }
-        LauraActions.perform(player, laura, action, arg, LauraActions.Source.COMMAND);
-        return 1;
+        return LauraActions.perform(player, laura, action, arg, LauraActions.Source.COMMAND) ? 1 : 0;
     }
 
     /**

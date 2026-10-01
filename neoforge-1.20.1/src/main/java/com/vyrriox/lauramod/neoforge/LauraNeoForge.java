@@ -27,6 +27,7 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.level.BlockEvent;
@@ -140,6 +141,11 @@ public final class LauraNeoForge {
             if (event.getEntity() instanceof ServerPlayer player) {
                 ServerLevel from = player.server.getLevel(event.getFrom());
                 LauraEvents.onPlayerChangedDimension(player, from);
+            }
+        });
+        game.addListener((EntityLeaveLevelEvent event) -> {
+            if (!event.getLevel().isClientSide()) {
+                LauraEvents.onEntityUnloaded(event.getEntity());
             }
         });
         game.addListener((LivingDeathEvent event) -> {

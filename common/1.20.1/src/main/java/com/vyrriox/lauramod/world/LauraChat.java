@@ -112,7 +112,12 @@ public final class LauraChat {
                     continue;
                 }
                 understood = true;
-                handleIntent(player, laura, match, segment, !first);
+                // An earlier order of the same message may have sent her to another dimension (her home).
+                LauraEntity live = LauraManager.live(laura);
+                if (live == null) {
+                    break;
+                }
+                handleIntent(player, live, match, segment, !first);
                 first = false;
             }
             if (!understood) {
