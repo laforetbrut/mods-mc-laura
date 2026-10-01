@@ -139,6 +139,18 @@ public final class LauraChat {
         }
     }
 
+    private static final java.util.regex.Pattern NUMBER = java.util.regex.Pattern.compile("\\d{1,4}");
+
+    /**
+     * The quantity written in a fetch order ("bring me 3 apples", "apporte 32 pains"), from 1 to
+     * 576, or 0 when the message has no number (the default amount is then used). Digits only, in
+     * any language, including scripts written without spaces.
+     */
+    static int countIn(TextMatcher.Prepared message) {
+        java.util.regex.Matcher m = NUMBER.matcher(message.text());
+        return m.find() ? Math.max(1, Math.min(576, Integer.parseInt(m.group()))) : 0;
+    }
+
     private static void handleIntent(ServerPlayer player, LauraEntity laura, DialogueManager.IntentMatch match, String segment, boolean queue) {
         LauraBrain brain = laura.brain();
         String intent = match.intent();
@@ -167,7 +179,7 @@ public final class LauraChat {
                     LauraSpeech.say(laura, player, "fetch.what", none);
                     return;
                 }
-                LauraActions.fetch(player, laura, items.isEmpty() ? "held" : items.get(0), 0, queue);
+                LauraActions.fetch(player, laura, items.isEmpty() ? "held" : items.get(0), countIn(prepared), queue);
             }
             case "chop_tree" -> LauraActions.task(player, laura, LauraTask.Type.CHOP_TREE, 0, queue);
             case "harvest" -> LauraActions.task(player, laura, LauraTask.Type.HARVEST, 0, queue);

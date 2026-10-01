@@ -338,6 +338,20 @@ public final class LauraTestCases {
                 ctx.succeed();
             });
         }));
+        // A number typed in a chat order is the quantity she brings back.
+        add(tests, "fetch_chat_count", 900, ctx -> withLaura(ctx, laura -> {
+            ServerPlayer player = ctx.player();
+            BlockPos chest = ctx.origin.offset(8, 0, 0);
+            ctx.level.setBlockAndUpdate(chest, Blocks.CHEST.defaultBlockState());
+            if (ctx.level.getBlockEntity(chest) instanceof ChestBlockEntity be) {
+                be.setItem(0, new ItemStack(Items.BREAD, 20));
+            }
+            LauraChat.onChat(player, "bring me 3 bread please");
+            ctx.waitFor("3 breads delivered", 800, () -> player.getInventory().countItem(Items.BREAD) >= 3, () -> {
+                ctx.check(player.getInventory().countItem(Items.BREAD) == 3, "count ignored: " + player.getInventory().countItem(Items.BREAD));
+                ctx.succeed();
+            });
+        }));
         // "Come" brings her back; it never creates a second companion.
         add(tests, "come_does_not_summon", 200, ctx -> withLaura(ctx, laura -> {
             ServerPlayer player = ctx.player();
