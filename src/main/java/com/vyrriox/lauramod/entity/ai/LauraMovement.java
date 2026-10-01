@@ -150,8 +150,8 @@ public final class LauraMovement {
     /**
      * Puts her on a spot, in her level or in another one. The game moves an entity to another
      * dimension by replacing it with a copy there: that copy is returned and the entity passed in
-     * is gone. Null when the trip was refused (a second her is already there); she is then
-     * unchanged.
+     * is gone. Null when the trip was refused (another mod can cancel it, a second her is already
+     * there); she is then unchanged.
      */
     @Nullable
     public static LauraEntity place(LauraEntity laura, ServerLevel level, BlockPos spot) {

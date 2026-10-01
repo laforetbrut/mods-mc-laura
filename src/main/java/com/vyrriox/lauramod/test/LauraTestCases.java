@@ -498,6 +498,45 @@ public final class LauraTestCases {
                 });
             }));
         });
+        // Minecraft 1.20.1 only. The portal of another mod can make the copy of her itself (a loader's
+        // own teleporter), without anything she overrides being asked: the copy reports in by itself.
+        add(tests, "teleporter_of_another_mod", 500, ctx -> {
+            ServerLevel nether = nether(ctx);
+            swept(ctx, nether, NETHER_FLOOR, true, () -> withLaura(ctx, laura -> {
+                BlockPos there = floor(nether, NETHER_FLOOR);
+                UUID id = laura.getUUID();
+                LauraWorldData.Record record = LauraWorldData.get(ctx.server()).get(id);
+                // Between two passes of the left behind check (every 40 ticks): her first tick over there comes first.
+                ctx.waitFor("a tick between two left behind checks", 45, () -> ctx.server().getTickCount() % 40 == 5, () -> {
+                    LauraEntity copy = LauraRegistries.LAURA.get().create(nether);
+                    ctx.check(copy != null, "could not create a copy");
+                    copy.restoreFrom(laura);
+                    copy.moveTo(there.getX() + 0.5, there.getY(), there.getZ() + 0.5, 0, 0);
+                    laura.setRemoved(Entity.RemovalReason.CHANGED_DIMENSION);
+                    nether.addDuringTeleport(copy);
+                    if (!LauraMod.platform().loaderName().equals("fabric")) {
+                        // Forge and NeoForge have such teleporters, and say when the copy joins its level: in this very tick.
+                        ctx.check(record.dimension == Level.NETHER, "the record still says " + record.dimension.location());
+                    }
+                    // Elsewhere her first tick tells.
+                    ctx.waitFor("her first tick in the Nether", 30, () -> record.dimension == Level.NETHER, () -> {
+                        ctx.check(record.pos.distSqr(there) < 4, "the record says " + record.pos + ", she is at " + copy.blockPosition());
+                        ctx.check(copies(ctx).size() == 1, copies(ctx).size() + " companions exist");
+                        // As after a portal she took by herself: she waits for her partner, the left behind check does not pull her back.
+                        ctx.after(90, () -> {
+                            ctx.check(nether.getEntity(id) == copy && !copy.isRemoved() && record.dimension == Level.NETHER, "she did not wait for her partner in the Nether");
+                            // Back with the mod's own teleport: she arrives standing still, whatever speed she left with.
+                            copy.setDeltaMovement(0.4, -2.0, 0.0);
+                            LauraEntity back = LauraManager.teleport(copy, ctx.level, ctx.origin);
+                            ctx.check(back != null && back != copy && back.level() == ctx.level && copy.isRemoved(), "she did not come back");
+                            ctx.check(back.getDeltaMovement().lengthSqr() == 0, "she arrived with the speed she left with: " + back.getDeltaMovement());
+                            ctx.check(record.dimension == Level.OVERWORLD && copies(ctx).size() == 1, copies(ctx).size() + " companions exist, the record says " + record.dimension.location());
+                            ctx.succeed();
+                        });
+                    });
+                });
+            }));
+        });
         // The player takes a portal while she follows, in a world where only he keeps the chunks loaded.
         add(tests, "nether_follows_player", 600, ctx -> {
             ServerLevel nether = nether(ctx);
