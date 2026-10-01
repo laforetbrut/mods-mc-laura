@@ -57,7 +57,8 @@ Version 2.0.0, mod id `lauramod`, for NeoForge, Forge and Fabric on Minecraft 1.
 | 26.1.2 | Fabric | Fabric Loader 0.19.5, Fabric API 0.155.3+26.1.2 | 25 | `lauramod-fabric-26.1.2-2.0.0.jar` |
 
 Each jar is built for one loader and one Minecraft version. Download the one that matches
-yours from the CurseForge page of the mod, or build it (see
+yours from the CurseForge page of the mod or from the
+[releases page](https://github.com/laforetbrut/mods-mc-laura/releases), or build it (see
 [Building from source](#building-from-source)). The nine targets share the same features and
 pass the in-game self test suite; only the optional integrations differ.
 
@@ -261,7 +262,8 @@ Version 2.0.0, identifiant de mod `lauramod`, pour NeoForge, Forge et Fabric sur
 | 26.1.2 | Fabric | Fabric Loader 0.19.5, Fabric API 0.155.3+26.1.2 | 25 | `lauramod-fabric-26.1.2-2.0.0.jar` |
 
 Chaque jar est compilé pour un seul chargeur et une seule version de Minecraft. Téléchargez
-celui qui correspond aux vôtres depuis la page CurseForge du mod, ou compilez-le (voir
+celui qui correspond aux vôtres depuis la page CurseForge du mod ou depuis la
+[page des releases](https://github.com/laforetbrut/mods-mc-laura/releases), ou compilez-le (voir
 [Compiler depuis les sources](#compiler-depuis-les-sources)). Les neuf cibles ont les mêmes
 fonctionnalités et réussissent la suite de self tests en jeu ; seules les intégrations
 facultatives diffèrent.
