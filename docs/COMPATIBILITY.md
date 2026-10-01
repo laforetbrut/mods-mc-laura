@@ -17,7 +17,7 @@ Version 2.0.0 exists for nine targets: Minecraft 1.20.1, 1.21.1 and 26.1.2, each
 
 The behaviour described in the guides is the same on the nine targets, because it lives in the shared code of each Minecraft version. Only the optional integrations below differ. None of them is required and none is bundled in the mod.
 
-In the tables, "yes" means the integration is wired for that target, either in its loader project or in the shared code. The in-game self tests check Farmer's Delight (or its Refabricated port) and KubeJS when they are loaded. Applied Energistics 2 and Curios have no in-game test.
+In the tables, "yes" means the integration is wired for that target, either in its loader project or in the shared code. The in-game self test suite checks Farmer's Delight (or its Refabricated port) and KubeJS when they are loaded. Applied Energistics 2 and Curios have no in-game test.
 
 ### Summary by loader (1.20.1)
 
@@ -118,7 +118,8 @@ She can wear one item on her back.
 - Put it on: right click her with it while her back is free, or use the back slot of her inventory. Take it off from the same slot.
 - The item is drawn on her back.
 - On NeoForge and Forge (the three Minecraft versions) and on Fabric 26.1.2, a backpack that exposes its inventory through the loader's item API becomes extra storage. Items go to her own bag first, then to the backpack. Jobs, fetch and pickup use both.
-- On Fabric 1.20.1 and 1.21.1, and for an item without such an inventory (the bundle for example), the item is worn for the look only.
+- On Fabric 1.20.1 and 1.21.1, and for an item without such an inventory, the item is worn for the look only.
+- The vanilla bundle: on NeoForge 26.1.2 and Fabric 26.1.2 the loader gives the bundle an inventory, so a worn bundle counts as extra storage there, within the capacity of a bundle. This comes from reading the loader code and has not been checked in game. On the seven other targets the bundle is worn for the look only.
 
 Worked example, a datapack that lets her wear a satchel of another mod. File `data/lauramod/tags/item/wearable_on_back.json` (`tags/items/` on Minecraft 1.20.1):
 
@@ -166,7 +167,7 @@ La version 2.0.0 existe pour neuf cibles : Minecraft 1.20.1, 1.21.1 et 26.1.2, c
 
 Le comportement décrit dans les guides est le même sur les neuf cibles, car il se trouve dans le code partagé de chaque version de Minecraft. Seules les intégrations facultatives ci-dessous diffèrent. Aucune n'est obligatoire et aucune n'est incluse dans le mod.
 
-Dans les tableaux, « oui » signifie que l'intégration est câblée pour cette cible, dans le projet de son chargeur ou dans le code partagé. Les self tests en jeu vérifient Farmer's Delight (ou son portage Refabricated) et KubeJS quand ils sont chargés. Applied Energistics 2 et Curios n'ont aucun test en jeu.
+Dans les tableaux, « oui » signifie que l'intégration est câblée pour cette cible, dans le projet de son chargeur ou dans le code partagé. La suite de self tests en jeu vérifie Farmer's Delight (ou son portage Refabricated) et KubeJS quand ils sont chargés. Applied Energistics 2 et Curios n'ont aucun test en jeu.
 
 ### Résumé par chargeur (1.20.1)
 
@@ -267,7 +268,8 @@ Elle peut porter un objet sur son dos.
 - Pour le lui mettre : clic droit sur elle avec l'objet quand son dos est libre, ou l'emplacement de dos de son inventaire. Retirez-le depuis ce même emplacement.
 - L'objet est dessiné sur son dos.
 - Sur NeoForge et Forge (les trois versions de Minecraft) et sur Fabric 26.1.2, un sac à dos qui expose son inventaire par l'API d'objets du chargeur devient un rangement supplémentaire. Les objets vont d'abord dans son propre sac, puis dans le sac à dos. Les métiers, la recherche d'objets et le ramassage utilisent les deux.
-- Sur Fabric 1.20.1 et 1.21.1, et pour un objet sans inventaire de ce type (le sac du jeu de base par exemple), l'objet est porté uniquement pour l'apparence.
+- Sur Fabric 1.20.1 et 1.21.1, et pour un objet sans inventaire de ce type, l'objet est porté uniquement pour l'apparence.
+- Le sac du jeu de base : sur NeoForge 26.1.2 et Fabric 26.1.2, le chargeur donne un inventaire au sac, un sac porté compte donc comme rangement supplémentaire sur ces cibles, dans la limite de la capacité d'un sac. Cela vient de la lecture du code du chargeur et n'a pas été vérifié en jeu. Sur les sept autres cibles, le sac est porté uniquement pour l'apparence.
 
 Exemple complet, un datapack qui lui permet de porter une sacoche d'un autre mod. Fichier `data/lauramod/tags/item/wearable_on_back.json` (`tags/items/` sur Minecraft 1.20.1) :
 

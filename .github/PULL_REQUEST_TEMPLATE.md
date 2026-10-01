@@ -4,7 +4,7 @@
 
 ## Targets touched
 
-<!-- Tick what this change concerns. The list is the planned set of nine targets: a folder that is not on main yet cannot be ticked. -->
+<!-- Tick what this change concerns. A change in common code usually concerns the three Minecraft versions. -->
 
 - [ ] common code (`common/<mcversion>/`)
 - [ ] neoforge-1.21.1

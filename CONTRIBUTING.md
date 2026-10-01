@@ -7,8 +7,7 @@ My Girlfriend Laura (mod id `lauramod`), author / auteur : vyrriox.
 
 Thanks for wanting to make Laura a better companion.
 
-- Questions and ideas: [GitHub Discussions](https://github.com/laforetbrut/lauramod/discussions).
-- Bugs and feature requests: [GitHub issues](https://github.com/laforetbrut/lauramod/issues/new/choose).
+- Questions, bugs and feature requests: [GitHub issues](https://github.com/laforetbrut/lauramod/issues/new/choose).
 - Security problems: never in public, see [SECURITY.md](SECURITY.md).
 - Everyone taking part follows the [Code of Conduct](CODE_OF_CONDUCT.md).
 
@@ -17,14 +16,14 @@ Thanks for wanting to make Laura a better companion.
 ```
 common/<mcversion>/src/main/     code and resources shared by every loader of that Minecraft version
 <loader>-<mcversion>/            one standalone Gradle project per target (neoforge-1.21.1, forge-1.21.1, fabric-1.21.1...)
-tools/                           asset generator and language checker (Python), target branch script
+tools/                           asset generator and language checker (Python), target branch script, jar collector
 docs/                            the guides
 ```
 
 - `main` holds everything. There is no root build: each `<loader>-<mcversion>/` folder is a Gradle project with its own wrapper.
 - A loader project adds `../common/<mcversion>/src/main` to its source set. The folder itself only holds the loader glue: entry points, networking, the `Platform` implementation and the optional integrations (`compat` package).
-- Each target also has a branch named like its folder (`neoforge-1.21.1` for example). It holds that single project at the repository root, with the common code merged into `src/main`. These branches are generated from `main` by `tools/make_branches.sh`: never edit them by hand, and open every pull request against `main`.
-- Minecraft 1.21.1 on NeoForge, Forge and Fabric is the reference. Minecraft 1.20.1 and 26.1.2 for the same three loaders complete the planned set of nine targets.
+- One branch per target, named like its folder (`neoforge-1.21.1` for example), is generated from `main` by `tools/make_branches.sh`; the branches are created when `main` is published. Such a branch holds that single project at the repository root, with the common code merged into `src/main`. Never edit these branches by hand, and open every pull request against `main`.
+- The nine targets are on `main`: Minecraft 1.20.1, 1.21.1 and 26.1.2, each on NeoForge, Forge and Fabric. Minecraft 1.21.1 is the reference.
 
 The full description is in [docs/BUILDING.md](docs/BUILDING.md).
 
@@ -66,8 +65,8 @@ A passing run prints these lines in the console and in `run-selftest/logs/latest
 - The process ends with exit code 0 when every test passed, 1 when a test failed, 2 when the server stopped before the tests ran.
 - A failed test prints `[SELFTEST] FAIL <name> (<n> ticks): <reason>`, and the run ends with `[SELFTEST] RESULT FAILURE`.
 - A run without the `RESULT SUCCESS` line is not a pass, whatever else is printed.
-- The self test starts a Minecraft server, and a server only runs once its EULA (<https://aka.ms/MinecraftEULA>) is accepted. With a new `run-selftest/` folder the run stops and says so. Create `run-selftest/eula.txt` containing `eula=true`, then run the task again. In the 1.21.1 projects you can instead pass `-PacceptEula` once (`./gradlew runSelftest -PacceptEula`), which writes that file.
-- The three 1.21.1 projects each use their own server port (`selftest_port` in their `gradle.properties`), so their self tests can run at the same time.
+- The self test starts a Minecraft server, and a server only runs once its EULA (<https://aka.ms/MinecraftEULA>) is accepted. With a new `run-selftest/` folder the run stops and says so. Create `run-selftest/eula.txt` containing `eula=true`, then run the task again. In every project you can instead pass `-PacceptEula` once (`./gradlew runSelftest -PacceptEula`), which writes that file.
+- Each project uses its own server port (`selftest_port` in its `gradle.properties`), so several self tests can run at the same time.
 - The tests of the optional integrations only run when the other mod is loaded (`-PwithCompatMods`).
 - Running a single test by name is explained in [docs/BUILDING.md](docs/BUILDING.md).
 
@@ -136,7 +135,6 @@ You can try a wording in game without building anything: both kinds of files can
 - New text shown to players is not written in the code: use a translation key (interface) or a dialogue key (what she says).
 - Skins, icons, textures and sounds are written by `tools/generate_assets.py`. A manual edit of a generated file is lost at the next run, so change the generator.
 - Keep the existing `@author` tags.
-- `ERROR_LOG.md` records the problems met during development, with their cause and the rule that prevents them. Read the entries about the area you change.
 
 ## Commit messages
 
@@ -171,8 +169,7 @@ A pull request must include:
 
 Merci de vouloir faire de Laura une meilleure compagne.
 
-- Questions et idées : [Discussions GitHub](https://github.com/laforetbrut/lauramod/discussions).
-- Bugs et demandes de fonctionnalités : [issues GitHub](https://github.com/laforetbrut/lauramod/issues/new/choose).
+- Questions, bugs et demandes de fonctionnalités : [issues GitHub](https://github.com/laforetbrut/lauramod/issues/new/choose).
 - Problèmes de sécurité : jamais en public, voir [SECURITY.md](SECURITY.md).
 - Toute personne qui participe respecte le [Code de conduite](CODE_OF_CONDUCT.md).
 
@@ -181,14 +178,14 @@ Merci de vouloir faire de Laura une meilleure compagne.
 ```
 common/<mcversion>/src/main/     code et ressources partagés par tous les chargeurs de cette version de Minecraft
 <chargeur>-<mcversion>/          un projet Gradle autonome par cible (neoforge-1.21.1, forge-1.21.1, fabric-1.21.1...)
-tools/                           générateur de ressources et vérificateur de langues (Python), script des branches de cible
+tools/                           générateur de ressources et vérificateur de langues (Python), script des branches de cible, collecte des jars
 docs/                            les guides
 ```
 
 - `main` contient tout. Il n'y a pas de build racine : chaque dossier `<chargeur>-<mcversion>/` est un projet Gradle avec son propre wrapper.
 - Un projet de chargeur ajoute `../common/<mcversion>/src/main` à son source set. Le dossier lui-même ne contient que la colle du chargeur : points d'entrée, réseau, implémentation de `Platform` et intégrations facultatives (paquet `compat`).
-- Chaque cible a aussi une branche qui porte le nom de son dossier (`neoforge-1.21.1` par exemple). Elle contient ce seul projet à la racine du dépôt, avec le code commun fusionné dans `src/main`. Ces branches sont générées à partir de `main` par `tools/make_branches.sh` : ne les modifiez jamais à la main, et ouvrez toutes les pull requests sur `main`.
-- Minecraft 1.21.1 sur NeoForge, Forge et Fabric est la référence. Minecraft 1.20.1 et 26.1.2 pour les trois mêmes chargeurs complètent l'ensemble prévu de neuf cibles.
+- Une branche par cible, qui porte le nom de son dossier (`neoforge-1.21.1` par exemple), est générée à partir de `main` par `tools/make_branches.sh` ; les branches sont créées quand `main` est publié. Une telle branche contient ce seul projet à la racine du dépôt, avec le code commun fusionné dans `src/main`. Ne modifiez jamais ces branches à la main, et ouvrez toutes les pull requests sur `main`.
+- Les neuf cibles sont sur `main` : Minecraft 1.20.1, 1.21.1 et 26.1.2, chacun sur NeoForge, Forge et Fabric. Minecraft 1.21.1 est la référence.
 
 La description complète se trouve dans [docs/BUILDING.md](docs/BUILDING.md).
 
@@ -230,8 +227,8 @@ Une exécution réussie affiche ces lignes dans la console et dans `run-selftest
 - Le processus se termine avec le code de sortie 0 quand tous les tests ont réussi, 1 quand un test a échoué, 2 quand le serveur s'est arrêté avant l'exécution des tests.
 - Un test en échec affiche `[SELFTEST] FAIL <nom> (<n> ticks): <raison>`, et l'exécution se termine par `[SELFTEST] RESULT FAILURE`.
 - Une exécution sans la ligne `RESULT SUCCESS` n'est pas une réussite, quoi qu'elle affiche d'autre.
-- Le self test démarre un serveur Minecraft, et un serveur ne fonctionne qu'une fois son CLUF (<https://aka.ms/MinecraftEULA>) accepté. Avec un nouveau dossier `run-selftest/`, l'exécution s'arrête et le signale. Créez `run-selftest/eula.txt` contenant `eula=true`, puis relancez la tâche. Dans les projets 1.21.1, vous pouvez à la place passer `-PacceptEula` une fois (`./gradlew runSelftest -PacceptEula`), ce qui écrit ce fichier.
-- Les trois projets 1.21.1 utilisent chacun leur propre port de serveur (`selftest_port` dans leur `gradle.properties`), si bien que leurs self tests peuvent tourner en même temps.
+- Le self test démarre un serveur Minecraft, et un serveur ne fonctionne qu'une fois son CLUF (<https://aka.ms/MinecraftEULA>) accepté. Avec un nouveau dossier `run-selftest/`, l'exécution s'arrête et le signale. Créez `run-selftest/eula.txt` contenant `eula=true`, puis relancez la tâche. Dans tous les projets, vous pouvez à la place passer `-PacceptEula` une fois (`./gradlew runSelftest -PacceptEula`), ce qui écrit ce fichier.
+- Chaque projet utilise son propre port de serveur (`selftest_port` dans son `gradle.properties`), si bien que plusieurs self tests peuvent tourner en même temps.
 - Les tests des intégrations facultatives ne s'exécutent que lorsque l'autre mod est chargé (`-PwithCompatMods`).
 - L'exécution d'un seul test par son nom est expliquée dans [docs/BUILDING.md](docs/BUILDING.md).
 
@@ -300,7 +297,6 @@ Vous pouvez essayer une formulation en jeu sans rien compiler : les deux sortes 
 - Un nouveau texte affiché aux joueurs ne s'écrit pas dans le code : utilisez une clé de traduction (interface) ou une clé de dialogue (ce qu'elle dit).
 - Les skins, les icônes, les textures et les sons sont écrits par `tools/generate_assets.py`. Une modification manuelle d'un fichier généré est perdue à l'exécution suivante : modifiez donc le générateur.
 - Conservez les balises `@author` existantes.
-- `ERROR_LOG.md` consigne les problèmes rencontrés pendant le développement, avec leur cause et la règle qui les évite. Lisez les entrées qui concernent la partie que vous modifiez.
 
 ## Messages de commit
 

@@ -14,7 +14,7 @@ My Girlfriend Laura (mod id `lauramod`), author / auteur : vyrriox.
 
 ## Reporting a vulnerability
 
-Please do not open a public issue, discussion or pull request. Report it privately through a
+Please do not open a public issue or pull request. Report it privately through a
 [GitHub private security advisory](https://github.com/laforetbrut/lauramod/security/advisories/new).
 
 Reports are not taken by email: the advisory is the only private channel of this project.
@@ -86,8 +86,7 @@ The options are described in [docs/CONFIG.md](docs/CONFIG.md), the commands in
 
 ## Signaler une faille
 
-Merci de ne pas ouvrir d'issue, de discussion ou de pull request publique. Signalez la faille en
-privé via une
+Merci de ne pas ouvrir d'issue ou de pull request publique. Signalez la faille en privé via une
 [GitHub private security advisory](https://github.com/laforetbrut/lauramod/security/advisories/new).
 
 Aucun signalement n'est reçu par e-mail : l'advisory est le seul canal privé de ce projet.

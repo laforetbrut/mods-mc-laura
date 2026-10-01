@@ -94,7 +94,7 @@ Format:
 |---|---|
 | `lines` | What she says for an event. One line is picked at random. The full list of keys is in `_builtin/en_us.json` (216 keys). |
 | `intents` | What she understands. `triggers` are the phrases, `responses` her possible answers. |
-| `items` | Words for the fetch order. The key is an item id or an item tag. |
+| `items` | Words for the fetch order. The key is an item id, an item tag or the built-in group `@music_disc` (any music disc). |
 | `chests` | Words for "this chest is for ...". Keys: `wood`, `harvest`, `seeds`, `ingredients`, `fuel`, `meals`, `pantry`, `storage`. |
 | `connectors` | Words that split a message into several orders ("then"). |
 | `everyone` | Words that address all companions in range ("everyone"). |
@@ -350,7 +350,7 @@ Format :
 |---|---|
 | `lines` | Ce qu'elle dit pour un événement. Une réplique est tirée au hasard. La liste complète des clés est dans `_builtin/en_us.json` (216 clés). |
 | `intents` | Ce qu'elle comprend. `triggers` contient les phrases, `responses` ses réponses possibles. |
-| `items` | Mots pour l'ordre rapporter. La clé est un identifiant d'objet ou un tag d'objets. |
+| `items` | Mots pour l'ordre rapporter. La clé est un identifiant d'objet, un tag d'objets ou le groupe intégré `@music_disc` (n'importe quel disque de musique). |
 | `chests` | Mots pour « ce coffre est pour ... ». Clés : `wood`, `harvest`, `seeds`, `ingredients`, `fuel`, `meals`, `pantry`, `storage`. |
 | `connectors` | Mots qui découpent un message en plusieurs ordres (« puis »). |
 | `everyone` | Mots qui s'adressent à toutes les compagnes à portée (« tout le monde »). |

@@ -147,7 +147,7 @@ Needs go from 100 (satisfied) to 0 (desperate). The minutes are the time a need 
 | `desires` | `true` | true / false | She regularly wishes for an item, a place or an activity. |
 | `desireMinutes` | `12` | 1 to 1440 | Average minutes between two desires. |
 | `desireDeadlineMinutes` | `15` | 1 to 1440 | Time you have to fulfil a desire. |
-| `refuseOrders` | `true` | true / false | When she is unhappy she sometimes refuses an order. Asking twice always works. |
+| `refuseOrders` | `true` | true / false | When she is unhappy she sometimes refuses an order. Asking twice always works. A hug is never refused because she is hungry, sad or jealous. |
 | `commentActivities` | `true` | true / false | She comments on what you do (mining, fighting, eating alone, being idle). |
 | `jealousOfPlayers` | `true` | true / false | She gets jealous when you stay close to, or chat with, other players. |
 | `afkMinutes` | `5` | 1 to 1440 | Minutes without moving before she decides you are ignoring her. |
@@ -175,7 +175,7 @@ Effect of `annoyance`:
 | `enabled` | `true` | true / false | Enables the fetch order. |
 | `radius` | `24` | 4 to 64 | Search radius around her, in blocks. |
 | `fromContainers` | `true` | true / false | She may take the item from nearby storage. |
-| `breakBlocks` | `true` | true / false | She may harvest blocks of the `lauramod:fetch_harvestable` block tag. Needs the `mobGriefing` game rule. |
+| `breakBlocks` | `true` | true / false | She may harvest blocks of the `lauramod:fetch_harvestable` block tag. Needs the `mobGriefing` game rule (`mob_griefing` on Minecraft 26.1.2). |
 | `replantCrops` | `true` | true / false | She replants the crops she harvests. |
 | `maxItems` | `64` | 1 to 576 | Maximum number of items per request. |
 | `timeoutSeconds` | `60` | 10 to 600 | She gives up after this time. |
@@ -247,7 +247,7 @@ Effect of `annoyance`:
 
 | Option | Default | Range or values | Meaning |
 |---|---|---|---|
-| `othersCanInteract` | `false` | true / false | Allows other players to open her menu and give her orders. |
+| `othersCanInteract` | `false` | true / false | Allows other players to open her menu and give her orders through her menu. Chat orders and `/laura` commands stay reserved to her partner. |
 | `reloadPermissionLevel` | `2` | 0 to 4 | Permission level needed for `/laura reload` and `/laura admin`. |
 
 ### lauramod-client.json
@@ -293,12 +293,14 @@ Fields of a gift entry:
 
 | Field | Default | Meaning |
 |---|---|---|
-| `match` | required | Item id or `#item_tag`. |
+| `match` | required | Item id, `#item_tag` or the built-in group `@music_disc` (any music disc, with or without mods). An unknown item or group is skipped and reported in the log. |
 | `affection` | `5` | Affection gained or lost. Affection always stays between 0 and 1000. |
 | `fun` | `5` | Fun gained. |
 | `tier` | `NICE` | `GROSS`, `MEH`, `NICE`, `GREAT` or `AMAZING`. Picks her reaction line. |
 | `returnChance` | `0.0` | Chance from 0 to 1 that she gives something back. It is multiplied by 0.5 plus her affection divided by 1000. |
 | `food` | `0` | Nutrition if she can eat an item that is not normally edible (the cake for example). |
+
+The same three forms (item id, `#item_tag`, `@music_disc`) are accepted wherever a config file of the mod takes an item: `foods.favorites`, `foods.disliked`, `general.reviveItems`, `gag.gagItems`, `gag.ungagItems`, the items of `desires.json` and the ingredients of `recipes.json`. The default `gifts.json` has a `@music_disc` entry, so every music disc is a gift.
 
 Worked example: make a block of emerald an amazing gift, and make bread a favourite food.
 
@@ -505,7 +507,7 @@ Les besoins vont de 100 (satisfait) à 0 (désespéré). Les minutes indiquent l
 | `desires` | `true` | true / false | Elle désire régulièrement un objet, un lieu ou une activité. |
 | `desireMinutes` | `12` | 1 à 1440 | Minutes en moyenne entre deux désirs. |
 | `desireDeadlineMinutes` | `15` | 1 à 1440 | Temps dont vous disposez pour réaliser un désir. |
-| `refuseOrders` | `true` | true / false | Mécontente, elle refuse parfois un ordre. Demander deux fois marche toujours. |
+| `refuseOrders` | `true` | true / false | Mécontente, elle refuse parfois un ordre. Demander deux fois marche toujours. Un câlin n'est jamais refusé parce qu'elle a faim, qu'elle est triste ou jalouse. |
 | `commentActivities` | `true` | true / false | Elle commente ce que vous faites (miner, combattre, manger seul, rester immobile). |
 | `jealousOfPlayers` | `true` | true / false | Elle devient jalouse quand vous restez près d'autres joueurs ou discutez avec eux. |
 | `afkMinutes` | `5` | 1 à 1440 | Minutes sans bouger avant qu'elle estime que vous l'ignorez. |
@@ -533,7 +535,7 @@ Effet de `annoyance` :
 | `enabled` | `true` | true / false | Active l'ordre « rapporte ». |
 | `radius` | `24` | 4 à 64 | Rayon de recherche autour d'elle, en blocs. |
 | `fromContainers` | `true` | true / false | Elle peut prendre l'objet dans les rangements proches. |
-| `breakBlocks` | `true` | true / false | Elle peut récolter les blocs du tag de blocs `lauramod:fetch_harvestable`. Demande la règle de jeu `mobGriefing`. |
+| `breakBlocks` | `true` | true / false | Elle peut récolter les blocs du tag de blocs `lauramod:fetch_harvestable`. Demande la règle de jeu `mobGriefing` (`mob_griefing` sur Minecraft 26.1.2). |
 | `replantCrops` | `true` | true / false | Elle replante les cultures qu'elle récolte. |
 | `maxItems` | `64` | 1 à 576 | Nombre maximum d'objets par demande. |
 | `timeoutSeconds` | `60` | 10 à 600 | Elle abandonne après ce délai. |
@@ -605,7 +607,7 @@ Effet de `annoyance` :
 
 | Option | Défaut | Plage ou valeurs | Signification |
 |---|---|---|---|
-| `othersCanInteract` | `false` | true / false | Autorise les autres joueurs à ouvrir son menu et à lui donner des ordres. |
+| `othersCanInteract` | `false` | true / false | Autorise les autres joueurs à ouvrir son menu et à lui donner des ordres par son menu. Les ordres du chat et les commandes `/laura` restent réservés à son partenaire. |
 | `reloadPermissionLevel` | `2` | 0 à 4 | Niveau de permission requis pour `/laura reload` et `/laura admin`. |
 
 ### lauramod-client.json
@@ -651,12 +653,14 @@ Champs d'une entrée de cadeau :
 
 | Champ | Défaut | Signification |
 |---|---|---|
-| `match` | obligatoire | Identifiant d'objet ou `#tag_d_objets`. |
+| `match` | obligatoire | Identifiant d'objet, `#tag_d_objets` ou le groupe intégré `@music_disc` (n'importe quel disque de musique, avec ou sans mods). Un objet ou un groupe inconnu est ignoré et signalé dans le journal. |
 | `affection` | `5` | Affection gagnée ou perdue. L'affection reste toujours entre 0 et 1000. |
 | `fun` | `5` | Amusement gagné. |
 | `tier` | `NICE` | `GROSS`, `MEH`, `NICE`, `GREAT` ou `AMAZING`. Choisit sa réplique de réaction. |
 | `returnChance` | `0.0` | Chance de 0 à 1 qu'elle offre quelque chose en retour. Elle est multipliée par 0.5 plus son affection divisée par 1000. |
 | `food` | `0` | Valeur nutritive si elle peut manger un objet qui n'est pas comestible d'habitude (le gâteau par exemple). |
+
+Les trois mêmes formes (identifiant d'objet, `#tag_d_objets`, `@music_disc`) sont acceptées partout où un fichier de configuration du mod attend un objet : `foods.favorites`, `foods.disliked`, `general.reviveItems`, `gag.gagItems`, `gag.ungagItems`, les objets de `desires.json` et les ingrédients de `recipes.json`. Le `gifts.json` par défaut contient une entrée `@music_disc` : tous les disques de musique sont donc des cadeaux.
 
 Exemple complet : faire du bloc d'émeraude un cadeau exceptionnel, et du pain un aliment préféré.
 

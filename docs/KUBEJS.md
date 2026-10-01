@@ -20,7 +20,7 @@ When [KubeJS](https://kubejs.com/) is installed, server scripts receive:
 | `Laura` | global binding | Functions to add content, read a companion's state and make her act. |
 | `LauraEvents` | event group | Server events fired when something happens to a companion. |
 
-The integration ships in the NeoForge 1.21.1 build. See [COMPATIBILITY.md](COMPATIBILITY.md) for the other loaders.
+The integration ships in the NeoForge 1.21.1 build (built against KubeJS 2101.7.2) and in the NeoForge, Forge and Fabric 1.20.1 builds (built against KubeJS 2001.6.5). See [COMPATIBILITY.md](COMPATIBILITY.md) for the targets without it.
 
 Scripts go in `kubejs/server_scripts/`. Everything runs on the server.
 
@@ -49,6 +49,8 @@ Entries use the same format as the files of `config/lauramod` (see [CONFIG.md](C
 | `Laura.addChat(locale, intent, trigger, response)` | One more chat phrase for an intent, with an optional answer (empty text for none). New intent ids work too. |
 | `Laura.addSpelling(locale, from, to)` | One more spelling rule. An empty `to` drops a filler word. |
 | `Laura.reload()` | Reloads the config, dialogues and tables on the next server tick. |
+
+Wherever an entry takes an item (`match`, the two food functions, `item` of a desired item, meal `ingredients`, `Laura.wish`), the three forms of the config files are accepted: an item id, an `#item_tag` or the built-in group `@music_disc` (any music disc, with or without mods).
 
 ### Query functions
 
@@ -174,7 +176,7 @@ Quand [KubeJS](https://kubejs.com/) est installé, les scripts serveur reçoiven
 | `Laura` | liaison globale | Fonctions pour ajouter du contenu, lire l'état d'une compagne et la faire agir. |
 | `LauraEvents` | groupe d'événements | Événements serveur déclenchés quand il arrive quelque chose à une compagne. |
 
-L'intégration est fournie dans la version NeoForge 1.21.1. Voir [COMPATIBILITY.md](COMPATIBILITY.md) pour les autres chargeurs.
+L'intégration est fournie dans la version NeoForge 1.21.1 (compilée avec KubeJS 2101.7.2) et dans les versions NeoForge, Forge et Fabric 1.20.1 (compilées avec KubeJS 2001.6.5). Voir [COMPATIBILITY.md](COMPATIBILITY.md) pour les cibles qui ne l'ont pas.
 
 Les scripts vont dans `kubejs/server_scripts/`. Tout s'exécute sur le serveur.
 
@@ -203,6 +205,8 @@ Les entrées utilisent le même format que les fichiers de `config/lauramod` (vo
 | `Laura.addChat(locale, intent, trigger, response)` | Une phrase de chat de plus pour une intention, avec une réponse facultative (texte vide pour aucune). Les nouveaux identifiants d'intention fonctionnent aussi. |
 | `Laura.addSpelling(locale, from, to)` | Une règle d'orthographe de plus. Un `to` vide supprime un mot de remplissage. |
 | `Laura.reload()` | Recharge la configuration, les dialogues et les tables au tick serveur suivant. |
+
+Partout où une entrée attend un objet (`match`, les deux fonctions d'aliments, `item` d'un objet désiré, les `ingredients` d'un plat, `Laura.wish`), les trois formes des fichiers de configuration sont acceptées : un identifiant d'objet, un `#tag_d_objets` ou le groupe intégré `@music_disc` (n'importe quel disque de musique, avec ou sans mods).
 
 ### Fonctions de lecture
 

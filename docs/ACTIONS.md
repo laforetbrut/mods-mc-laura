@@ -49,7 +49,7 @@ She reads the public chat. This is a proximity chat: she hears you, and everybod
 | "follow me", "stay here", "come here", "go play" | Follow, stay, come, wander. |
 | "go home", "this is our home" | Go home, set the home where you stand. |
 | "stop" | Stops what she is doing. |
-| "bring me bread", "fetch wood" | Fetch. Without an item name she fetches the item you hold. |
+| "bring me bread", "fetch wood" | Fetch. Without an item name she fetches the item you hold. A number written in the message is the quantity ("bring me 32 bread"). |
 | "chop a tree", "harvest", "cook" | One task. |
 | "be a lumberjack", "be a farmer", "be the cook" | Starts a job where you stand. |
 | "stop working", "back to work" | Stops all jobs, or resumes them. |
@@ -77,6 +77,7 @@ If she does not understand a message that contains her name, she says so.
 | Shears while she is gagged, or empty hand while sneaking | Removes the gag. |
 | A backpack while her back is free | She wears it. |
 | A trinket (with Curios) | She wears it. |
+| A water bucket | Washes her: her hygiene goes back up and the bucket comes back empty. |
 | Food, a gift, or what she wishes for | She eats it, accepts it, or stores the food for later. |
 | Anything else while sneaking | Opens her inventory. |
 | Empty hand | Opens her menu (`controls.menuOnRightClick`). |
@@ -116,10 +117,10 @@ Teleport rules while following:
 - She walks. She only teleports next to you beyond 128 blocks (`follow.teleportDistance`).
 - When stuck for 10 seconds she tells you (`follow.complainWhenStuck`). She teleports in that case only if `follow.teleportWhenStuck` is true.
 - `/laura come` (or "come here") makes her walk when a path exists, and teleport when none exists.
-- When you change dimension she joins you within a few seconds (`follow.followAcrossDimensions`). She stays behind when she is not in follow mode (stay, home, wander, work).
+- When you change dimension she joins you within a few seconds (`follow.followAcrossDimensions`) and arrives on a safe spot next to you. She stays behind when she is not in follow mode (stay, home, wander, work).
 - After any other long teleport (waystone, command, ender pearl) she is brought to you within a few seconds, even from unloaded chunks.
 
-**Refusals.** With `needs.refuseOrders`, when her mood is sad, angry, jealous, sulking or hungry, she may refuse follow, stay, wander, home, come, fetch, emote, hug, kiss, sleep and eat. The chance depends on `needs.annoyance` (0 % for CHILL and NORMAL, 15 % for NEEDY, 30 % for UNBEARABLE) and doubles while she sulks. Giving the same order again within 20 seconds always works.
+**Refusals.** With `needs.refuseOrders`, when her mood is sad, angry, jealous, sulking or hungry, she may refuse follow, stay, wander, home, come, fetch, emote, hug, kiss, sleep and eat. The chance depends on `needs.annoyance` (0 % for CHILL and NORMAL, 15 % for NEEDY, 30 % for UNBEARABLE) and doubles while she sulks. Giving the same order again within 20 seconds always works. A hug is never refused because she is hungry, sad or jealous: it comforts her.
 
 **Combat modes**: passive (avoids monsters, never fights), defensive (fights what hurts you or what you attack), aggressive (also attacks monsters that come close, except creepers).
 
@@ -127,13 +128,13 @@ Teleport rules while following:
 
 ### 5. Fetch
 
-"Bring me 16 bread", `/laura fetch bread 16`, or the Fetch tab.
+"Bring me 16 bread", `/laura fetch bread 16`, or the Fetch tab. A number written in a chat order is the quantity; without one she brings up to one stack, 16 at most.
 
 She looks, in this order, within 24 blocks (`fetch.radius`):
 
 1. Items lying on the ground.
 2. Storage blocks: chests, barrels and modded storage (`fetch.fromContainers`).
-3. Blocks of the `lauramod:fetch_harvestable` tag that drop the item: logs, flowers, ripe crops and more (`fetch.breakBlocks`, needs the `mobGriefing` game rule, at most 20 blocks away). Harvested crops are replanted. The bottom of sugar cane, bamboo and cactus is kept.
+3. Blocks of the `lauramod:fetch_harvestable` tag that drop the item: logs, flowers, ripe crops and more (`fetch.breakBlocks`, needs the `mobGriefing` game rule, named `mob_griefing` on Minecraft 26.1.2, at most 20 blocks away). Harvested crops are replanted. The bottom of sugar cane, bamboo and cactus is kept.
 
 She then walks back and gives you the items. After 60 seconds (`fetch.timeoutSeconds`) she brings what she has, or gives up. She does one fetch at a time: use `queue` to line up several requests.
 
@@ -151,8 +152,8 @@ A job is continuous work inside an area: a circle around the block where you sto
 
 | Job | What she does | Needs |
 |---|---|---|
-| Lumberjack | Fells natural trees (logs and leaves), replants a sapling, stores the wood. Never touches logs used in builds. | `mobGriefing` game rule. |
-| Farmer | Harvests ripe crops, replants, sows empty farmland, uses bone meal, stores the harvest. | `mobGriefing` game rule. |
+| Lumberjack | Fells natural trees (logs and leaves), replants a sapling, stores the wood. Never touches logs used in builds. | `mobGriefing` game rule (`mob_griefing` on 26.1.2). |
+| Farmer | Harvests ripe crops, replants, sows empty farmland, uses bone meal, stores the harvest. | `mobGriefing` game rule (`mob_griefing` on 26.1.2). |
 | Cook | Cooks raw food in smokers, furnaces and lit campfires, prepares the meals of `recipes.json` at a crafting table, stores the dishes and keeps 4 for herself. | A cooking station in the area. A crafting table for meals. |
 
 - She can hold several jobs and rotates between them.
@@ -184,7 +185,7 @@ Five needs go from 100 (satisfied) to 0. Disable them all with `needs.enabled`.
 | Energy | 60 min | Sleep (about 3 minutes for a full night). | Under 20 she walks slower. Under 8 she falls asleep on the spot. |
 | Fun | 30 min | Dancing, jukebox music, emotes, gifts, favourite food. | Under 30 she is bored. |
 | Attention | 20 min | Talk to her, hug, kiss, compliment, gifts, stay close. | Under 25 she follows you much closer, then stands in front of you, waves and pokes. |
-| Hygiene | 120 min | Water or rain. | At 25 or less she walks to water within 14 blocks for a bath. |
+| Hygiene | 120 min | Water or rain, or a water bucket: right click her with it to wash her (the bucket comes back empty). | At 25 or less she walks to water within 14 blocks for a bath. |
 
 - With hunger at 60 or more she heals 0.5 health per second (`needs.healWhenFedPerSecond`). There is no free regeneration by default (`general.regenPerSecond` is 0).
 - She reminds you when a need drops under 30, and more urgently under 15.
@@ -257,7 +258,7 @@ Right click her with an item.
 
 - **Food**: she eats it if she is hungry, if it is a favourite, or if she wishes for it. Otherwise it goes to her inventory for later. Raw meat and fish are kept for cooking unless she is starving.
 - **Favourite food**: more fun, +5 affection. **Disliked food**: -10 affection and 20 seconds of anger.
-- **Gift** (an entry of `gifts.json`): affection and fun change, she reacts according to the tier, and she may give something back. A `GROSS` gift makes her angry for 30 seconds and is not kept.
+- **Gift** (an entry of `gifts.json`): affection and fun change, she reacts according to the tier, and she may give something back. A `GROSS` gift makes her angry for 30 seconds and is not kept. An entry matches an item id, an `#item_tag` or the built-in group `@music_disc`: with the default file, any music disc is a gift, with or without mods.
 
 Worked example of a gift entry (see [CONFIG.md](CONFIG.md) for every field):
 
@@ -265,7 +266,7 @@ Worked example of a gift entry (see [CONFIG.md](CONFIG.md) for every field):
 { "match": "minecraft:emerald_block", "affection": 60, "fun": 30, "tier": "AMAZING", "returnChance": 0.5 }
 ```
 
-She also gives: food when you are hurt and hungry (`personality.feedOwner`), and your items back when you die within 32 blocks of her (`personality.keepOwnerItemsOnDeath`, not with the `keepInventory` game rule).
+She also gives: food when you are hurt and hungry (`personality.feedOwner`), and your items back when you die within 32 blocks of her (`personality.keepOwnerItemsOnDeath`, not with the `keepInventory` game rule, named `keep_inventory` on Minecraft 26.1.2).
 
 ### 12. The hay gag
 
@@ -307,7 +308,7 @@ SSS
 
 ### 15. Several companions
 
-- Each companion is bound to the player who summoned her. Other players cannot give her orders unless `permissions.othersCanInteract` is true.
+- Each companion is bound to the player who summoned her. Other players cannot give her orders, unless `permissions.othersCanInteract` is true: it opens her menu and the right click to them. Chat orders and `/laura` commands always stay reserved to her partner.
 - Commands and the menu act on the selected companion. Select one with `/laura list`, `/laura select <name>`, or by writing her name in chat.
 - A chat message goes to the companion whose name it contains, to every companion in range with a word such as "everyone" (English words: `everyone`, `everybody`, `girls`, `all of you`, `you all`, `ladies`, `y'all`), otherwise to the selected or nearest one.
 - `/laura where` lists them all.
@@ -365,9 +366,9 @@ The tab "My Girlfriend Laura" holds 58 advancements. Ids are `lauramod:laura/<id
 | Total Makeover | Give her a custom model. | `makeover` |
 | Pack Mule | Give her a backpack to wear. | `backpack` |
 | Put a Ring on It (hidden) | Give her a trinket to wear. | `curio` |
-| Hot Date | Take her to the Nether. | `nether` |
-| Date at the End of the World | Take her to the End. | `end` |
-| Squeaky Clean | Let her take a bath. | `bath` |
+| Hot Date | Be in the Nether with her, however you get there together. | `nether` |
+| Date at the End of the World | Be in the End with her, however you get there together. | `end` |
+| Squeaky Clean | She gets washed: she takes a bath, or water really washes her (a water bucket for example). | `bath` |
 | Sweet Dreams | Let her sleep in a real bed. | `sleep_bed` |
 | I'm Sorry, Okay? | Get forgiven with an apology. | `apology` |
 | The Silent Treatment (hidden) | Make her sulk. | `sulk` |
@@ -420,7 +421,7 @@ Elle lit le chat public. C'est un chat de proximité : elle vous entend, et tout
 | « suis-moi », « reste ici », « viens ici », « va jouer » | Suivre, rester, venir, se promener. |
 | « rentre à la maison », « c'est notre maison » | Rentrer, fixer la maison là où vous êtes. |
 | « stop », « arrête » | Arrête ce qu'elle fait. |
-| « apporte-moi du pain », « va chercher du bois » | Rapporter. Sans nom d'objet elle rapporte l'objet que vous tenez. |
+| « apporte-moi du pain », « va chercher du bois » | Rapporter. Sans nom d'objet elle rapporte l'objet que vous tenez. Un nombre écrit dans le message est la quantité (« apporte-moi 32 pains »). |
 | « coupe un arbre », « récolte », « cuisine » | Une tâche. |
 | « sois bûcheronne », « sois fermière », « sois cuisinière » | Démarre un métier là où vous êtes. |
 | « arrête de travailler », « au travail » | Arrête tous les métiers, ou les reprend. |
@@ -448,6 +449,7 @@ Si elle ne comprend pas un message qui contient son nom, elle le dit.
 | Des cisailles quand elle est bâillonnée, ou main vide en étant accroupi | Retire le bâillon. |
 | Un sac à dos quand son dos est libre | Elle le porte. |
 | Un bijou (avec Curios) | Elle le porte. |
+| Un seau d'eau | La lave : son hygiène remonte et le seau revient vide. |
 | De la nourriture, un cadeau, ou ce qu'elle désire | Elle mange, accepte, ou range la nourriture pour plus tard. |
 | Autre chose en étant accroupi | Ouvre son inventaire. |
 | Main vide | Ouvre son menu (`controls.menuOnRightClick`). |
@@ -487,10 +489,10 @@ Règles de téléportation quand elle suit :
 - Elle marche. Elle ne se téléporte près de vous qu'au-delà de 128 blocs (`follow.teleportDistance`).
 - Bloquée pendant 10 secondes, elle vous le dit (`follow.complainWhenStuck`). Elle ne se téléporte dans ce cas que si `follow.teleportWhenStuck` vaut true.
 - `/laura come` (ou « viens ici ») la fait marcher quand un chemin existe, et se téléporter quand il n'y en a pas.
-- Quand vous changez de dimension, elle vous rejoint en quelques secondes (`follow.followAcrossDimensions`). Elle reste sur place quand elle n'est pas en mode suivre (rester, maison, se promener, travail).
+- Quand vous changez de dimension, elle vous rejoint en quelques secondes (`follow.followAcrossDimensions`) et arrive à un endroit sûr à côté de vous. Elle reste sur place quand elle n'est pas en mode suivre (rester, maison, se promener, travail).
 - Après toute autre téléportation lointaine (waystone, commande, perle de l'Ender) elle est ramenée près de vous en quelques secondes, même depuis des chunks déchargés.
 
-**Refus.** Avec `needs.refuseOrders`, quand son humeur est triste, en colère, jalouse, boudeuse ou affamée, elle peut refuser suivre, rester, se promener, maison, venir, rapporter, émote, câlin, bisou, dormir et manger. La chance dépend de `needs.annoyance` (0 % pour CHILL et NORMAL, 15 % pour NEEDY, 30 % pour UNBEARABLE) et double quand elle boude. Redonner le même ordre dans les 20 secondes marche toujours.
+**Refus.** Avec `needs.refuseOrders`, quand son humeur est triste, en colère, jalouse, boudeuse ou affamée, elle peut refuser suivre, rester, se promener, maison, venir, rapporter, émote, câlin, bisou, dormir et manger. La chance dépend de `needs.annoyance` (0 % pour CHILL et NORMAL, 15 % pour NEEDY, 30 % pour UNBEARABLE) et double quand elle boude. Redonner le même ordre dans les 20 secondes marche toujours. Un câlin n'est jamais refusé parce qu'elle a faim, qu'elle est triste ou jalouse : il la réconforte.
 
 **Modes de combat** : passive (évite les monstres, ne se bat jamais), defensive (combat ce qui vous blesse ou ce que vous attaquez), aggressive (attaque aussi les monstres qui s'approchent, sauf les creepers).
 
@@ -498,13 +500,13 @@ Règles de téléportation quand elle suit :
 
 ### 5. Rapporter
 
-« Apporte-moi 16 pains », `/laura fetch bread 16`, ou l'onglet Chercher.
+« Apporte-moi 16 pains », `/laura fetch bread 16`, ou l'onglet Chercher. Un nombre écrit dans un ordre du chat est la quantité ; sans nombre, elle rapporte jusqu'à une pile, 16 au plus.
 
 Elle cherche, dans cet ordre, dans un rayon de 24 blocs (`fetch.radius`) :
 
 1. Les objets au sol.
 2. Les blocs de rangement : coffres, tonneaux et rangements de mods (`fetch.fromContainers`).
-3. Les blocs du tag `lauramod:fetch_harvestable` qui donnent l'objet : bûches, fleurs, cultures mûres et d'autres (`fetch.breakBlocks`, demande la règle de jeu `mobGriefing`, à 20 blocs au plus). Les cultures récoltées sont replantées. Le pied de la canne à sucre, du bambou et du cactus est conservé.
+3. Les blocs du tag `lauramod:fetch_harvestable` qui donnent l'objet : bûches, fleurs, cultures mûres et d'autres (`fetch.breakBlocks`, demande la règle de jeu `mobGriefing`, nommée `mob_griefing` sur Minecraft 26.1.2, à 20 blocs au plus). Les cultures récoltées sont replantées. Le pied de la canne à sucre, du bambou et du cactus est conservé.
 
 Elle revient ensuite et vous donne les objets. Après 60 secondes (`fetch.timeoutSeconds`) elle rapporte ce qu'elle a, ou abandonne. Elle fait une seule recherche à la fois : utilisez `queue` pour enchaîner plusieurs demandes.
 
@@ -522,8 +524,8 @@ Un métier est un travail continu dans une zone : un cercle autour du bloc où v
 
 | Métier | Ce qu'elle fait | Conditions |
 |---|---|---|
-| Bûcheronne | Abat les arbres naturels (bûches et feuilles), replante une pousse, range le bois. Ne touche jamais aux bûches des constructions. | Règle de jeu `mobGriefing`. |
-| Fermière | Récolte les cultures mûres, replante, sème la terre labourée vide, utilise la poudre d'os, range la récolte. | Règle de jeu `mobGriefing`. |
+| Bûcheronne | Abat les arbres naturels (bûches et feuilles), replante une pousse, range le bois. Ne touche jamais aux bûches des constructions. | Règle de jeu `mobGriefing` (`mob_griefing` sur la 26.1.2). |
+| Fermière | Récolte les cultures mûres, replante, sème la terre labourée vide, utilise la poudre d'os, range la récolte. | Règle de jeu `mobGriefing` (`mob_griefing` sur la 26.1.2). |
 | Cuisinière | Cuit la nourriture crue dans les fumoirs, les fourneaux et les feux de camp allumés, prépare les plats de `recipes.json` sur un établi, range les plats et en garde 4 pour elle. | Un poste de cuisson dans la zone. Un établi pour les plats. |
 
 - Elle peut avoir plusieurs métiers et alterne entre eux.
@@ -555,7 +557,7 @@ Cinq besoins vont de 100 (satisfait) à 0. Désactivez-les tous avec `needs.enab
 | Énergie | 60 min | Dormir (environ 3 minutes pour une nuit complète). | Sous 20 elle marche moins vite. Sous 8 elle s'endort sur place. |
 | Amusement | 30 min | Danse, musique de jukebox, émotes, cadeaux, aliment préféré. | Sous 30 elle s'ennuie. |
 | Attention | 20 min | Lui parler, câlin, bisou, compliment, cadeaux, rester près d'elle. | Sous 25 elle vous suit de beaucoup plus près, puis se plante devant vous, fait signe et vous pousse du doigt. |
-| Hygiène | 120 min | Eau ou pluie. | À 25 ou moins elle marche vers de l'eau à moins de 14 blocs pour un bain. |
+| Hygiène | 120 min | Eau ou pluie, ou un seau d'eau : faites un clic droit sur elle avec pour la laver (le seau revient vide). | À 25 ou moins elle marche vers de l'eau à moins de 14 blocs pour un bain. |
 
 - Avec une faim de 60 ou plus elle récupère 0,5 point de vie par seconde (`needs.healWhenFedPerSecond`). Il n'y a pas de régénération gratuite par défaut (`general.regenPerSecond` vaut 0).
 - Elle vous prévient quand un besoin passe sous 30, et avec plus d'insistance sous 15.
@@ -628,7 +630,7 @@ Faites un clic droit sur elle avec un objet.
 
 - **Nourriture** : elle la mange si elle a faim, si c'est un aliment préféré, ou si elle le désire. Sinon elle la range dans son inventaire pour plus tard. La viande et le poisson crus sont gardés pour la cuisine sauf si elle meurt de faim.
 - **Aliment préféré** : plus d'amusement, +5 d'affection. **Aliment détesté** : -10 d'affection et 20 secondes de colère.
-- **Cadeau** (une entrée de `gifts.json`) : l'affection et l'amusement changent, elle réagit selon le niveau du cadeau, et elle peut offrir quelque chose en retour. Un cadeau `GROSS` la met en colère pendant 30 secondes et n'est pas conservé.
+- **Cadeau** (une entrée de `gifts.json`) : l'affection et l'amusement changent, elle réagit selon le niveau du cadeau, et elle peut offrir quelque chose en retour. Un cadeau `GROSS` la met en colère pendant 30 secondes et n'est pas conservé. Une entrée désigne un identifiant d'objet, un `#tag_d_objets` ou le groupe intégré `@music_disc` : avec le fichier par défaut, n'importe quel disque de musique est un cadeau, avec ou sans mods.
 
 Exemple complet d'une entrée de cadeau (voir [CONFIG.md](CONFIG.md) pour tous les champs) :
 
@@ -636,7 +638,7 @@ Exemple complet d'une entrée de cadeau (voir [CONFIG.md](CONFIG.md) pour tous l
 { "match": "minecraft:emerald_block", "affection": 60, "fun": 30, "tier": "AMAZING", "returnChance": 0.5 }
 ```
 
-Elle donne aussi : de la nourriture quand vous êtes blessé et affamé (`personality.feedOwner`), et vos objets quand vous mourez à moins de 32 blocs d'elle (`personality.keepOwnerItemsOnDeath`, pas avec la règle de jeu `keepInventory`).
+Elle donne aussi : de la nourriture quand vous êtes blessé et affamé (`personality.feedOwner`), et vos objets quand vous mourez à moins de 32 blocs d'elle (`personality.keepOwnerItemsOnDeath`, pas avec la règle de jeu `keepInventory`, nommée `keep_inventory` sur Minecraft 26.1.2).
 
 ### 12. Le bâillon de foin
 
@@ -678,7 +680,7 @@ SSS
 
 ### 15. Plusieurs compagnes
 
-- Chaque compagne est liée au joueur qui l'a invoquée. Les autres joueurs ne peuvent pas lui donner d'ordres, sauf si `permissions.othersCanInteract` vaut true.
+- Chaque compagne est liée au joueur qui l'a invoquée. Les autres joueurs ne peuvent pas lui donner d'ordres, sauf si `permissions.othersCanInteract` vaut true : l'option leur ouvre son menu et le clic droit. Les ordres du chat et les commandes `/laura` restent toujours réservés à son partenaire.
 - Les commandes et le menu agissent sur la compagne sélectionnée. Sélectionnez-en une avec `/laura list`, `/laura select <nom>`, ou en écrivant son nom dans le chat.
 - Un message du chat va à la compagne dont il contient le nom, à toutes les compagnes à portée avec un mot comme « tout le monde » (mots français : `tout le monde`, `les filles`, `vous toutes`, `vous tous`, `mesdames`, `tout le groupe`), sinon à la compagne sélectionnée ou à la plus proche.
 - `/laura where` les liste toutes.
@@ -736,9 +738,9 @@ L'onglet « My Girlfriend Laura » contient 58 progrès. Les identifiants sont `
 | Relooking complet | Lui donner un modèle personnalisé. | `makeover` |
 | Bête de somme | Lui donner un sac à dos à porter. | `backpack` |
 | La bague au doigt (caché) | Lui offrir un bijou à porter. | `curio` |
-| Rendez-vous brûlant | L'emmener dans le Nether. | `nether` |
-| Rendez-vous au bout du monde | L'emmener dans l'End. | `end` |
-| Toute propre | La laisser prendre un bain. | `bath` |
+| Rendez-vous brûlant | Être dans le Nether avec elle, quelle que soit la façon dont vous y arrivez ensemble. | `nether` |
+| Rendez-vous au bout du monde | Être dans l'End avec elle, quelle que soit la façon dont vous y arrivez ensemble. | `end` |
+| Toute propre | Elle est lavée : elle prend un bain, ou de l'eau la lave vraiment (un seau d'eau par exemple). | `bath` |
 | Fais de beaux rêves | La laisser dormir dans un vrai lit. | `sleep_bed` |
 | Pardon, d'accord ? | Se faire pardonner avec des excuses. | `apology` |
 | La bouderie (caché) | La faire bouder. | `sulk` |

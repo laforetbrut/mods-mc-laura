@@ -41,10 +41,10 @@ Check these points:
 - She listens in your game language and in English. Run `/laura lang` to see which language she uses with you.
 - With `dialogue.requireName` you must write her name.
 - When she is gagged, every answer is a muffled sound.
-- Only her partner can give her orders, unless `permissions.othersCanInteract` is true.
+- She only answers the chat of her own partner. `permissions.othersCanInteract` opens her menu and the right click to other players, not chat orders or `/laura` commands.
 
 **She refuses my orders.**
-She does that when she is sad, angry, jealous, sulking or hungry, and only with the `NEEDY` and `UNBEARABLE` levels of `needs.annoyance`. Give the same order again within 20 seconds and she obeys. To stop it for good, set `needs.refuseOrders` to false.
+She does that when she is sad, angry, jealous, sulking or hungry, and only with the `NEEDY` and `UNBEARABLE` levels of `needs.annoyance`. Give the same order again within 20 seconds and she obeys. A hug is never refused because she is hungry, sad or jealous: it comforts her. To stop refusals for good, set `needs.refuseOrders` to false.
 
 **She sulks. What now?**
 Write "sorry" in chat, fulfil her current desire, or wait a few minutes (`personality.sulkMinutes`).
@@ -67,6 +67,9 @@ Right click her with a hay bale. Remove it with shears, or `/laura ungag`. To hi
 **How do I write an item or a file name in a command?**
 As it is, without quotes: `/laura fetch minecraft:oak_log 16`, `/laura fetch #minecraft:logs`, `/laura fetch bread`, `/laura skin file uploads/my_skin`. In a fetch command the count and the word `queue` go at the end of the line.
 
+**How do I ask for a precise quantity in chat?**
+Write the number in the order: "bring me 32 bread". Without a number she brings up to one stack, 16 at most.
+
 ### Following and finding her
 
 **She does not teleport to me any more.**
@@ -82,7 +85,7 @@ That is intended in 2.0.0. She walks, and teleports only beyond 128 blocks (`fol
 `/laura dismiss` puts her away: she loses 20 affection, still counts toward your limit, and comes back at the next summon. `/laura release`, then `/laura release confirm`, removes her for good: she drops everything she carries and nothing brings her back.
 
 **Does she follow me to the Nether and the End?**
-Yes, in follow mode (`follow.followAcrossDimensions`). She is also brought along after a waystone, a teleport command or an ender pearl.
+Yes, in follow mode (`follow.followAcrossDimensions`). She arrives on a safe spot next to you. She is also brought along after a waystone, a teleport command or an ender pearl. The Nether and End advancements are granted however you get there together.
 
 **Can she despawn?**
 No. She never despawns, and the world keeps a record of every companion. If she cannot be found when you call her, she is restored from her last saved state.
@@ -91,6 +94,9 @@ No. She never despawns, and the world keeps a record of every companion. If she 
 
 **She does not regenerate.**
 There is no free regeneration by default. Feed her: with hunger at 60 or more she heals 0.5 health per second. For the old behaviour set `general.regenPerSecond` above 0.
+
+**Her hygiene is low. How do I wash her?**
+Right click her with a water bucket: she is washed and the bucket comes back empty. She also bathes on her own in water within 14 blocks, and rain washes her. The "Squeaky Clean" advancement is granted when water really washes her, not only when she decides to bathe.
 
 **She died. How do I get her back?**
 With the default mode (`GRAVE`): craft a Laura's Gravestone (one stone bricks on top, three stone bricks in the middle, three cobblestone slabs at the bottom), place it anywhere and right click it with a flower. She comes back with her inventory. See [ACTIONS.md](ACTIONS.md) for the other modes.
@@ -111,7 +117,7 @@ No with `GRAVE` and `TIMER`. Yes with `NONE`: she drops everything.
 
 **The lumberjack or the farmer does nothing.**
 
-- The game rule `mobGriefing` must be true.
+- The game rule `mobGriefing` (`mob_griefing` on Minecraft 26.1.2) must be true.
 - She does not work at night unless `work.workAtNight` is true.
 - The lumberjack only fells trees that carry natural leaves.
 - The work area is a circle of 10 blocks around the spot where you gave the order. Give a radius to change it: `/laura job farmer 16`.
@@ -121,10 +127,10 @@ No with `GRAVE` and `TIMER`. Yes with `NONE`: she drops everything.
 She needs raw food or meal ingredients (in her inventory, or in a chest assigned to `ingredients`), a smoker, a furnace or a lit campfire in the area, fuel (in her inventory or in a `fuel` chest), and a crafting table for the meals of `recipes.json`.
 
 **She cannot find what I ask her to fetch.**
-She searches 24 blocks around **her** (`fetch.radius`): items on the ground, then storage, then blocks she may harvest. Breaking blocks needs the `mobGriefing` game rule and only concerns the block tag `lauramod:fetch_harvestable`.
+She searches 24 blocks around **her** (`fetch.radius`): items on the ground, then storage, then blocks she may harvest. Breaking blocks needs the `mobGriefing` game rule (`mob_griefing` on Minecraft 26.1.2) and only concerns the block tag `lauramod:fetch_harvestable`.
 
 **How do I stop her from breaking blocks?**
-Set the game rule `mobGriefing` to false, or set `fetch.breakBlocks` to false and do not give her the lumberjack and farmer jobs.
+Set the game rule `mobGriefing` (`mob_griefing` on Minecraft 26.1.2) to false, or set `fetch.breakBlocks` to false and do not give her the lumberjack and farmer jobs.
 
 **How do I fulfil her wish for fireworks?**
 Launch a firework rocket near her. Any rocket within 32 blocks around her counts, whoever launched it.
@@ -191,10 +197,10 @@ Vérifiez ces points :
 - Elle écoute la langue de votre jeu et l'anglais. Lancez `/laura lang` pour voir quelle langue elle utilise avec vous.
 - Avec `dialogue.requireName` il faut écrire son nom.
 - Quand elle est bâillonnée, chaque réponse est un son étouffé.
-- Seul son partenaire peut lui donner des ordres, sauf si `permissions.othersCanInteract` vaut true.
+- Elle ne répond qu'au chat de son propre partenaire. `permissions.othersCanInteract` ouvre son menu et le clic droit aux autres joueurs, pas les ordres du chat ni les commandes `/laura`.
 
 **Elle refuse mes ordres.**
-Elle le fait quand elle est triste, en colère, jalouse, boudeuse ou affamée, et seulement avec les niveaux `NEEDY` et `UNBEARABLE` de `needs.annoyance`. Redonnez le même ordre dans les 20 secondes et elle obéit. Pour l'empêcher définitivement, mettez `needs.refuseOrders` à false.
+Elle le fait quand elle est triste, en colère, jalouse, boudeuse ou affamée, et seulement avec les niveaux `NEEDY` et `UNBEARABLE` de `needs.annoyance`. Redonnez le même ordre dans les 20 secondes et elle obéit. Un câlin n'est jamais refusé parce qu'elle a faim, qu'elle est triste ou jalouse : il la réconforte. Pour empêcher définitivement les refus, mettez `needs.refuseOrders` à false.
 
 **Elle boude. Que faire ?**
 Écrivez « pardon » dans le chat, réalisez son désir en cours, ou attendez quelques minutes (`personality.sulkMinutes`).
@@ -217,6 +223,9 @@ Faites un clic droit sur elle avec une botte de foin. Retirez-la avec des cisail
 **Comment écrire un objet ou un nom de fichier dans une commande ?**
 Tel quel, sans guillemets : `/laura fetch minecraft:oak_log 16`, `/laura fetch #minecraft:logs`, `/laura fetch bread`, `/laura skin file uploads/my_skin`. Dans une commande fetch, la quantité et le mot `queue` se placent à la fin de la ligne.
 
+**Comment demander une quantité précise dans le chat ?**
+Écrivez le nombre dans l'ordre : « apporte-moi 32 pains ». Sans nombre, elle rapporte jusqu'à une pile, 16 au plus.
+
 ### La suivre et la retrouver
 
 **Elle ne se téléporte plus vers moi.**
@@ -232,7 +241,7 @@ C'est voulu en 2.0.0. Elle marche, et ne se téléporte qu'au-delà de 128 blocs
 `/laura dismiss` la met de côté : elle perd 20 points d'affection, compte toujours dans votre limite, et revient à la prochaine invocation. `/laura release`, puis `/laura release confirm`, la retire pour de bon : elle lâche tout ce qu'elle porte et rien ne la ramène.
 
 **Me suit-elle dans le Nether et l'End ?**
-Oui, en mode suivre (`follow.followAcrossDimensions`). Elle est aussi ramenée après un waystone, une commande de téléportation ou une perle de l'Ender.
+Oui, en mode suivre (`follow.followAcrossDimensions`). Elle arrive à un endroit sûr à côté de vous. Elle est aussi ramenée après un waystone, une commande de téléportation ou une perle de l'Ender. Les progrès du Nether et de l'End sont accordés quelle que soit la façon dont vous y arrivez ensemble.
 
 **Peut-elle disparaître ?**
 Non. Elle ne disparaît jamais, et le monde garde une fiche de chaque compagne. Si elle est introuvable quand vous l'appelez, elle est restaurée à partir de son dernier état enregistré.
@@ -241,6 +250,9 @@ Non. Elle ne disparaît jamais, et le monde garde une fiche de chaque compagne. 
 
 **Elle ne régénère pas sa vie.**
 Il n'y a pas de régénération gratuite par défaut. Nourrissez-la : avec une faim de 60 ou plus elle récupère 0,5 point de vie par seconde. Pour retrouver l'ancien comportement, mettez `general.regenPerSecond` au-dessus de 0.
+
+**Son hygiène est basse. Comment la laver ?**
+Faites un clic droit sur elle avec un seau d'eau : elle est lavée et le seau revient vide. Elle se baigne aussi d'elle-même dans de l'eau à moins de 14 blocs, et la pluie la lave. Le progrès « Toute propre » est accordé quand de l'eau la lave vraiment, pas seulement quand elle décide de se baigner.
 
 **Elle est morte. Comment la récupérer ?**
 Avec le mode par défaut (`GRAVE`) : fabriquez une Tombe de Laura (une pierre taillée en haut, trois pierres taillées au milieu, trois dalles de pierres en bas), posez-la n'importe où et faites un clic droit dessus avec une fleur. Elle revient avec son inventaire. Voir [ACTIONS.md](ACTIONS.md) pour les autres modes.
@@ -261,7 +273,7 @@ Non avec `GRAVE` et `TIMER`. Oui avec `NONE` : elle lâche tout.
 
 **La bûcheronne ou la fermière ne fait rien.**
 
-- La règle de jeu `mobGriefing` doit valoir true.
+- La règle de jeu `mobGriefing` (`mob_griefing` sur Minecraft 26.1.2) doit valoir true.
 - Elle ne travaille pas la nuit, sauf si `work.workAtNight` vaut true.
 - La bûcheronne n'abat que les arbres qui portent des feuilles naturelles.
 - La zone de travail est un cercle de 10 blocs autour de l'endroit où vous avez donné l'ordre. Indiquez un rayon pour le changer : `/laura job farmer 16`.
@@ -271,10 +283,10 @@ Non avec `GRAVE` et `TIMER`. Oui avec `NONE` : elle lâche tout.
 Il lui faut de la nourriture crue ou des ingrédients de plats (dans son inventaire, ou dans un coffre attribué à `ingredients`), un fumoir, un fourneau ou un feu de camp allumé dans la zone, du combustible (dans son inventaire ou dans un coffre `fuel`), et un établi pour les plats de `recipes.json`.
 
 **Elle ne trouve pas ce que je lui demande de rapporter.**
-Elle cherche dans un rayon de 24 blocs autour d'**elle** (`fetch.radius`) : les objets au sol, puis les rangements, puis les blocs qu'elle peut récolter. Casser des blocs demande la règle de jeu `mobGriefing` et ne concerne que le tag de blocs `lauramod:fetch_harvestable`.
+Elle cherche dans un rayon de 24 blocs autour d'**elle** (`fetch.radius`) : les objets au sol, puis les rangements, puis les blocs qu'elle peut récolter. Casser des blocs demande la règle de jeu `mobGriefing` (`mob_griefing` sur Minecraft 26.1.2) et ne concerne que le tag de blocs `lauramod:fetch_harvestable`.
 
 **Comment l'empêcher de casser des blocs ?**
-Mettez la règle de jeu `mobGriefing` à false, ou mettez `fetch.breakBlocks` à false et ne lui donnez pas les métiers de bûcheronne et de fermière.
+Mettez la règle de jeu `mobGriefing` (`mob_griefing` sur Minecraft 26.1.2) à false, ou mettez `fetch.breakBlocks` à false et ne lui donnez pas les métiers de bûcheronne et de fermière.
 
 **Comment réaliser son désir de feux d'artifice ?**
 Lancez une fusée de feu d'artifice près d'elle. Toute fusée dans un rayon de 32 blocs autour d'elle compte, peu importe qui l'a lancée.

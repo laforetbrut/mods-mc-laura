@@ -66,18 +66,18 @@
 <h3 align="center">What She Does</h3>
 
 <p align="center">
-<strong>Follows you</strong>: she walks with you, into the Nether and the End too, and only teleports when you are more than 128 blocks away. She can also stay, wander, come or go home.<br>
+<strong>Follows you</strong>: she walks with you, and only teleports when you are more than 128 blocks away. She follows you into the Nether and the End too, and arrives on a safe spot next to you. She can also stay, wander, come or go home.<br>
 <strong>Talks in your language</strong>: she reads the chat and understands plain sentences such as "follow me", "bring me bread" or "be a farmer". Chain orders with "then". Her answers show in chat and in a bubble above her head.<br>
-<strong>Needs and moods</strong>: hunger, energy, fun, attention and hygiene go down over time. She eats, sleeps and bathes on her own when she can, and tells you when something is missing. Her mood and her affection, from "Hates you" to "Soulmates", change how she behaves.<br>
+<strong>Needs and moods</strong>: hunger, energy, fun, attention and hygiene go down over time. She eats, sleeps and bathes on her own when she can, and tells you when something is missing. Right click her with a water bucket to wash her: the bucket comes back empty. Her mood and her affection, from "Hates you" to "Soulmates", change how she behaves. A hug comforts her: she never refuses one because she is hungry, sad or jealous.<br>
 <strong>Desires and gifts</strong>: about every 12 minutes she wishes for an item, a place or an activity (a sunset, a boat ride, fireworks), shown in a thought bubble. You have 15 minutes. Gifts and favourite food raise her affection, and she sometimes gives something back.<br>
 <strong>Fetches items</strong>: say "bring me bread" and she searches 24 blocks around her: items on the ground, then chests, barrels and modded storage, then the logs, flowers and ripe crops she may harvest. Harvested crops are replanted. A number in the message is the count ("bring me 32 bread"); without one she brings up to 16. <code>/laura fetch bread 32</code> and the Fetch tab of her menu do the same.<br>
-<strong>Works</strong>: as a lumberjack she fells natural trees and replants saplings, never touching the logs of your builds. As a farmer she harvests, replants, sows and uses bone meal. As a cook she uses furnaces, smokers and lit campfires, and prepares meals at a crafting table. She can hold several jobs, do a single task, or follow a to-do list of 16 tasks. By default she works during the day, and felling trees and farming need the <code>mobGriefing</code> game rule.<br>
+<strong>Works</strong>: as a lumberjack she fells natural trees and replants saplings, never touching the logs of your builds. As a farmer she harvests, replants, sows and uses bone meal. As a cook she uses furnaces, smokers and lit campfires, and prepares meals at a crafting table. She can hold several jobs, do a single task, or follow a to-do list of 16 tasks. By default she works during the day, and felling trees and farming need the <code>mobGriefing</code> game rule (<code>mob_griefing</code> on Minecraft 26.1.2).<br>
 <strong>Uses chests</strong>: assign containers to eight purposes (wood, harvest, seeds, ingredients, fuel, meals, pantry, storage). She takes what she needs there and stores what she produces.<br>
 <strong>Stays home</strong>: set her home with <code>/laura home set</code>, then send her there with <code>/laura home</code>. At home she stays within 12 blocks of it and sleeps in a free bed at night.<br>
 <strong>Looks after you</strong>: she gives you food when you are hurt and hungry, and returns your items when you die near her. Three combat modes: passive (default), defensive, aggressive.<br>
 <strong>Carries her things</strong>: three rows of inventory, four armor slots, both hands and a back slot. Sneak and right click her to open it.<br>
 <strong>Quiet time</strong>: a hay bale keeps her quiet for a while, right click her with it (it costs a little affection). Remove it with shears or <code>/laura ungag</code>, or wait: she removes it herself after 5 minutes. The feature can be turned off.<br>
-<strong>58 advancements</strong>: a whole tab to complete, from the first hug to 365 days together.
+<strong>58 advancements</strong>: a whole tab to complete, from the first hug to 365 days together. Going to the Nether or the End with her counts however you get there together, and the bath advancement is also granted when water really washes her, not only when she decides to bathe.
 </p>
 
 <p align="center"><em>Fair warning: out of the box she is very demanding, and she may refuse an order when she is unhappy (asking twice always works). One option makes her calm, see Configuration below.</em></p>
@@ -113,7 +113,7 @@
 <p align="center">
 <strong>Readable config files</strong>: everything lives in <code>config/lauramod/</code>. <code>lauramod-common.json</code> for the server or your singleplayer world, <code>lauramod-client.json</code> for your display. Every option is written with its comment, its range and its default.<br>
 <strong>A calmer companion</strong>: set <code>needs.annoyance</code> to <code>CHILL</code> or <code>NORMAL</code>, or turn needs, desires and refusals off one by one.<br>
-<strong>Your own content</strong>: <code>gifts.json</code>, <code>desires.json</code> and <code>recipes.json</code> list her gifts, her wishes and the meals she cooks. Apply changes with <code>/laura reload</code>.<br>
+<strong>Your own content</strong>: <code>gifts.json</code>, <code>desires.json</code> and <code>recipes.json</code> list her gifts, her wishes and the meals she cooks. A gift is matched by an item id, an item tag or the built-in group <code>@music_disc</code> (any music disc, with or without mods). Apply changes with <code>/laura reload</code>.<br>
 <strong>18 languages</strong>: Czech, German, English, Spanish, French, Indonesian, Italian, Japanese, Korean, Dutch, Polish, Brazilian Portuguese, Russian, Swedish, Turkish, Ukrainian, Simplified Chinese and Traditional Chinese, for the interface and for everything she says and understands.<br>
 <strong>Add your own</strong>: drop a JSON file in <code>config/lauramod/dialogues/</code> to add lines, chat phrases or a whole new language, and in <code>config/lauramod/lang/</code> for the interface. No code and no resource pack needed.
 </p>
@@ -122,7 +122,9 @@
 
 <h3 align="center">Optional Integrations</h3>
 
-<p align="center">Nothing below is required and nothing is bundled. The table describes the Minecraft 1.21.1 builds.</p>
+<p align="center">Nothing below is required and nothing is bundled. The table describes the Minecraft 1.21.1 builds.<br>
+<strong>Minecraft 1.20.1</strong>: Farmer's Delight (Refabricated on Fabric) and KubeJS on the three loaders. The Applied Energistics 2 bridge (three loaders) and the Curios bridge (NeoForge and Forge) are present but have never been run in game.<br>
+<strong>Minecraft 26.1.2</strong>: Farmer's Delight Refabricated on Fabric only.</p>
 
 <div align="center">
 <table>
@@ -139,7 +141,7 @@
 
 <p align="center">
 <strong>Modded storage</strong>: storage blocks of other mods work like vanilla chests for fetching, jobs and assigned chests.<br>
-<strong>Backpacks</strong>: she wears a bundle, a Sophisticated Backpacks backpack, or any item whose id contains "backpack". On NeoForge and Forge, a backpack that exposes its inventory becomes extra storage.<br>
+<strong>Backpacks</strong>: she wears a bundle, a Sophisticated Backpacks backpack, or any item whose id contains "backpack". On NeoForge and Forge, and on Fabric for Minecraft 26.1.2, a backpack that exposes its inventory becomes extra storage.<br>
 <strong>Applied Energistics 2</strong>: any block of a powered ME network gives her the whole network storage, to fetch from it and to store her production in it.<br>
 <strong>Curios</strong>: she wears trinkets (necklace, ring, bracelet, charm, head, back, belt).<br>
 <strong>Farmer's Delight</strong>: as a cook she also uses the cooking pots of her work area.<br>
@@ -152,8 +154,10 @@
 <h3 align="center">Supported Versions</h3>
 
 <p align="center">
+<strong>Minecraft 1.20.1</strong>: version 2.0.0 for NeoForge, Forge and Fabric (Fabric API required), Java 17.<br>
 <strong>Minecraft 1.21.1</strong>: version 2.0.0 for NeoForge, Forge and Fabric (Fabric API required), Java 21.<br>
-<strong>Minecraft 1.20.1 and 26.1.2</strong>: in preparation for the same three loaders, which will complete the planned set of nine targets.
+<strong>Minecraft 26.1.2</strong>: version 2.0.0 for NeoForge, Forge and Fabric (Fabric API required), Java 25.<br>
+Nine jars in all: pick the one that matches your Minecraft version and your loader.
 </p>
 
 <br>
@@ -161,7 +165,7 @@
 <h3 align="center">Getting Started</h3>
 
 <p align="center">
-<strong>1.</strong> Put the jar of your loader in the <code>mods</code> folder (Fabric also needs Fabric API). On a server, install it on the server and on every client.<br>
+<strong>1.</strong> Put the jar of your Minecraft version and your loader in the <code>mods</code> folder (Fabric also needs Fabric API). On a server, install it on the server and on every client.<br>
 <strong>2.</strong> Say "I feel lonely" in chat, or run <code>/laura summon</code>.<br>
 <strong>3.</strong> Press <strong>K</strong> near her to open her menu and look around the seven tabs.<br>
 <strong>4.</strong> Feed her: right click her with food. She heals while she is well fed.<br>
@@ -243,18 +247,18 @@
 <h3 align="center">Ce Qu'elle Fait</h3>
 
 <p align="center">
-<strong>Elle vous suit</strong> : elle marche avec vous, jusque dans le Nether et l'End, et ne se téléporte que si vous êtes à plus de 128 blocs. Elle peut aussi rester sur place, se promener, venir ou rentrer à la maison.<br>
+<strong>Elle vous suit</strong> : elle marche avec vous, et ne se téléporte que si vous êtes à plus de 128 blocs. Elle vous suit aussi dans le Nether et l'End, et arrive à un endroit sûr à côté de vous. Elle peut aussi rester sur place, se promener, venir ou rentrer à la maison.<br>
 <strong>Elle parle votre langue</strong> : elle lit le chat et comprend des phrases simples comme « suis-moi », « apporte-moi du pain » ou « sois fermière ». Enchaînez les ordres avec « puis ». Ses réponses s'affichent dans le chat et dans une bulle au-dessus de sa tête.<br>
-<strong>Besoins et humeurs</strong> : la faim, l'énergie, l'amusement, l'attention et l'hygiène baissent avec le temps. Elle mange, dort et se lave seule quand elle le peut, et vous prévient quand il lui manque quelque chose. Son humeur et son affection, de « Te déteste » à « Âmes sœurs », changent son comportement.<br>
+<strong>Besoins et humeurs</strong> : la faim, l'énergie, l'amusement, l'attention et l'hygiène baissent avec le temps. Elle mange, dort et se lave seule quand elle le peut, et vous prévient quand il lui manque quelque chose. Faites un clic droit sur elle avec un seau d'eau pour la laver : le seau revient vide. Son humeur et son affection, de « Te déteste » à « Âmes sœurs », changent son comportement. Un câlin la réconforte : elle n'en refuse jamais un parce qu'elle a faim, qu'elle est triste ou jalouse.<br>
 <strong>Désirs et cadeaux</strong> : toutes les 12 minutes environ, elle désire un objet, un lieu ou une activité (un coucher de soleil, un tour en bateau, des feux d'artifice), affiché dans une bulle de pensée. Vous avez 15 minutes. Les cadeaux et ses aliments préférés augmentent son affection, et elle offre parfois quelque chose en retour.<br>
 <strong>Elle rapporte des objets</strong> : dites « apporte-moi du pain » et elle cherche dans un rayon de 24 blocs autour d'elle : les objets au sol, puis les coffres, les tonneaux et les rangements de mods, puis les bûches, les fleurs et les cultures mûres qu'elle peut récolter. Les cultures récoltées sont replantées. Un nombre dans le message donne la quantité (« apporte-moi 32 pains ») ; sans nombre, elle en rapporte jusqu'à 16. <code>/laura fetch bread 32</code> et l'onglet Chercher de son menu font la même chose.<br>
-<strong>Elle travaille</strong> : bûcheronne, elle abat les arbres naturels et replante des pousses, sans jamais toucher aux bûches de vos constructions. Fermière, elle récolte, replante, sème et utilise la poudre d'os. Cuisinière, elle utilise les fourneaux, les fumoirs et les feux de camp allumés, et prépare des plats sur un établi. Elle peut cumuler plusieurs métiers, faire une tâche unique, ou suivre une liste de 16 tâches. Par défaut elle travaille de jour, et l'abattage des arbres et le travail des champs demandent la règle de jeu <code>mobGriefing</code>.<br>
+<strong>Elle travaille</strong> : bûcheronne, elle abat les arbres naturels et replante des pousses, sans jamais toucher aux bûches de vos constructions. Fermière, elle récolte, replante, sème et utilise la poudre d'os. Cuisinière, elle utilise les fourneaux, les fumoirs et les feux de camp allumés, et prépare des plats sur un établi. Elle peut cumuler plusieurs métiers, faire une tâche unique, ou suivre une liste de 16 tâches. Par défaut elle travaille de jour, et l'abattage des arbres et le travail des champs demandent la règle de jeu <code>mobGriefing</code> (<code>mob_griefing</code> sur Minecraft 26.1.2).<br>
 <strong>Elle utilise les coffres</strong> : attribuez des conteneurs à huit usages (bois, récolte, graines, ingrédients, combustible, plats, garde-manger, stockage). Elle y prend ce dont elle a besoin et y range ce qu'elle produit.<br>
 <strong>Elle reste à la maison</strong> : fixez sa maison avec <code>/laura home set</code>, puis envoyez-la là-bas avec <code>/laura home</code>. À la maison, elle reste dans un rayon de 12 blocs autour et dort la nuit dans un lit libre.<br>
 <strong>Elle veille sur vous</strong> : elle vous donne de la nourriture quand vous êtes blessé et affamé, et vous rend vos objets quand vous mourez près d'elle. Trois modes de combat : pacifique (par défaut), défensive, agressive.<br>
 <strong>Elle porte ses affaires</strong> : trois rangées d'inventaire, quatre emplacements d'armure, les deux mains et un emplacement de dos. Accroupissez-vous et faites un clic droit sur elle pour l'ouvrir.<br>
 <strong>Un peu de calme</strong> : une botte de foin la fait taire un moment, faites un clic droit sur elle avec (cela coûte un peu d'affection). Retirez-la avec des cisailles ou <code>/laura ungag</code>, ou attendez : elle la retire elle-même au bout de 5 minutes. La fonction peut être désactivée.<br>
-<strong>58 progrès</strong> : un onglet entier à compléter, du premier câlin à 365 jours ensemble.
+<strong>58 progrès</strong> : un onglet entier à compléter, du premier câlin à 365 jours ensemble. Aller dans le Nether ou l'End avec elle compte, quelle que soit la façon dont vous y arrivez ensemble, et le progrès du bain est aussi accordé quand de l'eau la lave vraiment, pas seulement quand elle décide de se baigner.
 </p>
 
 <p align="center"><em>Vous êtes prévenu : par défaut elle est très exigeante, et elle peut refuser un ordre quand elle est mécontente (le redonner une seconde fois marche toujours). Une option la rend calme, voir Configuration plus bas.</em></p>
@@ -290,7 +294,7 @@
 <p align="center">
 <strong>Des fichiers lisibles</strong> : tout se trouve dans <code>config/lauramod/</code>. <code>lauramod-common.json</code> pour le serveur ou votre monde solo, <code>lauramod-client.json</code> pour votre affichage. Chaque option est écrite avec son commentaire, sa plage de valeurs et sa valeur par défaut.<br>
 <strong>Une compagne plus calme</strong> : mettez <code>needs.annoyance</code> à <code>CHILL</code> ou <code>NORMAL</code>, ou désactivez un par un les besoins, les désirs et les refus.<br>
-<strong>Votre propre contenu</strong> : <code>gifts.json</code>, <code>desires.json</code> et <code>recipes.json</code> listent ses cadeaux, ses envies et les plats qu'elle cuisine. Appliquez les changements avec <code>/laura reload</code>.<br>
+<strong>Votre propre contenu</strong> : <code>gifts.json</code>, <code>desires.json</code> et <code>recipes.json</code> listent ses cadeaux, ses envies et les plats qu'elle cuisine. Un cadeau se désigne par un identifiant d'objet, un tag d'objets ou le groupe intégré <code>@music_disc</code> (n'importe quel disque de musique, avec ou sans mods). Appliquez les changements avec <code>/laura reload</code>.<br>
 <strong>18 langues</strong> : tchèque, allemand, anglais, espagnol, français, indonésien, italien, japonais, coréen, néerlandais, polonais, portugais du Brésil, russe, suédois, turc, ukrainien, chinois simplifié et chinois traditionnel, pour l'interface et pour tout ce qu'elle dit et comprend.<br>
 <strong>Ajoutez la vôtre</strong> : déposez un fichier JSON dans <code>config/lauramod/dialogues/</code> pour ajouter des répliques, des phrases de chat ou une langue entière, et dans <code>config/lauramod/lang/</code> pour l'interface. Sans code ni pack de ressources.
 </p>
@@ -299,7 +303,9 @@
 
 <h3 align="center">Intégrations Facultatives</h3>
 
-<p align="center">Rien de ce qui suit n'est obligatoire et rien n'est inclus dans le mod. Le tableau décrit les versions pour Minecraft 1.21.1.</p>
+<p align="center">Rien de ce qui suit n'est obligatoire et rien n'est inclus dans le mod. Le tableau décrit les versions pour Minecraft 1.21.1.<br>
+<strong>Minecraft 1.20.1</strong> : Farmer's Delight (Refabricated sur Fabric) et KubeJS sur les trois chargeurs. Le pont Applied Energistics 2 (trois chargeurs) et le pont Curios (NeoForge et Forge) sont présents mais n'ont jamais été lancés en jeu.<br>
+<strong>Minecraft 26.1.2</strong> : Farmer's Delight Refabricated sur Fabric uniquement.</p>
 
 <div align="center">
 <table>
@@ -316,7 +322,7 @@
 
 <p align="center">
 <strong>Rangements de mods</strong> : les blocs de rangement des autres mods fonctionnent comme les coffres du jeu de base pour rapporter, pour les métiers et pour les coffres attribués.<br>
-<strong>Sacs à dos</strong> : elle porte un sac du jeu de base, un sac à dos de Sophisticated Backpacks, ou tout objet dont l'identifiant contient « backpack ». Sur NeoForge et Forge, un sac à dos qui expose son inventaire devient un rangement supplémentaire.<br>
+<strong>Sacs à dos</strong> : elle porte un sac du jeu de base, un sac à dos de Sophisticated Backpacks, ou tout objet dont l'identifiant contient « backpack ». Sur NeoForge et Forge, et sur Fabric pour Minecraft 26.1.2, un sac à dos qui expose son inventaire devient un rangement supplémentaire.<br>
 <strong>Applied Energistics 2</strong> : n'importe quel bloc d'un réseau ME alimenté lui donne accès à tout le stockage du réseau, pour y prendre des objets et y ranger sa production.<br>
 <strong>Curios</strong> : elle porte des bijoux (collier, bague, bracelet, charme, tête, dos, ceinture).<br>
 <strong>Farmer's Delight</strong> : cuisinière, elle utilise aussi les marmites de sa zone de travail.<br>
@@ -329,8 +335,10 @@
 <h3 align="center">Versions Supportées</h3>
 
 <p align="center">
+<strong>Minecraft 1.20.1</strong> : version 2.0.0 pour NeoForge, Forge et Fabric (Fabric API obligatoire), Java 17.<br>
 <strong>Minecraft 1.21.1</strong> : version 2.0.0 pour NeoForge, Forge et Fabric (Fabric API obligatoire), Java 21.<br>
-<strong>Minecraft 1.20.1 et 26.1.2</strong> : en préparation pour les trois mêmes chargeurs, ce qui complétera l'ensemble prévu de neuf cibles.
+<strong>Minecraft 26.1.2</strong> : version 2.0.0 pour NeoForge, Forge et Fabric (Fabric API obligatoire), Java 25.<br>
+Neuf jars en tout : prenez celui qui correspond à votre version de Minecraft et à votre chargeur.
 </p>
 
 <br>
@@ -338,7 +346,7 @@
 <h3 align="center">Premiers Pas</h3>
 
 <p align="center">
-<strong>1.</strong> Placez le jar de votre chargeur dans le dossier <code>mods</code> (Fabric demande aussi Fabric API). Sur un serveur, installez-le sur le serveur et sur chaque client.<br>
+<strong>1.</strong> Placez le jar de votre version de Minecraft et de votre chargeur dans le dossier <code>mods</code> (Fabric demande aussi Fabric API). Sur un serveur, installez-le sur le serveur et sur chaque client.<br>
 <strong>2.</strong> Dites « je me sens seul » dans le chat, ou lancez <code>/laura summon</code>.<br>
 <strong>3.</strong> Appuyez sur <strong>K</strong> près d'elle pour ouvrir son menu et parcourir les sept onglets.<br>
 <strong>4.</strong> Nourrissez-la : faites un clic droit sur elle avec de la nourriture. Elle récupère de la vie tant qu'elle est bien nourrie.<br>

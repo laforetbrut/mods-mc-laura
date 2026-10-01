@@ -49,7 +49,7 @@ Related guides / Guides liés : [ACTIONS.md](ACTIONS.md), [CONFIG.md](CONFIG.md)
 | `/laura sleep` | She goes to sleep in a free bed within 8 blocks, or on the floor. She refuses during the day when her energy is above 85. |
 | `/laura wakeup` | Wakes her up (costs 2 affection). |
 | `/laura eat` | She eats the first suitable food of her inventory. |
-| `/laura hug` | Hug. |
+| `/laura hug` | Hug. Never refused because she is hungry, sad or jealous: it comforts her. |
 | `/laura kiss` | Kiss. Refused when she sulks or when affection is under 200. |
 | `/laura compliment` | Compliment. |
 | `/laura ungag` | Removes the hay gag. |
@@ -75,6 +75,8 @@ Related guides / Guides liés : [ACTIONS.md](ACTIONS.md), [CONFIG.md](CONFIG.md)
 | `/laura fetch <item> [count] queue` | Adds the request to her to-do list instead of starting now. |
 
 `<item>` can be an item id (`bread`, `minecraft:oak_log`), an item tag (`#minecraft:logs`), `held` (the item in your main hand), or words known by the dialogue files (`some wood`). The count and the word `queue` are read from the end of the line. Examples: `/laura fetch minecraft:bread 3`, `/laura fetch #minecraft:logs 16 queue`, `/laura fetch held`.
+
+The same order can be written in chat, where a number in the message is the quantity: "bring me 32 bread" does what `/laura fetch bread 32` does.
 
 ### Tasks and to-do list
 
@@ -219,7 +221,7 @@ She is renamed, gets a home, works a field of radius 12, stores crops in the che
 | `/laura sleep` | Elle va dormir dans un lit libre à moins de 8 blocs, ou par terre. Elle refuse en journée quand son énergie dépasse 85. |
 | `/laura wakeup` | La réveille (coûte 2 points d'affection). |
 | `/laura eat` | Elle mange le premier aliment convenable de son inventaire. |
-| `/laura hug` | Câlin. |
+| `/laura hug` | Câlin. Jamais refusé parce qu'elle a faim, qu'elle est triste ou jalouse : il la réconforte. |
 | `/laura kiss` | Bisou. Refusé quand elle boude ou quand l'affection est sous 200. |
 | `/laura compliment` | Compliment. |
 | `/laura ungag` | Retire le bâillon de foin. |
@@ -245,6 +247,8 @@ She is renamed, gets a home, works a field of radius 12, stores crops in the che
 | `/laura fetch <objet> [quantité] queue` | Ajoute la demande à sa liste de tâches au lieu de commencer tout de suite. |
 
 `<objet>` peut être un identifiant d'objet (`bread`, `minecraft:oak_log`), un tag d'objets (`#minecraft:logs`), `held` (l'objet de votre main principale), ou des mots connus des fichiers de dialogues (`du bois`). La quantité et le mot `queue` sont lus à la fin de la ligne. Exemples : `/laura fetch minecraft:bread 3`, `/laura fetch #minecraft:logs 16 queue`, `/laura fetch held`.
+
+Le même ordre peut s'écrire dans le chat, où un nombre dans le message est la quantité : « apporte-moi 32 pains » fait ce que fait `/laura fetch bread 32`.
 
 ### Tâches et liste de tâches
 

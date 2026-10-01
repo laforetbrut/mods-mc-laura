@@ -54,9 +54,9 @@ Version 2.0.0, mod id `lauramod`, for NeoForge, Forge and Fabric on Minecraft 1.
 | 26.1.2 | Fabric | Fabric Loader 0.19.5, Fabric API 0.155.3+26.1.2 | 25 | `lauramod-fabric-26.1.2-2.0.0.jar` |
 
 Each jar is built for one loader and one Minecraft version. Download the one that matches
-yours from the [Releases](https://github.com/laforetbrut/lauramod/releases) page, or build it
-(see [Building from source](#building-from-source)). The nine targets share the same features
-and pass the same in-game self tests; only the optional integrations differ.
+yours from the CurseForge page of the mod, or build it (see
+[Building from source](#building-from-source)). The nine targets share the same features and
+pass the in-game self test suite; only the optional integrations differ.
 
 Coming from 1.x? 2.0.0 is a full rewrite, and a companion saved by 1.x is kept. The differences
 are listed in the [changelog](CHANGELOG.md).
@@ -116,8 +116,8 @@ None of these mods is required and none is bundled in the jar.
 - **Backpack as storage**: a backpack that exposes its inventory adds storage. Elsewhere it is
   worn for the look only.
 
-The in-game self tests check Farmer's Delight and KubeJS. Applied Energistics 2 and Curios have
-no in-game test. Details: [COMPATIBILITY.md](docs/COMPATIBILITY.md).
+The in-game self test suite checks Farmer's Delight and KubeJS. Applied Energistics 2 and Curios
+have no in-game test. Details: [COMPATIBILITY.md](docs/COMPATIBILITY.md).
 
 ## Documentation
 
@@ -147,10 +147,18 @@ cd neoforge-1.21.1
 ```
 
 On Windows use `gradlew.bat build`. The jar is written to `build/libs/`. To run the in-game self
-tests on a dedicated server (this accepts the [Minecraft EULA](https://aka.ms/MinecraftEULA)):
+test suite on a dedicated server (this accepts the
+[Minecraft EULA](https://aka.ms/MinecraftEULA)):
 
 ```
 ./gradlew runSelftest -PacceptEula
+```
+
+To build the nine targets and collect their jars in the local `jars/` folder (ignored by Git),
+run this from the repository root:
+
+```
+bash tools/collect_jars.sh --build
 ```
 
 Toolchains, development runs, self tests and the optional mods of each target are described in
@@ -167,16 +175,17 @@ docs/                          the ten guides
 
 - `main` holds everything: one folder per target (`neoforge-1.20.1` to `fabric-26.1.2`) and one
   `common/<mcversion>` folder per Minecraft version (1.20.1, 1.21.1, 26.1.2). There is no root build.
-- Each target also has a branch named like its folder, generated from `main` by
-  `tools/make_branches.sh`. It holds that single project at the root, with the common code merged
-  into `src/main`. These branches are never edited by hand.
+- One branch per target, named like its folder, is generated from `main` by
+  `tools/make_branches.sh`; the branches are created when `main` is published. Such a branch
+  holds that single project at the root, with the common code merged into `src/main`. These
+  branches are never edited by hand.
 
 ## Contributing and security
 
 - How to contribute, build and test: [CONTRIBUTING.md](CONTRIBUTING.md). Pull requests go
   against `main`.
-- Questions and ideas: [GitHub Discussions](https://github.com/laforetbrut/lauramod/discussions).
-  Bugs and requests: [issues](https://github.com/laforetbrut/lauramod/issues/new/choose).
+- Questions, bugs and requests:
+  [GitHub issues](https://github.com/laforetbrut/lauramod/issues/new/choose).
 - Security problems are reported privately, see [SECURITY.md](SECURITY.md).
 - Everyone taking part follows the [Code of Conduct](CODE_OF_CONDUCT.md).
 
@@ -246,11 +255,10 @@ Version 2.0.0, identifiant de mod `lauramod`, pour NeoForge, Forge et Fabric sur
 | 26.1.2 | Fabric | Fabric Loader 0.19.5, Fabric API 0.155.3+26.1.2 | 25 | `lauramod-fabric-26.1.2-2.0.0.jar` |
 
 Chaque jar est compilé pour un seul chargeur et une seule version de Minecraft. Téléchargez
-celui qui correspond aux vôtres depuis la page
-[Releases](https://github.com/laforetbrut/lauramod/releases), ou compilez-le (voir
+celui qui correspond aux vôtres depuis la page CurseForge du mod, ou compilez-le (voir
 [Compiler depuis les sources](#compiler-depuis-les-sources)). Les neuf cibles ont les mêmes
-fonctionnalités et réussissent les mêmes self tests en jeu ; seules les intégrations facultatives
-diffèrent.
+fonctionnalités et réussissent la suite de self tests en jeu ; seules les intégrations
+facultatives diffèrent.
 
 Vous venez de la 1.x ? La 2.0.0 est une réécriture complète, et une compagne enregistrée par la
 1.x est conservée. Les différences sont listées dans le [changelog](CHANGELOG.md).
@@ -315,8 +323,8 @@ Aucun de ces mods n'est obligatoire et aucun n'est inclus dans le jar.
 - **Sac à dos comme rangement** : un sac à dos qui expose son inventaire ajoute du rangement.
   Ailleurs, il est porté uniquement pour l'apparence.
 
-Les self tests en jeu vérifient Farmer's Delight et KubeJS. Applied Energistics 2 et Curios n'ont
-aucun test en jeu. Détails : [COMPATIBILITY.md](docs/COMPATIBILITY.md).
+La suite de self tests en jeu vérifie Farmer's Delight et KubeJS. Applied Energistics 2 et Curios
+n'ont aucun test en jeu. Détails : [COMPATIBILITY.md](docs/COMPATIBILITY.md).
 
 ## Documentation
 
@@ -345,12 +353,19 @@ cd neoforge-1.21.1
 ./gradlew build
 ```
 
-Sous Windows, utilisez `gradlew.bat build`. Le jar est écrit dans `build/libs/`. Pour lancer les
-self tests en jeu sur un serveur dédié (cela accepte
+Sous Windows, utilisez `gradlew.bat build`. Le jar est écrit dans `build/libs/`. Pour lancer la
+suite de self tests en jeu sur un serveur dédié (cela accepte
 l'[EULA de Minecraft](https://aka.ms/MinecraftEULA)) :
 
 ```
 ./gradlew runSelftest -PacceptEula
+```
+
+Pour compiler les neuf cibles et rassembler leurs jars dans le dossier local `jars/` (ignoré par
+Git), lancez ceci depuis la racine du dépôt :
+
+```
+bash tools/collect_jars.sh --build
 ```
 
 Les outils de build, les lancements de développement, les self tests et les mods facultatifs de
@@ -368,16 +383,17 @@ docs/                          les dix guides
 - `main` contient tout : un dossier par cible (de `neoforge-1.20.1` à `fabric-26.1.2`) et un
   dossier `common/<mcversion>` par version de Minecraft (1.20.1, 1.21.1, 26.1.2). Il n'y a pas
   de build racine.
-- Chaque cible a aussi une branche nommée comme son dossier, générée depuis `main` par
-  `tools/make_branches.sh`. Elle contient ce seul projet à la racine, avec le code commun fusionné
-  dans `src/main`. Ces branches ne sont jamais modifiées à la main.
+- Une branche par cible, nommée comme son dossier, est générée depuis `main` par
+  `tools/make_branches.sh` ; les branches sont créées quand `main` est publié. Une telle branche
+  contient ce seul projet à la racine, avec le code commun fusionné dans `src/main`. Ces branches
+  ne sont jamais modifiées à la main.
 
 ## Contribuer et sécurité
 
 - Comment contribuer, compiler et tester : [CONTRIBUTING.md](CONTRIBUTING.md). Les pull requests
   se font sur `main`.
-- Questions et idées : [GitHub Discussions](https://github.com/laforetbrut/lauramod/discussions).
-  Bugs et demandes : [issues](https://github.com/laforetbrut/lauramod/issues/new/choose).
+- Questions, bugs et demandes :
+  [issues GitHub](https://github.com/laforetbrut/lauramod/issues/new/choose).
 - Les problèmes de sécurité se signalent en privé, voir [SECURITY.md](SECURITY.md).
 - Chaque participant suit le [Code de conduite](CODE_OF_CONDUCT.md).
 

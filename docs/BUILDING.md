@@ -41,9 +41,9 @@ docs/                            this documentation
 
 - Each `<loader>-<mcversion>/` folder is a **standalone Gradle project**. There is no root build.
 - Its `build.gradle` adds `../common/<mcversion>/src/main/java` and `../common/<mcversion>/src/main/resources` to the main source set. The loader folder itself only holds the glue: entry points, networking, the `Platform` implementation and the optional integrations (`compat` package).
-- Each target also has a branch named like its folder (`fabric-26.1.2` for example), generated from `main` by `tools/make_branches.sh`. On such a branch the project sits at the repository root, the common code is merged into `src/main`, and the include does nothing.
+- One branch per target, named like its folder (`fabric-26.1.2` for example), is generated from `main` by `tools/make_branches.sh`; the branches are created when `main` is published. On such a branch the project sits at the repository root, the common code is merged into `src/main`, and the include does nothing.
 - NeoForge for Minecraft 1.20.1 is the 47.1 fork of Forge. Its project uses the legacy plugin of ModDevGradle, and the mod depends on the mod id `forge` there.
-- Version 2.0.0 builds for the nine targets, and the nine pass the same in-game self tests.
+- Version 2.0.0 builds for the nine targets, and the nine pass the in-game self test suite.
 
 ### Build a jar
 
@@ -256,9 +256,9 @@ docs/                            cette documentation
 
 - Chaque dossier `<chargeur>-<mcversion>/` est un **projet Gradle autonome**. Il n'y a pas de build racine.
 - Son `build.gradle` ajoute `../common/<mcversion>/src/main/java` et `../common/<mcversion>/src/main/resources` au source set principal. Le dossier du chargeur ne contient que la colle : points d'entrée, réseau, implémentation de `Platform` et intégrations facultatives (paquet `compat`).
-- Chaque cible a aussi une branche nommée comme son dossier (`fabric-26.1.2` par exemple), générée depuis `main` par `tools/make_branches.sh`. Sur une telle branche, le projet est à la racine du dépôt, le code commun est fusionné dans `src/main`, et l'inclusion ne fait rien.
+- Une branche par cible, nommée comme son dossier (`fabric-26.1.2` par exemple), est générée depuis `main` par `tools/make_branches.sh` ; les branches sont créées quand `main` est publié. Sur une telle branche, le projet est à la racine du dépôt, le code commun est fusionné dans `src/main`, et l'inclusion ne fait rien.
 - NeoForge pour Minecraft 1.20.1 est le fork 47.1 de Forge. Son projet utilise le plugin legacy de ModDevGradle, et le mod y dépend de l'identifiant de mod `forge`.
-- La version 2.0.0 se compile pour les neuf cibles, et les neuf réussissent les mêmes self tests en jeu.
+- La version 2.0.0 se compile pour les neuf cibles, et les neuf réussissent la suite de self tests en jeu.
 
 ### Construire un jar
 
