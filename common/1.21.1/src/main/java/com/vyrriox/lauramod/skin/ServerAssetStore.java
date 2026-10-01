@@ -72,6 +72,7 @@ public final class ServerAssetStore {
     }
 
     public static synchronized void rescan() {
+        scans++;
         for (AssetKind kind : AssetKind.values()) {
             Map<String, Entry> found = new LinkedHashMap<>();
             Path root = dir(kind);
@@ -295,14 +296,55 @@ public final class ServerAssetStore {
         return kind == AssetKind.SKIN ? ".png" : ".bbmodel";
     }
 
-    /** Saves an uploaded file in the uploads folder and returns its entry. */
+    /**
+     * Saves an uploaded file in the uploads folder and returns its entry. Only that one entry is
+     * built (no scan of the folders), and nothing is written when the stored file is already the same.
+     */
     public static synchronized Entry storeUpload(AssetKind kind, String fileStem, byte[] data) throws IOException {
-        Path dir = dir(kind).resolve("uploads");
+        Path root = dir(kind);
+        Path dir = root.resolve("uploads");
         Files.createDirectories(dir);
-        Path target = dir.resolve(fileStem + uploadExtension(kind));
+        String fileName = fileStem + uploadExtension(kind);
+        Path target = dir.resolve(fileName);
+        String name = "uploads/" + fileStem;
+        Entry known = get(kind, name);
+        if (known != null && known.sha1().equals(uploadHash(kind, fileName, data)) && Files.isRegularFile(target)) {
+            return known;
+        }
         Files.write(target, data);
-        rescan();
-        return get(kind, "uploads/" + fileStem);
+        storeWrites++;
+        Entry entry = kind == AssetKind.SKIN ? skinEntry(root, target) : modelEntry(root, target);
+        Map<String, Entry> entries = ENTRIES.computeIfAbsent(kind, k -> new LinkedHashMap<>());
+        if (entry == null) {
+            entries.remove(name);
+        } else {
+            entries.put(entry.name(), entry);
+        }
+        return entry;
+    }
+
+    /** The hash a rescan would give this upload: the bytes of a skin, the file name and the bytes of a model. */
+    private static String uploadHash(AssetKind kind, String fileName, byte[] data) {
+        if (kind == AssetKind.SKIN) {
+            return sha1(data);
+        }
+        MessageDigest digest = digest();
+        digest.update(fileName.getBytes(StandardCharsets.UTF_8));
+        digest.update(data);
+        return HexFormat.of().formatHex(digest.digest());
+    }
+
+    private static int storeWrites;
+    private static int scans;
+
+    /** Upload files written since the game started (read by the self tests). */
+    public static synchronized int storeWrites() {
+        return storeWrites;
+    }
+
+    /** Folder scans done since the game started (read by the self tests). */
+    public static synchronized int scans() {
+        return scans;
     }
 
     public static boolean isValidSkinPng(byte[] data) {

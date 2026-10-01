@@ -24,8 +24,16 @@ import java.util.function.Function;
  */
 public final class ModelParser {
     private static final int MAX_CUBES = 4096;
+    // A file that passes the size check must not be able to freeze or exhaust the clients that render
+    // it: every count a client pays for at each frame, or in memory, has a limit.
+    public static final int MAX_BONES = 1024;
     /** Deepest chain of bones (a bone inside a bone inside a bone...). Real models stay under 20. */
-    static final int MAX_BONE_DEPTH = 64;
+    public static final int MAX_BONE_DEPTH = 64;
+    public static final int MAX_TEXTURES = 8;
+    /** Largest width or height of a texture, in pixels. */
+    public static final int MAX_TEXTURE_SIZE = 2048;
+    /** Pixels of all the textures of a model together (two textures of the largest size). */
+    public static final long MAX_TEXTURE_PIXELS = 2L * MAX_TEXTURE_SIZE * MAX_TEXTURE_SIZE;
 
     private ModelParser() {
     }
@@ -73,6 +81,36 @@ public final class ModelParser {
     }
 
     /**
+     * Checks the textures of a model from their PNG headers, without decoding them: their number,
+     * the size of each one and their total size. Throws IllegalArgumentException when one is not a
+     * PNG or a limit is exceeded.
+     */
+    public static void checkTextures(List<byte[]> textures) {
+        if (textures.size() > MAX_TEXTURES) {
+            throw new IllegalArgumentException("too many textures (max " + MAX_TEXTURES + ")");
+        }
+        long pixels = 0;
+        for (byte[] png : textures) {
+            if (png == null || png.length < 24 || (png[0] & 0xFF) != 0x89 || png[1] != 'P' || png[2] != 'N' || png[3] != 'G') {
+                throw new IllegalArgumentException("a texture is not a PNG image");
+            }
+            long width = pngInt(png, 16);
+            long height = pngInt(png, 20);
+            if (width <= 0 || height <= 0 || width > MAX_TEXTURE_SIZE || height > MAX_TEXTURE_SIZE) {
+                throw new IllegalArgumentException("a texture is larger than " + MAX_TEXTURE_SIZE + "x" + MAX_TEXTURE_SIZE);
+            }
+            pixels += width * height;
+        }
+        if (pixels > MAX_TEXTURE_PIXELS) {
+            throw new IllegalArgumentException("the textures are too large together");
+        }
+    }
+
+    private static long pngInt(byte[] b, int offset) {
+        return ((long) (b[offset] & 0xFF) << 24) | ((b[offset + 1] & 0xFF) << 16) | ((b[offset + 2] & 0xFF) << 8) | (b[offset + 3] & 0xFF);
+    }
+
+    /**
      * Parses a model file.
      *
      * @param fileName  name of the main file ({@code x.bbmodel} or {@code x.geo.json})
@@ -102,6 +140,7 @@ public final class ModelParser {
         if (model.cubeCount() == 0) {
             throw new IllegalArgumentException("the model has no cube");
         }
+        checkTextures(model.textures);
         return model;
     }
 
@@ -370,12 +409,13 @@ public final class ModelParser {
             }
         }
         for (ModelData.Bone bone : order) {
-            // Parents are plain names here: walk up to refuse a loop or an endless chain, which
-            // nothing could render.
+            // Parents are plain names here: walk up to refuse a loop (a bone that is its own
+            // ancestor) or an endless chain, which nothing could render and which would hang
+            // everything that walks up from a bone.
             int depth = 1;
             for (String up = parents.get(bone); up != null && byName.containsKey(up); up = parents.get(byName.get(up))) {
                 if (++depth > MAX_BONE_DEPTH) {
-                    throw new IllegalArgumentException("bones nested more than " + MAX_BONE_DEPTH + " deep");
+                    throw new IllegalArgumentException("bones nested too deep or in a loop (max " + MAX_BONE_DEPTH + ")");
                 }
             }
             String parentName = parents.get(bone);
@@ -666,6 +706,9 @@ public final class ModelParser {
     // ------------------------------------------------------------------ helpers
 
     private static void register(ModelData model, ModelData.Bone bone, ModelData.Bone parent) {
+        if (model.bones.size() >= MAX_BONES) {
+            throw new IllegalArgumentException("too many bones (max " + MAX_BONES + ")");
+        }
         String key = bone.name.toLowerCase(Locale.ROOT);
         if (model.bones.containsKey(key)) {
             key = key + "_" + model.bones.size();

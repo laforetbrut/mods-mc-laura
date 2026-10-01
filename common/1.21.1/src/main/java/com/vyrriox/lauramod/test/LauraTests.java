@@ -16,6 +16,7 @@ public final class LauraTests {
         List<TestRunner.TestCase> tests = new ArrayList<>();
         LauraTestCases.register(tests);
         WorkAreaTests.addTo(tests);
+        MiscAreaTests.addTo(tests);
         String only = System.getProperty("lauramod.selftest.only", "");
         if (!only.isBlank()) {
             tests.removeIf(t -> !t.name().contains(only));

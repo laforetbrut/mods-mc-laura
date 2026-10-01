@@ -28,6 +28,11 @@ public class LauraSleepGoal extends Goal {
 
     @Override
     public boolean canUse() {
+        if (laura.isAsleep()) {
+            // A sleep that did not start here (the sleep order, or a companion loaded asleep): this
+            // goal takes it over, so she wakes up by herself whatever her mode.
+            return true;
+        }
         if (--checkCooldown > 0) {
             return false;
         }
@@ -44,7 +49,9 @@ public class LauraSleepGoal extends Goal {
             return false;
         }
         if (laura.isAsleep()) {
-            return !laura.brain().canWakeUp() && ownerStillClose();
+            // A nap she was ordered to take is not cut short by daylight.
+            boolean over = laura.isSleepOrdered() ? laura.brain().orderedSleepOver() : laura.brain().canWakeUp();
+            return !over && ownerStillClose();
         }
         return walkTicks < 400;
     }
@@ -61,6 +68,9 @@ public class LauraSleepGoal extends Goal {
     public void start() {
         walkTicks = 0;
         bed = null;
+        if (laura.isAsleep()) {
+            return;
+        }
         LivingEntity owner = laura.getOwner();
         BlockPos center = laura.getMode() == LauraMode.HOME && laura.getHomePos() != null ? laura.getHomePos() : laura.blockPosition();
         if (owner instanceof Player player && player.isSleeping() && laura.getMode() == LauraMode.FOLLOW) {

@@ -88,7 +88,10 @@ public final class DesireTable {
                 JsonObject o = e.getAsJsonObject();
                 List<String> targets = new ArrayList<>();
                 for (JsonElement t : array(o, "biomes")) {
-                    targets.add(t.getAsString());
+                    // Only text is a biome, a tag or a dimension: anything else is skipped.
+                    if (t.isJsonPrimitive()) {
+                        targets.add(t.getAsString());
+                    }
                 }
                 String id = str(o, "id", "");
                 if (!id.isEmpty() && !targets.isEmpty()) {

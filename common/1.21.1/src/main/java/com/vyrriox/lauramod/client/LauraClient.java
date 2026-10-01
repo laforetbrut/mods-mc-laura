@@ -13,6 +13,7 @@ import com.vyrriox.lauramod.config.LauraClientConfig;
 import com.vyrriox.lauramod.desire.DesireTable;
 import com.vyrriox.lauramod.entity.LauraEntity;
 import com.vyrriox.lauramod.platform.ClientBridge;
+import com.vyrriox.lauramod.util.CacheFiles;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -33,6 +34,10 @@ public final class LauraClient {
     public static final KeyMapping CALL_KEY = new KeyMapping("key.lauramod.call", InputConstants.Type.KEYSYM, InputConstants.UNKNOWN.getValue(), KEY_CATEGORY);
 
     private static boolean joined;
+    /** Ticks to wait for the server to show it has the mod before leaving it. */
+    private static final int SERVER_CHECK_TICKS = 100;
+    /** Client ticks since the world was joined, -1 once the server check is done. */
+    private static int ticksSinceJoin = -1;
 
     private LauraClient() {
     }
@@ -45,6 +50,7 @@ public final class LauraClient {
     public static void init() {
         LauraClientConfig.load();
         DefaultAnimations.reload();
+        pruneDownloadCache();
         LauraMod.setClientBridge(new ClientBridge() {
             @Override
             public void openInteractionScreen(LauraEntity laura) {
@@ -70,6 +76,21 @@ public final class LauraClient {
         });
     }
 
+    /** Downloaded skins and models are kept 30 days after their last use, within a size limit per folder. */
+    private static void pruneDownloadCache() {
+        java.nio.file.Path cache = LauraMod.platform().gameDir().resolve("lauramod").resolve("cache");
+        Thread pruner = new Thread(() -> {
+            long maxAge = 30L * 24 * 60 * 60 * 1000;
+            int skins = CacheFiles.prune(cache.resolve("skins"), maxAge, 64L * 1024 * 1024);
+            int models = CacheFiles.prune(cache.resolve("models"), maxAge, 256L * 1024 * 1024);
+            if (skins + models > 0) {
+                LauraMod.LOGGER.info("Removed {} old skins and {} old models from the download cache", skins, models);
+            }
+        }, "Laura cache cleanup");
+        pruner.setDaemon(true);
+        pruner.start();
+    }
+
     /** Called after the registries are ready (item icons in desires need them). */
     public static void afterRegistries() {
         DesireTable.load();
@@ -89,7 +110,20 @@ public final class LauraClient {
         }
         if (!joined) {
             joined = true;
+            ticksSinceJoin = 0;
             LauraClientNetwork.hello();
+        }
+        // The mod is needed on both sides. NeoForge and Forge refuse such a connection themselves;
+        // where the loader lets it through, the player leaves with a clear message instead of
+        // playing with a mod that cannot work. The server answers the hello with its settings: no
+        // answer and no channel after a few seconds means it does not have the mod.
+        if (ticksSinceJoin >= 0 && ++ticksSinceJoin > SERVER_CHECK_TICKS) {
+            ticksSinceJoin = -1;
+            if (!ClientState.serverKnown && !LauraMod.platform().serverHasChannel()) {
+                LauraMod.LOGGER.warn("This server does not have {}: leaving", LauraMod.NAME);
+                mc.player.connection.getConnection().disconnect(Component.translatable("lauramod.network.server_missing"));
+                return;
+            }
         }
         LanguageOverlay.ensureInstalled();
         while (MENU_KEY.consumeClick()) {

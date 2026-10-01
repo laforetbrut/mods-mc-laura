@@ -446,6 +446,8 @@
   "lauramod.skin.changed": "Yeni görünüm: %s",
   "lauramod.skin.reset": "Varsayılan skinine döndü.",
   "lauramod.skin.not_allowed": "Onun görünümünü değiştirme iznin yok.",
+  "lauramod.look.cooldown": "O kadar hızlı değil: görünüşünü yeniden değiştirmeden önce birkaç saniye bekle.",
+  "lauramod.network.server_missing": "My Girlfriend Laura bu sunucuda yüklü değil. Mod her iki tarafta da gerekli: sunucudan eklemesini iste ya da burada oynamak için mods klasöründen kaldır.",
   "lauramod.skin.url_disabled": "URL'den skin kullanımı bu sunucuda kapalı.",
   "lauramod.skin.url_refused": "Bu web sitesine izin verilmiyor. İzin verilenler: %s",
   "lauramod.skin.file_missing": "Sunucuda %s adında bir skin yok.",

@@ -54,19 +54,22 @@ public final class Molang {
     public static final Expr ONE = new Constant(1);
 
     /** Longest expression read. Animation values are a few dozen characters. */
-    static final int MAX_LENGTH = 4096;
+    public static final int MAX_LENGTH = 1024;
     /** Deepest nesting of parentheses, function calls, ternaries and signs. */
-    static final int MAX_DEPTH = 48;
+    public static final int MAX_DEPTH = 48;
     /** Most operators and function calls in one expression (also the deepest tree to evaluate). */
-    static final int MAX_NODES = 512;
+    public static final int MAX_NODES = 512;
+    /** Most dice {@code math.die_roll} throws: the count comes from the file and is evaluated every frame. */
+    public static final int MAX_DIE_ROLLS = 64;
 
     private Molang() {
     }
 
     /**
      * Parses an expression; invalid input becomes 0 rather than breaking the model. The limits
-     * above bound the recursion of the parser and of {@link Expr#eval}, so a file made to nest
-     * thousands of levels is read as 0 instead of overflowing the stack.
+     * above bound the recursion of the parser and of {@link Expr#eval}, so an expression that is
+     * too long, or a file made to nest thousands of levels, is read as 0 instead of overflowing
+     * the stack.
      */
     public static Expr parse(String source) {
         if (source == null) {
@@ -235,7 +238,8 @@ public final class Molang {
                 case "random_integer" -> Math.floor(a + ThreadLocalRandom.current().nextDouble() * (b - a + 1));
                 case "die_roll" -> {
                     double sum = 0;
-                    for (int i = 0; i < (int) a; i++) {
+                    int rolls = (int) Math.max(0, Math.min(MAX_DIE_ROLLS, a));
+                    for (int i = 0; i < rolls; i++) {
                         sum += b + ThreadLocalRandom.current().nextDouble() * (d - b);
                     }
                     yield sum;

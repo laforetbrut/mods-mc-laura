@@ -147,7 +147,7 @@ Look at a container (6 blocks at most), then:
 |---|---|
 | `/laura reload` | Reloads the common config, gifts, desires, recipes, dialogues, and rescans the skin and model folders. |
 | `/laura admin list` | Every companion of the world: owner, name, state (`active`, `dismissed`, `grave`, `respawning`), position, dimension. |
-| `/laura admin remove <player>` | Deletes every companion of that player for good. |
+| `/laura admin remove <player>` | Deletes every companion of that player for good. A loaded companion leaves what she carries on the ground; one in an unloaded chunk is removed, and drops her things, as soon as that chunk loads. What a dismissed companion or one waiting on a grave carried is deleted with her. |
 | `/laura admin affection <player> <value>` | Sets the affection (0 to 1000) of that player's companion. |
 | `/laura admin need <player> <need> <value>` | Sets a need (0 to 100). Needs: `hunger`, `energy`, `fun`, `attention`, `hygiene`. |
 | `/laura admin desire <player> clear` | Removes her current desire. |
@@ -319,7 +319,7 @@ Regardez un conteneur (6 blocs au plus), puis :
 |---|---|
 | `/laura reload` | Recharge la configuration commune, les cadeaux, les désirs, les recettes, les dialogues, et relit les dossiers de skins et de modèles. |
 | `/laura admin list` | Toutes les compagnes du monde : propriétaire, nom, état (`active`, `dismissed`, `grave`, `respawning`), position, dimension. |
-| `/laura admin remove <joueur>` | Supprime définitivement toutes les compagnes de ce joueur. |
+| `/laura admin remove <joueur>` | Supprime définitivement toutes les compagnes de ce joueur. Une compagne chargée laisse au sol ce qu'elle portait ; une compagne dans un tronçon non chargé est supprimée, et lâche ses affaires, dès que ce tronçon se charge. Ce que portait une compagne renvoyée ou en attente sur une tombe est supprimé avec elle. |
 | `/laura admin affection <joueur> <valeur>` | Règle l'affection (0 à 1000) de la compagne de ce joueur. |
 | `/laura admin need <joueur> <besoin> <valeur>` | Règle un besoin (0 à 100). Besoins : `hunger`, `energy`, `fun`, `attention`, `hygiene`. |
 | `/laura admin desire <joueur> clear` | Retire son désir en cours. |

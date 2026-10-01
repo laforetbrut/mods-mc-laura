@@ -39,7 +39,9 @@ A custom model uses its own textures. The skin chosen in the Style tab only appl
 Limits and rules:
 
 - Only cubes are read. Mesh elements are ignored.
-- 4096 cubes at most.
+- 4096 cubes and 1024 bones at most, groups nested 64 deep at most. A bone cannot be its own ancestor.
+- 8 textures at most, each at most 2048x2048 pixels, and together at most the pixels of two 2048x2048 textures.
+- A model beyond a limit is refused: an upload with a message, a file of the folders with a line in the log.
 - Box UV and per-face UV are both supported. A `.bbmodel` can use several textures.
 - Groups and cubes with export turned off, and hidden cubes, are skipped.
 - A `.geo.json` file uses its first geometry.
@@ -64,14 +66,14 @@ config/lauramod/models/
         maid.animation.json
         maid.png
     uploads/
-        vyrriox_dress.bbmodel       model "uploads/vyrriox_dress"
+        <UUID>_dress.bbmodel        model "uploads/<UUID>_dress" (sent by a player)
 ```
 
 The name is the file name without its extension, or the folder name. Allowed characters: letters, digits, `_`, `-`, `.`, `/` and space.
 
 **2. Resource pack.** Put the files at `assets/<namespace>/laura_models/<name>.bbmodel` (or `.geo.json`, `.animation.json`, `.png`). When `/laura model <name>` does not find the name on the server, the model is looked up in each client's resource packs, then in the client's own `config/lauramod/models` folder. Players who do not have it see the default model.
 
-**3. Player upload.** With `models.allowUploads` set to true, on a multiplayer server, the Models page lists the `.bbmodel` files of your own `config/lauramod/models` folder with an "Upload" action. You can also drag and drop a `.bbmodel` file onto the menu window. You must be allowed to change her look. The server checks the file, saves it as `models/uploads/<player>_<name>.bbmodel` and applies it. Each player may keep 3 model files on the server (`models.maxUploadsPerPlayer`); sending a file with the same name replaces the old one and is always allowed. Only `.bbmodel` files can be uploaded, because they hold their textures. A `.geo.json` file is refused with a message: such models must be placed in the server folder by its administrator.
+**3. Player upload.** With `models.allowUploads` set to true, on a multiplayer server, the Models page lists the `.bbmodel` files of your own `config/lauramod/models` folder with an "Upload" action. You can also drag and drop a `.bbmodel` file onto the menu window. You must be allowed to change her look. The server checks the file, saves it as `models/uploads/<UUID>_<name>.bbmodel` (the UUID of the player's account, without dashes) and applies it. A player can send one file every 3 seconds. Each player may keep 3 model files on the server (`models.maxUploadsPerPlayer`); sending a file with the same name replaces the old one and is always allowed. Only `.bbmodel` files can be uploaded, because they hold their textures. A `.geo.json` file is refused with a message: such models must be placed in the server folder by its administrator.
 
 `models.defaultModel` is the model of every newly summoned companion. `/laura model reset` and the "Default model" entry of the menu apply it again. The name designates a file of the server folder when one exists, otherwise a resource pack model. Write `pack:<name>` to force the resource pack. The option is ignored when `models.allowCustomModels` is false. It cannot designate a file that only exists in a player's own folder.
 
@@ -154,7 +156,8 @@ Rules:
 - Numbers, `+ - * / %`, comparisons, `&&`, `||`, `!`, the ternary `? :`, and `??`.
 - `math.` functions: `sin`, `cos`, `asin`, `acos`, `atan`, `atan2` (degrees), `abs`, `sqrt`, `floor`, `ceil`, `round`, `trunc`, `exp`, `ln`, `pow`, `mod`, `min`, `max`, `clamp`, `lerp`, `lerprotate`, `hermite_blend`, `sign`, `random`, `random_integer`, `die_roll`, and the constant `math.pi`.
 - `query.` (or `q.`) values: `anim_time`, `life_time`, `ground_speed`, `modified_move_speed`, `distance_moved`, `modified_distance_moved`, `health`, `max_health`, `head_y_rotation`, `head_x_rotation`, `is_on_ground`, `is_in_water`, `is_sitting`, `is_sleeping`.
-- `variable.`, `temp.` and `context.` values are read as 0. An expression that cannot be parsed is read as 0.
+- `variable.`, `temp.` and `context.` values are read as 0. An expression that cannot be parsed is read as 0, and so is one longer than 1024 characters or nested more than 48 deep.
+- `math.die_roll` throws 64 dice at most.
 
 ### The default animation file
 
@@ -186,7 +189,7 @@ Worked example, a calmer `idle`:
 | Command | Effect |
 |---|---|
 | `/laura model list` | Models of the server. |
-| `/laura model <name>` | Applies a model. The name is typed as it is, for example `/laura model uploads/vyrriox_dress`. |
+| `/laura model <name>` | Applies a model. The name is typed as it is, for example `/laura model maid`. |
 | `/laura model reset` | Applies `models.defaultModel` (the default player-like model when it is empty). |
 
 The first custom model you give her, chosen or uploaded, grants the "Total Makeover" advancement. A change of model also fulfils the `new_outfit` desire.
@@ -223,7 +226,9 @@ Un modèle personnalisé utilise ses propres textures. Le skin choisi dans l'ong
 Limites et règles :
 
 - Seuls les cubes sont lus. Les éléments de type mesh sont ignorés.
-- 4096 cubes au plus.
+- 4096 cubes et 1024 os au plus, des groupes imbriqués sur 64 niveaux au plus. Un os ne peut pas être son propre ancêtre.
+- 8 textures au plus, chacune d'au plus 2048x2048 pixels, et ensemble au plus les pixels de deux textures de 2048x2048.
+- Un modèle qui dépasse une limite est refusé : un envoi avec un message, un fichier des dossiers avec une ligne dans le journal.
 - L'UV en boîte et l'UV par face sont tous deux gérés. Un `.bbmodel` peut utiliser plusieurs textures.
 - Les groupes et cubes dont l'export est désactivé, et les cubes masqués, sont ignorés.
 - Un fichier `.geo.json` utilise sa première géométrie.
@@ -248,14 +253,14 @@ config/lauramod/models/
         maid.animation.json
         maid.png
     uploads/
-        vyrriox_dress.bbmodel       modèle "uploads/vyrriox_dress"
+        <UUID>_dress.bbmodel        modèle "uploads/<UUID>_dress" (envoyé par un joueur)
 ```
 
 Le nom est le nom du fichier sans son extension, ou le nom du dossier. Caractères autorisés : lettres, chiffres, `_`, `-`, `.`, `/` et espace.
 
 **2. Pack de ressources.** Placez les fichiers dans `assets/<namespace>/laura_models/<nom>.bbmodel` (ou `.geo.json`, `.animation.json`, `.png`). Quand `/laura model <nom>` ne trouve pas le nom sur le serveur, le modèle est cherché dans les packs de ressources de chaque client, puis dans le dossier `config/lauramod/models` du client. Les joueurs qui ne l'ont pas voient le modèle par défaut.
 
-**3. Envoi par un joueur.** Avec `models.allowUploads` à true, sur un serveur multijoueur, la page Modèles liste les fichiers `.bbmodel` de votre propre dossier `config/lauramod/models` avec une action « Envoyer ». Vous pouvez aussi glisser-déposer un fichier `.bbmodel` sur la fenêtre du menu. Vous devez avoir le droit de changer son apparence. Le serveur vérifie le fichier, l'enregistre sous `models/uploads/<joueur>_<nom>.bbmodel` et l'applique. Chaque joueur peut garder 3 fichiers de modèle sur le serveur (`models.maxUploadsPerPlayer`) ; envoyer un fichier du même nom remplace l'ancien et reste toujours possible. Seuls les fichiers `.bbmodel` peuvent être envoyés, car ils contiennent leurs textures. Un fichier `.geo.json` est refusé avec un message : ces modèles doivent être placés dans le dossier du serveur par son administrateur.
+**3. Envoi par un joueur.** Avec `models.allowUploads` à true, sur un serveur multijoueur, la page Modèles liste les fichiers `.bbmodel` de votre propre dossier `config/lauramod/models` avec une action « Envoyer ». Vous pouvez aussi glisser-déposer un fichier `.bbmodel` sur la fenêtre du menu. Vous devez avoir le droit de changer son apparence. Le serveur vérifie le fichier, l'enregistre sous `models/uploads/<UUID>_<nom>.bbmodel` (l'UUID du compte du joueur, sans tirets) et l'applique. Un joueur peut envoyer un fichier toutes les 3 secondes. Chaque joueur peut garder 3 fichiers de modèle sur le serveur (`models.maxUploadsPerPlayer`) ; envoyer un fichier du même nom remplace l'ancien et reste toujours possible. Seuls les fichiers `.bbmodel` peuvent être envoyés, car ils contiennent leurs textures. Un fichier `.geo.json` est refusé avec un message : ces modèles doivent être placés dans le dossier du serveur par son administrateur.
 
 `models.defaultModel` est le modèle de toute compagne nouvellement invoquée. `/laura model reset` et l'entrée « Modèle par défaut » du menu l'appliquent de nouveau. Le nom désigne un fichier du dossier du serveur quand il en existe un, sinon un modèle de pack de ressources. Écrivez `pack:<nom>` pour imposer le pack de ressources. L'option est ignorée quand `models.allowCustomModels` vaut false. Elle ne peut pas désigner un fichier qui n'existe que dans le dossier d'un joueur.
 
@@ -338,7 +343,8 @@ Règles :
 - Nombres, `+ - * / %`, comparaisons, `&&`, `||`, `!`, le ternaire `? :`, et `??`.
 - Fonctions `math.` : `sin`, `cos`, `asin`, `acos`, `atan`, `atan2` (en degrés), `abs`, `sqrt`, `floor`, `ceil`, `round`, `trunc`, `exp`, `ln`, `pow`, `mod`, `min`, `max`, `clamp`, `lerp`, `lerprotate`, `hermite_blend`, `sign`, `random`, `random_integer`, `die_roll`, et la constante `math.pi`.
 - Valeurs `query.` (ou `q.`) : `anim_time`, `life_time`, `ground_speed`, `modified_move_speed`, `distance_moved`, `modified_distance_moved`, `health`, `max_health`, `head_y_rotation`, `head_x_rotation`, `is_on_ground`, `is_in_water`, `is_sitting`, `is_sleeping`.
-- Les valeurs `variable.`, `temp.` et `context.` valent 0. Une expression illisible vaut 0.
+- Les valeurs `variable.`, `temp.` et `context.` valent 0. Une expression illisible vaut 0, de même qu'une expression de plus de 1024 caractères ou imbriquée sur plus de 48 niveaux.
+- `math.die_roll` lance au plus 64 dés.
 
 ### Le fichier d'animations par défaut
 
@@ -370,7 +376,7 @@ Exemple complet, un `idle` plus calme :
 | Commande | Effet |
 |---|---|
 | `/laura model list` | Modèles du serveur. |
-| `/laura model <nom>` | Applique un modèle. Le nom s'écrit tel quel, par exemple `/laura model uploads/vyrriox_dress`. |
+| `/laura model <nom>` | Applique un modèle. Le nom s'écrit tel quel, par exemple `/laura model maid`. |
 | `/laura model reset` | Applique `models.defaultModel` (le modèle par défaut de type joueur quand il est vide). |
 
 Le premier modèle personnalisé que vous lui donnez, choisi ou envoyé, accorde le progrès « Relooking complet ». Un changement de modèle réalise aussi le désir `new_outfit`.

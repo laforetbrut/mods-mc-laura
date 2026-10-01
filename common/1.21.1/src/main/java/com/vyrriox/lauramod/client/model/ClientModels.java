@@ -9,6 +9,7 @@ import com.vyrriox.lauramod.model.ModelParser;
 import com.vyrriox.lauramod.skin.AssetCache;
 import com.vyrriox.lauramod.skin.AssetKind;
 import com.vyrriox.lauramod.skin.ServerAssetStore;
+import com.vyrriox.lauramod.util.CacheFiles;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.ResourceLocation;
@@ -76,16 +77,25 @@ public final class ClientModels {
             if (asked == null) {
                 Path cachedZip = AssetCache.file(cacheDir(), sha1, ".zip");
                 if (cachedZip != null && Files.isRegularFile(cachedZip)) {
+                    Map<String, byte[]> files = null;
                     try {
-                        Map<String, byte[]> files = AssetCache.unzip(Files.readAllBytes(cachedZip), MAX_UNPACKED_BYTES);
-                        // A file that is not the model its name promises is ignored and downloaded again.
-                        if (AssetCache.matchesModel(sha1, files)) {
-                            Loaded loaded = fromFiles(name, lowerCaseNames(files));
-                            CACHE.put(ref, Optional.ofNullable(loaded));
-                            return loaded;
-                        }
+                        files = AssetCache.unzip(Files.readAllBytes(cachedZip), MAX_UNPACKED_BYTES);
                     } catch (IOException | RuntimeException e) {
                         LauraMod.LOGGER.debug("Cached model {} unreadable", name);
+                    }
+                    // A file that is not the model its name promises is ignored and downloaded again.
+                    if (files != null && AssetCache.matchesModel(sha1, files)) {
+                        try {
+                            Loaded loaded = fromFiles(name, lowerCaseNames(files));
+                            CACHE.put(ref, Optional.ofNullable(loaded));
+                            CacheFiles.touch(cachedZip);
+                            return loaded;
+                        } catch (IOException | RuntimeException e) {
+                            // The cached file is the one the server sent: refused once, refused again, not asked for again.
+                            LauraMod.LOGGER.warn("Model {} from the server is invalid: {}", name, e.getMessage());
+                            CACHE.put(ref, Optional.empty());
+                            return null;
+                        }
                     }
                 }
             }
@@ -276,6 +286,9 @@ public final class ClientModels {
                 }
             }
         }
+        // Again here: the texture found next to the model was not part of the parser's check, and
+        // models of the config folder and of resource packs never went through the server.
+        ModelParser.checkTextures(data.textures);
         List<ResourceLocation> textures = new ArrayList<>();
         for (byte[] png : data.textures) {
             NativeImage image = NativeImage.read(png);

@@ -9,6 +9,8 @@ import com.vyrriox.lauramod.skin.AssetCache;
 import com.vyrriox.lauramod.skin.AssetKind;
 import com.vyrriox.lauramod.skin.ServerAssetStore;
 import com.vyrriox.lauramod.skin.SkinRef;
+import com.vyrriox.lauramod.util.CacheFiles;
+import com.vyrriox.lauramod.util.LruCache;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.ResourceLocation;
@@ -22,9 +24,7 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -47,8 +47,10 @@ public final class SkinTextures {
 
     /** A request the server did not answer (or answered "missing") is sent again after this long. */
     private static final long RETRY_MS = 10_000L;
+    /** Downloaded skins kept in memory at once (the ones in use are drawn every frame, so they stay). */
+    private static final int MAX_TEXTURES = 32;
 
-    private static final Map<String, Entry> CACHE = new HashMap<>();
+    private static final LruCache<String, Entry> CACHE = new LruCache<>(MAX_TEXTURES, SkinTextures::release);
     private static final ExecutorService DOWNLOADER = Executors.newSingleThreadExecutor(r -> {
         Thread t = new Thread(r, "Laura skin downloader");
         t.setDaemon(true);
@@ -107,6 +109,13 @@ public final class SkinTextures {
         return Minecraft.getInstance().gameDirectory.toPath().resolve("lauramod").resolve("cache").resolve("skins");
     }
 
+    /** Frees the texture of an entry that leaves the cache. */
+    private static void release(Entry entry) {
+        if (entry.texture() != null) {
+            Minecraft.getInstance().getTextureManager().release(entry.texture());
+        }
+    }
+
     // ------------------------------------------------------------------ server hosted skins
 
     private static void loadServerSkin(SkinRef ref) {
@@ -124,6 +133,7 @@ public final class SkinTextures {
                 // A file that is not the skin its name promises is ignored and downloaded again.
                 if (AssetCache.matchesSkin(ref.hash(), bytes) && ServerAssetStore.isValidSkinPng(bytes)) {
                     register(key, bytes);
+                    CacheFiles.touch(cached);
                     return;
                 }
             } catch (IOException ignored) {
@@ -136,12 +146,7 @@ public final class SkinTextures {
     /** True while a skin with this name was asked from the server and has not arrived. */
     public static boolean isWaitingFor(String name) {
         String prefix = "server/" + name + "#";
-        for (Map.Entry<String, Entry> e : CACHE.entrySet()) {
-            if (e.getValue().state() == State.LOADING && e.getKey().startsWith(prefix)) {
-                return true;
-            }
-        }
-        return false;
+        return CACHE.anyMatch((key, entry) -> entry.state() == State.LOADING && key.startsWith(prefix));
     }
 
     /** A skin the server sent. The caller checked that it was asked for and that the hash is a SHA-1. */
@@ -185,6 +190,7 @@ public final class SkinTextures {
                 byte[] bytes;
                 if (Files.isRegularFile(cached)) {
                     bytes = Files.readAllBytes(cached);
+                    CacheFiles.touch(cached);
                 } else {
                     bytes = fetch(url, limit, 0);
                     if (!ServerAssetStore.isValidSkinPng(bytes)) {
@@ -209,7 +215,7 @@ public final class SkinTextures {
             throw new IOException("domain not allowed");
         }
         for (InetAddress ip : InetAddress.getAllByName(uri.getHost())) {
-            if (ip.isLoopbackAddress() || ip.isSiteLocalAddress() || ip.isLinkLocalAddress() || ip.isAnyLocalAddress() || ip.isMulticastAddress()) {
+            if (SkinRef.isLocalAddress(ip)) {
                 throw new IOException("private address refused");
             }
         }
@@ -302,11 +308,6 @@ public final class SkinTextures {
 
     /** Forgets every downloaded texture (disconnect). */
     public static void clear() {
-        for (Entry entry : CACHE.values()) {
-            if (entry.texture() != null) {
-                Minecraft.getInstance().getTextureManager().release(entry.texture());
-            }
-        }
         CACHE.clear();
     }
 }
