@@ -50,7 +50,7 @@ Limits and rules:
 
 ### Where to put a model
 
-**1. Server folder** (the usual way). Put the files in `config/lauramod/models/` on the server, or in your own game folder for singleplayer. Run `/laura reload`. Players choose the model in the Style tab, page Models, or with `/laura model <name>`. Clients download it from the server and keep it in `<game folder>/lauramod/cache/models`.
+**1. Server folder** (the usual way). Put the files in `config/lauramod/models/` on the server, or in your own game folder for singleplayer. Run `/laura reload`. Players choose the model in the Style tab, page Models, or with `/laura model <name>`. Clients download it from the server and keep it in `<game folder>/lauramod/cache/models`. The server sends skins and models at 640 KB per second to each player, and a client asks again after 10 seconds without an answer. A client only accepts a file it asked for, only keeps it when its content matches the hash announced by the server, and refuses a model of more than 256 files or more than 64 MB once unpacked.
 
 Worked example of a folder layout:
 
@@ -156,7 +156,7 @@ Rules:
 - Numbers, `+ - * / %`, comparisons, `&&`, `||`, `!`, the ternary `? :`, and `??`.
 - `math.` functions: `sin`, `cos`, `asin`, `acos`, `atan`, `atan2` (degrees), `abs`, `sqrt`, `floor`, `ceil`, `round`, `trunc`, `exp`, `ln`, `pow`, `mod`, `min`, `max`, `clamp`, `lerp`, `lerprotate`, `hermite_blend`, `sign`, `random`, `random_integer`, `die_roll`, and the constant `math.pi`.
 - `query.` (or `q.`) values: `anim_time`, `life_time`, `ground_speed`, `modified_move_speed`, `distance_moved`, `modified_distance_moved`, `health`, `max_health`, `head_y_rotation`, `head_x_rotation`, `is_on_ground`, `is_in_water`, `is_sitting`, `is_sleeping`.
-- `variable.`, `temp.` and `context.` values are read as 0. An expression that cannot be parsed is read as 0, and so is one longer than 1024 characters or nested more than 48 deep.
+- `variable.`, `temp.` and `context.` values are read as 0. An expression that cannot be parsed is read as 0, and so is one longer than 1024 characters, nested more than 48 deep, or holding more than 512 operators and function calls.
 - `math.die_roll` throws 64 dice at most.
 
 ### The default animation file
@@ -237,7 +237,7 @@ Limites et règles :
 
 ### Où placer un modèle
 
-**1. Dossier du serveur** (la méthode habituelle). Placez les fichiers dans `config/lauramod/models/` sur le serveur, ou dans votre propre dossier de jeu en solo. Lancez `/laura reload`. Les joueurs choisissent le modèle dans l'onglet Style, page Modèles, ou avec `/laura model <nom>`. Les clients le téléchargent depuis le serveur et le gardent dans `<dossier du jeu>/lauramod/cache/models`.
+**1. Dossier du serveur** (la méthode habituelle). Placez les fichiers dans `config/lauramod/models/` sur le serveur, ou dans votre propre dossier de jeu en solo. Lancez `/laura reload`. Les joueurs choisissent le modèle dans l'onglet Style, page Modèles, ou avec `/laura model <nom>`. Les clients le téléchargent depuis le serveur et le gardent dans `<dossier du jeu>/lauramod/cache/models`. Le serveur envoie les skins et les modèles à 640 Ko par seconde à chaque joueur, et un client redemande après 10 secondes sans réponse. Un client n'accepte qu'un fichier qu'il a demandé, ne le garde que si son contenu correspond à l'empreinte annoncée par le serveur, et refuse un modèle de plus de 256 fichiers ou de plus de 64 Mo une fois décompressé.
 
 Exemple complet d'organisation du dossier :
 
@@ -343,7 +343,7 @@ Règles :
 - Nombres, `+ - * / %`, comparaisons, `&&`, `||`, `!`, le ternaire `? :`, et `??`.
 - Fonctions `math.` : `sin`, `cos`, `asin`, `acos`, `atan`, `atan2` (en degrés), `abs`, `sqrt`, `floor`, `ceil`, `round`, `trunc`, `exp`, `ln`, `pow`, `mod`, `min`, `max`, `clamp`, `lerp`, `lerprotate`, `hermite_blend`, `sign`, `random`, `random_integer`, `die_roll`, et la constante `math.pi`.
 - Valeurs `query.` (ou `q.`) : `anim_time`, `life_time`, `ground_speed`, `modified_move_speed`, `distance_moved`, `modified_distance_moved`, `health`, `max_health`, `head_y_rotation`, `head_x_rotation`, `is_on_ground`, `is_in_water`, `is_sitting`, `is_sleeping`.
-- Les valeurs `variable.`, `temp.` et `context.` valent 0. Une expression illisible vaut 0, de même qu'une expression de plus de 1024 caractères ou imbriquée sur plus de 48 niveaux.
+- Les valeurs `variable.`, `temp.` et `context.` valent 0. Une expression illisible vaut 0, de même qu'une expression de plus de 1024 caractères, imbriquée sur plus de 48 niveaux, ou contenant plus de 512 opérateurs et appels de fonction.
 - `math.die_roll` lance au plus 64 dés.
 
 ### Le fichier d'animations par défaut

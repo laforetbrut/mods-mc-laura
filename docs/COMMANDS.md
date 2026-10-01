@@ -16,7 +16,7 @@ Related guides / Guides liés : [ACTIONS.md](ACTIONS.md), [CONFIG.md](CONFIG.md)
 - Everything is under `/laura`. `/laura` alone, or `/laura help`, prints a short reminder.
 - Every command is open to all players, except `/laura reload` and `/laura admin` (see [Permissions](#permissions)).
 - A command acts on one of **your own** companions: the selected one if she is within 96 blocks in your dimension, otherwise the nearest one within 96 blocks. If none is close enough the command answers that she is not near.
-- `/laura come` and `/laura home` (or `/laura home go`) are the exceptions: they reach the selected companion (or the nearest loaded one) at any distance and in any dimension.
+- `/laura come` and `/laura home` (or `/laura home go`) are the exceptions: they reach the selected companion (or the nearest loaded one) at any distance and in any dimension. An order sent from out of earshot is never refused, and what she answers when she goes home or cannot come reaches you even there. These two commands return 0 when she refuses, which a command block or a script can test.
 - Select a companion with `/laura select <name>`, with the clickable `/laura list`, or simply by writing her name in chat.
 - Item ids, tags, file names and internet addresses are typed as they are, without quotes: `/laura fetch minecraft:bread 3`, `/laura fetch #minecraft:logs 16 queue`. A plain item name works too: `/laura fetch bread` means `minecraft:bread`.
 
@@ -30,7 +30,7 @@ Related guides / Guides liés : [ACTIONS.md](ACTIONS.md), [CONFIG.md](CONFIG.md)
 | `/laura release confirm` | She leaves for good: she drops everything she carries and her record is deleted. Nothing brings her back. |
 | `/laura list` | Lists your companions with a clickable select button. The selected one is marked with `>`. |
 | `/laura select <name>` | Chooses which companion answers your commands. |
-| `/laura where` | Position, dimension and state of each companion: here, far away, at her grave, coming back, dismissed. |
+| `/laura where` | Position, dimension and state of each companion: here, far away, at her grave, coming back, dismissed. The position is refreshed every second while she is active, at once after a teleport or a change of dimension, and when her chunk unloads. |
 | `/laura name <name>` | Renames her. 1 to 32 characters. |
 | `/laura info` | Mood, relationship, health, needs, current desire, mode, jobs, to-do list, home and days together. |
 | `/laura inventory` | Opens her inventory. |
@@ -44,16 +44,16 @@ Related guides / Guides liés : [ACTIONS.md](ACTIONS.md), [CONFIG.md](CONFIG.md)
 | `/laura follow` | She follows you. |
 | `/laura stay` | She sits and waits where she is. |
 | `/laura wander` | She walks around freely near where she was left. |
-| `/laura come` | She comes to you. Further than `follow.teleportDistance`, in another dimension, or when no path exists, she teleports. If none of your companions is loaded, the ones you already have are called back: teleported, recalled from unloaded chunks, or returned from dismissal. A new companion is created only when you have none. |
+| `/laura come` | She comes to you. Further than `follow.teleportDistance`, in another dimension, or when no path exists, she teleports to a safe spot next to you: at the surface of the water when you swim, on the ground below you when you fly. When there is no safe spot (the void, lava) she says so and stays where she is. If none of your companions is loaded, the ones you already have are called back: teleported, recalled from unloaded chunks, or returned from dismissal. A new companion is created only when you have none. |
 | `/laura stop` | Cancels the fetch in progress, clears the to-do list and stops the current animation. |
-| `/laura sleep` | She goes to sleep in a free bed within 8 blocks, or on the floor. She refuses during the day when her energy is above 85. |
+| `/laura sleep` | She goes to sleep in a free bed within 8 blocks, or on the floor. She refuses during the day when her energy is above 85. A sleep you order lasts until she is rested: daylight alone does not wake her. |
 | `/laura wakeup` | Wakes her up (costs 2 affection). |
 | `/laura eat` | She eats the first suitable food of her inventory. |
-| `/laura hug` | Hug. Never refused because she is hungry, sad or jealous: it comforts her. |
-| `/laura kiss` | Kiss. Refused when she sulks or when affection is under 200. |
+| `/laura hug` | Hug. Never refused because she is hungry, sad or jealous: it comforts her. She only pushes it away while she sulks or is still angry, and asking again within 20 seconds gets through. |
+| `/laura kiss` | Kiss. Refused when she is gagged, when she sulks or is still angry, or when affection is under 200. |
 | `/laura compliment` | Compliment. |
 | `/laura ungag` | Removes the hay gag. |
-| `/laura emote <emote>` | Plays an emote. See the list in [ACTIONS.md](ACTIONS.md). |
+| `/laura emote <emote>` | Plays an emote. See the list in [ACTIONS.md](ACTIONS.md). The `hug` and `kiss` emotes are a real hug and a real kiss, with the same rules. |
 | `/laura mode passive` / `defensive` / `aggressive` | Sets her combat mode. |
 | `/laura pickup on` / `off` | She collects items lying within 8 blocks into her inventory. |
 | `/laura answer yes` / `no` | Answers her "Do you still love me?" question. |
@@ -63,7 +63,7 @@ Related guides / Guides liés : [ACTIONS.md](ACTIONS.md), [CONFIG.md](CONFIG.md)
 | Command | Effect |
 |---|---|
 | `/laura home set` | Her home becomes the block where you stand, in your dimension. |
-| `/laura home` or `/laura home go` | Sends her home, from anywhere. |
+| `/laura home` or `/laura home go` | Sends her home, from anywhere. From further than `home.teleportDistance` or from another dimension she teleports to a safe spot next to her home; when there is none she says so and stays where she is. When none of your companions is loaded, the command only answers that you have no companion: call her first with `/laura come`. |
 | `/laura home clear` | Forgets the home. If she was in home mode she follows you again. |
 
 ### Fetch
@@ -130,7 +130,7 @@ Look at a container (6 blocks at most), then:
 | `/laura skin url <url> [slim]` | A skin from an internet address. Add `true` or `false` at the end for slim arms (`false` by default). |
 | `/laura skin reset` | Applies `skins.defaultSkin`. |
 | `/laura model list` | Models of the server. |
-| `/laura model <name>` | Applies a model. The name is typed as it is, for example `/laura model uploads/vyrriox_dress`. |
+| `/laura model <name>` | Applies a model. The name is typed as it is, for example `/laura model maid`. |
 | `/laura model reset` | Applies `models.defaultModel` (the default player-like model when it is empty). |
 
 ### Permissions
@@ -188,7 +188,7 @@ She is renamed, gets a home, works a field of radius 12, stores crops in the che
 - Tout passe par `/laura`. `/laura` seul, ou `/laura help`, affiche un court rappel.
 - Toutes les commandes sont ouvertes à tous les joueurs, sauf `/laura reload` et `/laura admin` (voir [Permissions](#permissions-1)).
 - Une commande agit sur l'une de **vos** compagnes : celle qui est sélectionnée si elle est à moins de 96 blocs dans votre dimension, sinon la plus proche à moins de 96 blocs. Si aucune n'est assez près, la commande répond qu'elle n'est pas à proximité.
-- `/laura come` et `/laura home` (ou `/laura home go`) font exception : elles atteignent la compagne sélectionnée (ou la plus proche chargée) à n'importe quelle distance et dans n'importe quelle dimension.
+- `/laura come` et `/laura home` (ou `/laura home go`) font exception : elles atteignent la compagne sélectionnée (ou la plus proche chargée) à n'importe quelle distance et dans n'importe quelle dimension. Un ordre envoyé hors de portée de voix n'est jamais refusé, et ce qu'elle répond quand elle rentre à la maison ou ne peut pas venir vous parvient même là. Ces deux commandes renvoient 0 quand elle refuse, ce qu'un bloc de commande ou un script peut tester.
 - Sélectionnez une compagne avec `/laura select <nom>`, avec la liste cliquable de `/laura list`, ou simplement en écrivant son nom dans le chat.
 - Les identifiants d'objets, les tags, les noms de fichiers et les adresses internet s'écrivent tels quels, sans guillemets : `/laura fetch minecraft:bread 3`, `/laura fetch #minecraft:logs 16 queue`. Un nom d'objet simple fonctionne aussi : `/laura fetch bread` signifie `minecraft:bread`.
 
@@ -202,7 +202,7 @@ She is renamed, gets a home, works a field of radius 12, stores crops in the che
 | `/laura release confirm` | Elle part pour de bon : elle lâche tout ce qu'elle porte et sa fiche est supprimée. Rien ne la ramène. |
 | `/laura list` | Liste vos compagnes avec un bouton de sélection cliquable. La sélectionnée est marquée par `>`. |
 | `/laura select <nom>` | Choisit la compagne qui répond à vos commandes. |
-| `/laura where` | Position, dimension et état de chaque compagne : ici, loin, sur sa tombe, de retour bientôt, congédiée. |
+| `/laura where` | Position, dimension et état de chaque compagne : ici, loin, sur sa tombe, de retour bientôt, congédiée. La position est rafraîchie chaque seconde tant qu'elle est active, aussitôt après une téléportation ou un changement de dimension, et quand son chunk se décharge. |
 | `/laura name <nom>` | La renomme. De 1 à 32 caractères. |
 | `/laura info` | Humeur, relation, vie, besoins, désir en cours, mode, métiers, liste de tâches, maison et jours passés ensemble. |
 | `/laura inventory` | Ouvre son inventaire. |
@@ -216,16 +216,16 @@ She is renamed, gets a home, works a field of radius 12, stores crops in the che
 | `/laura follow` | Elle vous suit. |
 | `/laura stay` | Elle s'assoit et attend sur place. |
 | `/laura wander` | Elle se promène librement autour de l'endroit où vous l'avez laissée. |
-| `/laura come` | Elle vient à vous. Au-delà de `follow.teleportDistance`, dans une autre dimension, ou quand aucun chemin n'existe, elle se téléporte. Si aucune de vos compagnes n'est chargée, celles que vous avez déjà sont rappelées : téléportées, rappelées depuis des chunks déchargés, ou de retour après avoir été congédiées. Une nouvelle compagne n'est créée que si vous n'en avez aucune. |
+| `/laura come` | Elle vient à vous. Au-delà de `follow.teleportDistance`, dans une autre dimension, ou quand aucun chemin n'existe, elle se téléporte à un endroit sûr à côté de vous : à la surface de l'eau quand vous nagez, au sol sous vous quand vous volez. Quand il n'y a aucun endroit sûr (le vide, la lave) elle le dit et reste où elle est. Si aucune de vos compagnes n'est chargée, celles que vous avez déjà sont rappelées : téléportées, rappelées depuis des chunks déchargés, ou de retour après avoir été congédiées. Une nouvelle compagne n'est créée que si vous n'en avez aucune. |
 | `/laura stop` | Annule la recherche en cours, vide la liste de tâches et arrête l'animation en cours. |
-| `/laura sleep` | Elle va dormir dans un lit libre à moins de 8 blocs, ou par terre. Elle refuse en journée quand son énergie dépasse 85. |
+| `/laura sleep` | Elle va dormir dans un lit libre à moins de 8 blocs, ou par terre. Elle refuse en journée quand son énergie dépasse 85. Un sommeil que vous ordonnez dure jusqu'à ce qu'elle soit reposée : le jour seul ne la réveille pas. |
 | `/laura wakeup` | La réveille (coûte 2 points d'affection). |
 | `/laura eat` | Elle mange le premier aliment convenable de son inventaire. |
-| `/laura hug` | Câlin. Jamais refusé parce qu'elle a faim, qu'elle est triste ou jalouse : il la réconforte. |
-| `/laura kiss` | Bisou. Refusé quand elle boude ou quand l'affection est sous 200. |
+| `/laura hug` | Câlin. Jamais refusé parce qu'elle a faim, qu'elle est triste ou jalouse : il la réconforte. Elle ne le repousse que lorsqu'elle boude ou est encore en colère, et le redemander dans les 20 secondes passe. |
+| `/laura kiss` | Bisou. Refusé quand elle est bâillonnée, quand elle boude ou est encore en colère, ou quand l'affection est sous 200. |
 | `/laura compliment` | Compliment. |
 | `/laura ungag` | Retire le bâillon de foin. |
-| `/laura emote <émote>` | Joue une émote. Voir la liste dans [ACTIONS.md](ACTIONS.md). |
+| `/laura emote <émote>` | Joue une émote. Voir la liste dans [ACTIONS.md](ACTIONS.md). Les émotes `hug` et `kiss` sont un vrai câlin et un vrai bisou, avec les mêmes règles. |
 | `/laura mode passive` / `defensive` / `aggressive` | Règle son mode de combat. |
 | `/laura pickup on` / `off` | Elle ramasse dans son inventaire les objets au sol à moins de 8 blocs. |
 | `/laura answer yes` / `no` | Répond à sa question « Tu m'aimes encore ? ». |
@@ -235,7 +235,7 @@ She is renamed, gets a home, works a field of radius 12, stores crops in the che
 | Commande | Effet |
 |---|---|
 | `/laura home set` | Sa maison devient le bloc où vous vous tenez, dans votre dimension. |
-| `/laura home` ou `/laura home go` | L'envoie à la maison, depuis n'importe où. |
+| `/laura home` ou `/laura home go` | L'envoie à la maison, depuis n'importe où. Depuis plus loin que `home.teleportDistance` ou depuis une autre dimension, elle se téléporte à un endroit sûr à côté de sa maison ; quand il n'y en a pas, elle le dit et reste où elle est. Quand aucune de vos compagnes n'est chargée, la commande répond seulement que vous n'avez pas de compagne : appelez-la d'abord avec `/laura come`. |
 | `/laura home clear` | Oublie la maison. Si elle était en mode maison, elle vous suit de nouveau. |
 
 ### Rapporter
@@ -302,7 +302,7 @@ Regardez un conteneur (6 blocs au plus), puis :
 | `/laura skin url <url> [slim]` | Un skin depuis une adresse internet. Ajoutez `true` ou `false` à la fin pour les bras fins (`false` par défaut). |
 | `/laura skin reset` | Applique `skins.defaultSkin`. |
 | `/laura model list` | Modèles du serveur. |
-| `/laura model <nom>` | Applique un modèle. Le nom s'écrit tel quel, par exemple `/laura model uploads/vyrriox_dress`. |
+| `/laura model <nom>` | Applique un modèle. Le nom s'écrit tel quel, par exemple `/laura model maid`. |
 | `/laura model reset` | Applique `models.defaultModel` (le modèle par défaut de type joueur quand il est vide). |
 
 ### Permissions

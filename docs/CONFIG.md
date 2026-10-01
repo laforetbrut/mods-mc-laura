@@ -44,6 +44,7 @@ All files are created with their default content the first time they are needed.
 
 - `/laura reload` reloads `lauramod-common.json`, `gifts.json`, `desires.json`, `recipes.json`, the dialogues, and rescans the `skins` and `models` folders. It needs the permission level set in `permissions.reloadPermissionLevel` (2 by default).
 - The same files are reloaded every time a server or a singleplayer world starts.
+- A problem in one file does not stop the others from loading. When `gifts.json`, `desires.json` or `recipes.json` is not valid JSON, the built-in defaults are used and the log says so. When one of them holds a value of the wrong kind, the error is written to the log and what was loaded before stays in use. In `recipes.json` a meal with a wrong value is skipped alone.
 - `lauramod-client.json` is read when the game starts. The switches of the Settings tab of her menu save the file at once.
 - Health, speed and attack damage are applied to every companion once per second, so a reload is enough.
 - `general.inventoryRows` is applied when a companion is loaded. Items that no longer fit are dropped at her feet.
@@ -85,7 +86,7 @@ All files are created with their default content the first time they are needed.
 | `stopDistance` | `3.5` | 1 to 32 | She stops when she is this close. |
 | `teleportDistance` | `128.0` | 8 to 1024 | She only teleports next to you when she is further than this. Closer, she walks. |
 | `teleportWhenStuck` | `false` | true / false | Also teleport when she has been stuck for `stuckSeconds`. |
-| `followAcrossDimensions` | `true` | true / false | She follows you to the Nether, the End and other dimensions. |
+| `followAcrossDimensions` | `true` | true / false | She follows you to the Nether, the End and other dimensions. With false she stays behind and does not walk through portals herself; `/laura come` and Laura's Heart still bring her. |
 | `complainWhenStuck` | `true` | true / false | She tells you when she cannot reach you. |
 | `stuckSeconds` | `10` | 3 to 600 | Time stuck before she complains. |
 
@@ -147,7 +148,7 @@ Needs go from 100 (satisfied) to 0 (desperate). The minutes are the time a need 
 | `desires` | `true` | true / false | She regularly wishes for an item, a place or an activity. |
 | `desireMinutes` | `12` | 1 to 1440 | Average minutes between two desires. |
 | `desireDeadlineMinutes` | `15` | 1 to 1440 | Time you have to fulfil a desire. |
-| `refuseOrders` | `true` | true / false | When she is unhappy she sometimes refuses an order. Asking twice always works. A hug is never refused because she is hungry, sad or jealous. |
+| `refuseOrders` | `true` | true / false | When she is unhappy she sometimes refuses an order. Asking twice always works. A hug is never refused because she is hungry, sad or jealous, and an order sent from out of earshot is never refused. |
 | `commentActivities` | `true` | true / false | She comments on what you do (mining, fighting, eating alone, being idle). |
 | `jealousOfPlayers` | `true` | true / false | She gets jealous when you stay close to, or chat with, other players. |
 | `afkMinutes` | `5` | 1 to 1440 | Minutes without moving before she decides you are ignoring her. |
@@ -216,7 +217,7 @@ She never fights her partner, nor her partner's other companions and pets, whate
 
 | Option | Default | Range or values | Meaning |
 |---|---|---|---|
-| `chatRange` | `64` | 4 to 512 | Proximity chat: she hears you, and you hear her, within this distance and in the same dimension. |
+| `chatRange` | `64` | 4 to 512 | Proximity chat: she hears you, and you hear her, within this distance and in the same dimension. What she answers when she is sent home, or when she cannot come after a call, still reaches you from further away. |
 | `requireName` | `false` | true / false | Chat orders must contain her name ("Laura, follow me"). |
 | `fallbackLanguage` | `"en_us"` | language code | Language used when a player's language has no dialogue file. |
 | `matchAllLanguages` | `false` | true / false | False: she listens in each player's own language plus English. True: in every language she knows. |
@@ -409,6 +410,7 @@ Tous les fichiers sont créés avec leur contenu par défaut la première fois q
 
 - `/laura reload` recharge `lauramod-common.json`, `gifts.json`, `desires.json`, `recipes.json`, les dialogues, et relit les dossiers `skins` et `models`. La commande demande le niveau de permission défini par `permissions.reloadPermissionLevel` (2 par défaut).
 - Les mêmes fichiers sont rechargés à chaque démarrage d'un serveur ou d'un monde solo.
+- Un problème dans un fichier n'empêche pas les autres de se charger. Quand `gifts.json`, `desires.json` ou `recipes.json` n'est pas du JSON valide, les valeurs par défaut intégrées sont utilisées et le journal le signale. Quand l'un d'eux contient une valeur du mauvais type, l'erreur est écrite dans le journal et ce qui était chargé auparavant reste utilisé. Dans `recipes.json`, un plat dont une valeur est incorrecte est ignoré seul.
 - `lauramod-client.json` est lu au lancement du jeu. Les interrupteurs de l'onglet Réglages de son menu enregistrent le fichier aussitôt.
 - La vie, la vitesse et les dégâts sont appliqués à chaque compagne une fois par seconde : un rechargement suffit.
 - `general.inventoryRows` est appliqué au chargement d'une compagne. Les objets qui ne rentrent plus tombent à ses pieds.
@@ -450,7 +452,7 @@ Tous les fichiers sont créés avec leur contenu par défaut la première fois q
 | `stopDistance` | `3.5` | 1 à 32 | Elle s'arrête à cette distance. |
 | `teleportDistance` | `128.0` | 8 à 1024 | Elle ne se téléporte près de vous qu'au-delà de cette distance. Plus près, elle marche. |
 | `teleportWhenStuck` | `false` | true / false | Téléporte aussi quand elle est bloquée depuis `stuckSeconds`. |
-| `followAcrossDimensions` | `true` | true / false | Elle vous suit dans le Nether, l'End et les autres dimensions. |
+| `followAcrossDimensions` | `true` | true / false | Elle vous suit dans le Nether, l'End et les autres dimensions. Avec false elle reste sur place et ne prend plus les portails d'elle-même ; `/laura come` et le Cœur de Laura la ramènent quand même. |
 | `complainWhenStuck` | `true` | true / false | Elle vous prévient quand elle ne peut pas vous rejoindre. |
 | `stuckSeconds` | `10` | 3 à 600 | Durée de blocage avant qu'elle se plaigne. |
 
@@ -512,7 +514,7 @@ Les besoins vont de 100 (satisfait) à 0 (désespéré). Les minutes indiquent l
 | `desires` | `true` | true / false | Elle désire régulièrement un objet, un lieu ou une activité. |
 | `desireMinutes` | `12` | 1 à 1440 | Minutes en moyenne entre deux désirs. |
 | `desireDeadlineMinutes` | `15` | 1 à 1440 | Temps dont vous disposez pour réaliser un désir. |
-| `refuseOrders` | `true` | true / false | Mécontente, elle refuse parfois un ordre. Demander deux fois marche toujours. Un câlin n'est jamais refusé parce qu'elle a faim, qu'elle est triste ou jalouse. |
+| `refuseOrders` | `true` | true / false | Mécontente, elle refuse parfois un ordre. Demander deux fois marche toujours. Un câlin n'est jamais refusé parce qu'elle a faim, qu'elle est triste ou jalouse, et un ordre envoyé hors de portée de voix n'est jamais refusé. |
 | `commentActivities` | `true` | true / false | Elle commente ce que vous faites (miner, combattre, manger seul, rester immobile). |
 | `jealousOfPlayers` | `true` | true / false | Elle devient jalouse quand vous restez près d'autres joueurs ou discutez avec eux. |
 | `afkMinutes` | `5` | 1 à 1440 | Minutes sans bouger avant qu'elle estime que vous l'ignorez. |
@@ -581,7 +583,7 @@ Elle ne se bat jamais contre son partenaire, ni contre les autres compagnes et l
 
 | Option | Défaut | Plage ou valeurs | Signification |
 |---|---|---|---|
-| `chatRange` | `64` | 4 à 512 | Chat de proximité : elle vous entend, et vous l'entendez, dans ce rayon et dans la même dimension. |
+| `chatRange` | `64` | 4 à 512 | Chat de proximité : elle vous entend, et vous l'entendez, dans ce rayon et dans la même dimension. Ce qu'elle répond quand elle est envoyée à la maison, ou quand elle ne peut pas venir après un appel, vous parvient quand même de plus loin. |
 | `requireName` | `false` | true / false | Les ordres du chat doivent contenir son nom (« Laura, suis-moi »). |
 | `fallbackLanguage` | `"en_us"` | code de langue | Langue utilisée quand la langue d'un joueur n'a pas de fichier de dialogues. |
 | `matchAllLanguages` | `false` | true / false | False : elle écoute la langue de chaque joueur plus l'anglais. True : toutes les langues qu'elle connaît. |

@@ -17,7 +17,8 @@ Version 2.0.0, mod id `lauramod`, for NeoForge, Forge and Fabric on Minecraft 1.
 ## Features
 
 - **A companion who follows you**: she walks with you, into the Nether and the End too, and only
-  teleports when you are more than 128 blocks away. She can also stay, wander, come or go home.
+  teleports when you are more than 128 blocks away, always to a safe spot next to you. She can
+  also stay, wander, come or go home.
 - **Talks in your language**: she reads the chat and understands plain sentences such as
   "follow me", "bring me 16 bread" or "be a farmer", chained with "then". She answers in chat and
   in a bubble above her head, heard within 64 blocks. 18 languages, and more can be added from
@@ -30,6 +31,8 @@ Version 2.0.0, mod id `lauramod`, for NeoForge, Forge and Fabric on Minecraft 1.
   chests assigned to eight purposes.
 - **Several companions**: 3 per player by default, each bound to the player who summoned her.
   If one dies, a flower on a Laura's Gravestone brings her back with her inventory.
+- **Made for servers**: she follows the PvP setting and the teams of the server, leaves locked
+  and protected containers alone, and skin and model transfers are limited in size and rate.
 - **Your look**: six built-in skins, any PNG skin, the skin of a Minecraft account, and custom
   Blockbench models (`.bbmodel`, `.geo.json`) with their own animations.
 - **Menus**: a menu with seven tabs (key K), an emote wheel with 30 emotes (key G), an inventory
@@ -216,8 +219,8 @@ Version 2.0.0, identifiant de mod `lauramod`, pour NeoForge, Forge et Fabric sur
 ## Caractéristiques
 
 - **Une compagne qui vous suit** : elle marche avec vous, jusque dans le Nether et l'End, et ne se
-  téléporte que si vous êtes à plus de 128 blocs. Elle peut aussi rester sur place, se promener,
-  venir ou rentrer à la maison.
+  téléporte que si vous êtes à plus de 128 blocs, toujours à un endroit sûr à côté de vous. Elle
+  peut aussi rester sur place, se promener, venir ou rentrer à la maison.
 - **Elle parle votre langue** : elle lit le chat et comprend des phrases simples comme
   « suis-moi », « apporte-moi 16 pains » ou « sois fermière », enchaînées avec « puis ». Elle
   répond dans le chat et dans une bulle au-dessus de sa tête, entendue dans un rayon de 64 blocs.
@@ -230,6 +233,9 @@ Version 2.0.0, identifiant de mod `lauramod`, pour NeoForge, Forge et Fabric sur
   cuisinière, suit une liste de 16 tâches, et utilise des coffres attribués à huit usages.
 - **Plusieurs compagnes** : 3 par joueur par défaut, chacune liée au joueur qui l'a invoquée.
   Si l'une meurt, une fleur sur une Tombe de Laura la ramène avec son inventaire.
+- **Pensée pour les serveurs** : elle suit le réglage PvP et les équipes du serveur, ne touche
+  pas aux conteneurs verrouillés ou protégés, et les transferts de skins et de modèles sont
+  limités en taille et en débit.
 - **Son apparence** : six skins intégrés, n'importe quel skin PNG, le skin d'un compte Minecraft,
   et des modèles Blockbench personnalisés (`.bbmodel`, `.geo.json`) avec leurs propres animations.
 - **Menus** : un menu à sept onglets (touche K), une roue de 30 émotes (touche G), un inventaire

@@ -93,7 +93,7 @@ Actions accepted by `Laura.order`:
 | `QUEUE` | `clear` or `remove:2` |
 | `CHEST` | A chest purpose, or `remove`. Applies to the container the player looks at. |
 
-The same checks as for a player apply: the player must be allowed to command her, and she may refuse when she is unhappy.
+The same checks as for a player apply: the player must be allowed to command her, and she may refuse when she is unhappy. As for a player, she never refuses an order when that player is out of earshot, and `HUG` and `KISS` follow their own rules (see [ACTIONS.md](ACTIONS.md)).
 
 ### Events
 
@@ -249,7 +249,7 @@ Actions acceptées par `Laura.order` :
 | `QUEUE` | `clear` ou `remove:2` |
 | `CHEST` | Un usage de coffre, ou `remove`. S'applique au conteneur que le joueur regarde. |
 
-Les mêmes vérifications que pour un joueur s'appliquent : le joueur doit avoir le droit de la commander, et elle peut refuser quand elle est mécontente.
+Les mêmes vérifications que pour un joueur s'appliquent : le joueur doit avoir le droit de la commander, et elle peut refuser quand elle est mécontente. Comme pour un joueur, elle ne refuse jamais un ordre quand ce joueur est hors de portée de voix, et `HUG` et `KISS` suivent leurs propres règles (voir [ACTIONS.md](ACTIONS.md)).
 
 ### Événements
 

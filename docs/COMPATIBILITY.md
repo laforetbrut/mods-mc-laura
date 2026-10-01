@@ -51,7 +51,7 @@ In the tables, "yes" means the integration is wired for that target, either in i
 
 **Fabric note.** On Fabric 1.21.1 only Farmer's Delight Refabricated is integrated. Applied Energistics 2, Curios and KubeJS have no Fabric 1.21.1 release. Backpack storage is not wired on Fabric 1.21.1: she can wear a backpack, but it does not add storage.
 
-**Forge note.** The Forge 1.21.1 project contains no Applied Energistics 2, Curios, Farmer's Delight or KubeJS bridge: these mods have no Forge 1.21.1 release. Modded storage and backpack storage work through Forge item handlers.
+**Forge note.** The Forge 1.21.1 project contains no Applied Energistics 2, Curios, Farmer's Delight or KubeJS bridge: these mods have no Forge 1.21.1 release. Modded storage and backpack storage work through Forge item handlers. The mod needs Forge 52.1.2 or newer: an older Forge 52 build refuses to load it.
 
 ### Summary by loader (26.1.2)
 
@@ -75,6 +75,13 @@ Every container she uses (fetch, pantry, job chests, deposits) is reached throug
 
 When she searches an area on her own, these blocks are skipped because they are machines, not storage: furnaces, brewing stands, hoppers, dispensers and droppers, jukeboxes, lecterns, chiseled bookshelves, campfires and crafters.
 
+**Locks and protection mods.** She uses a container the way her partner could:
+
+- A container locked with the vanilla `Lock` is left alone, unless she or her partner holds its key in the main hand. Both halves of a double chest count.
+- A container her partner assigned to her is hers to use.
+- Any other container is only used while her partner is in the same dimension and could open it: spawn protection and world border first, then the other mods. The mod asks them the way the loader does when a player right clicks a block, so the claims of protection mods apply to her.
+- A container the player could not open cannot be assigned to her.
+
 ### Applied Energistics 2
 
 [Applied Energistics 2](https://appliedenergistics.org/): NeoForge 1.21.1. The same bridge is compiled into the NeoForge, Forge and Fabric projects of 1.20.1, where it has never been run in game.
@@ -92,6 +99,8 @@ When she searches an area on her own, these blocks are skipped because they are 
 - Right click her with a trinket. It goes into a free slot that accepts it. She gains 8 affection and you get the "Put a Ring on It" advancement.
 - Food and items listed in `gifts.json` are treated as food or gifts, not as trinkets.
 - Her inventory screen does not show trinket slots in 2.0.0.
+- With the `GRAVE` and `TIMER` revive modes her trinkets stay on her when she dies and come back with her. With `NONE` they are left to Curios, which drops the trinkets of an entity that dies.
+- When she leaves for good (`/laura release confirm`, `/laura admin remove`) her trinkets are dropped with everything else she carries.
 
 ### Farmer's Delight
 
@@ -201,7 +210,7 @@ Dans les tableaux, « oui » signifie que l'intégration est câblée pour cette
 
 **Note Fabric.** Sur Fabric 1.21.1, seul Farmer's Delight Refabricated est intégré. Applied Energistics 2, Curios et KubeJS n'ont pas de version Fabric 1.21.1. Le rangement des sacs à dos n'est pas câblé sur Fabric 1.21.1 : elle peut porter un sac à dos, mais il n'ajoute pas de rangement.
 
-**Note Forge.** Le projet Forge 1.21.1 ne contient aucun pont Applied Energistics 2, Curios, Farmer's Delight ou KubeJS : ces mods n'ont pas de version Forge 1.21.1. Les rangements de mods et le rangement des sacs à dos fonctionnent grâce aux item handlers de Forge.
+**Note Forge.** Le projet Forge 1.21.1 ne contient aucun pont Applied Energistics 2, Curios, Farmer's Delight ou KubeJS : ces mods n'ont pas de version Forge 1.21.1. Les rangements de mods et le rangement des sacs à dos fonctionnent grâce aux item handlers de Forge. Le mod demande Forge 52.1.2 ou plus récent : une version plus ancienne de Forge 52 refuse de le charger.
 
 ### Résumé par chargeur (26.1.2)
 
@@ -225,6 +234,13 @@ Chaque conteneur qu'elle utilise (rapporter, garde-manger, coffres de métier, d
 
 Quand elle fouille une zone d'elle-même, ces blocs sont ignorés car ce sont des machines, pas des rangements : fourneaux, alambics, entonnoirs, distributeurs et droppers, jukebox, lutrins, bibliothèques sculptées, feux de camp et fabricateurs.
 
+**Verrous et mods de protection.** Elle utilise un conteneur comme son partenaire pourrait le faire :
+
+- Un conteneur verrouillé par le `Lock` du jeu de base est laissé tranquille, sauf si elle ou son partenaire tient sa clé dans la main principale. Les deux moitiés d'un coffre double comptent.
+- Un conteneur que son partenaire lui a attribué est à sa disposition.
+- Tout autre conteneur n'est utilisé que si son partenaire est dans la même dimension et pourrait l'ouvrir : la protection du spawn et la bordure du monde d'abord, puis les autres mods. Le mod les interroge comme le fait le chargeur quand un joueur fait un clic droit sur un bloc : les zones des mods de protection s'appliquent donc à elle.
+- Un conteneur que le joueur ne pourrait pas ouvrir ne peut pas lui être attribué.
+
 ### Applied Energistics 2
 
 [Applied Energistics 2](https://appliedenergistics.org/) : NeoForge 1.21.1. Le même pont est compilé dans les projets NeoForge, Forge et Fabric de la 1.20.1, où il n'a jamais été lancé en jeu.
@@ -242,6 +258,8 @@ Quand elle fouille une zone d'elle-même, ces blocs sont ignorés car ce sont de
 - Faites un clic droit sur elle avec un bijou. Il va dans un emplacement libre qui l'accepte. Elle gagne 8 points d'affection et vous obtenez le progrès « La bague au doigt ».
 - La nourriture et les objets listés dans `gifts.json` sont traités comme de la nourriture ou des cadeaux, pas comme des bijoux.
 - Son écran d'inventaire n'affiche pas les emplacements de bijoux en 2.0.0.
+- Avec les modes de retour `GRAVE` et `TIMER`, ses bijoux restent sur elle à sa mort et reviennent avec elle. Avec `NONE` ils sont laissés à Curios, qui lâche les bijoux d'une entité qui meurt.
+- Quand elle part pour de bon (`/laura release confirm`, `/laura admin remove`) ses bijoux tombent au sol avec tout ce qu'elle porte.
 
 ### Farmer's Delight
 
