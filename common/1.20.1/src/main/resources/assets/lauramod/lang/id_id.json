@@ -397,6 +397,7 @@
   "lauramod.summon.everyone_coming": "Para pendampingmu sedang dalam perjalanan.",
   "lauramod.summon.max": "Kamu sudah punya jumlah pendamping maksimal (%s).",
   "lauramod.summon.no_permission": "Kamu tidak boleh memanggil pendamping di sini.",
+  "lauramod.summon.no_room": "Tidak ada tempat aman untuknya di sini. Berdirilah di tanah yang kokoh lalu panggil dia lagi.",
   "lauramod.summon.on_her_way": "%s sedang dalam perjalanan!",
   "lauramod.summon.respawning": "%s kembali dalam %s detik.",
   "lauramod.summon.world_taken": "Dunia ini sudah punya pendamping sebanyak yang diizinkan.",

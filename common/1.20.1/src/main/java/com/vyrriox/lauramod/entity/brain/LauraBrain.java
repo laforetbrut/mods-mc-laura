@@ -646,7 +646,10 @@ public final class LauraBrain {
 
     /** True (and arms the cooldown) when this kind of gift or food may give affection again. */
     private boolean rewardReady(String key) {
-        int seconds = LauraConfig.giftCooldownSeconds.getInt();
+        return rewardReady(key, LauraConfig.giftCooldownSeconds.getInt());
+    }
+
+    private boolean rewardReady(String key, int seconds) {
         if (seconds <= 0) {
             return true;
         }
@@ -1295,14 +1298,19 @@ public final class LauraBrain {
     public void onHug(ServerPlayer player) {
         needs.add(Needs.Need.ATTENTION, 20);
         needs.add(Needs.Need.FUN, 5);
-        changeAffection(isSulking() ? 1 : 4);
+        // The hug itself is never limited, only how often it makes her fonder.
+        if (rewardReady("@hug", LauraConfig.cuddleCooldownSeconds.getInt())) {
+            changeAffection(isSulking() ? 1 : 4);
+        }
         onActivity(DesireType.Activity.HUG);
     }
 
     public void onKiss(ServerPlayer player) {
         needs.add(Needs.Need.ATTENTION, 20);
         needs.add(Needs.Need.FUN, 8);
-        changeAffection(isSulking() ? 1 : 5);
+        if (rewardReady("@kiss", LauraConfig.cuddleCooldownSeconds.getInt())) {
+            changeAffection(isSulking() ? 1 : 5);
+        }
         onActivity(DesireType.Activity.KISS);
     }
 

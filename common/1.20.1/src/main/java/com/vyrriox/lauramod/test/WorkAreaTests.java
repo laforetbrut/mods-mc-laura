@@ -371,6 +371,45 @@ public final class WorkAreaTests {
             });
         }));
 
+        // The rule turned off while she is at the tree: she stops at once, the tree stays whole.
+        add(tests, "work_griefing_off_midway", 900, ctx -> withLaura(ctx, laura -> {
+            BlockPos base = ctx.origin.offset(5, 0, 5);
+            plantOak(ctx, base);
+            GameRules.BooleanValue rule = ctx.level.getGameRules().getRule(GameRules.RULE_MOBGRIEFING);
+            boolean before = rule.get();
+            ctx.onCleanup(() -> rule.set(before, ctx.server()));
+            rule.set(true, ctx.server());
+            workAtAnyHour(ctx);
+            WorkArea area = new WorkArea(ctx.origin, 12, ctx.level.dimension());
+            int said = LauraSpeech.timesSaid("work.no_griefing");
+            laura.workplace().replaceCurrent(new LauraTask(LauraTask.Type.CHOP_TREE, "", 0, area));
+            ctx.waitFor("her to reach the tree", 400, () -> laura.distanceToSqr(base.getX() + 0.5, base.getY(), base.getZ() + 0.5) < 3.2 * 3.2, () -> {
+                ctx.check(laura.workplace().current() != null, "the errand ended before she reached the tree");
+                rule.set(false, ctx.server());
+                // Longer than it takes her to cut through a log by hand.
+                ctx.after(160, () -> {
+                    for (int y = 0; y < 5; y++) {
+                        ctx.check(ctx.level.getBlockState(base.above(y)).is(Blocks.OAK_LOG), "she went on cutting after mobGriefing was turned off");
+                    }
+                    ctx.check(laura.workplace().current() == null, "the errand goes on although mobGriefing is off");
+                    ctx.check(LauraSpeech.timesSaid("work.no_griefing") == said + 1, "she said why " + (LauraSpeech.timesSaid("work.no_griefing") - said) + " time(s)");
+                    laura.workplace().enableJob(LauraJob.LUMBERJACK, area);
+                    laura.workGoal().reset();
+                    rule.set(true, ctx.server());
+                    laura.setMode(LauraMode.WORK);
+                    ctx.waitFor("her job to bring her back to the tree", 400, () -> laura.distanceToSqr(base.getX() + 0.5, base.getY(), base.getZ() + 0.5) < 3.2 * 3.2 && laura.workGoal().isWorking(), () -> {
+                        rule.set(false, ctx.server());
+                        ctx.after(160, () -> {
+                            for (int y = 0; y < 5; y++) {
+                                ctx.check(ctx.level.getBlockState(base.above(y)).is(Blocks.OAK_LOG), "her job went on cutting after mobGriefing was turned off");
+                            }
+                            ctx.succeed();
+                        });
+                    });
+                });
+            });
+        }));
+
         // ------------------------------------------------------------------ work that finds nothing
         nothingToDo(tests, "work_nothing_lumberjack", LauraTask.Type.CHOP_TREE, "work.lumberjack.no_tree");
         nothingToDo(tests, "work_nothing_farmer", LauraTask.Type.HARVEST, "work.farmer.nothing");
