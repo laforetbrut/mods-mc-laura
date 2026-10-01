@@ -224,7 +224,7 @@
   "lauramod.menu.model.default": "Varsayılan model",
   "lauramod.menu.model.folder": "Model klasörünü aç",
   "lauramod.menu.model.upload": "%s yükle",
-  "lauramod.menu.model.hint": ".bbmodel veya .geo.json dosyalarını config/lauramod/models klasörüne bırak ya da bu pencereye sürükle.",
+  "lauramod.menu.model.hint": ".bbmodel veya .geo.json dosyalarını sunucuda config/lauramod/models klasörüne koy ya da bir .bbmodel dosyasını bu pencereye sürükle.",
   "lauramod.menu.rename": "Yeniden adlandır",
   "lauramod.menu.rename.hint": "Onun adı",
   "lauramod.menu.config_folder": "Yapılandırma klasörü",

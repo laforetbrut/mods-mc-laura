@@ -224,7 +224,7 @@
   "lauramod.menu.model.default": "Звичайна модель",
   "lauramod.menu.model.folder": "Відкрити теку моделей",
   "lauramod.menu.model.upload": "Завантажити %s",
-  "lauramod.menu.model.hint": "Поклади файли .bbmodel або .geo.json у config/lauramod/models або перетягни їх у це вікно.",
+  "lauramod.menu.model.hint": "Поклади файли .bbmodel або .geo.json у config/lauramod/models на сервері або перетягни файл .bbmodel у це вікно.",
   "lauramod.menu.rename": "Перейменувати",
   "lauramod.menu.rename.hint": "Її ім'я",
   "lauramod.menu.config_folder": "Тека налаштувань",

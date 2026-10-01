@@ -227,7 +227,7 @@
   "lauramod.menu.model.default": "默认模型",
   "lauramod.menu.model.folder": "打开模型文件夹",
   "lauramod.menu.model.upload": "上传 %s",
-  "lauramod.menu.model.hint": "将 .bbmodel 或 .geo.json 文件放入 config/lauramod/models，或直接拖到此窗口上。",
+  "lauramod.menu.model.hint": "将 .bbmodel 或 .geo.json 文件放入服务器的 config/lauramod/models，或把 .bbmodel 文件拖到此窗口上。",
   "lauramod.menu.rename": "改名",
   "lauramod.menu.rename.hint": "她的名字",
   "lauramod.menu.config_folder": "配置文件夹",

@@ -227,7 +227,7 @@
   "lauramod.menu.model.default": "Modelo padrão",
   "lauramod.menu.model.folder": "Abrir pasta de modelos",
   "lauramod.menu.model.upload": "Enviar %s",
-  "lauramod.menu.model.hint": "Coloque arquivos .bbmodel ou .geo.json em config/lauramod/models, ou arraste-os para esta janela.",
+  "lauramod.menu.model.hint": "Coloque arquivos .bbmodel ou .geo.json em config/lauramod/models no servidor, ou arraste um arquivo .bbmodel para esta janela.",
   "lauramod.menu.rename": "Renomear",
   "lauramod.menu.rename.hint": "O nome dela",
   "lauramod.menu.config_folder": "Pasta de configuração",

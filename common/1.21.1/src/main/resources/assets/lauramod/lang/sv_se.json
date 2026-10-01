@@ -224,7 +224,7 @@
   "lauramod.menu.model.default": "Standardmodell",
   "lauramod.menu.model.folder": "Öppna modellmappen",
   "lauramod.menu.model.upload": "Ladda upp %s",
-  "lauramod.menu.model.hint": "Släpp .bbmodel- eller .geo.json-filer i config/lauramod/models, eller dra dem till det här fönstret.",
+  "lauramod.menu.model.hint": "Lägg .bbmodel- eller .geo.json-filer i config/lauramod/models på servern, eller dra en .bbmodel-fil till det här fönstret.",
   "lauramod.menu.rename": "Byt namn",
   "lauramod.menu.rename.hint": "Hennes namn",
   "lauramod.menu.config_folder": "Konfigurationsmapp",

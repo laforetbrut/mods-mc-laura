@@ -224,7 +224,7 @@
   "lauramod.menu.model.default": "デフォルトモデル",
   "lauramod.menu.model.folder": "モデルフォルダを開く",
   "lauramod.menu.model.upload": "%sをアップロード",
-  "lauramod.menu.model.hint": ".bbmodel または .geo.json ファイルを config/lauramod/models に置くか、このウィンドウにドラッグしてください。",
+  "lauramod.menu.model.hint": ".bbmodel または .geo.json ファイルをサーバーの config/lauramod/models に置くか、.bbmodel ファイルをこのウィンドウにドラッグしてください。",
   "lauramod.menu.rename": "名前を変える",
   "lauramod.menu.rename.hint": "彼女の名前",
   "lauramod.menu.config_folder": "設定フォルダ",

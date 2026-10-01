@@ -227,7 +227,7 @@
   "lauramod.menu.model.default": "Modelo por defecto",
   "lauramod.menu.model.folder": "Abrir carpeta de modelos",
   "lauramod.menu.model.upload": "Subir %s",
-  "lauramod.menu.model.hint": "Suelta archivos .bbmodel o .geo.json en config/lauramod/models, o arrástralos a esta ventana.",
+  "lauramod.menu.model.hint": "Pon archivos .bbmodel o .geo.json en config/lauramod/models en el servidor, o arrastra un archivo .bbmodel a esta ventana.",
   "lauramod.menu.rename": "Renombrar",
   "lauramod.menu.rename.hint": "Su nombre",
   "lauramod.menu.config_folder": "Carpeta de configuración",

@@ -227,7 +227,7 @@
   "lauramod.menu.model.default": "Standaardmodel",
   "lauramod.menu.model.folder": "Modelmap openen",
   "lauramod.menu.model.upload": "%s uploaden",
-  "lauramod.menu.model.hint": "Zet .bbmodel- of .geo.json-bestanden in config/lauramod/models, of sleep ze naar dit venster.",
+  "lauramod.menu.model.hint": "Zet .bbmodel- of .geo.json-bestanden in config/lauramod/models op de server, of sleep een .bbmodel-bestand naar dit venster.",
   "lauramod.menu.rename": "Hernoemen",
   "lauramod.menu.rename.hint": "Haar naam",
   "lauramod.menu.config_folder": "Configuratiemap",

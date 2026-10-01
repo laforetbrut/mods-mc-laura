@@ -224,7 +224,7 @@
   "lauramod.menu.model.default": "Výchozí model",
   "lauramod.menu.model.folder": "Otevřít složku s modely",
   "lauramod.menu.model.upload": "Nahrát %s",
-  "lauramod.menu.model.hint": "Vlož soubory .bbmodel nebo .geo.json do config/lauramod/models, nebo je přetáhni na toto okno.",
+  "lauramod.menu.model.hint": "Vlož soubory .bbmodel nebo .geo.json do config/lauramod/models na serveru, nebo přetáhni soubor .bbmodel na toto okno.",
   "lauramod.menu.rename": "Přejmenovat",
   "lauramod.menu.rename.hint": "Její jméno",
   "lauramod.menu.config_folder": "Složka s nastavením",

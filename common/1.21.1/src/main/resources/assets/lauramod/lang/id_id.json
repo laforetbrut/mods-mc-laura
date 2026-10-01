@@ -224,7 +224,7 @@
   "lauramod.menu.model.default": "Model bawaan",
   "lauramod.menu.model.folder": "Buka folder model",
   "lauramod.menu.model.upload": "Unggah %s",
-  "lauramod.menu.model.hint": "Taruh file .bbmodel atau .geo.json di config/lauramod/models, atau seret ke jendela ini.",
+  "lauramod.menu.model.hint": "Taruh file .bbmodel atau .geo.json di config/lauramod/models pada server, atau seret file .bbmodel ke jendela ini.",
   "lauramod.menu.rename": "Ganti nama",
   "lauramod.menu.rename.hint": "Namanya",
   "lauramod.menu.config_folder": "Folder konfigurasi",

@@ -224,7 +224,7 @@
   "lauramod.menu.model.default": "기본 모델",
   "lauramod.menu.model.folder": "모델 폴더 열기",
   "lauramod.menu.model.upload": "%s 업로드",
-  "lauramod.menu.model.hint": ".bbmodel 또는 .geo.json 파일을 config/lauramod/models에 넣거나 이 창에 끌어다 놓으세요.",
+  "lauramod.menu.model.hint": ".bbmodel 또는 .geo.json 파일을 서버의 config/lauramod/models에 넣거나, .bbmodel 파일을 이 창에 끌어다 놓으세요.",
   "lauramod.menu.rename": "이름 바꾸기",
   "lauramod.menu.rename.hint": "그녀의 이름",
   "lauramod.menu.config_folder": "설정 폴더",
