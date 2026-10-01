@@ -405,6 +405,7 @@
   "lauramod.summon.everyone_coming": "Deine Begleiterinnen sind auf dem Weg.",
   "lauramod.summon.max": "Du hast bereits die maximale Anzahl an Begleiterinnen (%s).",
   "lauramod.summon.no_permission": "Du darfst hier keine Begleiterin herbeirufen.",
+  "lauramod.summon.no_room": "Hier gibt es keinen sicheren Platz für sie. Stell dich auf festen Boden und ruf sie noch einmal.",
   "lauramod.summon.on_her_way": "%s ist auf dem Weg!",
   "lauramod.summon.respawning": "%s ist in %s Sekunden wieder da.",
   "lauramod.summon.world_taken": "Diese Welt hat schon so viele Begleiterinnen, wie sie zulässt.",

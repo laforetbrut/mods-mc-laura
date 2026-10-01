@@ -397,6 +397,7 @@
   "lauramod.summon.everyone_coming": "Твої супутниці вже йдуть.",
   "lauramod.summon.max": "Досягнуто максимальної кількості супутниць (%s).",
   "lauramod.summon.no_permission": "Тут не можна викликати супутницю.",
+  "lauramod.summon.no_room": "Тут немає безпечного місця для неї. Стань на тверду землю й поклич її знову.",
   "lauramod.summon.on_her_way": "%s вже поспішає до тебе!",
   "lauramod.summon.respawning": "%s повернеться через %s с.",
   "lauramod.summon.world_taken": "У цьому світі вже максимально допустима кількість супутниць.",

@@ -397,6 +397,7 @@
   "lauramod.summon.everyone_coming": "Your companions are on their way.",
   "lauramod.summon.max": "You already have the maximum number of companions (%s).",
   "lauramod.summon.no_permission": "You are not allowed to summon a companion here.",
+  "lauramod.summon.no_room": "There is no safe place for her here. Stand on solid ground and call her again.",
   "lauramod.summon.on_her_way": "%s is on her way!",
   "lauramod.summon.respawning": "%s comes back in %s seconds.",
   "lauramod.summon.world_taken": "This world already has as many companions as it allows.",

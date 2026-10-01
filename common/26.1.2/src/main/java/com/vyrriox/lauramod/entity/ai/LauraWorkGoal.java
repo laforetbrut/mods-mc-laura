@@ -157,6 +157,11 @@ public class LauraWorkGoal extends Goal {
         failSaid.clear();
     }
 
+    /** True while a job or an errand is under way (read by the self tests). */
+    public boolean isWorking() {
+        return work != null;
+    }
+
     // ------------------------------------------------------------------ errands that found nothing
 
     /** True while a queued errand should wait: the last one of its kind found nothing to do. */
@@ -235,18 +240,18 @@ public class LauraWorkGoal extends Goal {
     }
 
     private void runErrand(LauraTask task) {
+        if (task.type() != LauraTask.Type.COOK && !mayBreakBlocks()) {
+            // Ordered or queued before the rule was turned off, or turned off while she was at it:
+            // she puts her tools down at once.
+            failErrand(task, "work.no_griefing");
+            return;
+        }
         if (work == null || workTask != task) {
             if (work != null) {
                 work.stop();
             }
             workTask = task;
             workJob = LauraJob.NONE;
-            if (task.type() != LauraTask.Type.COOK && !mayBreakBlocks()) {
-                // Ordered or queued before the rule was turned off.
-                work = null;
-                failErrand(task, "work.no_griefing");
-                return;
-            }
             boolean self = "self".equals(task.arg());
             work = switch (task.type()) {
                 case CHOP_TREE -> new LumberjackWork(ctx, areaFor(task, 16), true);
@@ -350,6 +355,11 @@ public class LauraWorkGoal extends Goal {
             return;
         }
         List<LauraJob> list = new ArrayList<>(jobs.keySet());
+        if (work != null && workJob != LauraJob.COOK && !mayBreakBlocks()) {
+            // The rule was turned off while she was at it: the round stops here.
+            work.stop();
+            work = null;
+        }
         if (work == null || !jobs.containsKey(workJob)) {
             if (work != null) {
                 work.stop();

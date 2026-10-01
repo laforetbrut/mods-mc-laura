@@ -118,6 +118,7 @@ public final class LauraConfig {
     public static ConfigFile.BoolValue jealousOfPlayers;
     public static ConfigFile.IntValue afkMinutes;
     public static ConfigFile.IntValue giftCooldownSeconds;
+    public static ConfigFile.IntValue cuddleCooldownSeconds;
 
     // combat
     public static ConfigFile.EnumValue<CombatMode> defaultCombatMode;
@@ -290,6 +291,8 @@ public final class LauraConfig {
         jealousOfPlayers = needs.bool("jealousOfPlayers", true, "She gets jealous when you chat with other players.");
         afkMinutes = needs.integer("afkMinutes", 5, 1, 1440, "Minutes without moving before she decides you are ignoring her.");
         giftCooldownSeconds = needs.integer("giftCooldownSeconds", 300, 0, 86400, "The same kind of gift or favorite food makes her fonder only once in this time, per companion.\nIn between she still takes the gift and eats the food, and a wish is still fulfilled, but she gains no affection and gives nothing back. 0 = no limit.");
+
+        cuddleCooldownSeconds = needs.integer("cuddleCooldownSeconds", 60, 0, 86400, "A hug makes her fonder only once in this time, and so does a kiss, per companion.\nIn between she still hugs and kisses back, her need for attention is still met and the advancements still count. 0 = no limit.");
 
         ConfigFile.Section combat = f.section("combat", "Fighting.");
         defaultCombatMode = combat.enumeration("defaultMode", CombatMode.PASSIVE, "PASSIVE: she avoids monsters. DEFENSIVE: she protects you. AGGRESSIVE: she also attacks nearby monsters.");

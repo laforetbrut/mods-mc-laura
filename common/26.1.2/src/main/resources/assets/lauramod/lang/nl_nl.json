@@ -405,6 +405,7 @@
   "lauramod.summon.everyone_coming": "Je metgezellinnen zijn onderweg.",
   "lauramod.summon.max": "Je hebt al het maximale aantal metgezellinnen (%s).",
   "lauramod.summon.no_permission": "Je mag hier geen metgezellin oproepen.",
+  "lauramod.summon.no_room": "Er is hier geen veilige plek voor haar. Ga op vaste grond staan en roep haar opnieuw.",
   "lauramod.summon.on_her_way": "%s is onderweg!",
   "lauramod.summon.respawning": "%s komt over %s seconden terug.",
   "lauramod.summon.world_taken": "Deze wereld heeft al zoveel metgezellinnen als is toegestaan.",

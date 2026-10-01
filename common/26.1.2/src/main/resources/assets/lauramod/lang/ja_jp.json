@@ -397,6 +397,7 @@
   "lauramod.summon.everyone_coming": "相棒たちが向かっています。",
   "lauramod.summon.max": "相棒の数がすでに上限(%s)に達しています。",
   "lauramod.summon.no_permission": "ここでは相棒を呼び出せません。",
+  "lauramod.summon.no_room": "ここには彼女が安全に立てる場所がありません。しっかりした地面に立ってから、もう一度呼んでください。",
   "lauramod.summon.on_her_way": "%sが向かっています！",
   "lauramod.summon.respawning": "%sは%s秒後に戻ってきます。",
   "lauramod.summon.world_taken": "このワールドはすでに許可された数の相棒でいっぱいです。",

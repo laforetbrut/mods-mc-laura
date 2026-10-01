@@ -462,10 +462,15 @@ public final class LauraManager {
         // A dismissed companion comes back first.
         for (LauraWorldData.Record r : mine) {
             if (r.dismissed && r.snapshot != null) {
+                if (!roomOrTell(player, player.blockPosition())) {
+                    return;
+                }
                 r.dismissed = false;
                 LauraEntity back = create(player, r.snapshot, player.blockPosition());
                 if (back != null) {
                     LauraSpeech.say(back, player, "summon.back", LineFormatter.values());
+                } else {
+                    r.dismissed = true;
                 }
                 return;
             }
@@ -492,6 +497,9 @@ public final class LauraManager {
         }
         if (!underWorldLimit(data)) {
             player.sendSystemMessage(Component.translatable("lauramod.summon.world_taken"));
+            return;
+        }
+        if (!roomOrTell(player, player.blockPosition())) {
             return;
         }
         LauraEntity laura = create(player, null, player.blockPosition());
@@ -613,11 +621,13 @@ public final class LauraManager {
             initDefaults(laura, player);
         }
         laura.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, player.getYRot() + 180, 0);
-        // On the ground: under her partner when he is in the air. Only over the void does she appear where he is.
+        // On the ground: under her partner when he is in the air. Over the void or lava there is
+        // nowhere to put her down: she is not created, the caller decides what to tell and when to retry.
         BlockPos spot = LauraMovement.findSafeSpot(laura, at);
-        if (spot != null) {
-            laura.snapTo(spot.getX() + 0.5, spot.getY(), spot.getZ() + 0.5, player.getYRot() + 180, 0);
+        if (spot == null) {
+            return null;
         }
+        laura.snapTo(spot.getX() + 0.5, spot.getY(), spot.getZ() + 0.5, player.getYRot() + 180, 0);
         laura.setOrderedToSit(false);
         laura.setMode(LauraMode.FOLLOW);
         if (snapshot != null && !clearOldBody(player.level().getServer(), laura)) {
@@ -634,6 +644,25 @@ public final class LauraManager {
         laura.playEmote(Emote.WAVE);
         track(laura);
         return laura;
+    }
+
+    /** Whether a companion can be put down next to this place (not over the void, not over lava). */
+    private static boolean hasRoom(ServerPlayer player, BlockPos at) {
+        LauraEntity probe = LauraRegistries.LAURA.get().create(player.level(), EntitySpawnReason.MOB_SUMMONED);
+        if (probe == null) {
+            return false;
+        }
+        probe.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, 0, 0);
+        return LauraMovement.findSafeSpot(probe, at) != null;
+    }
+
+    /** Same check, and the player who asked for her is told why she does not come. */
+    private static boolean roomOrTell(ServerPlayer player, BlockPos at) {
+        if (hasRoom(player, at)) {
+            return true;
+        }
+        player.sendSystemMessage(Component.translatable("lauramod.summon.no_room"));
+        return false;
     }
 
     /** Clickable invitation to give a freshly summoned companion her own name. */
@@ -855,6 +884,9 @@ public final class LauraManager {
             data(player.level().getServer()).remove(record.laura);
             return;
         }
+        if (!roomOrTell(player, player.blockPosition())) {
+            return;
+        }
         LauraEntity laura = create(player, record.snapshot, player.blockPosition());
         if (laura != null) {
             LauraSpeech.say(laura, player, "summon.lost", LineFormatter.values());
@@ -956,6 +988,9 @@ public final class LauraManager {
         if (chosen == null) {
             return false;
         }
+        if (!roomOrTell(player, grave.above())) {
+            return false;
+        }
         chosen.dead = false;
         data.setDirty();
         ServerLevel level = player.level();
@@ -985,6 +1020,11 @@ public final class LauraManager {
             }
             ServerPlayer owner = server.getPlayerList().getPlayer(record.owner);
             if (owner == null || !owner.isAlive()) {
+                continue;
+            }
+            if (!hasRoom(owner, owner.blockPosition())) {
+                // Her partner flies over the void or over lava: she waits, and comes back once he stands somewhere safe.
+                record.respawnAt = now + 100;
                 continue;
             }
             record.respawnAt = -1;
