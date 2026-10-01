@@ -397,6 +397,7 @@
   "lauramod.summon.everyone_coming": "Твои спутницы уже идут.",
   "lauramod.summon.max": "Достигнуто максимальное число спутниц (%s).",
   "lauramod.summon.no_permission": "Здесь нельзя призывать спутницу.",
+  "lauramod.summon.no_room": "Здесь нет безопасного места для неё. Встань на твёрдую землю и позови её снова.",
   "lauramod.summon.on_her_way": "%s уже спешит к тебе!",
   "lauramod.summon.respawning": "%s вернётся через %s сек.",
   "lauramod.summon.world_taken": "В этом мире уже максимально допустимое число спутниц.",
