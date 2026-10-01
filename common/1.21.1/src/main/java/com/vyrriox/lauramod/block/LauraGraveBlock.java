@@ -104,6 +104,10 @@ public class LauraGraveBlock extends HorizontalDirectionalBlock {
             }
             return ItemInteractionResult.CONSUME;
         }
+        if (LauraManager.hasDeadCompanion(serverPlayer)) {
+            // Somebody waits here but could not come back (nowhere safe next to the stone): the player was told why.
+            return ItemInteractionResult.CONSUME;
+        }
         ((ServerLevel) level).sendParticles(ParticleTypes.SOUL, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 3, 0.2, 0.2, 0.2, 0.01);
         player.sendSystemMessage(Component.translatable("lauramod.grave.empty").withStyle(ChatFormatting.GRAY));
         return ItemInteractionResult.CONSUME;
