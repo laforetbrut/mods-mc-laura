@@ -26,6 +26,7 @@ Check these points:
 - Two new summons must be 5 seconds apart.
 - You may already have the maximum (3 by default). Then your nearest companion within 64 blocks answers that she is already here.
 - The world may have reached `general.maxPerWorld`.
+- Over the void or over lava there is no safe place for her: nothing is created and you read "There is no safe place for her here. Stand on solid ground and call her again." The summon cooldown is not used up. The same message is shown when a dismissed companion, a revived one or one restored from her saved state has nowhere to stand. In `TIMER` mode she waits and tries again every 5 seconds until you stand somewhere safe.
 
 **How many companions can I have?**
 3 by default (`general.maxPerPlayer`). The second and the following ones get the names of `general.extraNames`. Laura's Heart only creates your first companion: ask for the next ones with `/laura summon` or the chat phrase.
@@ -103,7 +104,7 @@ No. She never despawns, and the world keeps a record of every companion. If she 
 Two things can remain from those builds. Recalls could leave a chunk force loaded for good: list them with `/forceload query` and free them with `/forceload remove`. The release only uses a temporary chunk ticket that is never saved. A companion could also exist twice, in two dimensions: the copy that loaded last is removed by itself after 5 seconds, with a warning in the server log.
 
 **Does she fight other players?**
-Only where the server allows fights between players. She never fights you, your other companions or your pets. She fights another player, or the companion or pet of another player, only when PvP is enabled and the two players are not teammates without friendly fire. Where those fights are forbidden the other side cannot hurt her either, creative mode players excepted. Set `combat.attackPlayers` to false to keep her out of every fight with players, and `combat.shieldWithoutPvp` to false to remove her protection.
+Only where the server allows fights between players. She never fights you, your other companions or your pets. She fights another player, or the companion or pet of another player, only when PvP is enabled and the two players are not teammates without friendly fire. Where those fights are forbidden the other side cannot hurt her either, creative mode players excepted. The PvP switch is the `pvp` setting of `server.properties` on Minecraft 1.20.1 and 1.21.1, and the `pvp` game rule on Minecraft 26.1.2. Set `combat.attackPlayers` to false to keep her out of every fight with players, and `combat.shieldWithoutPvp` to false to remove her protection.
 
 ### Health, death and inventory
 
@@ -115,6 +116,9 @@ Right click her with a water bucket: she gains 60 hygiene and the bucket comes b
 
 **I gave her the same gift again and her affection did not move.**
 The same kind of gift, or the same favourite food, makes her fonder only once every 300 seconds per companion (`needs.giftCooldownSeconds`). In between she still takes it, and a wish is still fulfilled. Set the option to 0 to remove the limit.
+
+**I hug or kiss her again and again and her affection does not move.**
+A hug makes her fonder only once every 60 seconds per companion, and so does a kiss (`needs.cuddleCooldownSeconds`). In between she still hugs and kisses back, her need for attention is still met, a wish for a hug or a kiss is still fulfilled and the advancements still count. Set the option to 0 to remove the limit.
 
 **She died. How do I get her back?**
 With the default mode (`GRAVE`): craft a Laura's Gravestone (one stone bricks on top, three stone bricks in the middle, three cobblestone slabs at the bottom), place it anywhere and right click it with a flower. She comes back with her inventory. See [ACTIONS.md](ACTIONS.md) for the other modes.
@@ -152,7 +156,7 @@ She leaves a container alone when it is locked (vanilla `Lock`) and neither she 
 She searches 24 blocks around **her** (`fetch.radius`): items on the ground, then storage, then blocks she may harvest. Breaking blocks needs the `mobGriefing` game rule (`mob_griefing` on Minecraft 26.1.2) and only concerns the block tag `lauramod:fetch_harvestable`.
 
 **How do I stop her from breaking blocks?**
-Set the game rule `mobGriefing` (`mob_griefing` on Minecraft 26.1.2) to false, or set `fetch.breakBlocks` to false and do not give her the lumberjack and farmer jobs. The game rule also stops a lumberjack or farmer job she already has, once the round of work she is busy with is over (`/laura stop` ends it at once): she then says so once and leaves the blocks alone.
+Set the game rule `mobGriefing` (`mob_griefing` on Minecraft 26.1.2) to false, or set `fetch.breakBlocks` to false and do not give her the lumberjack and farmer jobs. The game rule also stops at once a lumberjack or farmer job she already has, and a task under way: the tree or the field is left as it is, she says so once and leaves the blocks alone.
 
 **How do I fulfil her wish for fireworks?**
 Launch a firework rocket near her. Any rocket within 32 blocks around her counts, whoever launched it.
@@ -208,6 +212,7 @@ Vérifiez ces points :
 - Deux nouvelles invocations doivent être espacées de 5 secondes.
 - Vous avez peut-être déjà le maximum (3 par défaut). Dans ce cas votre compagne la plus proche à moins de 64 blocs répond qu'elle est déjà là.
 - Le monde a peut-être atteint `general.maxPerWorld`.
+- Au-dessus du vide ou de la lave il n'y a aucun endroit sûr pour elle : rien n'est créé et vous lisez « Il n'y a aucun endroit sûr pour elle ici. Pose-toi sur un sol solide et rappelle-la. » Le délai entre deux invocations n'est pas entamé. Le même message s'affiche quand une compagne congédiée, ramenée à la vie ou restaurée depuis son état sauvegardé n'a nulle part où se tenir. En mode `TIMER` elle attend et réessaie toutes les 5 secondes jusqu'à ce que vous soyez à un endroit sûr.
 
 **Combien de compagnes puis-je avoir ?**
 3 par défaut (`general.maxPerPlayer`). La deuxième et les suivantes reçoivent les noms de `general.extraNames`. Le Cœur de Laura ne crée que votre première compagne : demandez les suivantes avec `/laura summon` ou la phrase du chat.
@@ -285,7 +290,7 @@ Non. Elle ne disparaît jamais, et le monde garde une fiche de chaque compagne. 
 Deux choses peuvent rester de ces versions. Les rappels pouvaient laisser un chunk chargé de force pour de bon : listez-les avec `/forceload query` et libérez-les avec `/forceload remove`. La version publiée n'utilise qu'un ticket de chunk temporaire, jamais sauvegardé. Une compagne pouvait aussi exister en double, dans deux dimensions : la copie chargée en dernier est retirée d'elle-même après 5 secondes, avec un avertissement dans le journal du serveur.
 
 **Se bat-elle contre les autres joueurs ?**
-Seulement là où le serveur autorise les combats entre joueurs. Elle ne se bat jamais contre vous, vos autres compagnes ou vos animaux. Elle ne se bat contre un autre joueur, ou contre la compagne ou l'animal d'un autre joueur, que si le PvP est activé et que les deux joueurs ne sont pas coéquipiers sans tir ami. Là où ces combats sont interdits, l'autre camp ne peut pas la blesser non plus, sauf les joueurs en mode créatif. Mettez `combat.attackPlayers` à false pour la tenir à l'écart de tout combat avec des joueurs, et `combat.shieldWithoutPvp` à false pour retirer sa protection.
+Seulement là où le serveur autorise les combats entre joueurs. Elle ne se bat jamais contre vous, vos autres compagnes ou vos animaux. Elle ne se bat contre un autre joueur, ou contre la compagne ou l'animal d'un autre joueur, que si le PvP est activé et que les deux joueurs ne sont pas coéquipiers sans tir ami. Là où ces combats sont interdits, l'autre camp ne peut pas la blesser non plus, sauf les joueurs en mode créatif. L'interrupteur du PvP est le réglage `pvp` de `server.properties` sur Minecraft 1.20.1 et 1.21.1, et la règle de jeu `pvp` sur Minecraft 26.1.2. Mettez `combat.attackPlayers` à false pour la tenir à l'écart de tout combat avec des joueurs, et `combat.shieldWithoutPvp` à false pour retirer sa protection.
 
 ### Vie, mort et inventaire
 
@@ -297,6 +302,9 @@ Faites un clic droit sur elle avec un seau d'eau : elle gagne 60 points d'hygiè
 
 **Je lui ai redonné le même cadeau et son affection n'a pas bougé.**
 Un même type de cadeau, ou un même aliment préféré, ne la rend plus affectueuse qu'une fois toutes les 300 secondes par compagne (`needs.giftCooldownSeconds`). Entre-temps elle le prend quand même, et un désir est quand même réalisé. Mettez l'option à 0 pour retirer la limite.
+
+**Je lui fais câlin sur câlin ou bisou sur bisou et son affection ne bouge pas.**
+Un câlin ne la rend plus affectueuse qu'une fois toutes les 60 secondes par compagne, et un bisou de même (`needs.cuddleCooldownSeconds`). Entre-temps elle rend quand même le câlin et le bisou, son besoin d'attention est quand même comblé, un désir de câlin ou de bisou est quand même réalisé et les progrès comptent toujours. Mettez l'option à 0 pour retirer la limite.
 
 **Elle est morte. Comment la récupérer ?**
 Avec le mode par défaut (`GRAVE`) : fabriquez une Tombe de Laura (une pierre taillée en haut, trois pierres taillées au milieu, trois dalles de pierres en bas), posez-la n'importe où et faites un clic droit dessus avec une fleur. Elle revient avec son inventaire. Voir [ACTIONS.md](ACTIONS.md) pour les autres modes.
@@ -334,7 +342,7 @@ Elle ne touche pas à un conteneur quand il est verrouillé (`Lock` du jeu de ba
 Elle cherche dans un rayon de 24 blocs autour d'**elle** (`fetch.radius`) : les objets au sol, puis les rangements, puis les blocs qu'elle peut récolter. Casser des blocs demande la règle de jeu `mobGriefing` (`mob_griefing` sur Minecraft 26.1.2) et ne concerne que le tag de blocs `lauramod:fetch_harvestable`.
 
 **Comment l'empêcher de casser des blocs ?**
-Mettez la règle de jeu `mobGriefing` (`mob_griefing` sur Minecraft 26.1.2) à false, ou mettez `fetch.breakBlocks` à false et ne lui donnez pas les métiers de bûcheronne et de fermière. La règle de jeu arrête aussi un métier de bûcheronne ou de fermière qu'elle a déjà, une fois terminée la tournée de travail en cours (`/laura stop` l'arrête tout de suite) : elle le dit alors une fois et ne touche plus aux blocs.
+Mettez la règle de jeu `mobGriefing` (`mob_griefing` sur Minecraft 26.1.2) à false, ou mettez `fetch.breakBlocks` à false et ne lui donnez pas les métiers de bûcheronne et de fermière. La règle de jeu arrête aussi tout de suite un métier de bûcheronne ou de fermière qu'elle a déjà, et une tâche en cours : l'arbre ou le champ est laissé tel quel, elle le dit une fois et ne touche plus aux blocs.
 
 **Comment réaliser son désir de feux d'artifice ?**
 Lancez une fusée de feu d'artifice près d'elle. Toute fusée dans un rayon de 32 blocs autour d'elle compte, peu importe qui l'a lancée.

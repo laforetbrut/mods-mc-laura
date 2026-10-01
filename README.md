@@ -98,8 +98,8 @@ None of these mods is required and none is bundled in the jar.
 
 | Target | Farmer's Delight | KubeJS | Applied Energistics 2 | Curios | Backpack as storage |
 |---|---|---|---|---|---|
-| NeoForge 1.20.1 | yes | yes | compiled in, never run in game | compiled in, never run in game | yes |
-| Forge 1.20.1 | yes | yes | compiled in, never run in game | compiled in, never run in game | yes |
+| NeoForge 1.20.1 | yes | yes | compiled in, never run in game | yes | yes |
+| Forge 1.20.1 | yes | yes | compiled in, never run in game | yes | yes |
 | Fabric 1.20.1 | yes, Refabricated | yes | compiled in, never run in game | no | no |
 | NeoForge 1.21.1 | yes | yes | yes | yes | yes |
 | Forge 1.21.1 | no | no | no | no | yes |
@@ -119,8 +119,8 @@ None of these mods is required and none is bundled in the jar.
 - **Backpack as storage**: a backpack that exposes its inventory adds storage. Elsewhere it is
   worn for the look only.
 
-The in-game self test suite checks Farmer's Delight and KubeJS. Applied Energistics 2 and Curios
-have no in-game test. Details: [COMPATIBILITY.md](docs/COMPATIBILITY.md).
+The in-game self test suite checks Farmer's Delight, KubeJS and Curios. Applied Energistics 2
+has no in-game test. Details: [COMPATIBILITY.md](docs/COMPATIBILITY.md).
 
 ## Documentation
 
@@ -306,8 +306,8 @@ Aucun de ces mods n'est obligatoire et aucun n'est inclus dans le jar.
 
 | Cible | Farmer's Delight | KubeJS | Applied Energistics 2 | Curios | Sac à dos comme rangement |
 |---|---|---|---|---|---|
-| NeoForge 1.20.1 | oui | oui | compilé, jamais lancé en jeu | compilé, jamais lancé en jeu | oui |
-| Forge 1.20.1 | oui | oui | compilé, jamais lancé en jeu | compilé, jamais lancé en jeu | oui |
+| NeoForge 1.20.1 | oui | oui | compilé, jamais lancé en jeu | oui | oui |
+| Forge 1.20.1 | oui | oui | compilé, jamais lancé en jeu | oui | oui |
 | Fabric 1.20.1 | oui, Refabricated | oui | compilé, jamais lancé en jeu | non | non |
 | NeoForge 1.21.1 | oui | oui | oui | oui | oui |
 | Forge 1.21.1 | non | non | non | non | oui |
@@ -329,8 +329,8 @@ Aucun de ces mods n'est obligatoire et aucun n'est inclus dans le jar.
 - **Sac à dos comme rangement** : un sac à dos qui expose son inventaire ajoute du rangement.
   Ailleurs, il est porté uniquement pour l'apparence.
 
-La suite de self tests en jeu vérifie Farmer's Delight et KubeJS. Applied Energistics 2 et Curios
-n'ont aucun test en jeu. Détails : [COMPATIBILITY.md](docs/COMPATIBILITY.md).
+La suite de self tests en jeu vérifie Farmer's Delight, KubeJS et Curios. Applied Energistics 2
+n'a aucun test en jeu. Détails : [COMPATIBILITY.md](docs/COMPATIBILITY.md).
 
 ## Documentation
 

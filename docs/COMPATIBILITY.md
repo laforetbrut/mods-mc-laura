@@ -17,7 +17,7 @@ Version 2.0.0 exists for nine targets: Minecraft 1.20.1, 1.21.1 and 26.1.2, each
 
 The behaviour described in the guides is the same on the nine targets, because it lives in the shared code of each Minecraft version. Only the optional integrations below differ. None of them is required and none is bundled in the mod.
 
-In the tables, "yes" means the integration is wired for that target, either in its loader project or in the shared code. The in-game self test suite checks Farmer's Delight (or its Refabricated port) and KubeJS when they are loaded. Applied Energistics 2 and Curios have no in-game test.
+In the tables, "yes" means the integration is wired for that target, either in its loader project or in the shared code. The in-game self test suite checks Farmer's Delight (or its Refabricated port), KubeJS and Curios when they are loaded. Applied Energistics 2 has no in-game test.
 
 ### Summary by loader (1.20.1)
 
@@ -27,13 +27,13 @@ In the tables, "yes" means the integration is wired for that target, either in i
 | Backpack worn on her back | yes | yes | yes |
 | Backpack used as extra storage | yes, item handlers | yes, item handlers | no |
 | Applied Energistics 2 network | compiled in, never run in game | compiled in, never run in game | compiled in, never run in game |
-| Curios trinkets | compiled in, never run in game | compiled in, never run in game | no |
+| Curios trinkets | yes | yes | no |
 | Farmer's Delight cooking pot | yes | yes | yes, Farmer's Delight Refabricated |
 | KubeJS binding and events | yes | yes | yes |
 | Carry On blacklist | yes | yes | yes |
 | Waystones and other teleports | yes | yes | yes |
 
-**1.20.1 note.** NeoForge for Minecraft 1.20.1 is the 47.1 fork of Forge, so the NeoForge and Forge projects use the same item handlers and the same Forge builds of the other mods. Farmer's Delight and KubeJS are checked in game on the three loaders. The Applied Energistics 2 and Curios bridges are compiled against their APIs but have never been run in game: treat them as untested. Curios has no Fabric release, and backpack storage is not wired on Fabric 1.20.1.
+**1.20.1 note.** NeoForge for Minecraft 1.20.1 is the 47.1 fork of Forge, so the NeoForge and Forge projects use the same item handlers and the same Forge builds of the other mods. Farmer's Delight and KubeJS are checked in game on the three loaders, and Curios on NeoForge and Forge. The Applied Energistics 2 bridge is compiled against its API but has never been run in game: treat it as untested. Curios has no Fabric release, and backpack storage is not wired on Fabric 1.20.1.
 
 ### Summary by loader (1.21.1)
 
@@ -93,7 +93,7 @@ When she searches an area on her own, these blocks are skipped because they are 
 
 ### Curios
 
-[Curios](https://modrinth.com/mod/curios): NeoForge 1.21.1. The same bridge is compiled into the NeoForge and Forge projects of 1.20.1, where it has never been run in game.
+[Curios](https://modrinth.com/mod/curios): NeoForge 1.21.1, and NeoForge and Forge 1.20.1.
 
 - She has these trinket slots: `necklace`, `ring`, `bracelet`, `charm`, `head`, `back`, `belt`.
 - Right click her with a trinket. It goes into a free slot that accepts it. She gains 8 affection and you get the "Put a Ring on It" advancement.
@@ -176,7 +176,7 @@ La version 2.0.0 existe pour neuf cibles : Minecraft 1.20.1, 1.21.1 et 26.1.2, c
 
 Le comportement décrit dans les guides est le même sur les neuf cibles, car il se trouve dans le code partagé de chaque version de Minecraft. Seules les intégrations facultatives ci-dessous diffèrent. Aucune n'est obligatoire et aucune n'est incluse dans le mod.
 
-Dans les tableaux, « oui » signifie que l'intégration est câblée pour cette cible, dans le projet de son chargeur ou dans le code partagé. La suite de self tests en jeu vérifie Farmer's Delight (ou son portage Refabricated) et KubeJS quand ils sont chargés. Applied Energistics 2 et Curios n'ont aucun test en jeu.
+Dans les tableaux, « oui » signifie que l'intégration est câblée pour cette cible, dans le projet de son chargeur ou dans le code partagé. La suite de self tests en jeu vérifie Farmer's Delight (ou son portage Refabricated), KubeJS et Curios quand ils sont chargés. Applied Energistics 2 n'a aucun test en jeu.
 
 ### Résumé par chargeur (1.20.1)
 
@@ -186,13 +186,13 @@ Dans les tableaux, « oui » signifie que l'intégration est câblée pour cette
 | Sac à dos porté sur son dos | oui | oui | oui |
 | Sac à dos utilisé comme rangement supplémentaire | oui, item handlers | oui, item handlers | non |
 | Réseau Applied Energistics 2 | compilé, jamais lancé en jeu | compilé, jamais lancé en jeu | compilé, jamais lancé en jeu |
-| Bijoux Curios | compilé, jamais lancé en jeu | compilé, jamais lancé en jeu | non |
+| Bijoux Curios | oui | oui | non |
 | Marmite de Farmer's Delight | oui | oui | oui, Farmer's Delight Refabricated |
 | Liaison et événements KubeJS | oui | oui | oui |
 | Liste noire de Carry On | oui | oui | oui |
 | Waystones et autres téléportations | oui | oui | oui |
 
-**Note 1.20.1.** NeoForge pour Minecraft 1.20.1 est le fork 47.1 de Forge : les projets NeoForge et Forge utilisent donc les mêmes item handlers et les mêmes versions Forge des autres mods. Farmer's Delight et KubeJS sont vérifiés en jeu sur les trois chargeurs. Les ponts Applied Energistics 2 et Curios sont compilés avec leurs API mais n'ont jamais été lancés en jeu : considérez-les comme non testés. Curios n'a pas de version Fabric, et le rangement des sacs à dos n'est pas câblé sur Fabric 1.20.1.
+**Note 1.20.1.** NeoForge pour Minecraft 1.20.1 est le fork 47.1 de Forge : les projets NeoForge et Forge utilisent donc les mêmes item handlers et les mêmes versions Forge des autres mods. Farmer's Delight et KubeJS sont vérifiés en jeu sur les trois chargeurs, et Curios sur NeoForge et Forge. Le pont Applied Energistics 2 est compilé avec son API mais n'a jamais été lancé en jeu : considérez-le comme non testé. Curios n'a pas de version Fabric, et le rangement des sacs à dos n'est pas câblé sur Fabric 1.20.1.
 
 ### Résumé par chargeur (1.21.1)
 
@@ -252,7 +252,7 @@ Quand elle fouille une zone d'elle-même, ces blocs sont ignorés car ce sont de
 
 ### Curios
 
-[Curios](https://modrinth.com/mod/curios) : NeoForge 1.21.1. Le même pont est compilé dans les projets NeoForge et Forge de la 1.20.1, où il n'a jamais été lancé en jeu.
+[Curios](https://modrinth.com/mod/curios) : NeoForge 1.21.1, ainsi que NeoForge et Forge 1.20.1.
 
 - Elle dispose de ces emplacements de bijoux : `necklace`, `ring`, `bracelet`, `charm`, `head`, `back`, `belt`.
 - Faites un clic droit sur elle avec un bijou. Il va dans un emplacement libre qui l'accepte. Elle gagne 8 points d'affection et vous obtenez le progrès « La bague au doigt ».

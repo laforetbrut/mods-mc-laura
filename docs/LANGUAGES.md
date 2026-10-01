@@ -117,7 +117,7 @@ Format:
 {
   "spelling": {
     "u": "you",
-    "ur": "you're",
+    "your pretty": "you're pretty",
     "thx": "thanks",
     "so": "",
     "very": ""
@@ -126,6 +126,7 @@ Format:
 ```
 
 - `"u": "you"` reads "love u" as "love you".
+- `"your pretty": "you're pretty"` fixes a common mistake: "your pretty" is read as "you're pretty".
 - An empty value drops a filler word: "you're so pretty" is read as "you're pretty".
 - Rules are applied once, from left to right. At each word the longest rule wins.
 - The mod ships spelling rules for `en_us` and `fr_fr`. You can add rules for any language.

@@ -23,7 +23,7 @@ Option names such as `follow.teleportDistance` refer to `config/lauramod/lauramo
 | Spawn egg | Creative only. Right click an unclaimed companion to make her yours. |
 
 - A new companion follows you, gets the name `general.defaultName` (then the names of `general.extraNames`), the skin `skins.defaultSkin`, 500 affection, and offers a clickable rename button.
-- She appears on a safe spot next to you: on the ground below you when you fly, at the surface of the water when you swim. Only when there is no such place (over the void) does she appear where you are.
+- She appears on a safe spot next to you: on the ground below you when you fly, at the surface of the water when you swim. When there is no such place (over the void or over lava) nothing is created: you read "There is no safe place for her here. Stand on solid ground and call her again." and the summon cooldown is not used up. The same holds for a dismissed companion who comes back and for a companion restored from her last saved state.
 - One player can have 3 companions (`general.maxPerPlayer`). `general.maxPerWorld` can limit the whole world.
 - Two new summons by the same player must be 5 seconds apart (`summoning.summonCooldownSeconds`).
 - Laura's Heart used while a companion is loaded calls her to you (she teleports if she is further than 12 blocks or in another dimension), gives 50 affection and 40 attention, and makes her happy. The heart is consumed. When there is no safe place for her next to you, she tells you so, stays where she is, and the heart is kept.
@@ -127,11 +127,11 @@ Teleport rules while following:
 
 **Refusals.** With `needs.refuseOrders`, when her mood is sad, angry, jealous, sulking or hungry, she may refuse follow, stay, wander, home, come, sleep and eat, a fetch asked from her menu, and an emote asked with `/laura emote`, from her menu or from the emote wheel. A fetch or an emote asked in chat, and `/laura fetch`, are never refused. The chance depends on `needs.annoyance` (0 % for CHILL and NORMAL, 15 % for NEEDY, 30 % for UNBEARABLE) and doubles while she sulks. Giving the same order again within 20 seconds always works. She only argues face to face: an order sent from out of earshot (further than `dialogue.chatRange` or from another dimension, with a command or the call key) is never refused. What she answers when she is sent home or cannot come to you reaches you even there.
 
-**Hug and kiss.** They are not orders and her needs never count against them, whether you ask in chat, with a command, from the menu or from the emote wheel. A hug is never refused because she is hungry, sad or jealous: it comforts her. She only pushes it away while she sulks or is still angry (after a hit, an insult, a gift or a food she hates), and asking again within 20 seconds gets through. A kiss is refused while she is gagged, while she sulks or is still angry, and when affection is under 200.
+**Hug and kiss.** They are not orders and her needs never count against them, whether you ask in chat, with a command, from the menu or from the emote wheel. A hug is never refused because she is hungry, sad or jealous: it comforts her. She only pushes it away while she sulks or is still angry (after a hit, an insult, a gift or a food she hates), and asking again within 20 seconds gets through. A kiss is refused while she is gagged, while she sulks or is still angry, and when affection is under 200. A hug makes her fonder only once every 60 seconds per companion, and so does a kiss (`needs.cuddleCooldownSeconds`, 0 for no limit). In between she still hugs and kisses back, her need for attention is still met, a wish for a hug or a kiss is still fulfilled and the advancements still count.
 
 **Combat modes**: passive (avoids monsters, never fights), defensive (fights what hurts you or what you attack), aggressive (also attacks monsters that come close, except creepers).
 
-**Other players.** She never fights you, nor your other companions and your pets. She fights another player, or the companion or pet of another player, only when `combat.attackPlayers` is true, PvP is enabled on the server and the two players are not teammates without friendly fire. Where those fights are forbidden, the other side cannot hurt her either (`combat.shieldWithoutPvp`); creative mode players still can.
+**Other players.** She never fights you, nor your other companions and your pets. She fights another player, or the companion or pet of another player, only when `combat.attackPlayers` is true, PvP is enabled on the server and the two players are not teammates without friendly fire. Where those fights are forbidden, the other side cannot hurt her either (`combat.shieldWithoutPvp`); creative mode players still can. The PvP switch is the `pvp` setting of `server.properties` on Minecraft 1.20.1 and 1.21.1, and the `pvp` game rule on Minecraft 26.1.2.
 
 **Villagers.** While she follows you nearby, villagers within 5 blocks of her walk away, except when they sleep or trade (`personality.jealousOfVillagers`).
 
@@ -179,7 +179,7 @@ A job is continuous work inside an area: a circle around the block where you sto
 - She does not work at night (`work.workAtNight`), while sulking, sleeping, sitting or fighting.
 - Another order (follow, stay...) pauses the jobs. "back to work" or `/laura work` resumes them.
 - When none of her jobs finds anything to do, she says so once and pauses: 1 minute, then 2, then 4 minutes at most, until a job keeps her busy again.
-- The lumberjack and the farmer stop when the `mobGriefing` game rule is turned off, even for a job given earlier. The rule is read each time she starts a round of a job or a task: the round under way is finished first (it lasts as long as she finds trees or crops to work on), and `/laura stop` ends it at once. She then says so once and leaves the blocks alone. The cook goes on.
+- The lumberjack and the farmer stop at once when the `mobGriefing` game rule is turned off, even for a job given earlier or a task under way: the tree or the field is left as it is. She says so once and leaves the blocks alone. The cook goes on.
 - With `work.onlyNaturalTrees`, a tree she fells stands on soil (dirt, grass and the other blocks of the dirt tag, or mangrove roots), is made of a single kind of log, spreads at most 6 blocks sideways from the foot of its trunk and carries at least 4 natural leaves in its upper half. She only takes the logs that lead up to a log topped by natural leaves, so a wall, a beam or a roof of logs that touches the tree stays in place. A log pillar of a build with natural leaves growing right on top of it cannot be told from a trunk.
 - As a cook she only takes food out of a furnace or a smoker: ingots, glass or charcoal smelted there by someone else stay where they are.
 
@@ -233,7 +233,7 @@ Five needs go from 100 (satisfied) to 0. Disable them all with `needs.enabled`.
 
 | Event | Affection |
 |---|---|
-| Hug, kiss | +4, +5 (+1 while she sulks) |
+| Hug, kiss | +4, +5 (+1 while she sulks), once every 60 seconds each (`needs.cuddleCooldownSeconds`) |
 | Compliment | +3 |
 | Desire fulfilled | +20 to +40 |
 | Desire missed | -20, and she sulks 1 to 3 minutes |
@@ -333,6 +333,7 @@ SSS
 ```
 
 - The flower is consumed. When several companions are dead, the one who died first comes back.
+- She only comes back on a safe spot. When there is none next to the gravestone (the void, lava), you read the same message as for a summon and the flower is kept. With `TIMER`, while you are over the void or over lava she waits, and tries again every 5 seconds until you stand somewhere safe.
 - While a companion is dead and no other is with you, Laura's Heart does not work and reminds you of the grave.
 - With `GRAVE` and `TIMER` you are told about her death wherever you are, another dimension included.
 
@@ -426,7 +427,7 @@ Les noms d'options comme `follow.teleportDistance` renvoient à `config/lauramod
 | Œuf d'apparition | Créatif uniquement. Faites un clic droit sur une compagne sans propriétaire pour qu'elle devienne la vôtre. |
 
 - Une nouvelle compagne vous suit, reçoit le nom `general.defaultName` (puis les noms de `general.extraNames`), le skin `skins.defaultSkin`, 500 points d'affection, et propose un bouton cliquable pour la renommer.
-- Elle apparaît à un endroit sûr à côté de vous : au sol sous vous quand vous volez, à la surface de l'eau quand vous nagez. C'est seulement quand un tel endroit n'existe pas (au-dessus du vide) qu'elle apparaît là où vous êtes.
+- Elle apparaît à un endroit sûr à côté de vous : au sol sous vous quand vous volez, à la surface de l'eau quand vous nagez. Quand un tel endroit n'existe pas (au-dessus du vide ou de la lave) rien n'est créé : vous lisez « Il n'y a aucun endroit sûr pour elle ici. Pose-toi sur un sol solide et rappelle-la. » et le délai entre deux invocations n'est pas entamé. Il en va de même pour une compagne congédiée qui revient et pour une compagne restaurée depuis son dernier état sauvegardé.
 - Un joueur peut avoir 3 compagnes (`general.maxPerPlayer`). `general.maxPerWorld` peut limiter le monde entier.
 - Deux nouvelles invocations par le même joueur doivent être espacées de 5 secondes (`summoning.summonCooldownSeconds`).
 - Le Cœur de Laura utilisé alors qu'une compagne est chargée l'appelle à vous (elle se téléporte si elle est à plus de 12 blocs ou dans une autre dimension), donne 50 points d'affection et 40 d'attention, et la rend heureuse. Le cœur est consommé. Quand il n'y a aucun endroit sûr pour elle à côté de vous, elle vous le dit, reste où elle est, et le cœur est conservé.
@@ -530,11 +531,11 @@ Règles de téléportation quand elle suit :
 
 **Refus.** Avec `needs.refuseOrders`, quand son humeur est triste, en colère, jalouse, boudeuse ou affamée, elle peut refuser suivre, rester, se promener, maison, venir, dormir et manger, un objet à rapporter demandé par son menu, et une émote demandée avec `/laura emote`, par son menu ou par la roue des émotes. Un objet à rapporter ou une émote demandés dans le chat, et `/laura fetch`, ne sont jamais refusés. La chance dépend de `needs.annoyance` (0 % pour CHILL et NORMAL, 15 % pour NEEDY, 30 % pour UNBEARABLE) et double quand elle boude. Redonner le même ordre dans les 20 secondes marche toujours. Elle ne discute qu'en face à face : un ordre envoyé hors de portée de voix (au-delà de `dialogue.chatRange` ou depuis une autre dimension, par une commande ou la touche d'appel) n'est jamais refusé. Ce qu'elle répond quand elle est envoyée à la maison ou ne peut pas venir vous parvient même là.
 
-**Câlin et bisou.** Ce ne sont pas des ordres et ses besoins ne jouent jamais contre eux, que vous les demandiez dans le chat, par une commande, par le menu ou par la roue des émotes. Un câlin n'est jamais refusé parce qu'elle a faim, qu'elle est triste ou jalouse : il la réconforte. Elle ne le repousse que lorsqu'elle boude ou est encore en colère (après un coup, une insulte, un cadeau ou un aliment qu'elle déteste), et le redemander dans les 20 secondes passe. Un bisou est refusé quand elle est bâillonnée, quand elle boude ou est encore en colère, et quand l'affection est sous 200.
+**Câlin et bisou.** Ce ne sont pas des ordres et ses besoins ne jouent jamais contre eux, que vous les demandiez dans le chat, par une commande, par le menu ou par la roue des émotes. Un câlin n'est jamais refusé parce qu'elle a faim, qu'elle est triste ou jalouse : il la réconforte. Elle ne le repousse que lorsqu'elle boude ou est encore en colère (après un coup, une insulte, un cadeau ou un aliment qu'elle déteste), et le redemander dans les 20 secondes passe. Un bisou est refusé quand elle est bâillonnée, quand elle boude ou est encore en colère, et quand l'affection est sous 200. Un câlin ne la rend plus affectueuse qu'une fois toutes les 60 secondes par compagne, et un bisou de même (`needs.cuddleCooldownSeconds`, 0 pour aucune limite). Entre-temps elle rend quand même le câlin et le bisou, son besoin d'attention est quand même comblé, un désir de câlin ou de bisou est quand même réalisé et les progrès comptent toujours.
 
 **Modes de combat** : passive (évite les monstres, ne se bat jamais), defensive (combat ce qui vous blesse ou ce que vous attaquez), aggressive (attaque aussi les monstres qui s'approchent, sauf les creepers).
 
-**Autres joueurs.** Elle ne se bat jamais contre vous, ni contre vos autres compagnes et vos animaux. Elle ne se bat contre un autre joueur, ou contre la compagne ou l'animal d'un autre joueur, que si `combat.attackPlayers` vaut true, que le PvP est activé sur le serveur et que les deux joueurs ne sont pas coéquipiers sans tir ami. Là où ces combats sont interdits, l'autre camp ne peut pas la blesser non plus (`combat.shieldWithoutPvp`) ; les joueurs en mode créatif le peuvent toujours.
+**Autres joueurs.** Elle ne se bat jamais contre vous, ni contre vos autres compagnes et vos animaux. Elle ne se bat contre un autre joueur, ou contre la compagne ou l'animal d'un autre joueur, que si `combat.attackPlayers` vaut true, que le PvP est activé sur le serveur et que les deux joueurs ne sont pas coéquipiers sans tir ami. Là où ces combats sont interdits, l'autre camp ne peut pas la blesser non plus (`combat.shieldWithoutPvp`) ; les joueurs en mode créatif le peuvent toujours. L'interrupteur du PvP est le réglage `pvp` de `server.properties` sur Minecraft 1.20.1 et 1.21.1, et la règle de jeu `pvp` sur Minecraft 26.1.2.
 
 **Villageois.** Quand elle vous suit de près, les villageois à moins de 5 blocs d'elle s'éloignent, sauf s'ils dorment ou commercent (`personality.jealousOfVillagers`).
 
@@ -582,7 +583,7 @@ Un métier est un travail continu dans une zone : un cercle autour du bloc où v
 - Elle ne travaille pas la nuit (`work.workAtNight`), ni quand elle boude, dort, est assise ou se bat.
 - Un autre ordre (suivre, rester...) met les métiers en pause. « au travail » ou `/laura work` les reprend.
 - Quand aucun de ses métiers ne trouve quoi que ce soit à faire, elle le dit une fois et fait une pause : 1 minute, puis 2, puis 4 minutes au plus, jusqu'à ce qu'un métier l'occupe de nouveau.
-- La bûcheronne et la fermière s'arrêtent quand la règle de jeu `mobGriefing` est désactivée, même pour un métier donné auparavant. La règle est lue chaque fois qu'elle commence une tournée d'un métier ou une tâche : la tournée en cours est d'abord terminée (elle dure tant qu'elle trouve des arbres ou des cultures à travailler), et `/laura stop` l'arrête tout de suite. Elle le dit alors une fois et ne touche plus aux blocs. La cuisinière continue.
+- La bûcheronne et la fermière s'arrêtent aussitôt quand la règle de jeu `mobGriefing` est désactivée, même pour un métier donné auparavant ou une tâche en cours : l'arbre ou le champ est laissé tel quel. Elle le dit une fois et ne touche plus aux blocs. La cuisinière continue.
 - Avec `work.onlyNaturalTrees`, un arbre qu'elle abat repose sur de la terre (terre, herbe et les autres blocs du tag dirt, ou des racines de palétuvier), est fait d'une seule sorte de bûche, s'étend d'au plus 6 blocs sur les côtés depuis le pied de son tronc et porte au moins 4 feuilles naturelles dans sa moitié haute. Elle ne prend que les bûches qui mènent à une bûche surmontée de feuilles naturelles : un mur, une poutre ou un toit en bûches qui touche l'arbre reste donc en place. Un pilier en bûches d'une construction sur lequel poussent directement des feuilles naturelles ne peut pas être distingué d'un tronc.
 - Cuisinière, elle ne sort que de la nourriture d'un fourneau ou d'un fumoir : les lingots, le verre ou le charbon de bois qu'un autre y a fait cuire restent où ils sont.
 
@@ -636,7 +637,7 @@ Cinq besoins vont de 100 (satisfait) à 0. Désactivez-les tous avec `needs.enab
 
 | Événement | Affection |
 |---|---|
-| Câlin, bisou | +4, +5 (+1 quand elle boude) |
+| Câlin, bisou | +4, +5 (+1 quand elle boude), une fois toutes les 60 secondes chacun (`needs.cuddleCooldownSeconds`) |
 | Compliment | +3 |
 | Désir réalisé | +20 à +40 |
 | Désir manqué | -20, et elle boude 1 à 3 minutes |
@@ -736,6 +737,7 @@ SSS
 ```
 
 - La fleur est consommée. Quand plusieurs compagnes sont mortes, celle qui est morte en premier revient.
+- Elle ne revient qu'à un endroit sûr. Quand il n'y en a aucun à côté de la tombe (le vide, la lave), vous lisez le même message que pour une invocation et la fleur est conservée. Avec `TIMER`, tant que vous êtes au-dessus du vide ou de la lave elle attend, et réessaie toutes les 5 secondes jusqu'à ce que vous soyez à un endroit sûr.
 - Tant qu'une compagne est morte et qu'aucune autre n'est avec vous, le Cœur de Laura ne fonctionne pas et vous rappelle la tombe.
 - Avec `GRAVE` et `TIMER`, vous êtes prévenu de sa mort où que vous soyez, y compris dans une autre dimension.
 

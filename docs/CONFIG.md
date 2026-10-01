@@ -153,6 +153,7 @@ Needs go from 100 (satisfied) to 0 (desperate). The minutes are the time a need 
 | `jealousOfPlayers` | `true` | true / false | She gets jealous when you stay close to, or chat with, other players. |
 | `afkMinutes` | `5` | 1 to 1440 | Minutes without moving before she decides you are ignoring her. |
 | `giftCooldownSeconds` | `300` | 0 to 86400 | The same kind of gift or favorite food makes her fonder only once in this time, per companion. In between she still takes the gift and eats the food, and a wish is still fulfilled, but she gains no affection and no fun, and gives nothing back. A gift she dislikes always counts. 0 means no limit. |
+| `cuddleCooldownSeconds` | `60` | 0 to 86400 | A hug makes her fonder only once in this time, and so does a kiss, per companion. In between she still hugs and kisses back, her need for attention is still met, a wish for a hug or a kiss is still fulfilled and the advancements still count. 0 means no limit. |
 
 Effect of `annoyance`:
 
@@ -173,6 +174,8 @@ Effect of `annoyance`:
 | `shieldWithoutPvp` | `true` | true / false | Where the server forbids fights between two players (PvP off, same team without friendly fire), the other player, their companions and their pets cannot hurt her either. Creative mode players still can. |
 
 She never fights her partner, nor her partner's other companions and pets, whatever these options say.
+
+For `attackPlayers` and `shieldWithoutPvp`, the PvP switch is the `pvp` setting of `server.properties` on Minecraft 1.20.1 and 1.21.1, and the `pvp` game rule on Minecraft 26.1.2.
 
 #### fetch
 
@@ -519,6 +522,7 @@ Les besoins vont de 100 (satisfait) à 0 (désespéré). Les minutes indiquent l
 | `jealousOfPlayers` | `true` | true / false | Elle devient jalouse quand vous restez près d'autres joueurs ou discutez avec eux. |
 | `afkMinutes` | `5` | 1 à 1440 | Minutes sans bouger avant qu'elle estime que vous l'ignorez. |
 | `giftCooldownSeconds` | `300` | 0 à 86400 | Un même type de cadeau ou de nourriture préférée ne la rend plus affectueuse qu'une fois pendant ce délai, par compagne. Entre-temps elle prend quand même le cadeau et mange la nourriture, et un désir est quand même réalisé, mais elle ne gagne ni affection ni amusement et n'offre rien en retour. Un cadeau qu'elle déteste compte toujours. 0 : aucune limite. |
+| `cuddleCooldownSeconds` | `60` | 0 à 86400 | Un câlin ne la rend plus affectueuse qu'une fois pendant ce délai, et un bisou de même, par compagne. Entre-temps elle rend quand même le câlin et le bisou, son besoin d'attention est quand même comblé, un désir de câlin ou de bisou est quand même réalisé et les progrès comptent toujours. 0 : aucune limite. |
 
 Effet de `annoyance` :
 
@@ -539,6 +543,8 @@ Effet de `annoyance` :
 | `shieldWithoutPvp` | `true` | true / false | Là où le serveur interdit le combat entre deux joueurs (PvP désactivé, même équipe sans tir ami), l'autre joueur, ses compagnes et ses animaux ne peuvent pas la blesser non plus. Les joueurs en mode créatif le peuvent toujours. |
 
 Elle ne se bat jamais contre son partenaire, ni contre les autres compagnes et les animaux de son partenaire, quelles que soient ces options.
+
+Pour `attackPlayers` et `shieldWithoutPvp`, l'interrupteur du PvP est le réglage `pvp` de `server.properties` sur Minecraft 1.20.1 et 1.21.1, et la règle de jeu `pvp` sur Minecraft 26.1.2.
 
 #### fetch
 

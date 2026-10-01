@@ -120,7 +120,7 @@ Each project declares these runs:
 
 - Every project declares the four runs.
 - The `clienttest` run needs a singleplayer world named `laura_test` in `run-clienttest/saves`.
-- The system property `lauramod.selftest.only` keeps only the tests whose name contains its value. It is set with `-PselftestOnly=<text>` in the three 1.20.1 projects, the three 1.21.1 projects and `forge-26.1.2`. `neoforge-26.1.2` and `fabric-26.1.2` do not pass it. On Minecraft 1.21.1 the value can hold several parts of names separated by commas: `-PselftestOnly=hug,bath` runs the tests whose name contains `hug` or `bath`.
+- The system property `lauramod.selftest.only` keeps only the tests whose name contains its value. It is set with `-PselftestOnly=<text>` in the nine projects. The value can hold several parts of names separated by commas: `-PselftestOnly=hug,bath` runs the tests whose name contains `hug` or `bath`.
 - The run folders are ignored by Git.
 
 ### Running the self tests
@@ -135,7 +135,7 @@ cd forge-1.20.1
 1. `runSelftest` first runs `prepareSelftest`, which prepares `run-selftest/`:
    - `-PacceptEula` writes `eula.txt` with `eula=true`. Passing it means you accept the Minecraft EULA (<https://aka.ms/MinecraftEULA>). Without it the task stops with a message, unless `run-selftest/eula.txt` already contains `eula=true`.
    - When `server.properties` is missing, it writes one: offline mode, flat world, no spawn protection, no tick watchdog, and the port `selftest_port` of the project's `gradle.properties`.
-2. The dedicated server starts and runs the suite of the common code, plus one test for Farmer's Delight and one for KubeJS when they are loaded.
+2. The dedicated server starts and runs the suite of the common code, plus the tests of Farmer's Delight, KubeJS and Curios when these mods are loaded.
 3. A passing run prints `[SELFTEST] <n> passed, 0 failed` and then `[SELFTEST] RESULT SUCCESS` in the console and in `run-selftest/logs/latest.log`, writes `run-selftest/lauramod-selftest.json`, and the server stops by itself.
 4. The server process ends with exit code 0 when every test passed, 1 when a test failed, 2 when the server stopped before the tests ran. A run without the `RESULT SUCCESS` line is not a pass.
 
@@ -163,17 +163,18 @@ The integrations are compiled against the public APIs of the other mods, which a
 
 | Project | Compile-only dependencies | Loaded in dev runs with `-PwithCompatMods` |
 |---|---|---|
-| `neoforge-1.20.1` | Applied Energistics 2 API 15.4.10, Curios API 5.14.1+1.20.1, Farmer's Delight 1.20.1-1.3.4, KubeJS 2001.6.5-build.26, Rhino 2001.2.2-build.17 | Farmer's Delight and KubeJS (with Rhino and Architectury 9.1.12) |
-| `forge-1.20.1` | Applied Energistics 2 API 15.4.10, Curios API 5.14.1+1.20.1, Farmer's Delight 1.20.1-1.3.4, KubeJS 2001.6.5-build.26, Rhino 2001.2.2-build.17 | Farmer's Delight and KubeJS (with Rhino and Architectury 9.1.12) |
+| `neoforge-1.20.1` | Applied Energistics 2 API 15.4.10, Curios API 5.14.1+1.20.1, Farmer's Delight 1.20.1-1.3.4, KubeJS 2001.6.5-build.26, Rhino 2001.2.2-build.17 | Farmer's Delight, KubeJS (with Rhino and Architectury 9.1.12) and Curios |
+| `forge-1.20.1` | Applied Energistics 2 API 15.4.10, Curios API 5.14.1+1.20.1, Farmer's Delight 1.20.1-1.3.4, KubeJS 2001.6.5-build.26, Rhino 2001.2.2-build.17 | Farmer's Delight, KubeJS (with Rhino and Architectury 9.1.12) and Curios |
 | `fabric-1.20.1` | Applied Energistics 2 API 15.4.10, Farmer's Delight Refabricated 1.20.1-2.5.7, KubeJS 2001.6.5-build.26, Rhino 2001.2.2-build.17 | Farmer's Delight Refabricated (with the jars nested in it) and KubeJS (with Rhino and Architectury 9.1.12) |
-| `neoforge-1.21.1` | Applied Energistics 2 API 19.0.27, Curios API 9.5.1+1.21.1, Farmer's Delight 1.21.1-1.3.4, KubeJS 2101.7.2-build.377 | Farmer's Delight and KubeJS |
+| `neoforge-1.21.1` | Applied Energistics 2 API 19.0.27, Curios API 9.5.1+1.21.1, Farmer's Delight 1.21.1-1.3.4, KubeJS 2101.7.2-build.377 | Farmer's Delight, KubeJS and Curios |
 | `forge-1.21.1` | none | not available |
 | `fabric-1.21.1` | Farmer's Delight Refabricated 1.21.1-3.3.6 | Farmer's Delight Refabricated |
 | `neoforge-26.1.2` | none | not available |
 | `forge-26.1.2` | none | not available |
 | `fabric-26.1.2` | Farmer's Delight Refabricated 26.1-3.6.26 | Farmer's Delight Refabricated |
 
-- Applied Energistics 2 and Curios are never loaded in the dev runs, so their bridges have no in-game test. On 1.20.1 they have never been run in game.
+- Curios is loaded in `neoforge-1.20.1`, `forge-1.20.1` and `neoforge-1.21.1`. Its self test `compat_curios_death` needs KubeJS as well: the test script lets a gold nugget go in a ring slot. It checks that she wears the trinket, keeps it through a death and a revival at the grave, and drops it when she is released.
+- Applied Energistics 2 is never loaded in the dev runs, so its bridge has no in-game test. On 1.20.1 it has never been run in game.
 - With `-PwithCompatMods`, the projects that load KubeJS copy the test script `src/selftest/kubejs/server_scripts/laura_selftest.js` into `run-selftest/` before the self test.
 
 Example:
@@ -335,7 +336,7 @@ Chaque projet déclare ces lancements :
 
 - Chaque projet déclare les quatre lancements.
 - Le lancement `clienttest` a besoin d'un monde solo nommé `laura_test` dans `run-clienttest/saves`.
-- La propriété système `lauramod.selftest.only` ne garde que les tests dont le nom contient sa valeur. Elle se règle avec `-PselftestOnly=<texte>` dans les trois projets 1.20.1, les trois projets 1.21.1 et `forge-26.1.2`. `neoforge-26.1.2` et `fabric-26.1.2` ne la transmettent pas. Sur Minecraft 1.21.1 la valeur peut contenir plusieurs morceaux de noms séparés par des virgules : `-PselftestOnly=hug,bath` lance les tests dont le nom contient `hug` ou `bath`.
+- La propriété système `lauramod.selftest.only` ne garde que les tests dont le nom contient sa valeur. Elle se règle avec `-PselftestOnly=<texte>` dans les neuf projets. La valeur peut contenir plusieurs morceaux de noms séparés par des virgules : `-PselftestOnly=hug,bath` lance les tests dont le nom contient `hug` ou `bath`.
 - Les dossiers de lancement sont ignorés par Git.
 
 ### Lancer les self tests
@@ -350,7 +351,7 @@ cd forge-1.20.1
 1. `runSelftest` lance d'abord `prepareSelftest`, qui prépare `run-selftest/` :
    - `-PacceptEula` écrit `eula.txt` avec `eula=true`. Le passer signifie que vous acceptez l'EULA de Minecraft (<https://aka.ms/MinecraftEULA>). Sans lui, la tâche s'arrête avec un message, sauf si `run-selftest/eula.txt` contient déjà `eula=true`.
    - Quand `server.properties` manque, elle en écrit un : mode hors ligne, monde plat, pas de protection du spawn, pas de surveillance des ticks, et le port `selftest_port` du `gradle.properties` du projet.
-2. Le serveur dédié démarre et exécute la suite du code commun, plus un test pour Farmer's Delight et un pour KubeJS quand ils sont chargés.
+2. Le serveur dédié démarre et exécute la suite du code commun, plus les tests de Farmer's Delight, de KubeJS et de Curios quand ces mods sont chargés.
 3. Une exécution réussie affiche `[SELFTEST] <n> passed, 0 failed` puis `[SELFTEST] RESULT SUCCESS` dans la console et dans `run-selftest/logs/latest.log`, écrit `run-selftest/lauramod-selftest.json`, et le serveur s'arrête tout seul.
 4. Le processus du serveur se termine avec le code de sortie 0 quand tous les tests ont réussi, 1 quand un test a échoué, 2 quand le serveur s'est arrêté avant l'exécution des tests. Une exécution sans la ligne `RESULT SUCCESS` n'est pas une réussite.
 
@@ -378,17 +379,18 @@ Les intégrations sont compilées avec les API publiques des autres mods, qui ne
 
 | Projet | Dépendances de compilation seulement | Chargés dans les lancements de développement avec `-PwithCompatMods` |
 |---|---|---|
-| `neoforge-1.20.1` | API Applied Energistics 2 15.4.10, API Curios 5.14.1+1.20.1, Farmer's Delight 1.20.1-1.3.4, KubeJS 2001.6.5-build.26, Rhino 2001.2.2-build.17 | Farmer's Delight et KubeJS (avec Rhino et Architectury 9.1.12) |
-| `forge-1.20.1` | API Applied Energistics 2 15.4.10, API Curios 5.14.1+1.20.1, Farmer's Delight 1.20.1-1.3.4, KubeJS 2001.6.5-build.26, Rhino 2001.2.2-build.17 | Farmer's Delight et KubeJS (avec Rhino et Architectury 9.1.12) |
+| `neoforge-1.20.1` | API Applied Energistics 2 15.4.10, API Curios 5.14.1+1.20.1, Farmer's Delight 1.20.1-1.3.4, KubeJS 2001.6.5-build.26, Rhino 2001.2.2-build.17 | Farmer's Delight, KubeJS (avec Rhino et Architectury 9.1.12) et Curios |
+| `forge-1.20.1` | API Applied Energistics 2 15.4.10, API Curios 5.14.1+1.20.1, Farmer's Delight 1.20.1-1.3.4, KubeJS 2001.6.5-build.26, Rhino 2001.2.2-build.17 | Farmer's Delight, KubeJS (avec Rhino et Architectury 9.1.12) et Curios |
 | `fabric-1.20.1` | API Applied Energistics 2 15.4.10, Farmer's Delight Refabricated 1.20.1-2.5.7, KubeJS 2001.6.5-build.26, Rhino 2001.2.2-build.17 | Farmer's Delight Refabricated (avec les jars qu'il contient) et KubeJS (avec Rhino et Architectury 9.1.12) |
-| `neoforge-1.21.1` | API Applied Energistics 2 19.0.27, API Curios 9.5.1+1.21.1, Farmer's Delight 1.21.1-1.3.4, KubeJS 2101.7.2-build.377 | Farmer's Delight et KubeJS |
+| `neoforge-1.21.1` | API Applied Energistics 2 19.0.27, API Curios 9.5.1+1.21.1, Farmer's Delight 1.21.1-1.3.4, KubeJS 2101.7.2-build.377 | Farmer's Delight, KubeJS et Curios |
 | `forge-1.21.1` | aucune | non disponible |
 | `fabric-1.21.1` | Farmer's Delight Refabricated 1.21.1-3.3.6 | Farmer's Delight Refabricated |
 | `neoforge-26.1.2` | aucune | non disponible |
 | `forge-26.1.2` | aucune | non disponible |
 | `fabric-26.1.2` | Farmer's Delight Refabricated 26.1-3.6.26 | Farmer's Delight Refabricated |
 
-- Applied Energistics 2 et Curios ne sont jamais chargés dans les lancements de développement : leurs ponts n'ont donc aucun test en jeu. En 1.20.1, ils n'ont jamais été lancés en jeu.
+- Curios est chargé dans `neoforge-1.20.1`, `forge-1.20.1` et `neoforge-1.21.1`. Son self test `compat_curios_death` a aussi besoin de KubeJS : le script de test permet de mettre une pépite d'or dans un emplacement de bague. Il vérifie qu'elle porte le bijou, le garde après une mort et un retour à la vie sur la tombe, et le lâche quand elle est libérée.
+- Applied Energistics 2 n'est jamais chargé dans les lancements de développement : son pont n'a donc aucun test en jeu. En 1.20.1, il n'a jamais été lancé en jeu.
 - Avec `-PwithCompatMods`, les projets qui chargent KubeJS copient le script de test `src/selftest/kubejs/server_scripts/laura_selftest.js` dans `run-selftest/` avant le self test.
 
 Exemple :

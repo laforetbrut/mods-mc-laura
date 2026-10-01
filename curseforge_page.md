@@ -124,7 +124,7 @@
 <h3 align="center">Optional Integrations</h3>
 
 <p align="center">Nothing below is required and nothing is bundled. The table describes the Minecraft 1.21.1 builds.<br>
-<strong>Minecraft 1.20.1</strong>: Farmer's Delight (Refabricated on Fabric) and KubeJS on the three loaders. The Applied Energistics 2 bridge (three loaders) and the Curios bridge (NeoForge and Forge) are present but have never been run in game.<br>
+<strong>Minecraft 1.20.1</strong>: Farmer's Delight (Refabricated on Fabric) and KubeJS on the three loaders, and Curios on NeoForge and Forge. The Applied Energistics 2 bridge (three loaders) is present but has never been run in game.<br>
 <strong>Minecraft 26.1.2</strong>: Farmer's Delight Refabricated on Fabric only.</p>
 
 <div align="center">
@@ -306,7 +306,7 @@ Nine jars in all: pick the one that matches your Minecraft version and your load
 <h3 align="center">Intégrations Facultatives</h3>
 
 <p align="center">Rien de ce qui suit n'est obligatoire et rien n'est inclus dans le mod. Le tableau décrit les versions pour Minecraft 1.21.1.<br>
-<strong>Minecraft 1.20.1</strong> : Farmer's Delight (Refabricated sur Fabric) et KubeJS sur les trois chargeurs. Le pont Applied Energistics 2 (trois chargeurs) et le pont Curios (NeoForge et Forge) sont présents mais n'ont jamais été lancés en jeu.<br>
+<strong>Minecraft 1.20.1</strong> : Farmer's Delight (Refabricated sur Fabric) et KubeJS sur les trois chargeurs, et Curios sur NeoForge et Forge. Le pont Applied Energistics 2 (trois chargeurs) est présent mais n'a jamais été lancé en jeu.<br>
 <strong>Minecraft 26.1.2</strong> : Farmer's Delight Refabricated sur Fabric uniquement.</p>
 
 <div align="center">
