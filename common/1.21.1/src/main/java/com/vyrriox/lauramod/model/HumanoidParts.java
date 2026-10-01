@@ -16,7 +16,8 @@ import java.util.Map;
  * the head looking around and the held items need.
  *
  * <p>Names are compared without case, accents, spaces, dashes or underscores. When several bones
- * match, the one closest to the top of the hierarchy wins ("tete" before "tete_peau").
+ * match, the one closest to the top of the hierarchy wins ("tete" before "tete_peau"). Names tell
+ * arms from legs; which one is the right one is then read from their positions.
  *
  * @author vyrriox
  */
@@ -83,6 +84,23 @@ public final class HumanoidParts {
             }
             queue.addAll(bone.children);
         }
+        bySide(found, RIGHT_ARM, LEFT_ARM);
+        bySide(found, RIGHT_LEG, LEFT_LEG);
         return Map.copyOf(found);
+    }
+
+    /**
+     * Left and right are decided by where the bones are, not by their names: a model faces north,
+     * so its right side is the one with the larger X pivot. Many models label the sides the other
+     * way round (Java and Bedrock files put the right arm at negative X, a Blockbench project does
+     * not), and they would otherwise wave and hold items with the wrong hand.
+     */
+    private static void bySide(Map<String, ModelData.Bone> found, String right, String left) {
+        ModelData.Bone r = found.get(right);
+        ModelData.Bone l = found.get(left);
+        if (r != null && l != null && r.pivotX < l.pivotX) {
+            found.put(right, l);
+            found.put(left, r);
+        }
     }
 }

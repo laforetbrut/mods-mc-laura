@@ -192,9 +192,13 @@ public class CustomEntityModel extends EntityModel<LauraEntity> implements Armed
     @Override
     public void translateToHand(HumanoidArm side, PoseStack poseStack) {
         boolean right = side == HumanoidArm.RIGHT;
+        // A dedicated hand or item bone first, otherwise the arm found by HumanoidParts.
         boolean found = right
-                ? translateToBone(poseStack, "right_hand", "rightitem", "right_item", "hand_right", "right_arm", "rightarm", "arm_right", "bipedrightarm")
-                : translateToBone(poseStack, "left_hand", "leftitem", "left_item", "hand_left", "left_arm", "leftarm", "arm_left", "bipedleftarm");
+                ? translateToBone(poseStack, "right_hand", "rightitem", "right_item", "hand_right")
+                : translateToBone(poseStack, "left_hand", "leftitem", "left_item", "hand_left");
+        if (!found && model != null) {
+            found = translateToBone(poseStack, model.data().part(right ? HumanoidParts.RIGHT_ARM : HumanoidParts.LEFT_ARM));
+        }
         if (found) {
             poseStack.translate(0.0F, -0.1F, 0.0F);
         }

@@ -71,6 +71,16 @@ public final class ClientSelfTest {
         return LauraClient.nearestOwned(32);
     }
 
+    private static void wave(Minecraft mc) {
+        onServer(mc, player -> {
+            List<LauraEntity> all = LauraManager.findAll(player);
+            if (!all.isEmpty()) {
+                com.vyrriox.lauramod.world.LauraActions.perform(player, all.get(0), com.vyrriox.lauramod.network.LauraAction.EMOTE, "WAVE",
+                        com.vyrriox.lauramod.world.LauraActions.Source.MENU);
+            }
+        });
+    }
+
     private static void shot(Minecraft mc, String name) {
         Screenshot.grab(mc.gameDirectory, "laura_" + name + ".png", mc.getMainRenderTarget(),
                 message -> LauraMod.LOGGER.info("[CLIENTTEST] {}", message.getString()));
@@ -135,12 +145,47 @@ public final class ClientSelfTest {
             if (!all.isEmpty()) {
                 player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(Items.HAY_BLOCK));
                 com.vyrriox.lauramod.world.LauraActions.gag(player, all.get(0), player.getMainHandItem());
+                // She may have walked off since the first shots: bring her back in front, facing the player.
+                Vec3 look = player.getLookAngle();
+                all.get(0).teleportTo(player.getX() + look.x * 3, player.getY(), player.getZ() + look.z * 3);
+                all.get(0).getNavigation().stop();
                 all.get(0).setYRot(player.getYRot() + 180);
                 all.get(0).setYBodyRot(player.getYRot() + 180);
                 all.get(0).setYHeadRot(player.getYRot() + 180);
             }
         }));
         STEPS.add(() -> shot(mc, "world_hay"));
+        // The wave on the default model, as the reference for the custom model below.
+        STEPS.add(() -> onServer(mc, player -> {
+            List<LauraEntity> all = LauraManager.findAll(player);
+            if (!all.isEmpty()) {
+                com.vyrriox.lauramod.world.LauraActions.ungag(player, all.get(0), false);
+            }
+        }));
+        STEPS.add(() -> wave(mc));
+        STEPS.add(() -> shot(mc, "default_wave"));
+        // Custom model check: config/lauramod/models/test_fr.bbmodel, when present, has French bone
+        // names, a nose on its front, a blue right arm and no animation. It shows the borrowed
+        // default animations (the same wave, on "bras_d") and the bone lookup (hay on "tete", bag
+        // on "corps").
+        STEPS.add(() -> {
+            LauraEntity l = laura();
+            if (l != null) {
+                com.vyrriox.lauramod.client.network.LauraClientNetwork.setModel(l.getId(), "server:test_fr");
+            }
+        });
+        STEPS.add(() -> {
+        });
+        STEPS.add(() -> wave(mc));
+        STEPS.add(() -> shot(mc, "model_wave"));
+        STEPS.add(() -> onServer(mc, player -> {
+            List<LauraEntity> all = LauraManager.findAll(player);
+            if (!all.isEmpty()) {
+                player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(Items.HAY_BLOCK));
+                com.vyrriox.lauramod.world.LauraActions.gag(player, all.get(0), player.getMainHandItem());
+            }
+        }));
+        STEPS.add(() -> shot(mc, "model_hay"));
         STEPS.add(() -> onServer(mc, player -> {
             List<LauraEntity> all = LauraManager.findAll(player);
             if (!all.isEmpty()) {
@@ -150,6 +195,13 @@ public final class ClientSelfTest {
             }
         }));
         STEPS.add(() -> shot(mc, "world_back"));
+        STEPS.add(() -> {
+            LauraEntity l = laura();
+            if (l != null) {
+                com.vyrriox.lauramod.client.network.LauraClientNetwork.setModel(l.getId(), "reset");
+            }
+        });
+        STEPS.add(() -> shot(mc, "world_back_default"));
         STEPS.add(() -> onServer(mc, player -> {
             List<LauraEntity> all = LauraManager.findAll(player);
             if (!all.isEmpty()) {
