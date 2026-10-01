@@ -478,5 +478,9 @@
   "lauramod.help.look": "/laura skin ..., /laura model ..., /laura name <nama>",
   "lauramod.help.info": "/laura info, /laura where, /laura list, /laura lang",
   "lauramod.help.chat": "Ajak dia bicara di chat dalam jarak 64 blok. Rangkai perintah dengan \"lalu\". Tekan K untuk membuka menunya.",
-  "tag.item.lauramod.wearable_on_back": "Dapat dipakai di punggung"
+  "tag.item.lauramod.wearable_on_back": "Dapat dipakai di punggung",
+  "lauramod.release.confirm": "Ini tidak bisa dibatalkan: %s akan pergi selamanya dan menjatuhkan barang-barangnya. Ketik /laura release confirm untuk melanjutkan.",
+  "lauramod.release.done": "%s telah pergi selamanya.",
+  "lauramod.upload.quota": "Kamu sudah menyimpan %s file jenis ini di server. Ganti salah satunya (nama file sama) atau minta admin menghapus satu.",
+  "lauramod.upload.bbmodel_only": "Dari sini hanya file .bbmodel yang bisa dikirim (teksturnya ada di dalamnya). Taruh model .geo.json di folder server config/lauramod/models."
 }

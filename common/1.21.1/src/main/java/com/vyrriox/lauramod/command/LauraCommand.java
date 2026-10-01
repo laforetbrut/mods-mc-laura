@@ -1,7 +1,6 @@
 package com.vyrriox.lauramod.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -78,6 +77,11 @@ public final class LauraCommand {
             return 1;
         }));
         root.then(Commands.literal("dismiss").executes(c -> withLaura(c, LauraManager::dismiss)));
+        // For good: asked twice, because nothing brings her back afterwards.
+        root.then(Commands.literal("release")
+                .executes(c -> withLaura(c, (p, l) -> p.sendSystemMessage(
+                        Component.translatable("lauramod.release.confirm", l.getLauraName()).withStyle(ChatFormatting.RED))))
+                .then(Commands.literal("confirm").executes(c -> withLaura(c, LauraManager::release))));
         root.then(Commands.literal("list").executes(c -> {
             LauraManager.list(c.getSource().getPlayerOrException());
             return 1;
@@ -129,12 +133,8 @@ public final class LauraCommand {
                 .then(Commands.literal("set").executes(c -> run(c, LauraAction.SET_HOME, "")))
                 .then(Commands.literal("clear").executes(c -> run(c, LauraAction.CLEAR_HOME, ""))));
         root.then(Commands.literal("fetch")
-                .then(Commands.argument("item", StringArgumentType.string()).suggests(ITEMS)
-                        .executes(c -> fetch(c, StringArgumentType.getString(c, "item"), 0, false))
-                        .then(Commands.argument("count", IntegerArgumentType.integer(1, 576))
-                                .executes(c -> fetch(c, StringArgumentType.getString(c, "item"), IntegerArgumentType.getInteger(c, "count"), false))
-                                .then(Commands.literal("queue")
-                                        .executes(c -> fetch(c, StringArgumentType.getString(c, "item"), IntegerArgumentType.getInteger(c, "count"), true))))));
+                .then(Commands.argument("request", StringArgumentType.greedyString()).suggests(ITEMS)
+                        .executes(c -> fetch(c, StringArgumentType.getString(c, "request")))));
         root.then(taskCommand("chop", LauraTask.Type.CHOP_TREE));
         root.then(taskCommand("harvest", LauraTask.Type.HARVEST));
         root.then(taskCommand("cook", LauraTask.Type.COOK));
@@ -273,7 +273,8 @@ public final class LauraCommand {
         LauraEntity laura = LauraManager.find(player);
         if (laura == null) {
             if (action == LauraAction.COME) {
-                LauraManager.summon(player, false);
+                // None of hers is loaded: recall them, and only create one if she has none at all.
+                LauraManager.call(player);
                 return 1;
             }
             c.getSource().sendFailure(Component.translatable("lauramod.not_found"));
@@ -283,8 +284,39 @@ public final class LauraCommand {
         return 1;
     }
 
-    private static int fetch(CommandContext<CommandSourceStack> c, String item, int count, boolean queue) throws CommandSyntaxException {
-        return withLaura(c, (p, l) -> LauraActions.fetch(p, l, item, count, queue));
+    /**
+     * {@code <item> [count] [queue]}. The item is an id ("minecraft:bread"), a #tag, "held" or free
+     * text ("some bread"), none of which a single unquoted word argument can hold, so the whole
+     * request is read at once and the optional count and "queue" are taken from its end.
+     */
+    private static int fetch(CommandContext<CommandSourceStack> c, String request) throws CommandSyntaxException {
+        List<String> words = new java.util.ArrayList<>(List.of(request.trim().split("\\s+")));
+        boolean queue = words.size() > 1 && words.get(words.size() - 1).equalsIgnoreCase("queue");
+        if (queue) {
+            words.remove(words.size() - 1);
+        }
+        int count = 0;
+        if (words.size() > 1 && words.get(words.size() - 1).matches("\\d{1,3}")) {
+            count = Math.max(1, Math.min(576, Integer.parseInt(words.remove(words.size() - 1))));
+        }
+        String item = String.join(" ", words);
+        int amount = count;
+        return withLaura(c, (p, l) -> LauraActions.fetch(p, l, item, amount, queue));
+    }
+
+    /** A file name or URL followed by an optional "true" or "false" (slim arms). */
+    private record SkinArg(String value, boolean slim) {
+        static SkinArg parse(String raw, boolean defaultSlim) {
+            String text = raw.trim();
+            int space = text.lastIndexOf(' ');
+            if (space > 0) {
+                String last = text.substring(space + 1);
+                if (last.equalsIgnoreCase("true") || last.equalsIgnoreCase("false")) {
+                    return new SkinArg(text.substring(0, space).trim(), Boolean.parseBoolean(last));
+                }
+            }
+            return new SkinArg(text, defaultSlim);
+        }
     }
 
     private static int help(CommandContext<CommandSourceStack> c) {
@@ -349,16 +381,20 @@ public final class LauraCommand {
                 }))
                 .then(Commands.literal("builtin").then(Commands.argument("name", StringArgumentType.word()).suggests(BUILTIN_SKINS)
                         .executes(c -> skin(c, "builtin:" + StringArgumentType.getString(c, "name"), true))))
-                .then(Commands.literal("file").then(Commands.argument("name", StringArgumentType.string()).suggests(SKINS)
-                        .executes(c -> skin(c, "server:" + StringArgumentType.getString(c, "name"), true))
-                        .then(Commands.argument("slim", BoolArgumentType.bool())
-                                .executes(c -> skin(c, "server:" + StringArgumentType.getString(c, "name"), BoolArgumentType.getBool(c, "slim"))))))
+                // File names ("uploads/x") and URLs hold characters an unquoted word cannot: the rest of
+                // the line is read at once, with an optional "true" or "false" (slim arms) at its end.
+                .then(Commands.literal("file").then(Commands.argument("name", StringArgumentType.greedyString()).suggests(SKINS)
+                        .executes(c -> {
+                            SkinArg arg = SkinArg.parse(StringArgumentType.getString(c, "name"), true);
+                            return skin(c, "server:" + arg.value(), arg.slim());
+                        })))
                 .then(Commands.literal("player").then(Commands.argument("name", StringArgumentType.word())
                         .executes(c -> skin(c, "player:" + StringArgumentType.getString(c, "name"), true))))
-                .then(Commands.literal("url").then(Commands.argument("url", StringArgumentType.string())
-                        .executes(c -> skin(c, "url:" + StringArgumentType.getString(c, "url"), false))
-                        .then(Commands.argument("slim", BoolArgumentType.bool())
-                                .executes(c -> skin(c, "url:" + StringArgumentType.getString(c, "url"), BoolArgumentType.getBool(c, "slim"))))));
+                .then(Commands.literal("url").then(Commands.argument("url", StringArgumentType.greedyString())
+                        .executes(c -> {
+                            SkinArg arg = SkinArg.parse(StringArgumentType.getString(c, "url"), false);
+                            return skin(c, "url:" + arg.value(), arg.slim());
+                        })));
     }
 
     private static int skin(CommandContext<CommandSourceStack> c, String ref, boolean slim) throws CommandSyntaxException {
@@ -373,7 +409,7 @@ public final class LauraCommand {
                     c.getSource().getPlayerOrException().sendSystemMessage(Component.translatable("lauramod.model.list").append(" " + (models.isEmpty() ? "-" : String.join(", ", models))));
                     return 1;
                 }))
-                .then(Commands.argument("name", StringArgumentType.string()).suggests(MODELS)
+                .then(Commands.argument("name", StringArgumentType.greedyString()).suggests(MODELS)
                         .executes(c -> withLaura(c, (p, l) -> SkinService.requestModel(p, l, StringArgumentType.getString(c, "name")))));
     }
 

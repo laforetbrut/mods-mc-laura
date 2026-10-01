@@ -478,5 +478,9 @@
   "lauramod.help.look": "/laura skin ..., /laura model ..., /laura name <namn>",
   "lauramod.help.info": "/laura info, /laura where, /laura list, /laura lang",
   "lauramod.help.chat": "Prata med henne i chatten inom 64 block. Kedja order med \"sedan\". Tryck K för hennes meny.",
-  "tag.item.lauramod.wearable_on_back": "Kan bäras på ryggen"
+  "tag.item.lauramod.wearable_on_back": "Kan bäras på ryggen",
+  "lauramod.release.confirm": "Det här går inte att ångra: %s lämnar för gott och släpper sina saker. Skriv /laura release confirm för att fortsätta.",
+  "lauramod.release.done": "%s har gått för gott.",
+  "lauramod.upload.quota": "Du har redan %s filer av den här typen på servern. Ersätt en av dem (samma filnamn) eller be en admin ta bort en.",
+  "lauramod.upload.bbmodel_only": "Härifrån kan bara .bbmodel-filer skickas (de innehåller sina texturer). Lägg .geo.json-modeller i servermappen config/lauramod/models."
 }

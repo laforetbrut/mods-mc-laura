@@ -34,6 +34,73 @@ public final class SkinService {
         }
     }
 
+    /**
+     * Gives her the default skin of the config. A server file gets its current hash (clients
+     * download it by hash), a player name is looked up in the background (she wears the built-in
+     * skin until the answer arrives), anything unusable falls back to the built-in skin.
+     */
+    public static void applyDefaultSkin(LauraEntity laura) {
+        SkinRef ref = SkinRef.parse(LauraConfig.defaultSkin.get());
+        switch (ref.type()) {
+            case SERVER -> {
+                ServerAssetStore.Entry entry = entry(AssetKind.SKIN, ref.value());
+                laura.setSkin(entry == null ? SkinRef.DEFAULT : new SkinRef(SkinRef.Type.SERVER, entry.name(), entry.sha1()), true);
+            }
+            case PLAYER -> {
+                laura.setSkin(SkinRef.DEFAULT, true);
+                MinecraftServer server = laura.getServer();
+                if (server == null || !LauraConfig.allowPlayerNameSkins.get() || !MojangSkinResolver.isValidName(ref.value())) {
+                    return;
+                }
+                MojangSkinResolver.resolve(ref.value()).thenAccept(result -> server.execute(() -> {
+                    // Only if she still wears the placeholder: a skin chosen in the meantime stays.
+                    if (laura.isAlive() && result.isPresent() && laura.getSkin().equals(SkinRef.DEFAULT)) {
+                        MojangSkinResolver.Result r = result.get();
+                        laura.setSkin(new SkinRef(SkinRef.Type.URL, r.url(), ""), r.slim());
+                        laura.setSkinLabel("player:" + r.name());
+                    }
+                }));
+            }
+            case URL -> {
+                String url = SkinRef.normalizeUrl(ref.value());
+                boolean allowed = LauraConfig.allowUrlSkins.get() && url.length() <= 1024 && SkinRef.isAllowedUrl(url, LauraConfig.urlDomainWhitelist.get());
+                laura.setSkin(allowed ? new SkinRef(SkinRef.Type.URL, url, "") : SkinRef.DEFAULT, true);
+            }
+            default -> laura.setSkin(ref, true);
+        }
+    }
+
+    /** Gives her the default model of the config: a server file (with its current hash) or a resource pack model. */
+    public static void applyDefaultModel(LauraEntity laura) {
+        String name = LauraConfig.defaultModel.get() == null ? "" : LauraConfig.defaultModel.get().trim();
+        if (name.isEmpty() || !LauraConfig.allowCustomModels.get()) {
+            laura.setModel("");
+            return;
+        }
+        boolean pack = name.startsWith("pack:");
+        String plain = pack ? name.substring(5) : name.startsWith("server:") ? name.substring(7) : name;
+        int hash = plain.indexOf('#');
+        if (hash > 0) {
+            plain = plain.substring(0, hash);
+        }
+        if (!ServerAssetStore.isSafeName(plain)) {
+            laura.setModel("");
+            return;
+        }
+        ServerAssetStore.Entry entry = pack ? null : entry(AssetKind.MODEL, plain);
+        laura.setModel(entry == null ? "pack:" + plain : "server:" + entry.name() + "#" + entry.sha1());
+    }
+
+    /** A server file by name, looking again in the folder if it was added since the last scan. */
+    private static ServerAssetStore.Entry entry(AssetKind kind, String name) {
+        ServerAssetStore.Entry entry = ServerAssetStore.get(kind, name);
+        if (entry == null && ServerAssetStore.isSafeName(name)) {
+            rescanThrottled();
+            entry = ServerAssetStore.get(kind, name);
+        }
+        return entry;
+    }
+
     public static boolean canChangeLook(ServerPlayer player, LauraEntity laura) {
         return laura.isOwnedBy(player) || LauraConfig.othersCanChangeSkin.get() || player.hasPermissions(2);
     }
@@ -46,7 +113,7 @@ public final class SkinService {
         }
         String raw = rawRef == null ? "" : rawRef.trim();
         if (raw.equalsIgnoreCase("reset") || raw.isEmpty()) {
-            laura.setSkin(SkinRef.parse(LauraConfig.defaultSkin.get()), true);
+            applyDefaultSkin(laura);
             player.sendSystemMessage(Component.translatable("lauramod.skin.reset"));
             return;
         }
@@ -127,7 +194,7 @@ public final class SkinService {
         }
         String name = rawName == null ? "" : rawName.trim();
         if (name.isEmpty() || name.equalsIgnoreCase("reset") || name.equalsIgnoreCase("default")) {
-            laura.setModel("");
+            applyDefaultModel(laura);
             player.sendSystemMessage(Component.translatable("lauramod.model.reset"));
             return;
         }
@@ -171,16 +238,43 @@ public final class SkinService {
     }
 
     /** Called when a complete upload arrived. */
+    /** Files one player may keep in the uploads folder (replacing one of their own files is always allowed). */
+    public static int uploadQuota(AssetKind kind) {
+        return kind == AssetKind.SKIN ? LauraConfig.maxSkinUploadsPerPlayer.getInt() : LauraConfig.maxModelUploadsPerPlayer.getInt();
+    }
+
+    private static String uploadPrefix(ServerPlayer player) {
+        return sanitize(player.getGameProfile().getName()) + "_";
+    }
+
+    public static boolean hasUploadRoom(ServerPlayer player, AssetKind kind, String name) {
+        String prefix = uploadPrefix(player);
+        return ServerAssetStore.hasUpload(kind, prefix + sanitize(name)) || ServerAssetStore.countUploads(kind, prefix) < uploadQuota(kind);
+    }
+
     public static void finishUpload(ServerPlayer player, LauraEntity laura, AssetKind kind, String name, byte[] data, boolean slim) {
-        String stem = sanitize(player.getGameProfile().getName()) + "_" + sanitize(name);
+        if (laura == null || !canChangeLook(player, laura)) {
+            LauraNetwork.uploadResult(player, false, Component.translatable("lauramod.skin.not_allowed"));
+            return;
+        }
+        if (!hasUploadRoom(player, kind, name)) {
+            LauraNetwork.uploadResult(player, false, Component.translatable("lauramod.upload.quota", uploadQuota(kind)));
+            return;
+        }
+        String stem = uploadPrefix(player) + sanitize(name);
         if (kind == AssetKind.SKIN) {
             if (!ServerAssetStore.isValidSkinPng(data)) {
                 LauraNetwork.uploadResult(player, false, Component.translatable("lauramod.upload.invalid_skin"));
                 return;
             }
         } else {
+            if (name.toLowerCase(Locale.ROOT).endsWith(".geo.json")) {
+                // Stored uploads are single .bbmodel files (they hold their textures).
+                LauraNetwork.uploadResult(player, false, Component.translatable("lauramod.upload.bbmodel_only"));
+                return;
+            }
             try {
-                ModelParser.parse(name.endsWith(".geo.json") ? name : name + ".bbmodel", new String(data, StandardCharsets.UTF_8), null);
+                ModelParser.parse(name.toLowerCase(Locale.ROOT).endsWith(".bbmodel") ? name : name + ".bbmodel", new String(data, StandardCharsets.UTF_8), null);
             } catch (RuntimeException e) {
                 LauraNetwork.uploadResult(player, false, Component.translatable("lauramod.upload.invalid_model", e.getMessage()));
                 return;
@@ -194,12 +288,12 @@ public final class SkinService {
             }
             LauraMod.LOGGER.info("{} uploaded {} {}", player.getGameProfile().getName(), kind.name().toLowerCase(Locale.ROOT), entry.name());
             LauraNetwork.uploadResult(player, true, Component.translatable("lauramod.upload.done", entry.name()));
-            if (laura != null && canChangeLook(player, laura)) {
-                if (kind == AssetKind.SKIN) {
-                    laura.setSkin(new SkinRef(SkinRef.Type.SERVER, entry.name(), entry.sha1()), slim);
-                } else {
-                    laura.setModel("server:" + entry.name() + "#" + entry.sha1());
-                }
+            if (kind == AssetKind.SKIN) {
+                laura.setSkin(new SkinRef(SkinRef.Type.SERVER, entry.name(), entry.sha1()), slim);
+                LauraAdvancements.award(player, "new_look");
+            } else {
+                laura.setModel("server:" + entry.name() + "#" + entry.sha1());
+                LauraAdvancements.award(player, "makeover");
             }
         } catch (IOException e) {
             LauraMod.LOGGER.warn("Upload from {} failed: {}", player.getGameProfile().getName(), e.getMessage());

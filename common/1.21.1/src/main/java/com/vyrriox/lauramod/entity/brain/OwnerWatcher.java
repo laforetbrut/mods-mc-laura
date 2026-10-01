@@ -11,8 +11,12 @@ import com.vyrriox.lauramod.gift.GiftTable;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.WalkTarget;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -54,6 +58,9 @@ public final class OwnerWatcher {
             return;
         }
         boolean comments = LauraConfig.commentActivities.get() && !laura.isAsleep();
+        if (near && LauraConfig.jealousOfVillagers.get() && laura.getMode() == com.vyrriox.lauramod.entity.LauraMode.FOLLOW && !laura.isAsleep()) {
+            keepVillagersAway(laura);
+        }
 
         // AFK detection
         Vec3 pos = owner.position();
@@ -142,6 +149,19 @@ public final class OwnerWatcher {
                     laura.playEmote(Emote.POUT);
                     break;
                 }
+            }
+        }
+    }
+
+    /** Villagers step back while she walks around with her partner: nobody gets too close to him. */
+    private static void keepVillagersAway(LauraEntity laura) {
+        for (Villager villager : laura.level().getEntitiesOfClass(Villager.class, laura.getBoundingBox().inflate(5.0, 2.0, 5.0))) {
+            if (villager.isSleeping() || villager.isTrading()) {
+                continue;
+            }
+            Vec3 away = DefaultRandomPos.getPosAway(villager, 10, 5, laura.position());
+            if (away != null) {
+                villager.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(away, 0.6F, 1));
             }
         }
     }

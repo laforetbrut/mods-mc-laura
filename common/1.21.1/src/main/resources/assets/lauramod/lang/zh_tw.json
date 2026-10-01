@@ -487,5 +487,9 @@
   "lauramod.help.look": "/laura skin ...，/laura model ...，/laura name <name>",
   "lauramod.help.info": "/laura info，/laura where，/laura list，/laura lang",
   "lauramod.help.chat": "在 64 格內的聊天欄和她說話。用「然後」連接多個指令。按 K 開啟她的選單。",
-  "tag.item.lauramod.wearable_on_back": "可背在背上"
+  "tag.item.lauramod.wearable_on_back": "可背在背上",
+  "lauramod.release.confirm": "此操作無法復原：%s 將永遠離開並丟下她的物品。輸入 /laura release confirm 以繼續。",
+  "lauramod.release.done": "%s 已永遠離開。",
+  "lauramod.upload.quota": "你在伺服器上已有 %s 個此類檔案。請取代其中一個（檔名相同），或請管理員刪除一個。",
+  "lauramod.upload.bbmodel_only": "這裡只能傳送 .bbmodel 檔案（其中包含材質）。請把 .geo.json 模型放進伺服器的 config/lauramod/models 資料夾。"
 }

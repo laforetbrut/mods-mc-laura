@@ -324,6 +324,50 @@ public final class LauraTestCases {
             LauraActions.fetch(player, laura, "minecraft:apple", 3, false);
             ctx.waitFor("3 apples delivered", 800, () -> player.getInventory().countItem(Items.APPLE) >= 3, ctx::succeed);
         }));
+        // The command takes full ids, a count and "queue" on one line.
+        add(tests, "fetch_command", 900, ctx -> withLaura(ctx, laura -> {
+            ServerPlayer player = ctx.player();
+            BlockPos chest = ctx.origin.offset(8, 0, 0);
+            ctx.level.setBlockAndUpdate(chest, Blocks.CHEST.defaultBlockState());
+            if (ctx.level.getBlockEntity(chest) instanceof ChestBlockEntity be) {
+                be.setItem(0, new ItemStack(Items.BREAD, 10));
+            }
+            ctx.server().getCommands().performPrefixedCommand(player.createCommandSourceStack(), "laura fetch minecraft:bread 2");
+            ctx.waitFor("2 breads delivered", 800, () -> player.getInventory().countItem(Items.BREAD) >= 2, () -> {
+                ctx.check(player.getInventory().countItem(Items.BREAD) == 2, "count ignored: " + player.getInventory().countItem(Items.BREAD));
+                ctx.succeed();
+            });
+        }));
+        // "Come" brings her back; it never creates a second companion.
+        add(tests, "come_does_not_summon", 200, ctx -> withLaura(ctx, laura -> {
+            ServerPlayer player = ctx.player();
+            LauraManager.call(player);
+            ctx.server().getCommands().performPrefixedCommand(player.createCommandSourceStack(), "laura come");
+            ctx.after(5, () -> {
+                ctx.check(LauraWorldData.get(ctx.server()).byOwner(player.getUUID()).size() == 1, "a second companion was created");
+                ctx.succeed();
+            });
+        }));
+        add(tests, "dismiss_and_release", 300, ctx -> withLaura(ctx, laura -> {
+            ServerPlayer player = ctx.player();
+            int before = laura.getAffection();
+            LauraManager.dismiss(player, laura);
+            resetCooldown(ctx);
+            LauraManager.summon(player, false);
+            ctx.waitFor("her to come back", 100, () -> !LauraManager.findAll(player).isEmpty(), () -> {
+                LauraEntity back = LauraManager.findAll(player).get(0);
+                ctx.check(back.getAffection() == before - LauraConfig.dismissAffectionPenalty.getInt(), "dismiss penalty: " + before + " to " + back.getAffection());
+                back.inventory().setItem(0, new ItemStack(Items.DIAMOND, 3));
+                // The first command only asks for confirmation.
+                ctx.server().getCommands().performPrefixedCommand(player.createCommandSourceStack(), "laura release");
+                ctx.check(back.isAlive(), "released without confirmation");
+                ctx.server().getCommands().performPrefixedCommand(player.createCommandSourceStack(), "laura release confirm");
+                ctx.check(LauraWorldData.get(ctx.server()).byOwner(player.getUUID()).isEmpty(), "she is still in the world data");
+                ctx.check(!ctx.level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, back.getBoundingBox().inflate(3),
+                        e -> e.getItem().is(Items.DIAMOND)).isEmpty(), "her belongings were not dropped");
+                ctx.succeed();
+            });
+        }));
         add(tests, "assign_chest", 200, ctx -> withLaura(ctx, laura -> {
             ServerPlayer player = ctx.player();
             BlockPos chest = ctx.origin.offset(0, 0, 3);

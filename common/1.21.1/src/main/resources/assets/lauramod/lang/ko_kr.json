@@ -478,5 +478,9 @@
   "lauramod.help.look": "/laura skin ..., /laura model ..., /laura name <이름>",
   "lauramod.help.info": "/laura info, /laura where, /laura list, /laura lang",
   "lauramod.help.chat": "64블록 이내에서 채팅으로 말을 걸 수 있어요. \"그리고 나서\"로 명령을 이어 붙일 수 있어요. K 키로 그녀의 메뉴를 열어요.",
-  "tag.item.lauramod.wearable_on_back": "등에 착용 가능"
+  "tag.item.lauramod.wearable_on_back": "등에 착용 가능",
+  "lauramod.release.confirm": "되돌릴 수 없어요: %s 은(는) 영영 떠나고 소지품을 떨어뜨려요. 계속하려면 /laura release confirm 을 입력하세요.",
+  "lauramod.release.done": "%s 은(는) 영영 떠났어요.",
+  "lauramod.upload.quota": "이 종류의 파일이 서버에 이미 %s개 있어요. 같은 파일 이름으로 바꾸거나 관리자에게 삭제를 부탁하세요.",
+  "lauramod.upload.bbmodel_only": "여기서는 .bbmodel 파일만 보낼 수 있어요(텍스처가 들어 있어요). .geo.json 모델은 서버의 config/lauramod/models 폴더에 넣으세요."
 }

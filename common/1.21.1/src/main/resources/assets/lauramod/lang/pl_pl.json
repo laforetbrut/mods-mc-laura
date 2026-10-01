@@ -487,5 +487,9 @@
   "lauramod.help.look": "/laura skin ..., /laura model ..., /laura name <imię>",
   "lauramod.help.info": "/laura info, /laura where, /laura list, /laura lang",
   "lauramod.help.chat": "Pisz do niej na czacie w promieniu 64 bloków. Łącz polecenia słowem \"potem\". Naciśnij K, aby otworzyć jej menu.",
-  "tag.item.lauramod.wearable_on_back": "Do noszenia na plecach"
+  "tag.item.lauramod.wearable_on_back": "Do noszenia na plecach",
+  "lauramod.release.confirm": "Tego nie da się cofnąć: %s odejdzie na zawsze i upuści swoje rzeczy. Wpisz /laura release confirm, aby kontynuować.",
+  "lauramod.release.done": "%s odeszła na zawsze.",
+  "lauramod.upload.quota": "Masz już %s plików tego typu na serwerze. Zastąp jeden z nich (ta sama nazwa pliku) albo poproś admina o usunięcie jednego.",
+  "lauramod.upload.bbmodel_only": "Stąd można wysyłać tylko pliki .bbmodel (zawierają swoje tekstury). Modele .geo.json umieść w folderze serwera config/lauramod/models."
 }

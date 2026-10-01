@@ -231,12 +231,36 @@ public final class ServerAssetStore {
         }
     }
 
+    /** True if the uploads folder already holds a file with this stem (it will be replaced, not added). */
+    public static synchronized boolean hasUpload(AssetKind kind, String fileStem) {
+        return Files.isRegularFile(dir(kind).resolve("uploads").resolve(fileStem + uploadExtension(kind)));
+    }
+
+    /** Number of uploaded files whose name starts with the prefix (the uploads of one player). */
+    public static synchronized int countUploads(AssetKind kind, String prefix) {
+        Path dir = dir(kind).resolve("uploads");
+        if (!Files.isDirectory(dir)) {
+            return 0;
+        }
+        String extension = uploadExtension(kind);
+        try (java.util.stream.Stream<Path> files = Files.list(dir)) {
+            return (int) files.map(p -> p.getFileName().toString()).filter(n -> n.startsWith(prefix) && n.endsWith(extension)).count();
+        } catch (IOException e) {
+            LauraMod.LOGGER.warn("Could not list uploads: {}", e.getMessage());
+            // Unknown count: refuse rather than let the folder grow without limit.
+            return Integer.MAX_VALUE;
+        }
+    }
+
+    private static String uploadExtension(AssetKind kind) {
+        return kind == AssetKind.SKIN ? ".png" : ".bbmodel";
+    }
+
     /** Saves an uploaded file in the uploads folder and returns its entry. */
     public static synchronized Entry storeUpload(AssetKind kind, String fileStem, byte[] data) throws IOException {
         Path dir = dir(kind).resolve("uploads");
         Files.createDirectories(dir);
-        String extension = kind == AssetKind.SKIN ? ".png" : ".bbmodel";
-        Path target = dir.resolve(fileStem + extension);
+        Path target = dir.resolve(fileStem + uploadExtension(kind));
         Files.write(target, data);
         rescan();
         return get(kind, "uploads/" + fileStem);
@@ -302,11 +326,16 @@ public final class ServerAssetStore {
             Clients download models from the server, so everybody sees the same Laura.
 
             Animation names are matched by their last part: "animation.laura.walk" is used for walking.
-            Recognized names: idle, walk, run, sit, sleep, swim, sad, angry, happy, hungry, tired, gagged,
-            carry, attack, eat, and every emote (wave, hug, kiss, dance, clap, laugh, cry, blush, facepalm,
-            jump, bow, think, shrug, stomp, yawn, celebrate). Missing animations are simply skipped.
+            Recognized names: idle, walk, sit, sleep, swim, sad, angry, happy, hungry, tired, gagged, carry,
+            carry_walk, eat, and every emote of the emote wheel (wave, hug, kiss, dance, clap, laugh, cry,
+            blush, facepalm, jump, bow, think, shrug, stomp, yawn, celebrate, snap, twirl, hum, stretch...).
+            Missing animations fall back to idle or are skipped. A model with no animation at all borrows
+            the default ones, and its arms and legs swing when it walks.
 
-            Bone names used for attachments: head (hay gag), right_hand / left_hand (held items).
+            Bones are found by name, in English or not (head/tete/kopf, body/corps, right_arm/bras_d,
+            left_leg/jambe_g...). Left and right are read from where the bones are, not from their names.
+            They are used for the hay gag (head), the bag on her back (body) and held items (right_hand /
+            left_hand bones if the model has them, otherwise the arms).
             See docs/MODELS.md in the project repository for the full guide.
             """;
 }

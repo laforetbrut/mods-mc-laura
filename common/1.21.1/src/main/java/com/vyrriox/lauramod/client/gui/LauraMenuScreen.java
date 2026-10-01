@@ -822,6 +822,10 @@ public class LauraMenuScreen extends Screen {
                 upload(AssetKind.SKIN, file);
             } else if (n.endsWith(".bbmodel")) {
                 upload(AssetKind.MODEL, file);
+            } else if (n.endsWith(".geo.json")) {
+                // A Bedrock model needs its texture file next to it: it cannot travel as one file.
+                ClientState.lastUploadMessage = Component.translatable("lauramod.upload.bbmodel_only");
+                ClientState.lastUploadSuccess = false;
             }
         }
     }

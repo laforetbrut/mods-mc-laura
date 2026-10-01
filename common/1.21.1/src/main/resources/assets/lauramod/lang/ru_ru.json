@@ -478,5 +478,9 @@
   "lauramod.help.look": "/laura skin ..., /laura model ..., /laura name <name>",
   "lauramod.help.info": "/laura info, /laura where, /laura list, /laura lang",
   "lauramod.help.chat": "Говори с ней в чате в радиусе 64 блоков. Связывай приказы словом «потом». Меню: клавиша K.",
-  "tag.item.lauramod.wearable_on_back": "Можно носить на спине"
+  "tag.item.lauramod.wearable_on_back": "Можно носить на спине",
+  "lauramod.release.confirm": "Это нельзя отменить: %s уйдёт навсегда и бросит свои вещи. Введи /laura release confirm, чтобы продолжить.",
+  "lauramod.release.done": "%s ушла навсегда.",
+  "lauramod.upload.quota": "У тебя уже %s файлов этого типа на сервере. Замени один из них (то же имя файла) или попроси админа удалить один.",
+  "lauramod.upload.bbmodel_only": "Отсюда можно отправлять только файлы .bbmodel (в них есть текстуры). Модели .geo.json положи в папку сервера config/lauramod/models."
 }

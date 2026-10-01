@@ -11,7 +11,7 @@ import com.vyrriox.lauramod.entity.ai.LauraMovement;
 import com.vyrriox.lauramod.entity.brain.Needs;
 import com.vyrriox.lauramod.network.LauraNetwork;
 import com.vyrriox.lauramod.registry.LauraRegistries;
-import com.vyrriox.lauramod.skin.SkinRef;
+import com.vyrriox.lauramod.skin.SkinService;
 import com.vyrriox.lauramod.util.ChatButtons;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -364,17 +364,39 @@ public final class LauraManager {
         }
     }
 
-    /** The player already has the maximum: every companion comes, the dead ones are reminded. */
+    /**
+     * "Come" (command, call key, Laura's Heart) when none of the player's companions is loaded:
+     * brings back the ones she has, wherever they are. A new companion is only created when she has
+     * none at all; more companions are asked for with the summon command or the chat phrase.
+     */
+    public static void call(ServerPlayer player) {
+        MinecraftServer server = player.getServer();
+        if (server == null) {
+            return;
+        }
+        List<LauraWorldData.Record> mine = data(server).byOwner(player.getUUID());
+        if (mine.isEmpty() || mine.stream().anyMatch(r -> r.dismissed && r.snapshot != null)) {
+            // First companion, or a dismissed one coming back.
+            summon(player, false);
+            return;
+        }
+        callEveryone(player, mine);
+    }
+
+    /** Every companion of the player comes, the dead ones are reminded. */
     private static void callEveryone(ServerPlayer player, List<LauraWorldData.Record> mine) {
         boolean anyone = false;
+        boolean waiting = false;
         for (LauraWorldData.Record r : mine) {
             if (r.dead) {
                 player.sendSystemMessage(Component.translatable("lauramod.grave.waiting", r.lauraName).withStyle(ChatFormatting.GRAY));
+                waiting = true;
                 continue;
             }
             if (r.respawnAt >= 0) {
                 long seconds = Math.max(1, (r.respawnAt - player.serverLevel().getGameTime()) / 20);
                 player.sendSystemMessage(Component.translatable("lauramod.summon.respawning", r.lauraName, seconds));
+                waiting = true;
                 continue;
             }
             Entity e = findEntity(player.getServer(), r.laura, r.dimension);
@@ -392,7 +414,7 @@ public final class LauraManager {
             LauraEntity nearest = findNear(player, 16);
             if (nearest != null) {
                 LauraSpeech.say(nearest, player, "already_here", LineFormatter.values());
-            } else {
+            } else if (!waiting && mine.size() >= LauraConfig.maxPerPlayer.getInt()) {
                 player.sendSystemMessage(Component.translatable("lauramod.summon.max", LauraConfig.maxPerPlayer.getInt()));
             }
         } else {
@@ -462,8 +484,8 @@ public final class LauraManager {
 
     public static void initDefaults(LauraEntity laura, ServerPlayer owner) {
         laura.setCustomName(Component.literal(nextName(owner)));
-        laura.setSkin(SkinRef.parse(LauraConfig.defaultSkin.get()), true);
-        laura.setModel(LauraConfig.defaultModel.get());
+        SkinService.applyDefaultSkin(laura);
+        SkinService.applyDefaultModel(laura);
         laura.setAffection(LauraConfig.startAffection.getInt());
         laura.setCombatMode(LauraConfig.defaultCombatMode.get());
         laura.setSummonGameTime(laura.level().getGameTime());
@@ -523,6 +545,9 @@ public final class LauraManager {
 
     public static void dismiss(ServerPlayer player, LauraEntity laura) {
         LauraSpeech.say(laura, player, "dismiss", LineFormatter.values());
+        // Being sent away hurts: she remembers it when she comes back.
+        laura.brain().changeAffection(-LauraConfig.dismissAffectionPenalty.getInt());
+        laura.brain().needs().add(Needs.Need.ATTENTION, -25);
         LauraWorldData data = data(player.getServer());
         LauraWorldData.Record record = data.getOrCreate(laura.getUUID(), player.getUUID());
         record.snapshot = laura.saveWithoutId(new CompoundTag());
@@ -537,8 +562,14 @@ public final class LauraManager {
 
     /** Forgets a companion for good (admin, or "release"). */
     public static void release(ServerPlayer player, LauraEntity laura) {
+        String name = laura.getLauraName();
+        laura.dropBelongings();
+        if (laura.level() instanceof ServerLevel level) {
+            level.sendParticles(ParticleTypes.CLOUD, laura.getX(), laura.getY() + 1, laura.getZ(), 30, 0.4, 0.6, 0.4, 0.02);
+        }
         data(player.getServer()).remove(laura.getUUID());
         laura.discard();
+        player.sendSystemMessage(Component.translatable("lauramod.release.done", name).withStyle(ChatFormatting.GRAY));
     }
 
     // ------------------------------------------------------------------ recall across unloaded chunks

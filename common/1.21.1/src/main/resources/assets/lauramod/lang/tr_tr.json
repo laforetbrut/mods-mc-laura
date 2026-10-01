@@ -478,5 +478,9 @@
   "lauramod.help.look": "/laura skin ..., /laura model ..., /laura name <ad>",
   "lauramod.help.info": "/laura info, /laura where, /laura list, /laura lang",
   "lauramod.help.chat": "Sohbette 64 blok içinden onunla konuş. Emirleri \"sonra\" ile zincirle. Menüsü için K tuşuna bas.",
-  "tag.item.lauramod.wearable_on_back": "Sırtta taşınabilir"
+  "tag.item.lauramod.wearable_on_back": "Sırtta taşınabilir",
+  "lauramod.release.confirm": "Bu geri alınamaz: %s temelli gidecek ve eşyalarını bırakacak. Devam etmek için /laura release confirm yaz.",
+  "lauramod.release.done": "%s temelli gitti.",
+  "lauramod.upload.quota": "Sunucuda bu türden zaten %s dosyan var. Birini değiştir (aynı dosya adı) ya da bir yöneticiden birini silmesini iste.",
+  "lauramod.upload.bbmodel_only": "Buradan yalnızca .bbmodel dosyaları gönderilebilir (dokularını içerirler). .geo.json modellerini sunucunun config/lauramod/models klasörüne koy."
 }

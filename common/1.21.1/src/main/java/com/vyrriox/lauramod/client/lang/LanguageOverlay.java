@@ -43,7 +43,7 @@ public final class LanguageOverlay extends Language {
         }
     }
 
-    /** Forces a reload of the files (after a resource reload or /laura reload). */
+    /** Forces a reload of the files (after a resource reload, F3+T). */
     public static void reload() {
         loadedFor = "";
         ensureInstalled();

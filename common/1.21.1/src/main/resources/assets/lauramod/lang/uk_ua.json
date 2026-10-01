@@ -478,5 +478,9 @@
   "lauramod.help.look": "/laura skin ..., /laura model ..., /laura name <name>",
   "lauramod.help.info": "/laura info, /laura where, /laura list, /laura lang",
   "lauramod.help.chat": "Розмовляй із нею в чаті в радіусі 64 блоків. З'єднуй накази словом «потім». Меню: клавіша K.",
-  "tag.item.lauramod.wearable_on_back": "Можна носити на спині"
+  "tag.item.lauramod.wearable_on_back": "Можна носити на спині",
+  "lauramod.release.confirm": "Це не можна скасувати: %s піде назавжди й покине свої речі. Введи /laura release confirm, щоб продовжити.",
+  "lauramod.release.done": "%s пішла назавжди.",
+  "lauramod.upload.quota": "У тебе вже %s файлів цього типу на сервері. Заміни один із них (те саме ім'я файлу) або попроси адміна видалити один.",
+  "lauramod.upload.bbmodel_only": "Звідси можна надсилати лише файли .bbmodel (вони містять текстури). Моделі .geo.json поклади в теку сервера config/lauramod/models."
 }

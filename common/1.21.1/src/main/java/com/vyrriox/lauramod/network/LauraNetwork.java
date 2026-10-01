@@ -219,6 +219,19 @@ public final class LauraNetwork {
             uploadResult(player, false, Component.translatable("lauramod.upload.disabled"));
             return;
         }
+        // Nothing is buffered or written for a player who may not change that companion's look,
+        // or who already filled their share of the uploads folder.
+        LauraEntity target = lauraById(player, entityId);
+        if (target == null || !SkinService.canChangeLook(player, target)) {
+            uploadResult(player, false, Component.translatable("lauramod.skin.not_allowed"));
+            UPLOADS.remove(player.getUUID());
+            return;
+        }
+        if (offset == 0 && !SkinService.hasUploadRoom(player, kind, name)) {
+            uploadResult(player, false, Component.translatable("lauramod.upload.quota", SkinService.uploadQuota(kind)));
+            UPLOADS.remove(player.getUUID());
+            return;
+        }
         if (total <= 0 || total > limit) {
             uploadResult(player, false, Component.translatable("lauramod.upload.too_big", limit / 1024));
             UPLOADS.remove(player.getUUID());

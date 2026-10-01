@@ -487,5 +487,9 @@
   "lauramod.help.look": "/laura skin ...，/laura model ...，/laura name <name>",
   "lauramod.help.info": "/laura info，/laura where，/laura list，/laura lang",
   "lauramod.help.chat": "在 64 格内的聊天栏和她说话。用“然后”连接多个指令。按 K 打开她的菜单。",
-  "tag.item.lauramod.wearable_on_back": "可背在背上"
+  "tag.item.lauramod.wearable_on_back": "可背在背上",
+  "lauramod.release.confirm": "此操作无法撤销：%s 将永远离开并丢下她的物品。输入 /laura release confirm 以继续。",
+  "lauramod.release.done": "%s 已永远离开。",
+  "lauramod.upload.quota": "你在服务器上已有 %s 个此类文件。请替换其中一个（文件名相同），或请管理员删除一个。",
+  "lauramod.upload.bbmodel_only": "这里只能发送 .bbmodel 文件（其中包含贴图）。请把 .geo.json 模型放进服务器的 config/lauramod/models 文件夹。"
 }

@@ -354,6 +354,11 @@ public class LauraEntity extends TamableAnimal {
         if (LauraManager.keepsBelongingsOnDeath() && this.getOwnerUUID() != null) {
             return;
         }
+        dropBelongings();
+    }
+
+    /** Drops everything she carries at her feet: bag, equipment, items kept for her partner, back item. */
+    public void dropBelongings() {
         for (int i = 0; i < inventory.getContainerSize(); i++) {
             ItemStack stack = inventory.removeItemNoUpdate(i);
             if (!stack.isEmpty()) {
@@ -540,8 +545,9 @@ public class LauraEntity extends TamableAnimal {
 
     public void setModel(String model) {
         String old = this.entityData.get(DATA_MODEL);
-        this.entityData.set(DATA_MODEL, model == null ? "" : model);
-        if (!old.equals(model) && !this.level().isClientSide) {
+        String value = model == null ? "" : model;
+        this.entityData.set(DATA_MODEL, value);
+        if (!old.equals(value) && !this.level().isClientSide) {
             brain.onLookChanged();
         }
     }

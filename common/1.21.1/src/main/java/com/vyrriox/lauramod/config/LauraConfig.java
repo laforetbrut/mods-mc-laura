@@ -151,6 +151,7 @@ public final class LauraConfig {
     public static ConfigFile.StringListValue ungagItems;
     public static ConfigFile.IntValue gagSeconds;
     public static ConfigFile.IntValue gagAffectionPenalty;
+    public static ConfigFile.IntValue dismissAffectionPenalty;
 
     // dialogue
     public static ConfigFile.IntValue chatRange;
@@ -169,6 +170,8 @@ public final class LauraConfig {
     public static ConfigFile.BoolValue allowPlayerNameSkins;
     public static ConfigFile.BoolValue allowSkinUploads;
     public static ConfigFile.IntValue maxSkinKb;
+    public static ConfigFile.IntValue maxSkinUploadsPerPlayer;
+    public static ConfigFile.IntValue maxModelUploadsPerPlayer;
     public static ConfigFile.BoolValue othersCanChangeSkin;
 
     // models
@@ -218,6 +221,7 @@ public final class LauraConfig {
         respawnDelaySeconds = general.integer("respawnDelaySeconds", 30, 0, 3600, "Delay before she comes back in TIMER mode.");
         reviveItems = general.list("reviveItems", List.of("#minecraft:small_flowers", "#minecraft:flowers"), "Items that can be laid on a gravestone to bring her back.");
         inventoryRows = general.integer("inventoryRows", 3, 1, 6, "Rows of 9 slots in her personal inventory.");
+        dismissAffectionPenalty = general.integer("dismissAffectionPenalty", 20, 0, 1000, "Affection lost when she is dismissed (she comes back at the next summon).");
 
         ConfigFile.Section summon = f.section("summoning", "How players get a Laura.");
         chatSummon = summon.bool("chatSummon", true, "Say \"I feel lonely\" (in any supported language) to summon her.");
@@ -335,12 +339,14 @@ public final class LauraConfig {
         allowPlayerNameSkins = skins.bool("allowPlayerNameSkins", true, "Allow copying the skin of any Minecraft account by name.");
         allowSkinUploads = skins.bool("allowUploads", true, "Allow players to upload a skin file to the server (drag and drop in the skin screen).");
         maxSkinKb = skins.integer("maxSkinKb", 256, 8, 4096, "Maximum size of a skin file, in kilobytes.");
+        maxSkinUploadsPerPlayer = skins.integer("maxUploadsPerPlayer", 10, 1, 1000, "Skin files one player may keep on the server. Uploading a file with the same name replaces it.");
         othersCanChangeSkin = skins.bool("othersCanChangeSkin", false, "Allow players other than her partner to change her skin.");
 
         ConfigFile.Section models = f.section("models", "Custom Blockbench models (.bbmodel or .geo.json) from config/lauramod/models.");
         allowCustomModels = models.bool("allowCustomModels", true, "Allow custom models.");
         allowModelUploads = models.bool("allowUploads", false, "Allow players to upload their own model files to the server.");
         maxModelKb = models.integer("maxModelKb", 2048, 16, 16384, "Maximum size of a model file, in kilobytes.");
+        maxModelUploadsPerPlayer = models.integer("maxUploadsPerPlayer", 3, 1, 1000, "Model files one player may keep on the server. Uploading a file with the same name replaces it.");
         defaultModel = models.string("defaultModel", "", "Model of a newly summoned Laura. Empty = the player-like default model.");
 
         ConfigFile.Section permissions = f.section("permissions", "Who can do what.");

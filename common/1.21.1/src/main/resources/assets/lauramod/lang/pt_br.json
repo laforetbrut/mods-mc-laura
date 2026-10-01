@@ -487,5 +487,9 @@
   "lauramod.help.look": "/laura skin ..., /laura model ..., /laura name <nome>",
   "lauramod.help.info": "/laura info, /laura where, /laura list, /laura lang",
   "lauramod.help.chat": "Fale com ela no chat a até 64 blocos. Encadeie ordens com \"e depois\". Aperte K para o menu dela.",
-  "tag.item.lauramod.wearable_on_back": "Usável nas costas"
+  "tag.item.lauramod.wearable_on_back": "Usável nas costas",
+  "lauramod.release.confirm": "Isso não pode ser desfeito: %s vai embora para sempre e vai soltar os pertences dela. Digite /laura release confirm para continuar.",
+  "lauramod.release.done": "%s foi embora para sempre.",
+  "lauramod.upload.quota": "Você já tem %s arquivos desse tipo no servidor. Substitua um deles (mesmo nome de arquivo) ou peça a um admin para remover um.",
+  "lauramod.upload.bbmodel_only": "Daqui só é possível enviar arquivos .bbmodel (eles contêm as texturas). Coloque os modelos .geo.json na pasta config/lauramod/models do servidor."
 }

@@ -478,5 +478,9 @@
   "lauramod.help.look": "/laura skin ...、/laura model ...、/laura name <名前>",
   "lauramod.help.info": "/laura info、/laura where、/laura list、/laura lang",
   "lauramod.help.chat": "64ブロック以内でチャットで話しかけられます。「そのあと」で指示をつなげられます。Kキーで彼女のメニュー。",
-  "tag.item.lauramod.wearable_on_back": "背中に装備可能"
+  "tag.item.lauramod.wearable_on_back": "背中に装備可能",
+  "lauramod.release.confirm": "これは取り消せません: %s は永遠に去り、持ち物を落とします。続けるには /laura release confirm と入力してください。",
+  "lauramod.release.done": "%s は永遠に去りました。",
+  "lauramod.upload.quota": "この種類のファイルはすでにサーバーに %s 個あります。同じファイル名で置き換えるか、管理者に削除を頼んでください。",
+  "lauramod.upload.bbmodel_only": "ここから送信できるのは .bbmodel ファイルだけです(テクスチャを含むため)。.geo.json モデルはサーバーの config/lauramod/models フォルダーに置いてください。"
 }

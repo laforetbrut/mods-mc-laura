@@ -382,7 +382,10 @@ public final class LauraBrain {
             needs.add(Needs.Need.ATTENTION, 8);
             LauraAdvancements.award(from, "feed");
         }
-        if (wanted && desire.mustEat()) {
+        // The item she asked for counts as soon as her partner hands it over, even when she eats it
+        // on the spot instead of keeping it. Food she takes from her own bag only counts for wishes
+        // that are about eating.
+        if (wanted && (desire.mustEat() || from != null)) {
             fulfillDesire();
         }
         laura.level().getServer().tell(new net.minecraft.server.TickTask(laura.level().getServer().getTickCount() + 30, () -> laura.setCarried(ItemStack.EMPTY)));
@@ -572,6 +575,14 @@ public final class LauraBrain {
         if (activity == null) {
             return;
         }
+        if (activity == DesireType.Activity.FIREWORKS) {
+            // Any rocket in the sky near her counts, whoever launched it.
+            if (!laura.level().getEntitiesOfClass(net.minecraft.world.entity.projectile.FireworkRocketEntity.class,
+                    laura.getBoundingBox().inflate(32, 64, 32)).isEmpty()) {
+                onFirework();
+            }
+            return;
+        }
         boolean holds = switch (activity) {
             case SUNSET -> LauraWorldChecks.isSunset(laura.level()) && LauraWorldChecks.canSeeSky(laura) && owner.distanceToSqr(laura) < 100;
             case STARGAZE -> LauraWorldChecks.isNight(laura.level()) && !laura.level().isRaining() && LauraWorldChecks.canSeeSky(laura) && owner.distanceToSqr(laura) < 100;
@@ -666,7 +677,6 @@ public final class LauraBrain {
         nextDesireTime = -1;
     }
 
-    /** Replaces the current desire and announces it (used by reactions and tests). */
     /** True when the stack is what she currently wishes for (an item, or flowers for the flower wish). */
     public boolean wants(ItemStack stack) {
         if (desire == null || stack.isEmpty()) {
@@ -678,6 +688,7 @@ public final class LauraBrain {
         return desire.activity() == DesireType.Activity.FLOWERS && stack.is(net.minecraft.tags.ItemTags.SMALL_FLOWERS);
     }
 
+    /** Replaces the current desire and announces it (used by reactions and tests). */
     public void forceDesire(Desire newDesire) {
         desire = newDesire;
         ServerPlayer owner = owner();

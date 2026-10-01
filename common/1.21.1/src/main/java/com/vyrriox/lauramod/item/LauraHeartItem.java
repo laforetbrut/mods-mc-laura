@@ -57,7 +57,7 @@ public class LauraHeartItem extends Item {
                 LauraSpeech.say(existing, serverPlayer, "heart.gift", LineFormatter.values());
             }
         } else {
-            LauraManager.summon(serverPlayer, false);
+            LauraManager.call(serverPlayer);
             if (LauraManager.find(serverPlayer) == null) {
                 return InteractionResultHolder.fail(stack);
             }

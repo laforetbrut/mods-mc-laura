@@ -478,5 +478,9 @@
   "lauramod.help.look": "/laura skin ..., /laura model ..., /laura name <jméno>",
   "lauramod.help.info": "/laura info, /laura where, /laura list, /laura lang",
   "lauramod.help.chat": "Mluv s ní v chatu do vzdálenosti 64 bloků. Příkazy řetěz slovem „potom“. Klávesa K otevře její menu.",
-  "tag.item.lauramod.wearable_on_back": "Lze nosit na zádech"
+  "tag.item.lauramod.wearable_on_back": "Lze nosit na zádech",
+  "lauramod.release.confirm": "Tohle nejde vrátit: %s odejde navždy a upustí své věci. Napiš /laura release confirm pro pokračování.",
+  "lauramod.release.done": "%s odešla navždy.",
+  "lauramod.upload.quota": "Na serveru už máš %s souborů tohoto typu. Nahraď jeden z nich (stejný název souboru) nebo požádej admina, ať jeden smaže.",
+  "lauramod.upload.bbmodel_only": "Odsud lze posílat jen soubory .bbmodel (obsahují své textury). Modely .geo.json vlož do složky serveru config/lauramod/models."
 }

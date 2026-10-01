@@ -87,7 +87,7 @@ public final class AnimationSampler {
         }
         ModelData.Keyframe first = keys.get(0);
         if (n == 1 || t <= first.time()) {
-            eval(first, n == 1 || t > first.time(), ctx, out);
+            eval(first, n == 1, ctx, out);
             return true;
         }
         ModelData.Keyframe last = keys.get(n - 1);

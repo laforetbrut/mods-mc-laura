@@ -519,7 +519,8 @@ public final class DialogueManager {
               "spelling": { "what players type": "what it means" }
             }
 
-            Placeholders: {player} {laura} {item} {count} {days} {place} {x} {y} {z} {dimension}
+            Placeholders: {player} {laura} {days} everywhere, plus the ones of each line ({item} {count} {place}
+            {activity} {minutes} {other}...): the shipped file of your language in _builtin shows which line uses which.
             Triggers ignore case, accents and punctuation. End a word with * to match its beginning (sorr* = sorry, sorrry).
             "spelling" rewrites chat shortcuts and frequent mistakes before triggers are searched
             ("jtm": "je t'aime", "tu est": "tu es", "ur": "you're"). An empty value drops a filler word

@@ -487,5 +487,9 @@
   "lauramod.help.look": "/laura skin ..., /laura model ..., /laura name <naam>",
   "lauramod.help.info": "/laura info, /laura where, /laura list, /laura lang",
   "lauramod.help.chat": "Praat met haar in de chat binnen 64 blokken. Koppel bevelen met \"daarna\". Druk op K voor haar menu.",
-  "tag.item.lauramod.wearable_on_back": "Draagbaar op de rug"
+  "tag.item.lauramod.wearable_on_back": "Draagbaar op de rug",
+  "lauramod.release.confirm": "Dit kan niet ongedaan worden gemaakt: %s vertrekt voorgoed en laat haar spullen vallen. Typ /laura release confirm om door te gaan.",
+  "lauramod.release.done": "%s is voorgoed vertrokken.",
+  "lauramod.upload.quota": "Je hebt al %s bestanden van dit type op de server. Vervang er een (zelfde bestandsnaam) of vraag een admin om er een te verwijderen.",
+  "lauramod.upload.bbmodel_only": "Vanaf hier kunnen alleen .bbmodel-bestanden worden verstuurd (ze bevatten hun texturen). Zet .geo.json-modellen in de servermap config/lauramod/models."
 }
