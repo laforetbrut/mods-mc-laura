@@ -69,7 +69,8 @@ public class LauraFindFoodGoal extends Goal {
         }
         for (BlockPos pos : LauraInventories.storagesAround(level, laura.blockPosition(), RADIUS, p -> true)) {
             InventoryAccess inv = LauraInventories.at(level, pos);
-            if (inv != null && inv.hasAnyMatching(EDIBLE)) {
+            // Even starving, she only opens a container her partner could open too.
+            if (inv != null && inv.hasAnyMatching(EDIBLE) && LauraInventories.mayUse(laura, pos)) {
                 target = pos;
                 pantry = false;
                 return true;
@@ -102,7 +103,7 @@ public class LauraFindFoodGoal extends Goal {
             return;
         }
         InventoryAccess inv = laura.level() instanceof ServerLevel level ? LauraInventories.at(level, target) : null;
-        if (inv != null) {
+        if (inv != null && !LauraInventories.isLocked(laura, target)) {
             for (int slot = 0; slot < inv.size(); slot++) {
                 ItemStack stack = inv.get(slot);
                 if (!stack.isEmpty() && EDIBLE.test(stack)) {

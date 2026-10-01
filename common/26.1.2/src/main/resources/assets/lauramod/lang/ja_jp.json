@@ -446,6 +446,8 @@
   "lauramod.skin.changed": "新しい見た目: %s",
   "lauramod.skin.reset": "彼女のデフォルトスキンに戻しました。",
   "lauramod.skin.not_allowed": "彼女の見た目を変更する権限がありません。",
+  "lauramod.look.cooldown": "早すぎます。見た目をもう一度変えるには数秒待ってください。",
+  "lauramod.network.server_missing": "このサーバーには My Girlfriend Laura が導入されていません。このMODはサーバーとクライアントの両方に必要です。サーバーに導入してもらうか、ここで遊ぶには mods フォルダーから外してください。",
   "lauramod.skin.url_disabled": "このサーバーではURLからのスキンが無効です。",
   "lauramod.skin.url_refused": "このウェブサイトは許可されていません。許可: %s",
   "lauramod.skin.file_missing": "サーバーに%sという名前のスキンがありません。",

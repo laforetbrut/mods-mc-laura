@@ -75,6 +75,10 @@ loom {
             configName = 'Laura Self Test'
             runDir 'run-selftest'
             vmArg '-Dlauramod.selftest=true'
+            // -PselftestOnly=name runs only the tests whose name contains it.
+            if (project.hasProperty('selftestOnly')) {
+                vmArg "-Dlauramod.selftest.only=${project.property('selftestOnly')}"
+            }
             programArg 'nogui'
         }
     }

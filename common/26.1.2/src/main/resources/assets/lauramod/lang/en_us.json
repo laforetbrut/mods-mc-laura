@@ -446,6 +446,8 @@
   "lauramod.skin.changed": "New look: %s",
   "lauramod.skin.reset": "Back to her default skin.",
   "lauramod.skin.not_allowed": "You are not allowed to change her look.",
+  "lauramod.look.cooldown": "Not so fast: wait a few seconds before changing her look again.",
+  "lauramod.network.server_missing": "My Girlfriend Laura is not installed on this server. The mod is needed on both sides: ask the server to add it, or remove it from your mods folder to play here.",
   "lauramod.skin.url_disabled": "Skins from URLs are disabled on this server.",
   "lauramod.skin.url_refused": "This website is not allowed. Allowed: %s",
   "lauramod.skin.file_missing": "The server has no skin named %s.",

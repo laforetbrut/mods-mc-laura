@@ -33,8 +33,25 @@ final class FabricPlatform implements Platform {
                 .orElse("unknown");
     }
 
+    /** Installed by the client entry point: tells whether the server announced the mod channel. */
+    private static volatile java.util.function.BooleanSupplier serverChannel;
+
     static void setClientSender(Consumer<byte[]> sender) {
         clientSender = sender;
+    }
+
+    static void setServerChannelCheck(java.util.function.BooleanSupplier check) {
+        serverChannel = check;
+    }
+
+    /**
+     * Fabric lets a client with the mod join a server without it. The mod is needed on both sides,
+     * like on NeoForge and Forge: the common client code leaves such a server with a clear message.
+     */
+    @Override
+    public boolean serverHasChannel() {
+        java.util.function.BooleanSupplier check = serverChannel;
+        return check == null || check.getAsBoolean();
     }
 
     @Override
@@ -112,6 +129,15 @@ final class FabricPlatform implements Platform {
             LauraMod.LOGGER.warn("Farmer's Delight is installed but is not the Refabricated port: cooking pots are not supported");
             return false;
         }
+    }
+
+    @Override
+    public boolean mayUseContainer(ServerPlayer player, ServerLevel level, BlockPos pos) {
+        // The callback Fabric runs when a player right clicks a block: claim mods answer FAIL there.
+        net.minecraft.world.phys.BlockHitResult hit = new net.minecraft.world.phys.BlockHitResult(
+                net.minecraft.world.phys.Vec3.atCenterOf(pos), net.minecraft.core.Direction.UP, pos, false);
+        return net.fabricmc.fabric.api.event.player.UseBlockCallback.EVENT.invoker()
+                .interact(player, level, net.minecraft.world.InteractionHand.MAIN_HAND, hit) != net.minecraft.world.InteractionResult.FAIL;
     }
 
     @Override

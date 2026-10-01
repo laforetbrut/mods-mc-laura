@@ -185,7 +185,10 @@ public final class LauraManager {
         for (LauraEntity laura : owner.level().getEntitiesOfClass(LauraEntity.class, owner.getBoundingBox().inflate(64), l -> l.isOwnedBy(owner))) {
             if (!out.contains(laura)) {
                 track(laura);
-                out.add(laura);
+                // Not the ones an administrator removed while they were not loaded: track just let them go.
+                if (!laura.isRemoved()) {
+                    out.add(laura);
+                }
             }
         }
         out.sort(Comparator.comparingDouble(l -> l.level() == owner.level() ? l.distanceToSqr(owner) : Double.MAX_VALUE));
@@ -267,6 +270,12 @@ public final class LauraManager {
         }
         MinecraftServer server = level.getServer();
         LauraWorldData data = data(server);
+        if (data.consumeRemoved(laura.getUUID())) {
+            // Removed by an administrator while her chunk was not loaded: she leaves now, instead of
+            // registering herself again.
+            removeForGood(laura);
+            return;
+        }
         if (laura.getUUID().equals(data.legacyLaura())) {
             data.clearLegacy();
         }
@@ -449,6 +458,8 @@ public final class LauraManager {
         }
         if (snapshot != null) {
             laura.load(snapshot);
+            // A snapshot taken while she slept holds her bed: she comes back awake, and that bed is free.
+            laura.wakeUp();
             laura.setHealth(laura.getMaxHealth());
             laura.deathTime = 0;
             laura.setRemainingFireTicks(0);
@@ -549,6 +560,9 @@ public final class LauraManager {
         // Being sent away hurts: she remembers it when she comes back.
         laura.brain().changeAffection(-LauraConfig.dismissAffectionPenalty.getInt());
         laura.brain().needs().add(Needs.Need.ATTENTION, -25);
+        // Before the snapshot: removing an entity does not wake it up, her bed would stay occupied
+        // for good and she would come back asleep.
+        laura.wakeUp();
         LauraWorldData data = data(player.level().getServer());
         LauraWorldData.Record record = data.getOrCreate(laura.getUUID(), player.getUUID());
         record.snapshot = laura.saveWithoutId(new CompoundTag());
@@ -564,13 +578,46 @@ public final class LauraManager {
     /** Forgets a companion for good (admin, or "release"). */
     public static void release(ServerPlayer player, LauraEntity laura) {
         String name = laura.getLauraName();
-        laura.dropBelongings();
         if (laura.level() instanceof ServerLevel level) {
             level.sendParticles(ParticleTypes.CLOUD, laura.getX(), laura.getY() + 1, laura.getZ(), 30, 0.4, 0.6, 0.4, 0.02);
         }
         data(player.level().getServer()).remove(laura.getUUID());
-        laura.discard();
+        removeForGood(laura);
         player.sendSystemMessage(Component.translatable("lauramod.release.done", name).withStyle(ChatFormatting.GRAY));
+    }
+
+    /** She leaves the world for good: her bed is freed and everything she carries stays on the ground. */
+    private static void removeForGood(LauraEntity laura) {
+        laura.wakeUp();
+        laura.dropBelongings();
+        LauraMod.platform().dropTrinkets(laura);
+        laura.discard();
+    }
+
+    /**
+     * Admin removal of every companion of a player. The loaded ones leave at once; the ones in
+     * unloaded chunks are remembered and leave as soon as they are loaded (see {@link #track}),
+     * instead of registering themselves again.
+     */
+    public static void removeAll(MinecraftServer server, ServerPlayer target) {
+        LauraWorldData data = data(server);
+        Set<UUID> gone = new java.util.HashSet<>();
+        for (LauraEntity laura : findAll(target)) {
+            gone.add(laura.getUUID());
+            removeForGood(laura);
+        }
+        for (LauraWorldData.Record r : data.byOwner(target.getUUID())) {
+            // Dismissed companions and the ones waiting on a grave only exist as their record.
+            if (!gone.contains(r.laura) && r.isActive()) {
+                Entity entity = findEntity(server, r.laura, r.dimension);
+                if (entity == null) {
+                    data.markRemoved(r.laura);
+                } else if (entity instanceof LauraEntity laura && !laura.isRemoved()) {
+                    removeForGood(laura);
+                }
+            }
+            data.remove(r.laura);
+        }
     }
 
     // ------------------------------------------------------------------ recall across unloaded chunks

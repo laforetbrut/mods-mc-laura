@@ -118,6 +118,38 @@ public class CookWork implements Work {
         return CookingSupport.isFuel(level(), s) && !s.is(Items.LAVA_BUCKET) && s.get(DataComponents.FOOD) == null;
     }
 
+    /** What she takes out of a furnace: food and nothing else. */
+    static boolean isCookedFood(ItemStack s) {
+        return !s.isEmpty() && s.get(DataComponents.FOOD) != null;
+    }
+
+    /**
+     * The containers (bowls, bottles) taken from her bags for a pot recipe, as one stack. Her bags
+     * give one stack per slot they took from: stacks that cannot be merged into the first one go
+     * back through {@code giveBack} instead of being forgotten.
+     */
+    public static ItemStack mergeContainers(List<ItemStack> taken, java.util.function.Consumer<ItemStack> giveBack) {
+        ItemStack merged = ItemStack.EMPTY;
+        for (ItemStack stack : taken) {
+            if (stack.isEmpty()) {
+                continue;
+            }
+            if (merged.isEmpty()) {
+                merged = stack;
+                continue;
+            }
+            if (ItemStack.isSameItemSameComponents(merged, stack)) {
+                int move = Math.min(stack.getCount(), merged.getMaxStackSize() - merged.getCount());
+                merged.grow(move);
+                stack.shrink(move);
+            }
+            if (!stack.isEmpty()) {
+                giveBack.accept(stack);
+            }
+        }
+        return merged;
+    }
+
     private boolean isDish(ItemStack s) {
         if (s.get(DataComponents.FOOD) == null && !s.is(Items.CAKE)) {
             return false;
@@ -238,13 +270,15 @@ public class CookWork implements Work {
         ItemStack containers = ItemStack.EMPTY;
         if (!recipe.container().isEmpty()) {
             List<ItemStack> taken = ctx.take(s -> ItemStack.isSameItem(s, recipe.container()), Math.max(1, recipe.result().getCount()));
-            containers = taken.isEmpty() ? ItemStack.EMPTY : taken.get(0);
+            containers = mergeContainers(taken, ctx::store);
         }
         if (!pots.load(level(), target, ingredients, containers)) {
             ingredients.forEach(ctx::store);
             ctx.store(containers);
             rejected.add(target);
         } else {
+            // The pot takes what fits in its container slot and leaves the rest in the stack.
+            ctx.store(containers);
             loadedStations.add(target);
             waitTicks = 0;
             ctx.laura().swing(InteractionHand.MAIN_HAND);
@@ -398,7 +432,8 @@ public class CookWork implements Work {
                     int score;
                     if (be instanceof AbstractFurnaceBlockEntity furnace && !(be instanceof BlastFurnaceBlockEntity)) {
                         if (finished) {
-                            if (furnace.getItem(2).isEmpty()) {
+                            // Only food: ingots, glass or charcoal smelted there by someone else stay where they are.
+                            if (!isCookedFood(furnace.getItem(2))) {
                                 continue;
                             }
                             score = 10;
@@ -496,7 +531,7 @@ public class CookWork implements Work {
     private Status collect() {
         BlockEntity be = level().getBlockEntity(target);
         if (be instanceof AbstractFurnaceBlockEntity furnace) {
-            ItemStack out = furnace.removeItem(2, 64);
+            ItemStack out = isCookedFood(furnace.getItem(2)) ? furnace.removeItem(2, 64) : ItemStack.EMPTY;
             if (!out.isEmpty()) {
                 record(out.copy());
                 ctx.store(out);

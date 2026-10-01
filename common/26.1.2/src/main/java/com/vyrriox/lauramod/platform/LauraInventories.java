@@ -1,11 +1,20 @@
 package com.vyrriox.lauramod.platform;
 
 import com.vyrriox.lauramod.LauraMod;
+import com.vyrriox.lauramod.entity.LauraEntity;
+import com.vyrriox.lauramod.entity.LauraSpeech;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.Container;
+import net.minecraft.world.LockCode;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BrewingStandBlockEntity;
 import net.minecraft.world.level.block.entity.CampfireBlockEntity;
@@ -14,12 +23,18 @@ import net.minecraft.world.level.block.entity.DispenserBlockEntity;
 import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.minecraft.world.level.block.entity.JukeboxBlockEntity;
 import net.minecraft.world.level.block.entity.LecternBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.storage.TagValueInput;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -59,7 +74,112 @@ public final class LauraInventories {
         return !(be instanceof AbstractFurnaceBlockEntity || be instanceof BrewingStandBlockEntity || be instanceof HopperBlockEntity
                 || be instanceof DispenserBlockEntity || be instanceof JukeboxBlockEntity || be instanceof LecternBlockEntity
                 || be instanceof ChiseledBookShelfBlockEntity || be instanceof CampfireBlockEntity)
-                && !be.getClass().getName().toLowerCase(java.util.Locale.ROOT).contains("crafter");
+                && !isCrafter(be);
+    }
+
+    /**
+     * Crafters, vanilla and modded. The registry id is tested first: class names of the game are
+     * remapped in a Fabric release jar, so the class name alone misses the vanilla crafter there.
+     */
+    private static boolean isCrafter(BlockEntity be) {
+        Identifier id = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(be.getType());
+        return id != null && id.getPath().contains("crafter")
+                || be.getClass().getName().toLowerCase(Locale.ROOT).contains("crafter");
+    }
+
+    // ------------------------------------------------------------------ permissions
+
+    /** The lock field of vanilla containers, found by its type so that it works with every mapping. */
+    private static final Field LOCK_FIELD = findLockField();
+
+    private static Field findLockField() {
+        for (Field field : BaseContainerBlockEntity.class.getDeclaredFields()) {
+            if (field.getType() == LockCode.class && !Modifier.isStatic(field.getModifiers())) {
+                try {
+                    field.setAccessible(true);
+                    return field;
+                } catch (RuntimeException e) {
+                    LauraMod.LOGGER.debug("Container locks will be read from their saved data: {}", e.toString());
+                }
+            }
+        }
+        return null;
+    }
+
+    /** The vanilla lock of a container ("Lock" in its data), or null when the block cannot have one. */
+    @Nullable
+    private static LockCode lockOf(ServerLevel level, @Nullable BlockEntity be) {
+        if (!(be instanceof BaseContainerBlockEntity)) {
+            return null;
+        }
+        try {
+            if (LOCK_FIELD != null) {
+                return (LockCode) LOCK_FIELD.get(be);
+            }
+            return LockCode.fromTag(TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), be.saveWithoutMetadata(level.registryAccess())));
+        } catch (ReflectiveOperationException | RuntimeException e) {
+            return null;
+        }
+    }
+
+    /** True when the block at pos has a vanilla lock and neither she nor her partner holds its key. */
+    private static boolean isLockedFor(ServerLevel level, BlockPos pos, LauraEntity laura, @Nullable ServerPlayer owner) {
+        LockCode lock = lockOf(level, level.getBlockEntity(pos));
+        if (lock == null || lock.unlocksWith(laura.getMainHandItem())) {
+            return false;
+        }
+        return owner == null || !lock.unlocksWith(owner.getMainHandItem());
+    }
+
+    /**
+     * True when the container at pos is locked for her. A vanilla lock is respected the way a player
+     * has to respect it: the key must be in her hand or in her partner's. Both halves of a double
+     * chest count.
+     */
+    public static boolean isLocked(LauraEntity laura, BlockPos pos) {
+        if (!(laura.level() instanceof ServerLevel level) || !level.isLoaded(pos)) {
+            return false;
+        }
+        ServerPlayer owner = LauraSpeech.owner(laura);
+        if (isLockedFor(level, pos, laura, owner)) {
+            return true;
+        }
+        BlockState state = level.getBlockState(pos);
+        if (state.getBlock() instanceof ChestBlock && state.getValue(ChestBlock.TYPE) != ChestType.SINGLE) {
+            BlockPos other = pos.relative(ChestBlock.getConnectedDirection(state));
+            return level.isLoaded(other) && isLockedFor(level, other, laura, owner);
+        }
+        return false;
+    }
+
+    /**
+     * True when she may take from or put into the container at pos. A locked container is never
+     * used. A container her partner assigned to her is hers to use. Any other container is only used
+     * on behalf of her partner: that player must be there, in the same dimension, and be allowed to
+     * open it (spawn protection, world border, and the claims of other mods, asked through the loader).
+     */
+    public static boolean mayUse(LauraEntity laura, BlockPos pos) {
+        if (!(laura.level() instanceof ServerLevel level) || isLocked(laura, pos)) {
+            return false;
+        }
+        if (laura.workplace().purposeOf(pos) != null) {
+            return true;
+        }
+        ServerPlayer owner = LauraSpeech.owner(laura);
+        return owner != null && playerMayUse(owner, level, pos);
+    }
+
+    /** True when the player may open the container at pos: the world rules first, then the other mods. */
+    public static boolean playerMayUse(ServerPlayer player, ServerLevel level, BlockPos pos) {
+        if (player.level() != level || !level.mayInteract(player, pos)) {
+            return false;
+        }
+        try {
+            return LauraMod.platform().mayUseContainer(player, level, pos);
+        } catch (RuntimeException e) {
+            LauraMod.LOGGER.debug("Container permission check failed at {}: {}", pos, e.toString());
+            return false;
+        }
     }
 
     /** Storage positions around a center, nearest first. */

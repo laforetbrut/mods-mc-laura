@@ -50,6 +50,10 @@ neoForge {
             programArgument '--nogui'
             gameDirectory = project.file('run-selftest')
             systemProperty 'lauramod.selftest', 'true'
+            // -PselftestOnly=name runs only the tests whose name contains it.
+            if (project.hasProperty('selftestOnly')) {
+                systemProperty 'lauramod.selftest.only', project.property('selftestOnly').toString()
+            }
         }
         configureEach {
             systemProperty 'forge.logging.markers', 'REGISTRIES'

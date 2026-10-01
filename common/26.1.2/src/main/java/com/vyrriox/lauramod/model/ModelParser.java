@@ -24,8 +24,102 @@ import java.util.function.Function;
  */
 public final class ModelParser {
     private static final int MAX_CUBES = 4096;
+    // A file that passes the size check must not be able to freeze or exhaust the clients that render
+    // it: every count a client pays for at each frame, or in memory, has a limit.
+    public static final int MAX_BONES = 1024;
+    /** Deepest chain of bones (a bone inside a bone inside a bone...). Real models stay under 20. */
+    public static final int MAX_BONE_DEPTH = 64;
+    public static final int MAX_TEXTURES = 8;
+    /** Largest width or height of a texture, in pixels. */
+    public static final int MAX_TEXTURE_SIZE = 2048;
+    /** Pixels of all the textures of a model together (two textures of the largest size). */
+    public static final long MAX_TEXTURE_PIXELS = 2L * MAX_TEXTURE_SIZE * MAX_TEXTURE_SIZE;
 
     private ModelParser() {
+    }
+
+    /** A model file that cannot be used. The message can be shown to a player. */
+    public static final class InvalidModelException extends Exception {
+        private static final long serialVersionUID = 1L;
+
+        InvalidModelException(String message, Throwable cause) {
+            super(message, cause);
+        }
+    }
+
+    /**
+     * Same as {@link #parse} for files that are not trusted (uploads, files sent by a server):
+     * whatever goes wrong inside the parser, including a stack overflow or a lack of memory caused
+     * by a file made for that, comes out as an {@link InvalidModelException} and nothing else.
+     */
+    public static ModelData parseChecked(String fileName, String json, Function<String, byte[]> sideFiles) throws InvalidModelException {
+        try {
+            return parse(fileName, json, sideFiles);
+        } catch (RuntimeException | Error e) {
+            throw new InvalidModelException(reason(e), e);
+        }
+    }
+
+    /** Same as {@link #parseAnimations} for files that are not trusted. */
+    public static void parseAnimationsChecked(ModelData model, String json) throws InvalidModelException {
+        try {
+            parseAnimations(model, json);
+        } catch (RuntimeException | Error e) {
+            throw new InvalidModelException(reason(e), e);
+        }
+    }
+
+    private static String reason(Throwable e) {
+        if (e instanceof StackOverflowError) {
+            return "the file is nested too deep";
+        }
+        if (e instanceof OutOfMemoryError) {
+            return "the file needs too much memory";
+        }
+        String message = e.getMessage();
+        return message == null || message.isBlank() ? e.getClass().getSimpleName() : message;
+    }
+
+    /**
+     * Checks the textures of a model from their PNG headers, without decoding them: their number,
+     * the size of each one and their total size. Throws IllegalArgumentException when one is not a
+     * PNG or a limit is exceeded.
+     */
+    public static void checkTextures(List<byte[]> textures) {
+        if (textures.size() > MAX_TEXTURES) {
+            throw new IllegalArgumentException("too many textures (max " + MAX_TEXTURES + ")");
+        }
+        long pixels = 0;
+        for (byte[] png : textures) {
+            if (png == null || png.length < 24 || (png[0] & 0xFF) != 0x89 || png[1] != 'P' || png[2] != 'N' || png[3] != 'G') {
+                throw new IllegalArgumentException("a texture is not a PNG image");
+            }
+            long width = pngInt(png, 16);
+            long height = pngInt(png, 20);
+            if (width <= 0 || height <= 0 || width > MAX_TEXTURE_SIZE || height > MAX_TEXTURE_SIZE) {
+                throw new IllegalArgumentException("a texture is larger than " + MAX_TEXTURE_SIZE + "x" + MAX_TEXTURE_SIZE);
+            }
+            pixels += width * height;
+        }
+        if (pixels > MAX_TEXTURE_PIXELS) {
+            throw new IllegalArgumentException("the textures are too large together");
+        }
+    }
+
+    private static long pngInt(byte[] b, int offset) {
+        return ((long) (b[offset] & 0xFF) << 24) | ((b[offset + 1] & 0xFF) << 16) | ((b[offset + 2] & 0xFF) << 8) | (b[offset + 3] & 0xFF);
+    }
+
+    /**
+     * Reads the root object of a file. The Gson of this version of the game refuses more than 255
+     * nested values by itself: that limit is lifted, so that the limits of this parser decide, with
+     * their own messages, like on the versions of the game that ship an older Gson. Gson reads the
+     * tree in a loop, not a recursion: depth costs nothing here.
+     */
+    private static JsonObject readRoot(String json) {
+        JsonReader reader = new JsonReader(new StringReader(json));
+        reader.setNestingLimit(Integer.MAX_VALUE);
+        return JsonParser.parseReader(reader).getAsJsonObject();
     }
 
     /**
@@ -37,7 +131,7 @@ public final class ModelParser {
      */
     public static ModelData parse(String fileName, String json, Function<String, byte[]> sideFiles) {
         String lower = fileName.toLowerCase(Locale.ROOT);
-        JsonObject root = JsonParser.parseReader(new JsonReader(new StringReader(json))).getAsJsonObject();
+        JsonObject root = readRoot(json);
         ModelData model;
         if (lower.endsWith(".bbmodel")) {
             model = parseBbmodel(root);
@@ -58,6 +152,7 @@ public final class ModelParser {
         if (model.cubeCount() == 0) {
             throw new IllegalArgumentException("the model has no cube");
         }
+        checkTextures(model.textures);
         return model;
     }
 
@@ -99,7 +194,7 @@ public final class ModelParser {
                     addBbCube(model, looseRoot, element, projectBoxUv);
                 }
             } else if (node.isJsonObject()) {
-                parseBbGroup(model, node.getAsJsonObject(), groups, elements, null, projectBoxUv, uuidToBone);
+                parseBbGroup(model, node.getAsJsonObject(), groups, elements, null, projectBoxUv, uuidToBone, 1);
             }
         }
         List<JsonElement> textures = arr(root, "textures");
@@ -118,7 +213,10 @@ public final class ModelParser {
     }
 
     private static void parseBbGroup(ModelData model, JsonObject node, Map<String, JsonObject> groups, Map<String, JsonObject> elements,
-                                     ModelData.Bone parent, boolean projectBoxUv, Map<String, String> uuidToBone) {
+                                     ModelData.Bone parent, boolean projectBoxUv, Map<String, String> uuidToBone, int depth) {
+        if (depth > MAX_BONE_DEPTH) {
+            throw new IllegalArgumentException("bones nested more than " + MAX_BONE_DEPTH + " deep");
+        }
         JsonObject data = node;
         if (!node.has("name") && node.has("uuid") && groups.containsKey(node.get("uuid").getAsString())) {
             data = groups.get(node.get("uuid").getAsString());
@@ -148,7 +246,7 @@ public final class ModelParser {
                     addBbCube(model, bone, element, projectBoxUv || mirror && element.has("uv_offset"));
                 }
             } else if (child.isJsonObject()) {
-                parseBbGroup(model, child.getAsJsonObject(), groups, elements, bone, projectBoxUv, uuidToBone);
+                parseBbGroup(model, child.getAsJsonObject(), groups, elements, bone, projectBoxUv, uuidToBone, depth + 1);
             }
         }
     }
@@ -323,6 +421,15 @@ public final class ModelParser {
             }
         }
         for (ModelData.Bone bone : order) {
+            // Parents are plain names here: walk up to refuse a loop (a bone that is its own
+            // ancestor) or an endless chain, which nothing could render and which would hang
+            // everything that walks up from a bone.
+            int depth = 1;
+            for (String up = parents.get(bone); up != null && byName.containsKey(up); up = parents.get(byName.get(up))) {
+                if (++depth > MAX_BONE_DEPTH) {
+                    throw new IllegalArgumentException("bones nested too deep or in a loop (max " + MAX_BONE_DEPTH + ")");
+                }
+            }
             String parentName = parents.get(bone);
             ModelData.Bone parent = parentName == null ? null : byName.get(parentName);
             register(model, bone, parent);
@@ -375,7 +482,7 @@ public final class ModelParser {
     // ------------------------------------------------------------------ bedrock animations
 
     public static void parseAnimations(ModelData model, String json) {
-        JsonObject root = JsonParser.parseReader(new JsonReader(new StringReader(json))).getAsJsonObject();
+        JsonObject root = readRoot(json);
         JsonObject animations = obj(root, "animations");
         if (animations == null) {
             return;
@@ -474,15 +581,16 @@ public final class ModelParser {
     }
 
     private static String[] triple(JsonElement e) {
+        // A loop, not a recursion: a "vector" inside a "vector" thousands of times is just skipped.
+        while (e != null && e.isJsonObject() && e.getAsJsonObject().has("vector")) {
+            e = e.getAsJsonObject().get("vector");
+        }
         if (e == null) {
             return new String[]{"0", "0", "0"};
         }
         if (e.isJsonPrimitive()) {
             String s = e.getAsString();
             return new String[]{s, s, s};
-        }
-        if (e.isJsonObject() && e.getAsJsonObject().has("vector")) {
-            return triple(e.getAsJsonObject().get("vector"));
         }
         JsonArray a = e.getAsJsonArray();
         return new String[]{a.get(0).getAsString(), a.size() > 1 ? a.get(1).getAsString() : "0", a.size() > 2 ? a.get(2).getAsString() : "0"};
@@ -610,6 +718,9 @@ public final class ModelParser {
     // ------------------------------------------------------------------ helpers
 
     private static void register(ModelData model, ModelData.Bone bone, ModelData.Bone parent) {
+        if (model.bones.size() >= MAX_BONES) {
+            throw new IllegalArgumentException("too many bones (max " + MAX_BONES + ")");
+        }
         String key = bone.name.toLowerCase(Locale.ROOT);
         if (model.bones.containsKey(key)) {
             key = key + "_" + model.bones.size();
