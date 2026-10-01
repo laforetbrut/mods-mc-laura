@@ -41,10 +41,28 @@ public interface Platform {
     void sendToPlayer(ServerPlayer player, byte[] data);
 
     /**
+     * Client side: false when the server this client plays on did not announce the mod channel, so
+     * the mod is missing there. Loaders that refuse such a connection by themselves (the channel is
+     * required on NeoForge and Forge) keep the default.
+     */
+    default boolean serverHasChannel() {
+        return true;
+    }
+
+    /**
      * The inventory of a block through the loader's item API (capabilities, Transfer API), which
      * covers modded storage. Null when the loader finds nothing (vanilla containers are then used).
      */
     InventoryAccess inventoryAt(net.minecraft.server.level.ServerLevel level, net.minecraft.core.BlockPos pos);
+
+    /**
+     * Asks the other mods whether the player may open the container at pos, the way the loader does
+     * when a player right clicks a block (claim and protection mods answer there). True when nobody
+     * objects. Laura calls it before she uses a container her partner did not assign to her.
+     */
+    default boolean mayUseContainer(ServerPlayer player, net.minecraft.server.level.ServerLevel level, net.minecraft.core.BlockPos pos) {
+        return true;
+    }
 
     /**
      * The inventory inside an item (a backpack), through the loader's item API. Null when the item
@@ -73,5 +91,14 @@ public interface Platform {
      */
     default boolean equipTrinket(net.minecraft.world.entity.LivingEntity entity, net.minecraft.world.item.ItemStack stack, boolean simulate) {
         return false;
+    }
+
+    /** Copies of the trinkets the entity wears. Empty when no trinket mod is installed. */
+    default java.util.List<net.minecraft.world.item.ItemStack> trinkets(net.minecraft.world.entity.LivingEntity entity) {
+        return java.util.List.of();
+    }
+
+    /** Drops every trinket the entity wears at its feet and empties its trinket slots. */
+    default void dropTrinkets(net.minecraft.world.entity.LivingEntity entity) {
     }
 }

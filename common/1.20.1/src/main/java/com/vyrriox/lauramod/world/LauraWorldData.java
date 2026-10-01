@@ -136,6 +136,29 @@ public class LauraWorldData extends SavedData {
     private final Map<UUID, OwnerMeta> owners = new HashMap<>();
     /** The single Laura of a 1.x world, before she is registered again. */
     private UUID legacyLaura;
+    /** Companions an administrator removed while they were not loaded: they leave when they are loaded. */
+    private final java.util.Set<UUID> removed = new java.util.LinkedHashSet<>();
+    private static final int MAX_REMOVED = 1024;
+
+    /** Remembers that this companion must leave the world as soon as she is loaded. */
+    public void markRemoved(UUID laura) {
+        removed.add(laura);
+        java.util.Iterator<UUID> oldest = removed.iterator();
+        while (removed.size() > MAX_REMOVED && oldest.hasNext()) {
+            oldest.next();
+            oldest.remove();
+        }
+        setDirty();
+    }
+
+    /** True, once, for a companion that was removed while she was not loaded. */
+    public boolean consumeRemoved(UUID laura) {
+        if (removed.remove(laura)) {
+            setDirty();
+            return true;
+        }
+        return false;
+    }
 
     public static LauraWorldData get(MinecraftServer server) {
         return server.overworld().getDataStorage().computeIfAbsent(LauraWorldData::load, LauraWorldData::new, NAME);
@@ -230,6 +253,14 @@ public class LauraWorldData extends SavedData {
                 // Same.
             }
         }
+        ListTag removedList = tag.getList("Removed", Tag.TAG_STRING);
+        for (int i = 0; i < removedList.size(); i++) {
+            try {
+                data.removed.add(UUID.fromString(removedList.getString(i)));
+            } catch (IllegalArgumentException ignored) {
+                // Not a UUID: skipped.
+            }
+        }
         if (tag.hasUUID("LauraUUID") && tag.getBoolean("Exists")) {
             data.legacyLaura = tag.getUUID("LauraUUID");
         } else if (tag.hasUUID("LegacyLaura")) {
@@ -250,6 +281,11 @@ public class LauraWorldData extends SavedData {
             metas.add(m.save());
         }
         tag.put("Owners", metas);
+        ListTag removedList = new ListTag();
+        for (UUID id : removed) {
+            removedList.add(net.minecraft.nbt.StringTag.valueOf(id.toString()));
+        }
+        tag.put("Removed", removedList);
         if (legacyLaura != null) {
             tag.putUUID("LegacyLaura", legacyLaura);
         }

@@ -15,9 +15,14 @@ public final class LauraTests {
     public static List<TestRunner.TestCase> all() {
         List<TestRunner.TestCase> tests = new ArrayList<>();
         LauraTestCases.register(tests);
+        WorkAreaTests.addTo(tests);
+        MiscAreaTests.addTo(tests);
+        CombatTests.addTo(tests);
+        // One or several parts of test names, separated by commas.
         String only = System.getProperty("lauramod.selftest.only", "");
         if (!only.isBlank()) {
-            tests.removeIf(t -> !t.name().contains(only));
+            List<String> parts = List.of(only.split(","));
+            tests.removeIf(t -> parts.stream().map(String::trim).noneMatch(p -> !p.isEmpty() && t.name().contains(p)));
         }
         return tests;
     }

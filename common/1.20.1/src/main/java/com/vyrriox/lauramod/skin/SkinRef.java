@@ -81,6 +81,23 @@ public record SkinRef(Type type, String value, String hash) {
         return u;
     }
 
+    /**
+     * True for an address a skin must never be downloaded from: this machine, the local network
+     * (IPv4 private ranges, IPv6 unique local fc00::/7, link local), the shared address space of
+     * carriers (100.64.0.0/10), "this network" (0.0.0.0/8) and multicast.
+     */
+    public static boolean isLocalAddress(java.net.InetAddress ip) {
+        if (ip.isLoopbackAddress() || ip.isSiteLocalAddress() || ip.isLinkLocalAddress() || ip.isAnyLocalAddress() || ip.isMulticastAddress()) {
+            return true;
+        }
+        byte[] b = ip.getAddress();
+        if (b.length == 16) {
+            return (b[0] & 0xFE) == 0xFC;
+        }
+        int first = b[0] & 0xFF;
+        return first == 0 || first == 100 && (b[1] & 0xC0) == 64;
+    }
+
     /** True if the URL is http(s) and its host is on the whitelist ("*" allows everything). */
     public static boolean isAllowedUrl(String url, List<String> whitelist) {
         try {

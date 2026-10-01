@@ -454,6 +454,8 @@
   "lauramod.skin.changed": "新造型：%s",
   "lauramod.skin.reset": "已恢復她的預設外觀。",
   "lauramod.skin.not_allowed": "你沒有權限更改她的造型。",
+  "lauramod.look.cooldown": "別這麼快：請等幾秒再更換她的外觀。",
+  "lauramod.network.server_missing": "此伺服器未安裝 My Girlfriend Laura。此模組需要伺服器與用戶端都安裝：請讓伺服器加入它，或將它從你的 mods 資料夾移除後再在此遊玩。",
   "lauramod.skin.url_disabled": "此伺服器已停用透過網址設定外觀。",
   "lauramod.skin.url_refused": "不允許使用這個網站。允許的網站：%s",
   "lauramod.skin.file_missing": "伺服器上沒有名為 %s 的外觀。",

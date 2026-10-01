@@ -91,18 +91,21 @@ public final class FarmersDelightPots implements CookingPots {
         }
         CookingPotBlockEntity pot = pot(level, pos);
         ItemStackHandler inv = pot.getInventory();
+        ItemStack current = inv.getStackInSlot(CookingPotBlockEntity.CONTAINER_SLOT);
+        if (!containers.isEmpty() && !current.isEmpty() && !ItemStack.isSameItemSameTags(current, containers)) {
+            // Another container is in the slot: the meal could not be served. Nothing goes into the pot.
+            return false;
+        }
         for (int i = 0; i < ingredients.size(); i++) {
             inv.setStackInSlot(i, ingredients.get(i));
         }
         if (!containers.isEmpty()) {
-            ItemStack current = inv.getStackInSlot(CookingPotBlockEntity.CONTAINER_SLOT);
-            if (current.isEmpty()) {
-                inv.setStackInSlot(CookingPotBlockEntity.CONTAINER_SLOT, containers);
-            } else if (ItemStack.isSameItemSameTags(current, containers)) {
-                current.grow(containers.getCount());
-            } else {
-                // Another container is in the slot: keep hers aside, the pot will use its own.
-                return true;
+            // The slot takes what fits; the rest stays in the stack, which the caller keeps.
+            int room = Math.min(inv.getSlotLimit(CookingPotBlockEntity.CONTAINER_SLOT), containers.getMaxStackSize()) - current.getCount();
+            int move = Math.max(0, Math.min(containers.getCount(), room));
+            if (move > 0) {
+                inv.setStackInSlot(CookingPotBlockEntity.CONTAINER_SLOT, containers.copyWithCount(current.getCount() + move));
+                containers.shrink(move);
             }
         }
         pot.setChanged();

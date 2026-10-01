@@ -30,6 +30,7 @@ public final class LauraFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         FabricPlatform.setClientSender(data -> ClientPlayNetworking.send(LauraChannel.ID, LauraChannel.write(data)));
+        FabricPlatform.setServerChannelCheck(() -> ClientPlayNetworking.canSend(LauraChannel.ID));
         // Received on the client network thread: the bytes are read there, the packet is handled on the client thread.
         ClientPlayNetworking.registerGlobalReceiver(LauraChannel.ID, (client, handler, buf, responseSender) -> {
             byte[] data = LauraChannel.read(buf);

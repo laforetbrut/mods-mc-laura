@@ -44,7 +44,7 @@ public final class LauraTargetGoals {
             @Override
             public boolean canUse() {
                 LivingEntity attacker = laura.getLastHurtByMob();
-                return LauraConfig.retaliate.get() && canFight(laura) && attacker != null && !laura.isOwnedBy(attacker) && super.canUse();
+                return LauraConfig.retaliate.get() && canFight(laura) && attacker != null && laura.mayFight(attacker) && super.canUse();
             }
         });
         targets.addGoal(4, new NearestAttackableTargetGoal<>(laura, Monster.class, 10, true, false,

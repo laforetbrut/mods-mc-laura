@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.vyrriox.lauramod.LauraMod;
 import com.vyrriox.lauramod.command.LauraCommand;
 import com.vyrriox.lauramod.entity.LauraEntity;
+import com.vyrriox.lauramod.network.LauraNetwork;
 import com.vyrriox.lauramod.test.LauraSelfTest;
 import com.vyrriox.lauramod.world.LauraChat;
 import com.vyrriox.lauramod.world.LauraManager;
@@ -11,6 +12,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -26,6 +28,7 @@ public final class LauraEvents {
     public static void onServerStarting(MinecraftServer server) {
         LauraMod.reloadAll();
         LauraManager.clear();
+        LauraNetwork.clear();
     }
 
     public static void onServerStarted(MinecraftServer server) {
@@ -34,6 +37,7 @@ public final class LauraEvents {
 
     public static void onServerStopped(MinecraftServer server) {
         LauraManager.clear();
+        LauraNetwork.clear();
         LauraSelfTest.onServerStopped();
     }
 
@@ -43,6 +47,7 @@ public final class LauraEvents {
             LauraMod.reloadAll();
         }
         LauraManager.tick(server);
+        LauraNetwork.tick(server);
         LauraSelfTest.tick(server);
     }
 
@@ -68,6 +73,16 @@ public final class LauraEvents {
 
     public static void onPlayerDeath(ServerPlayer player) {
         LauraManager.onPlayerDeath(player);
+    }
+
+    /**
+     * An entity stops being part of a server level: its chunk unloads, or it is removed. Loaders
+     * forward the event they fire when entity tracking ends (EntityLeaveLevelEvent, ENTITY_UNLOAD).
+     */
+    public static void onEntityUnloaded(Entity entity) {
+        if (entity instanceof LauraEntity laura) {
+            LauraManager.onUnloaded(laura);
+        }
     }
 
     public static void onBlockBroken(ServerPlayer player, BlockState state) {

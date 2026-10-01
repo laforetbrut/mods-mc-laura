@@ -114,6 +114,11 @@ public class FetchGoal extends Goal {
         return spec;
     }
 
+    /** What she carries for the fetch in progress. Saved with her so that nothing is lost on the way. */
+    public List<ItemStack> carried() {
+        return java.util.Collections.unmodifiableList(bag);
+    }
+
     /** Stops the errand; with {@code deliver} she still brings back what she has. */
     public void cancel(boolean deliver) {
         if (spec == null) {
@@ -229,7 +234,11 @@ public class FetchGoal extends Goal {
         for (BlockPos pos : LauraInventories.storagesAround(level, laura.blockPosition(), LauraConfig.fetchRadius.getInt(), p -> !rejected.contains(p))) {
             InventoryAccess inventory = LauraInventories.at(level, pos);
             if (inventory != null && inventory.hasAnyMatching(spec)) {
-                return pos;
+                // Locked, or not hers and her partner could not open it either: she leaves it alone.
+                if (LauraInventories.mayUse(laura, pos)) {
+                    return pos;
+                }
+                rejected.add(pos);
             }
         }
         return null;
@@ -316,7 +325,7 @@ public class FetchGoal extends Goal {
     private void toContainer() {
         if (moveTo(targetPos.getX() + 0.5, targetPos.getY(), targetPos.getZ() + 0.5, 2.3)) {
             InventoryAccess inventory = laura.level() instanceof ServerLevel level ? LauraInventories.at(level, targetPos) : null;
-            if (inventory != null) {
+            if (inventory != null && !LauraInventories.isLocked(laura, targetPos)) {
                 openChest(true);
                 for (int slot = 0; slot < inventory.size() && collected < amount; slot++) {
                     ItemStack stack = inventory.get(slot);
