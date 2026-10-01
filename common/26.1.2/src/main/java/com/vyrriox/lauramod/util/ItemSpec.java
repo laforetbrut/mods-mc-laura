@@ -1,5 +1,6 @@
 package com.vyrriox.lauramod.util;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -13,8 +14,8 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
- * An item id ({@code minecraft:cake}) or an item tag ({@code #minecraft:logs}) written in a config
- * or dialogue file.
+ * An item id ({@code minecraft:cake}), an item tag ({@code #minecraft:logs}) or a built-in group
+ * ({@code @music_disc}) written in a config or dialogue file.
  *
  * @author vyrriox
  */
@@ -22,14 +23,48 @@ public final class ItemSpec implements Predicate<ItemStack> {
     private final String raw;
     private final Item item;
     private final TagKey<Item> tag;
+    private final Group group;
 
-    private ItemSpec(String raw, Item item, TagKey<Item> tag) {
+    private ItemSpec(String raw, Item item, TagKey<Item> tag, Group group) {
         this.raw = raw;
         this.item = item;
         this.tag = tag;
+        this.group = group;
     }
 
-    /** Parses a spec. Returns empty for invalid ids or unknown items. */
+    /**
+     * Item groups matched by what the items are, not by a tag: a tag can be missing from a
+     * Minecraft version or a loader, a group means the same thing everywhere.
+     */
+    private enum Group {
+        /** Any item a jukebox can play, modded discs included. */
+        MUSIC_DISC {
+            @Override
+            boolean test(ItemStack stack) {
+                return stack.has(DataComponents.JUKEBOX_PLAYABLE);
+            }
+
+            @Override
+            Item icon() {
+                return Items.MUSIC_DISC_CAT;
+            }
+        };
+
+        abstract boolean test(ItemStack stack);
+
+        abstract Item icon();
+
+        static Group byName(String name) {
+            for (Group group : values()) {
+                if (group.name().equalsIgnoreCase(name)) {
+                    return group;
+                }
+            }
+            return null;
+        }
+    }
+
+    /** Parses a spec. Returns empty for invalid ids, unknown items and unknown groups. */
     public static Optional<ItemSpec> parse(String raw) {
         if (raw == null) {
             return Optional.empty();
@@ -38,9 +73,13 @@ public final class ItemSpec implements Predicate<ItemStack> {
         if (s.isEmpty()) {
             return Optional.empty();
         }
+        if (s.startsWith("@")) {
+            Group group = Group.byName(s.substring(1));
+            return group == null ? Optional.empty() : Optional.of(new ItemSpec(s, null, null, group));
+        }
         if (s.startsWith("#")) {
             Identifier id = Identifier.tryParse(s.substring(1));
-            return id == null ? Optional.empty() : Optional.of(new ItemSpec(s, null, TagKey.create(Registries.ITEM, id)));
+            return id == null ? Optional.empty() : Optional.of(new ItemSpec(s, null, TagKey.create(Registries.ITEM, id), null));
         }
         Identifier id = Identifier.tryParse(s.contains(":") ? s : "minecraft:" + s);
         if (id == null) {
@@ -50,11 +89,11 @@ public final class ItemSpec implements Predicate<ItemStack> {
         if (found.isEmpty() || found.get() == Items.AIR) {
             return Optional.empty();
         }
-        return Optional.of(new ItemSpec(s, found.get(), null));
+        return Optional.of(new ItemSpec(s, found.get(), null, null));
     }
 
     public static ItemSpec of(Item item) {
-        return new ItemSpec(BuiltInRegistries.ITEM.getKey(item).toString(), item, null);
+        return new ItemSpec(BuiltInRegistries.ITEM.getKey(item).toString(), item, null, null);
     }
 
     public boolean isTag() {
@@ -65,7 +104,7 @@ public final class ItemSpec implements Predicate<ItemStack> {
         return raw;
     }
 
-    /** The single item, or null for tags. */
+    /** The single item, or null for tags and groups. */
     public Item item() {
         return item;
     }
@@ -75,6 +114,9 @@ public final class ItemSpec implements Predicate<ItemStack> {
         if (stack.isEmpty()) {
             return false;
         }
+        if (group != null) {
+            return group.test(stack);
+        }
         return tag != null ? stack.is(tag) : stack.is(item);
     }
 
@@ -82,6 +124,9 @@ public final class ItemSpec implements Predicate<ItemStack> {
     public ItemStack icon() {
         if (item != null) {
             return new ItemStack(item);
+        }
+        if (group != null) {
+            return new ItemStack(group.icon());
         }
         for (var holder : BuiltInRegistries.ITEM.getTagOrEmpty(tag)) {
             return new ItemStack(holder.value());

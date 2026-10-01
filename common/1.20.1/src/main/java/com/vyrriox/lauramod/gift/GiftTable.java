@@ -81,6 +81,18 @@ public final class GiftTable {
             root = JsonParser.parseReader(new JsonReader(new StringReader(DEFAULTS))).getAsJsonObject();
         }
         com.vyrriox.lauramod.api.ScriptData.extend("gifts", root);
+        apply(root);
+    }
+
+    /**
+     * Uses the built-in table, without {@code gifts.json} and scripts: the self tests check the
+     * defaults, not a file an earlier run left in the test directory.
+     */
+    public static synchronized void loadDefaults() {
+        apply(JsonParser.parseReader(new JsonReader(new StringReader(DEFAULTS))).getAsJsonObject());
+    }
+
+    private static void apply(JsonObject root) {
         List<Gift> parsedGifts = new ArrayList<>();
         for (JsonElement e : array(root, "gifts")) {
             if (!e.isJsonObject()) {
@@ -225,7 +237,8 @@ public final class GiftTable {
 
     private static final String DEFAULTS = """
             // My Girlfriend Laura - gifts and food.
-            // "match" is an item id or an #item_tag. The first matching entry is used.
+            // "match" is an item id, an #item_tag or @music_disc (any item a jukebox can play).
+            // The first matching entry is used.
             // affection: -1000 to 1000. fun: 0 to 100. tier: GROSS, MEH, NICE, GREAT or AMAZING (picks her reaction).
             // returnChance: chance (0 to 1) that she gives you something back (from returnGifts).
             // food: nutrition if she can eat an item that is not normally edible (the cake for example).
@@ -248,7 +261,7 @@ public final class GiftTable {
                 { "match": "minecraft:sweet_berries", "affection": 6, "fun": 5, "tier": "NICE", "returnChance": 0.05 },
                 { "match": "minecraft:glow_berries", "affection": 8, "fun": 8, "tier": "NICE", "returnChance": 0.05 },
                 { "match": "minecraft:honey_bottle", "affection": 10, "fun": 8, "tier": "NICE", "returnChance": 0.1 },
-                { "match": "#minecraft:music_discs", "affection": 20, "fun": 25, "tier": "GREAT", "returnChance": 0.2 },
+                { "match": "@music_disc", "affection": 20, "fun": 25, "tier": "GREAT", "returnChance": 0.2 },
                 { "match": "minecraft:name_tag", "affection": 5, "fun": 5, "tier": "MEH", "returnChance": 0.0 },
                 { "match": "minecraft:totem_of_undying", "affection": 50, "fun": 20, "tier": "AMAZING", "returnChance": 0.4 },
                 { "match": "minecraft:rotten_flesh", "affection": -25, "fun": 0, "tier": "GROSS", "returnChance": 0.0 },

@@ -12,12 +12,14 @@ import com.vyrriox.lauramod.entity.LauraMode;
 import com.vyrriox.lauramod.entity.brain.Needs;
 import com.vyrriox.lauramod.entity.work.ChestPurpose;
 import com.vyrriox.lauramod.entity.work.LauraTask;
+import com.vyrriox.lauramod.gift.GiftTable;
 import com.vyrriox.lauramod.network.LauraAction;
 import com.vyrriox.lauramod.platform.CookingPots;
 import com.vyrriox.lauramod.platform.InventoryAccess;
 import com.vyrriox.lauramod.platform.LauraInventories;
 import com.vyrriox.lauramod.registry.LauraRegistries;
 import com.vyrriox.lauramod.skin.SkinService;
+import com.vyrriox.lauramod.util.ItemSpec;
 import com.vyrriox.lauramod.world.LauraActions;
 import com.vyrriox.lauramod.world.LauraAdvancements;
 import com.vyrriox.lauramod.world.LauraChat;
@@ -35,6 +37,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
@@ -253,6 +256,25 @@ public final class LauraTestCases {
             LauraActions.giveItem(player, laura, player.getMainHandItem(), InteractionHand.MAIN_HAND);
             ctx.check(laura.brain().desire() == null, "desire still active");
             ctx.check(LauraAdvancements.get(player, "desires") == 1, "desire counter");
+            ctx.succeed();
+        }));
+        // Every music disc is a gift: the default table matches them by what they are (@music_disc),
+        // not by a tag that some Minecraft versions or loaders do not have.
+        add(tests, "gift_music_disc", 200, ctx -> withLaura(ctx, laura -> {
+            ItemSpec discs = ItemSpec.parse("@music_disc").orElse(null);
+            ctx.check(discs != null, "@music_disc not understood");
+            for (Item disc : List.of(Items.MUSIC_DISC_13, Items.MUSIC_DISC_CAT, Items.MUSIC_DISC_PIGSTEP,
+                    Items.MUSIC_DISC_OTHERSIDE, Items.MUSIC_DISC_5, Items.MUSIC_DISC_RELIC)) {
+                ctx.check(discs.test(new ItemStack(disc)), BuiltInRegistries.ITEM.getKey(disc) + " is not a music disc");
+            }
+            ctx.check(!discs.test(new ItemStack(Items.JUKEBOX)), "a jukebox counted as a music disc");
+            GiftTable.loadDefaults();
+            ctx.onCleanup(GiftTable::load);
+            ServerPlayer player = ctx.player();
+            player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.MUSIC_DISC_PIGSTEP));
+            LauraActions.giveItem(player, laura, player.getMainHandItem(), InteractionHand.MAIN_HAND);
+            ctx.check(player.getInventory().countItem(Items.MUSIC_DISC_PIGSTEP) == 0, "she did not take the disc");
+            ctx.check(LauraAdvancements.get(player, "gifts") == 1, "the disc was not taken as a gift");
             ctx.succeed();
         }));
         add(tests, "hay_quiet", 200, ctx -> withLaura(ctx, laura -> {

@@ -40,6 +40,12 @@ public final class ClientSelfTest {
             return;
         }
         if (STEPS.isEmpty()) {
+            // Other windows can take the focus on a busy machine: the game must not pause under the
+            // test (in memory only, like the HUD setting below).
+            mc.options.pauseOnLostFocus = false;
+            if (mc.screen instanceof net.minecraft.client.gui.screens.PauseScreen) {
+                mc.setScreen(null);
+            }
             plan(mc);
             wait = 100;
         }
@@ -81,6 +87,35 @@ public final class ClientSelfTest {
         });
     }
 
+    /**
+     * Removes every companion of the test world, whoever owns her: the development player of some
+     * loaders gets another name and UUID on each run.
+     */
+    private static void removeAllCompanions(net.minecraft.server.MinecraftServer server) {
+        for (java.util.UUID owner : com.vyrriox.lauramod.world.LauraWorldData.get(server).all().stream().map(r -> r.owner).distinct().toList()) {
+            com.vyrriox.lauramod.test.MockPlayers.forgetCompanions(server, owner);
+        }
+        for (net.minecraft.server.level.ServerLevel level : server.getAllLevels()) {
+            List<LauraEntity> left = new ArrayList<>();
+            for (net.minecraft.world.entity.Entity entity : level.getAllEntities()) {
+                if (entity instanceof LauraEntity laura) {
+                    left.add(laura);
+                }
+            }
+            left.forEach(LauraEntity::discard);
+        }
+    }
+
+    /** Puts her back 3 blocks in front of the player, facing them: she may have walked off since the last shot. */
+    private static void inFront(ServerPlayer player, LauraEntity laura) {
+        Vec3 look = player.getLookAngle();
+        laura.teleportTo(player.getX() + look.x * 3, player.getY(), player.getZ() + look.z * 3);
+        laura.getNavigation().stop();
+        laura.setYRot(player.getYRot() + 180);
+        laura.setYBodyRot(player.getYRot() + 180);
+        laura.setYHeadRot(player.getYRot() + 180);
+    }
+
     private static void shot(Minecraft mc, String name) {
         Screenshot.grab(mc.gameDirectory, "laura_" + name + ".png", mc.getMainRenderTarget(),
                 message -> LauraMod.LOGGER.info("[CLIENTTEST] {}", message.getString()));
@@ -88,6 +123,11 @@ public final class ClientSelfTest {
 
     private static void plan(Minecraft mc) {
         STEPS.add(() -> onServer(mc, player -> {
+            // The quick play world is kept between runs: start from one new companion, whatever
+            // earlier runs left in it (several companions on top of each other, one still gagged),
+            // and without monsters, which hurt or killed the player during the night shots.
+            removeAllCompanions(player.getServer());
+            player.getServer().setDifficulty(net.minecraft.world.Difficulty.PEACEFUL, true);
             player.serverLevel().setDayTime(6000);
             player.serverLevel().setWeatherParameters(6000, 0, false, false);
             LauraManager.summon(player, false);
@@ -96,8 +136,7 @@ public final class ClientSelfTest {
             List<LauraEntity> all = LauraManager.findAll(player);
             if (!all.isEmpty()) {
                 LauraEntity l = all.get(0);
-                Vec3 look = player.getLookAngle();
-                l.teleportTo(player.getX() + look.x * 3, player.getY(), player.getZ() + look.z * 3);
+                inFront(player, l);
                 l.setBackItem(new ItemStack(Items.BUNDLE));
                 l.brain().needs().set(com.vyrriox.lauramod.entity.brain.Needs.Need.HUNGER, 35);
             }
@@ -111,6 +150,7 @@ public final class ClientSelfTest {
         // In memory only: the user's config file is not rewritten by the test.
         STEPS.add(() -> com.vyrriox.lauramod.config.LauraClientConfig.showNeedsHud.set(true));
         STEPS.add(() -> shot(mc, "world_front"));
+        STEPS.add(() -> onServer(mc, player -> LauraManager.findAll(player).stream().findFirst().ifPresent(l -> inFront(player, l))));
         // A long line to check the speech bubble: wrapping, width and readability.
         STEPS.add(() -> {
             LauraEntity l = laura();
@@ -120,7 +160,10 @@ public final class ClientSelfTest {
             }
         });
         STEPS.add(() -> shot(mc, "world_speech"));
-        STEPS.add(() -> onServer(mc, player -> player.serverLevel().setDayTime(18000)));
+        STEPS.add(() -> onServer(mc, player -> {
+            player.serverLevel().setDayTime(18000);
+            LauraManager.findAll(player).stream().findFirst().ifPresent(l -> inFront(player, l));
+        }));
         STEPS.add(() -> shot(mc, "world_speech_night"));
         STEPS.add(() -> onServer(mc, player -> player.serverLevel().setDayTime(6000)));
         for (LauraMenuScreen.Tab tab : LauraMenuScreen.Tab.values()) {
@@ -145,13 +188,7 @@ public final class ClientSelfTest {
             if (!all.isEmpty()) {
                 player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(Items.HAY_BLOCK));
                 com.vyrriox.lauramod.world.LauraActions.gag(player, all.get(0), player.getMainHandItem());
-                // She may have walked off since the first shots: bring her back in front, facing the player.
-                Vec3 look = player.getLookAngle();
-                all.get(0).teleportTo(player.getX() + look.x * 3, player.getY(), player.getZ() + look.z * 3);
-                all.get(0).getNavigation().stop();
-                all.get(0).setYRot(player.getYRot() + 180);
-                all.get(0).setYBodyRot(player.getYRot() + 180);
-                all.get(0).setYHeadRot(player.getYRot() + 180);
+                inFront(player, all.get(0));
             }
         }));
         STEPS.add(() -> shot(mc, "world_hay"));

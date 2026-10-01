@@ -13,9 +13,27 @@ Related guides / Guides liés : [ACTIONS.md](ACTIONS.md), [KUBEJS.md](KUBEJS.md)
 
 ### Targets
 
-Version 2.0.0 exists for Minecraft 1.21.1 on NeoForge, Forge and Fabric. Other targets are listed in the README of the repository: <https://github.com/laforetbrut/lauramod>.
+Version 2.0.0 exists for nine targets: Minecraft 1.20.1, 1.21.1 and 26.1.2, each on NeoForge, Forge and Fabric. The README of the repository lists them with their loader and Java versions: <https://github.com/laforetbrut/lauramod>.
 
-The behaviour described in the guides is the same on the three loaders, because it lives in shared code. Only the optional integrations below differ. None of them is required and none is bundled in the mod.
+The behaviour described in the guides is the same on the nine targets, because it lives in the shared code of each Minecraft version. Only the optional integrations below differ. None of them is required and none is bundled in the mod.
+
+In the tables, "yes" means the integration is wired for that target, either in its loader project or in the shared code. The in-game self tests check Farmer's Delight (or its Refabricated port) and KubeJS when they are loaded. Applied Energistics 2 and Curios have no in-game test.
+
+### Summary by loader (1.20.1)
+
+| Integration | NeoForge | Forge | Fabric |
+|---|---|---|---|
+| Modded storage blocks (fetch, jobs, assigned chests) | yes, item handlers | yes, item handlers | yes, Transfer API |
+| Backpack worn on her back | yes | yes | yes |
+| Backpack used as extra storage | yes, item handlers | yes, item handlers | no |
+| Applied Energistics 2 network | compiled in, never run in game | compiled in, never run in game | compiled in, never run in game |
+| Curios trinkets | compiled in, never run in game | compiled in, never run in game | no |
+| Farmer's Delight cooking pot | yes | yes | yes, Farmer's Delight Refabricated |
+| KubeJS binding and events | yes | yes | yes |
+| Carry On blacklist | yes | yes | yes |
+| Waystones and other teleports | yes | yes | yes |
+
+**1.20.1 note.** NeoForge for Minecraft 1.20.1 is the 47.1 fork of Forge, so the NeoForge and Forge projects use the same item handlers and the same Forge builds of the other mods. Farmer's Delight and KubeJS are checked in game on the three loaders. The Applied Energistics 2 and Curios bridges are compiled against their APIs but have never been run in game: treat them as untested. Curios has no Fabric release, and backpack storage is not wired on Fabric 1.20.1.
 
 ### Summary by loader (1.21.1)
 
@@ -31,9 +49,25 @@ The behaviour described in the guides is the same on the three loaders, because 
 | Carry On blacklist | yes | yes | yes |
 | Waystones and other teleports | yes | yes | yes |
 
-**Fabric note.** On Fabric 1.21.1 only Farmer's Delight Refabricated is integrated. The Applied Energistics 2, Curios and KubeJS integrations do not exist on Fabric. Backpack storage and trinkets are not wired on Fabric yet: she can wear a backpack, but it does not add storage.
+**Fabric note.** On Fabric 1.21.1 only Farmer's Delight Refabricated is integrated. Applied Energistics 2, Curios and KubeJS have no Fabric 1.21.1 release. Backpack storage is not wired on Fabric 1.21.1: she can wear a backpack, but it does not add storage.
 
-**Forge note.** The Forge 1.21.1 project of version 2.0.0 contains no Applied Energistics 2, Curios, Farmer's Delight or KubeJS bridge. Modded storage and backpack storage work through Forge item handlers.
+**Forge note.** The Forge 1.21.1 project contains no Applied Energistics 2, Curios, Farmer's Delight or KubeJS bridge: these mods have no Forge 1.21.1 release. Modded storage and backpack storage work through Forge item handlers.
+
+### Summary by loader (26.1.2)
+
+| Integration | NeoForge | Forge | Fabric |
+|---|---|---|---|
+| Modded storage blocks (fetch, jobs, assigned chests) | yes, resource handlers | yes, item handlers | yes, Transfer API |
+| Backpack worn on her back | yes | yes | yes |
+| Backpack used as extra storage | yes, resource handlers | yes, item handlers | yes, Transfer API |
+| Applied Energistics 2 network | no | no | no |
+| Curios trinkets | no | no | no |
+| Farmer's Delight cooking pot | no | no | yes, Farmer's Delight Refabricated |
+| KubeJS binding and events | no | no | no |
+| Carry On blacklist | yes | yes | yes |
+| Waystones and other teleports | yes | yes | yes |
+
+**26.1.2 note.** Fabric 26.1.2 integrates Farmer's Delight Refabricated. The NeoForge and Forge projects of 26.1.2 have none of the four mod bridges yet. NeoForge 26.1.2 reaches storage through its new transfer API (resource handlers) instead of item handlers. Backpack storage works on the three loaders.
 
 ### Modded storage
 
@@ -43,7 +77,7 @@ When she searches an area on her own, these blocks are skipped because they are 
 
 ### Applied Energistics 2
 
-[Applied Energistics 2](https://appliedenergistics.org/), NeoForge only.
+[Applied Energistics 2](https://appliedenergistics.org/): NeoForge 1.21.1. The same bridge is compiled into the NeoForge, Forge and Fabric projects of 1.20.1, where it has never been run in game.
 
 - Any block of a powered ME network (interface, ME chest, drive, cable with a terminal...) gives her the whole network storage, not only the slots of that block.
 - Fetch: with such a block within `fetch.radius`, "bring me 32 iron ingots" takes them from the network.
@@ -52,7 +86,7 @@ When she searches an area on her own, these blocks are skipped because they are 
 
 ### Curios
 
-[Curios](https://modrinth.com/mod/curios), NeoForge only.
+[Curios](https://modrinth.com/mod/curios): NeoForge 1.21.1. The same bridge is compiled into the NeoForge and Forge projects of 1.20.1, where it has never been run in game.
 
 - She has these trinket slots: `necklace`, `ring`, `bracelet`, `charm`, `head`, `back`, `belt`.
 - Right click her with a trinket. It goes into a free slot that accepts it. She gains 8 affection and you get the "Put a Ring on It" advancement.
@@ -61,7 +95,7 @@ When she searches an area on her own, these blocks are skipped because they are 
 
 ### Farmer's Delight
 
-[Farmer's Delight](https://modrinth.com/mod/farmers-delight) on NeoForge, [Farmer's Delight Refabricated](https://modrinth.com/mod/farmers-delight-refabricated) on Fabric.
+[Farmer's Delight](https://modrinth.com/mod/farmers-delight) on NeoForge 1.21.1 and on NeoForge and Forge 1.20.1. [Farmer's Delight Refabricated](https://modrinth.com/mod/farmers-delight-refabricated) on Fabric 1.20.1, 1.21.1 and 26.1.2. On Fabric another port of Farmer's Delight is not supported: the log says so and her cooking ignores the pots.
 
 As a cook (job or single task) she also uses cooking pots that stand in her work area:
 
@@ -73,7 +107,7 @@ Ingredients come from her inventory and from chests assigned to `ingredients`.
 
 ### KubeJS
 
-[KubeJS](https://kubejs.com/), NeoForge only. Scripts get the `Laura` binding and the `LauraEvents` event group. See [KUBEJS.md](KUBEJS.md).
+[KubeJS](https://kubejs.com/): NeoForge 1.21.1, and NeoForge, Forge and Fabric 1.20.1. Scripts get the `Laura` binding and the `LauraEvents` event group. See [KUBEJS.md](KUBEJS.md).
 
 ### Backpacks
 
@@ -83,10 +117,10 @@ She can wear one item on her back.
 - Default content of the tag: `minecraft:bundle` and the backpacks of [Sophisticated Backpacks](https://modrinth.com/mod/sophisticated-backpacks) (`backpack`, `copper_backpack`, `iron_backpack`, `gold_backpack`, `diamond_backpack`, `netherite_backpack`).
 - Put it on: right click her with it while her back is free, or use the back slot of her inventory. Take it off from the same slot.
 - The item is drawn on her back.
-- On NeoForge and Forge, a backpack that exposes its inventory through an item handler becomes extra storage. Items go to her own bag first, then to the backpack. Jobs, fetch and pickup use both.
-- An item without such an inventory (the bundle for example) is worn for the look only.
+- On NeoForge and Forge (the three Minecraft versions) and on Fabric 26.1.2, a backpack that exposes its inventory through the loader's item API becomes extra storage. Items go to her own bag first, then to the backpack. Jobs, fetch and pickup use both.
+- On Fabric 1.20.1 and 1.21.1, and for an item without such an inventory (the bundle for example), the item is worn for the look only.
 
-Worked example, a datapack that lets her wear a satchel of another mod. File `data/lauramod/tags/item/wearable_on_back.json`:
+Worked example, a datapack that lets her wear a satchel of another mod. File `data/lauramod/tags/item/wearable_on_back.json` (`tags/items/` on Minecraft 1.20.1):
 
 ```json
 {
@@ -101,7 +135,7 @@ Worked example, a datapack that lets her wear a satchel of another mod. File `da
 
 The block tag `lauramod:fetch_harvestable` lists what she may break to fetch an item. Default content: `#minecraft:logs`, `#minecraft:flowers`, `#minecraft:crops`, sugar cane, pumpkin, melon, cactus, bamboo, sweet berry bush, brown and red mushrooms, cocoa, nether wart, kelp, short and tall grass, fern and large fern, vine, glow lichen, moss carpet.
 
-Add modded plants with a datapack file `data/lauramod/tags/block/fetch_harvestable.json`:
+Add modded plants with a datapack file `data/lauramod/tags/block/fetch_harvestable.json` (`tags/blocks/` on Minecraft 1.20.1):
 
 ```json
 {
@@ -128,9 +162,27 @@ Companions in stay, home, wander or work mode are not moved.
 
 ### Cibles
 
-La version 2.0.0 existe pour Minecraft 1.21.1 sur NeoForge, Forge et Fabric. Les autres cibles sont listées dans le README du dépôt : <https://github.com/laforetbrut/lauramod>.
+La version 2.0.0 existe pour neuf cibles : Minecraft 1.20.1, 1.21.1 et 26.1.2, chacun sur NeoForge, Forge et Fabric. Le README du dépôt les liste avec leurs versions de chargeur et de Java : <https://github.com/laforetbrut/lauramod>.
 
-Le comportement décrit dans les guides est le même sur les trois chargeurs, car il se trouve dans du code partagé. Seules les intégrations facultatives ci-dessous diffèrent. Aucune n'est obligatoire et aucune n'est incluse dans le mod.
+Le comportement décrit dans les guides est le même sur les neuf cibles, car il se trouve dans le code partagé de chaque version de Minecraft. Seules les intégrations facultatives ci-dessous diffèrent. Aucune n'est obligatoire et aucune n'est incluse dans le mod.
+
+Dans les tableaux, « oui » signifie que l'intégration est câblée pour cette cible, dans le projet de son chargeur ou dans le code partagé. Les self tests en jeu vérifient Farmer's Delight (ou son portage Refabricated) et KubeJS quand ils sont chargés. Applied Energistics 2 et Curios n'ont aucun test en jeu.
+
+### Résumé par chargeur (1.20.1)
+
+| Intégration | NeoForge | Forge | Fabric |
+|---|---|---|---|
+| Rangements de mods (rapporter, métiers, coffres attribués) | oui, item handlers | oui, item handlers | oui, Transfer API |
+| Sac à dos porté sur son dos | oui | oui | oui |
+| Sac à dos utilisé comme rangement supplémentaire | oui, item handlers | oui, item handlers | non |
+| Réseau Applied Energistics 2 | compilé, jamais lancé en jeu | compilé, jamais lancé en jeu | compilé, jamais lancé en jeu |
+| Bijoux Curios | compilé, jamais lancé en jeu | compilé, jamais lancé en jeu | non |
+| Marmite de Farmer's Delight | oui | oui | oui, Farmer's Delight Refabricated |
+| Liaison et événements KubeJS | oui | oui | oui |
+| Liste noire de Carry On | oui | oui | oui |
+| Waystones et autres téléportations | oui | oui | oui |
+
+**Note 1.20.1.** NeoForge pour Minecraft 1.20.1 est le fork 47.1 de Forge : les projets NeoForge et Forge utilisent donc les mêmes item handlers et les mêmes versions Forge des autres mods. Farmer's Delight et KubeJS sont vérifiés en jeu sur les trois chargeurs. Les ponts Applied Energistics 2 et Curios sont compilés avec leurs API mais n'ont jamais été lancés en jeu : considérez-les comme non testés. Curios n'a pas de version Fabric, et le rangement des sacs à dos n'est pas câblé sur Fabric 1.20.1.
 
 ### Résumé par chargeur (1.21.1)
 
@@ -146,9 +198,25 @@ Le comportement décrit dans les guides est le même sur les trois chargeurs, ca
 | Liste noire de Carry On | oui | oui | oui |
 | Waystones et autres téléportations | oui | oui | oui |
 
-**Note Fabric.** Sur Fabric 1.21.1, seul Farmer's Delight Refabricated est intégré. Les intégrations Applied Energistics 2, Curios et KubeJS n'existent pas sur Fabric. Le rangement des sacs à dos et les bijoux ne sont pas encore câblés sur Fabric : elle peut porter un sac à dos, mais il n'ajoute pas de rangement.
+**Note Fabric.** Sur Fabric 1.21.1, seul Farmer's Delight Refabricated est intégré. Applied Energistics 2, Curios et KubeJS n'ont pas de version Fabric 1.21.1. Le rangement des sacs à dos n'est pas câblé sur Fabric 1.21.1 : elle peut porter un sac à dos, mais il n'ajoute pas de rangement.
 
-**Note Forge.** Le projet Forge 1.21.1 de la version 2.0.0 ne contient aucun pont Applied Energistics 2, Curios, Farmer's Delight ou KubeJS. Les rangements de mods et le rangement des sacs à dos fonctionnent grâce aux item handlers de Forge.
+**Note Forge.** Le projet Forge 1.21.1 ne contient aucun pont Applied Energistics 2, Curios, Farmer's Delight ou KubeJS : ces mods n'ont pas de version Forge 1.21.1. Les rangements de mods et le rangement des sacs à dos fonctionnent grâce aux item handlers de Forge.
+
+### Résumé par chargeur (26.1.2)
+
+| Intégration | NeoForge | Forge | Fabric |
+|---|---|---|---|
+| Rangements de mods (rapporter, métiers, coffres attribués) | oui, resource handlers | oui, item handlers | oui, Transfer API |
+| Sac à dos porté sur son dos | oui | oui | oui |
+| Sac à dos utilisé comme rangement supplémentaire | oui, resource handlers | oui, item handlers | oui, Transfer API |
+| Réseau Applied Energistics 2 | non | non | non |
+| Bijoux Curios | non | non | non |
+| Marmite de Farmer's Delight | non | non | oui, Farmer's Delight Refabricated |
+| Liaison et événements KubeJS | non | non | non |
+| Liste noire de Carry On | oui | oui | oui |
+| Waystones et autres téléportations | oui | oui | oui |
+
+**Note 26.1.2.** Fabric 26.1.2 intègre Farmer's Delight Refabricated. Les projets NeoForge et Forge de la 26.1.2 n'ont encore aucun des quatre ponts vers d'autres mods. NeoForge 26.1.2 atteint les rangements par sa nouvelle API de transfert (resource handlers) au lieu des item handlers. Le rangement des sacs à dos fonctionne sur les trois chargeurs.
 
 ### Rangements de mods
 
@@ -158,7 +226,7 @@ Quand elle fouille une zone d'elle-même, ces blocs sont ignorés car ce sont de
 
 ### Applied Energistics 2
 
-[Applied Energistics 2](https://appliedenergistics.org/), NeoForge uniquement.
+[Applied Energistics 2](https://appliedenergistics.org/) : NeoForge 1.21.1. Le même pont est compilé dans les projets NeoForge, Forge et Fabric de la 1.20.1, où il n'a jamais été lancé en jeu.
 
 - N'importe quel bloc d'un réseau ME alimenté (interface, coffre ME, lecteur, câble avec un terminal...) lui donne accès à tout le stockage du réseau, pas seulement aux emplacements de ce bloc.
 - Rapporter : avec un tel bloc dans le rayon `fetch.radius`, « apporte-moi 32 lingots de fer » les prend dans le réseau.
@@ -167,7 +235,7 @@ Quand elle fouille une zone d'elle-même, ces blocs sont ignorés car ce sont de
 
 ### Curios
 
-[Curios](https://modrinth.com/mod/curios), NeoForge uniquement.
+[Curios](https://modrinth.com/mod/curios) : NeoForge 1.21.1. Le même pont est compilé dans les projets NeoForge et Forge de la 1.20.1, où il n'a jamais été lancé en jeu.
 
 - Elle dispose de ces emplacements de bijoux : `necklace`, `ring`, `bracelet`, `charm`, `head`, `back`, `belt`.
 - Faites un clic droit sur elle avec un bijou. Il va dans un emplacement libre qui l'accepte. Elle gagne 8 points d'affection et vous obtenez le progrès « La bague au doigt ».
@@ -176,7 +244,7 @@ Quand elle fouille une zone d'elle-même, ces blocs sont ignorés car ce sont de
 
 ### Farmer's Delight
 
-[Farmer's Delight](https://modrinth.com/mod/farmers-delight) sur NeoForge, [Farmer's Delight Refabricated](https://modrinth.com/mod/farmers-delight-refabricated) sur Fabric.
+[Farmer's Delight](https://modrinth.com/mod/farmers-delight) sur NeoForge 1.21.1 et sur NeoForge et Forge 1.20.1. [Farmer's Delight Refabricated](https://modrinth.com/mod/farmers-delight-refabricated) sur Fabric 1.20.1, 1.21.1 et 26.1.2. Sur Fabric, un autre portage de Farmer's Delight n'est pas pris en charge : le journal le signale et sa cuisine ignore les marmites.
 
 Cuisinière (métier ou tâche unique), elle utilise aussi les marmites placées dans sa zone de travail :
 
@@ -188,7 +256,7 @@ Les ingrédients viennent de son inventaire et des coffres attribués à `ingred
 
 ### KubeJS
 
-[KubeJS](https://kubejs.com/), NeoForge uniquement. Les scripts reçoivent la liaison `Laura` et le groupe d'événements `LauraEvents`. Voir [KUBEJS.md](KUBEJS.md).
+[KubeJS](https://kubejs.com/) : NeoForge 1.21.1, ainsi que NeoForge, Forge et Fabric 1.20.1. Les scripts reçoivent la liaison `Laura` et le groupe d'événements `LauraEvents`. Voir [KUBEJS.md](KUBEJS.md).
 
 ### Sacs à dos
 
@@ -198,10 +266,10 @@ Elle peut porter un objet sur son dos.
 - Contenu par défaut du tag : `minecraft:bundle` et les sacs à dos de [Sophisticated Backpacks](https://modrinth.com/mod/sophisticated-backpacks) (`backpack`, `copper_backpack`, `iron_backpack`, `gold_backpack`, `diamond_backpack`, `netherite_backpack`).
 - Pour le lui mettre : clic droit sur elle avec l'objet quand son dos est libre, ou l'emplacement de dos de son inventaire. Retirez-le depuis ce même emplacement.
 - L'objet est dessiné sur son dos.
-- Sur NeoForge et Forge, un sac à dos qui expose son inventaire par un item handler devient un rangement supplémentaire. Les objets vont d'abord dans son propre sac, puis dans le sac à dos. Les métiers, la recherche d'objets et le ramassage utilisent les deux.
-- Un objet sans inventaire de ce type (le sac du jeu de base par exemple) est porté uniquement pour l'apparence.
+- Sur NeoForge et Forge (les trois versions de Minecraft) et sur Fabric 26.1.2, un sac à dos qui expose son inventaire par l'API d'objets du chargeur devient un rangement supplémentaire. Les objets vont d'abord dans son propre sac, puis dans le sac à dos. Les métiers, la recherche d'objets et le ramassage utilisent les deux.
+- Sur Fabric 1.20.1 et 1.21.1, et pour un objet sans inventaire de ce type (le sac du jeu de base par exemple), l'objet est porté uniquement pour l'apparence.
 
-Exemple complet, un datapack qui lui permet de porter une sacoche d'un autre mod. Fichier `data/lauramod/tags/item/wearable_on_back.json` :
+Exemple complet, un datapack qui lui permet de porter une sacoche d'un autre mod. Fichier `data/lauramod/tags/item/wearable_on_back.json` (`tags/items/` sur Minecraft 1.20.1) :
 
 ```json
 {
@@ -216,7 +284,7 @@ Exemple complet, un datapack qui lui permet de porter une sacoche d'un autre mod
 
 Le tag de blocs `lauramod:fetch_harvestable` liste ce qu'elle peut casser pour rapporter un objet. Contenu par défaut : `#minecraft:logs`, `#minecraft:flowers`, `#minecraft:crops`, canne à sucre, citrouille, pastèque, cactus, bambou, buisson à baies sucrées, champignons bruns et rouges, cacao, verrues du Nether, varech, herbes courtes et hautes, fougère et grande fougère, lianes, lichen lumineux, tapis de mousse.
 
-Ajoutez des plantes de mods avec un fichier de datapack `data/lauramod/tags/block/fetch_harvestable.json` :
+Ajoutez des plantes de mods avec un fichier de datapack `data/lauramod/tags/block/fetch_harvestable.json` (`tags/blocks/` sur Minecraft 1.20.1) :
 
 ```json
 {

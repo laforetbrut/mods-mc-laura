@@ -63,8 +63,11 @@ public final class LauraFabric implements ModInitializer {
     }
 
     private static void registerContent() {
+        // Fabric's build() without an id: the vanilla build(id) of Minecraft 1.21.1 only uses the id to
+        // look the type up in the data fixer schema, and logs "No data fixer registered" at ERROR level
+        // for every modded type (NeoForge and Forge turn that message into a debug one).
         EntityType<LauraEntity> lauraType = Registry.register(BuiltInRegistries.ENTITY_TYPE, LauraMod.id(LauraRegistries.LAURA_ID),
-                LauraRegistries.lauraType().build(LauraMod.id(LauraRegistries.LAURA_ID).toString()));
+                LauraRegistries.lauraType().build());
         laura = lauraType;
         FabricDefaultAttributeRegistry.register(lauraType, LauraEntity.createAttributes());
 

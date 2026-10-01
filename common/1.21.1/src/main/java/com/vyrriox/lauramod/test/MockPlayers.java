@@ -51,8 +51,8 @@ public final class MockPlayers {
         return player;
     }
 
-    /** Removes the fake player's companions from the worlds and from the saved data. */
-    private static void forgetCompanions(MinecraftServer server, UUID owner) {
+    /** Removes the player's companions from the worlds and from the saved data. */
+    public static void forgetCompanions(MinecraftServer server, UUID owner) {
         LauraWorldData data = LauraWorldData.get(server);
         for (LauraWorldData.Record r : data.byOwner(owner)) {
             for (ServerLevel level : server.getAllLevels()) {
