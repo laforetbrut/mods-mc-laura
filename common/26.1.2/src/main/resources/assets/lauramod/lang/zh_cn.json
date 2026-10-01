@@ -405,6 +405,7 @@
   "lauramod.summon.everyone_coming": "你的伴侣们正在赶来。",
   "lauramod.summon.max": "你的伴侣数量已达上限（%s）。",
   "lauramod.summon.no_permission": "你无权在这里召唤伴侣。",
+  "lauramod.summon.no_room": "这里没有适合她的安全位置。请站到坚实的地面上再呼唤她。",
   "lauramod.summon.on_her_way": "%s 正在赶来！",
   "lauramod.summon.respawning": "%s 将在 %s 秒后回来。",
   "lauramod.summon.world_taken": "这个世界的伴侣数量已达上限。",

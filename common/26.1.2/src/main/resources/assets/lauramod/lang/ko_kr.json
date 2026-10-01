@@ -397,6 +397,7 @@
   "lauramod.summon.everyone_coming": "동반자들이 오고 있어요.",
   "lauramod.summon.max": "이미 동반자 최대 수(%s)에 도달했어요.",
   "lauramod.summon.no_permission": "여기서는 동반자를 소환할 수 없어요.",
+  "lauramod.summon.no_room": "여기에는 그녀가 안전하게 설 곳이 없어요. 단단한 땅 위에 서서 다시 불러 주세요.",
   "lauramod.summon.on_her_way": "%s 지금 가는 중이에요!",
   "lauramod.summon.respawning": "%s, %s초 후에 돌아와요.",
   "lauramod.summon.world_taken": "이 월드에는 이미 허용된 만큼 동반자가 있어요.",

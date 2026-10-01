@@ -397,6 +397,7 @@
   "lauramod.summon.everyone_coming": "Dina följeslagare är på väg.",
   "lauramod.summon.max": "Du har redan maximalt antal följeslagare (%s).",
   "lauramod.summon.no_permission": "Du får inte kalla på en följeslagare här.",
+  "lauramod.summon.no_room": "Det finns ingen säker plats för henne här. Ställ dig på fast mark och kalla på henne igen.",
   "lauramod.summon.on_her_way": "%s är på väg!",
   "lauramod.summon.respawning": "%s kommer tillbaka om %s sekunder.",
   "lauramod.summon.world_taken": "Den här världen har redan så många följeslagare som den tillåter.",

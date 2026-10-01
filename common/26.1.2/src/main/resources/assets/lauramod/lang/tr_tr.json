@@ -397,6 +397,7 @@
   "lauramod.summon.everyone_coming": "Eşlikçilerin yolda.",
   "lauramod.summon.max": "Zaten izin verilen en fazla sayıda eşlikçin var (%s).",
   "lauramod.summon.no_permission": "Burada eşlikçi çağırma iznin yok.",
+  "lauramod.summon.no_room": "Burada onun için güvenli bir yer yok. Sağlam bir zemine geç ve onu yeniden çağır.",
   "lauramod.summon.on_her_way": "%s yolda!",
   "lauramod.summon.respawning": "%s, %s saniye içinde geri dönüyor.",
   "lauramod.summon.world_taken": "Bu dünyada izin verilen sayıda eşlikçi zaten var.",

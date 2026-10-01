@@ -91,12 +91,35 @@ public final class MiscAreaTests {
             for (int i = 0; i < laura.inventory().getContainerSize(); i++) {
                 laura.inventory().setItem(i, new ItemStack(Items.STONE, 64));
             }
-            player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.POPPY, 2));
+            player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.STICK, 2));
             long spoken = LauraSpeech.spokenCount();
             LauraActions.giveItem(player, laura, player.getMainHandItem(), InteractionHand.MAIN_HAND);
             ctx.check(player.getMainHandItem().getCount() == 1, "the gift was not taken");
-            ctx.check(count(ctx, laura.getBoundingBox().inflate(3), Items.POPPY) == 1, "the gift that did not fit was destroyed");
+            ctx.check(count(ctx, laura.getBoundingBox().inflate(3), Items.STICK) == 1, "the gift that did not fit was destroyed");
             ctx.check(LauraSpeech.spokenCount() - spoken == 1, "she said " + (LauraSpeech.spokenCount() - spoken) + " lines for one gift");
+            ctx.succeed();
+        }));
+        // Hugs in a row are all given, but only the first of each cooldown makes her fonder.
+        add(tests, "cuddle_cooldown", 200, ctx -> withLaura(ctx, laura -> {
+            ServerPlayer player = ctx.player();
+            int seconds = LauraConfig.cuddleCooldownSeconds.getInt();
+            ctx.onCleanup(() -> LauraConfig.cuddleCooldownSeconds.set(seconds));
+            LauraConfig.cuddleCooldownSeconds.set(60);
+            laura.setAffection(300);
+            int hugs = LauraAdvancements.get(player, "hugs");
+            for (int i = 0; i < 5; i++) {
+                LauraActions.perform(player, laura, LauraAction.HUG, "", LauraActions.Source.MENU);
+            }
+            ctx.check(LauraAdvancements.get(player, "hugs") == hugs + 5, "a hug in a row was refused");
+            ctx.check(laura.getAffection() == 304, "five hugs in a row: affection is " + laura.getAffection());
+            for (int i = 0; i < 3; i++) {
+                LauraActions.perform(player, laura, LauraAction.KISS, "", LauraActions.Source.MENU);
+            }
+            ctx.check(laura.getAffection() == 309, "three kisses in a row: affection is " + laura.getAffection());
+            LauraConfig.cuddleCooldownSeconds.set(0);
+            LauraActions.perform(player, laura, LauraAction.HUG, "", LauraActions.Source.MENU);
+            LauraActions.perform(player, laura, LauraAction.HUG, "", LauraActions.Source.MENU);
+            ctx.check(laura.getAffection() == 317, "without a cooldown two hugs gave " + (laura.getAffection() - 309));
             ctx.succeed();
         }));
         // The same kind of gift only makes her fonder once per cooldown: taking it back from her bag
