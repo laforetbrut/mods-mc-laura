@@ -41,6 +41,15 @@ public interface Platform {
     InventoryAccess inventoryAt(net.minecraft.server.level.ServerLevel level, net.minecraft.core.BlockPos pos);
 
     /**
+     * Asks the other mods whether the player may open the container at pos, the way the loader does
+     * when a player right clicks a block (claim and protection mods answer there). True when nobody
+     * objects. Laura calls it before she uses a container her partner did not assign to her.
+     */
+    default boolean mayUseContainer(ServerPlayer player, net.minecraft.server.level.ServerLevel level, net.minecraft.core.BlockPos pos) {
+        return true;
+    }
+
+    /**
      * The inventory inside an item (a backpack), through the loader's item API. Null when the item
      * has none or the loader cannot tell.
      */

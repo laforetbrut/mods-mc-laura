@@ -116,6 +116,8 @@ public class LauraEntity extends TamableAnimal {
     private final LauraWorkplace workplace = new LauraWorkplace(this);
     private LauraWorkGoal workGoal;
     private final List<ItemStack> keptOwnerItems = new ArrayList<>();
+    /** Items of a fetch that was cut short by a save, a death or a change of dimension; put in her bags on her next tick. */
+    private final List<ItemStack> pendingFetchBag = new ArrayList<>();
     private BlockPos homePos;
     private ResourceKey<Level> homeDimension;
     private BlockPos wanderCenter;
@@ -210,6 +212,16 @@ public class LauraEntity extends TamableAnimal {
         }
         if (gagTicks > 0 && --gagTicks == 0 && isGagged()) {
             LauraActions.ungag(null, this, true);
+        }
+        if (!pendingFetchBag.isEmpty()) {
+            // Not while loading: she has to be in the world to drop what does not fit.
+            for (ItemStack stack : pendingFetchBag) {
+                ItemStack rest = bags().add(stack);
+                if (!rest.isEmpty()) {
+                    this.spawnAtLocation(rest);
+                }
+            }
+            pendingFetchBag.clear();
         }
         if ((this.tickCount + tickOffset) % 5 == 0) {
             LauraActions.processQueue(this);
@@ -359,6 +371,14 @@ public class LauraEntity extends TamableAnimal {
 
     /** Drops everything she carries at her feet: bag, equipment, items kept for her partner, back item. */
     public void dropBelongings() {
+        if (fetchGoal != null) {
+            // What she carries for a fetch goes back into her bag first, and is dropped with the rest.
+            fetchGoal.cancel(false);
+        }
+        for (ItemStack stack : pendingFetchBag) {
+            this.spawnAtLocation(stack);
+        }
+        pendingFetchBag.clear();
         for (int i = 0; i < inventory.getContainerSize(); i++) {
             ItemStack stack = inventory.removeItemNoUpdate(i);
             if (!stack.isEmpty()) {
@@ -896,6 +916,24 @@ public class LauraEntity extends TamableAnimal {
             }
         }
         tag.put("KeptOwnerItems", kept);
+        // The fetch itself is not saved, only what she already carries for it: without this the items
+        // vanish when she is saved and unloaded, dies, is sent away or changes dimension on the way.
+        ListTag fetchBag = new ListTag();
+        for (ItemStack stack : pendingFetchBag) {
+            if (!stack.isEmpty()) {
+                fetchBag.add(stack.save(this.registryAccess()));
+            }
+        }
+        if (fetchGoal != null) {
+            for (ItemStack stack : fetchGoal.carried()) {
+                if (!stack.isEmpty()) {
+                    fetchBag.add(stack.save(this.registryAccess()));
+                }
+            }
+        }
+        if (!fetchBag.isEmpty()) {
+            tag.put("FetchBag", fetchBag);
+        }
         if (homePos != null) {
             tag.putInt("HomeX", homePos.getX());
             tag.putInt("HomeY", homePos.getY());
@@ -946,6 +984,13 @@ public class LauraEntity extends TamableAnimal {
             ListTag kept = tag.getList("KeptOwnerItems", Tag.TAG_COMPOUND);
             for (int i = 0; i < kept.size(); i++) {
                 ItemStack.parse(this.registryAccess(), kept.getCompound(i)).ifPresent(keptOwnerItems::add);
+            }
+        }
+        pendingFetchBag.clear();
+        if (tag.contains("FetchBag", Tag.TAG_LIST)) {
+            ListTag fetchBag = tag.getList("FetchBag", Tag.TAG_COMPOUND);
+            for (int i = 0; i < fetchBag.size(); i++) {
+                ItemStack.parse(this.registryAccess(), fetchBag.getCompound(i)).ifPresent(pendingFetchBag::add);
             }
         }
         if (tag.contains("HomeX")) {

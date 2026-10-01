@@ -36,7 +36,18 @@ public final class LauraSpeech {
             return false;
         }
         deliver(laura, to, format(laura, to, line, values));
+        if (com.vyrriox.lauramod.test.LauraSelfTest.enabled()) {
+            SAID.merge(effectiveKey, 1, Integer::sum);
+        }
         return true;
+    }
+
+    /** How many times each dialogue key was said. Only filled during the self tests, which read it. */
+    private static final java.util.Map<String, Integer> SAID = new java.util.HashMap<>();
+
+    /** Self tests: how many times a dialogue key was said since the server started. */
+    public static int timesSaid(String key) {
+        return SAID.getOrDefault(key, 0);
     }
 
     /** Tries the keys in order and says the first one that exists. */

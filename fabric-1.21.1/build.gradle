@@ -62,12 +62,24 @@ loom {
             runDir 'run-server'
             programArg 'nogui'
         }
+        // Client that opens every screen of the mod in the quick play world laura_test and saves screenshots.
+        clienttest {
+            client()
+            configName = 'Laura Client Test'
+            runDir 'run-clienttest'
+            vmArg '-Dlauramod.clienttest=true'
+            programArgs '--quickPlaySingleplayer', 'laura_test'
+        }
         // Dedicated server that runs the mod's self tests, writes lauramod-selftest.json and stops.
         selftest {
             server()
             configName = 'Laura Self Test'
             runDir 'run-selftest'
             vmArg '-Dlauramod.selftest=true'
+            // -PselftestOnly=name runs only the tests whose name contains it.
+            if (project.hasProperty('selftestOnly')) {
+                vmArg "-Dlauramod.selftest.only=${project.property('selftestOnly')}"
+            }
             programArg 'nogui'
         }
     }

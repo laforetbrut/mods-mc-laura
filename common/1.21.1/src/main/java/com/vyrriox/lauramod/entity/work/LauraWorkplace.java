@@ -95,7 +95,8 @@ public final class LauraWorkplace {
         List<BlockPos> out = new ArrayList<>();
         Level level = laura.level();
         for (ChestAssignment c : chests) {
-            if (c.purpose() == purpose && c.dimension().equals(level.dimension()) && level.isLoaded(c.pos()) && inventory(c.pos()) != null) {
+            if (c.purpose() == purpose && c.dimension().equals(level.dimension()) && level.isLoaded(c.pos()) && inventory(c.pos()) != null
+                    && !LauraInventories.isLocked(laura, c.pos())) {
                 out.add(c.pos());
             }
         }
@@ -120,7 +121,7 @@ public final class LauraWorkplace {
         }
         if (area != null && LauraConfig.depositInChests.get() && chests.stream().noneMatch(c -> c.purpose() == purpose || c.purpose() == ChestPurpose.STORAGE)) {
             for (BlockPos pos : containersIn(area, false)) {
-                if (purposeOf(pos) == null && hasRoom(pos, sample)) {
+                if (purposeOf(pos) == null && hasRoom(pos, sample) && LauraInventories.mayUse(laura, pos)) {
                     return pos;
                 }
             }
@@ -141,7 +142,8 @@ public final class LauraWorkplace {
                 ChestPurpose p = purposeOf(pos);
                 boolean usable = p == null || p == purpose || p == ChestPurpose.STORAGE;
                 InventoryAccess inv = usable ? inventory(pos) : null;
-                if (inv != null && inv.hasAnyMatching(wanted)) {
+                // A container nobody assigned to her is only used when her partner could open it too.
+                if (inv != null && inv.hasAnyMatching(wanted) && LauraInventories.mayUse(laura, pos)) {
                     return pos;
                 }
             }
@@ -216,8 +218,39 @@ public final class LauraWorkplace {
         return current;
     }
 
+    /**
+     * Moves to the first queued task the filter accepts, and leaves the ones before it in the
+     * queue (errands that just found nothing to do wait there without blocking what comes after).
+     * Returns it, or null when no queued task is accepted.
+     */
+    public LauraTask advance(Predicate<LauraTask> ready) {
+        for (LauraTask task : queue) {
+            if (ready.test(task)) {
+                queue.remove(task);
+                current = task;
+                return task;
+            }
+        }
+        return null;
+    }
+
     public void finishCurrent() {
         current = null;
+    }
+
+    private String lastRequest = "";
+    private long lastRequestTime = Long.MIN_VALUE;
+
+    /**
+     * True when the same request was already received within the last half second: a double click
+     * or a packet sent twice is one player action, answered once.
+     */
+    public boolean isRepeatedRequest(String request) {
+        long now = laura.level().getGameTime();
+        boolean repeated = request.equals(lastRequest) && now - lastRequestTime >= 0 && now - lastRequestTime < 10;
+        lastRequest = request;
+        lastRequestTime = now;
+        return repeated;
     }
 
     public List<LauraTask> queued() {
