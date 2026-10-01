@@ -152,7 +152,7 @@ She leaves a container alone when it is locked (vanilla `Lock`) and neither she 
 She searches 24 blocks around **her** (`fetch.radius`): items on the ground, then storage, then blocks she may harvest. Breaking blocks needs the `mobGriefing` game rule (`mob_griefing` on Minecraft 26.1.2) and only concerns the block tag `lauramod:fetch_harvestable`.
 
 **How do I stop her from breaking blocks?**
-Set the game rule `mobGriefing` (`mob_griefing` on Minecraft 26.1.2) to false, or set `fetch.breakBlocks` to false and do not give her the lumberjack and farmer jobs. The game rule also stops a lumberjack or farmer job she already has: she says so once and leaves the blocks alone.
+Set the game rule `mobGriefing` (`mob_griefing` on Minecraft 26.1.2) to false, or set `fetch.breakBlocks` to false and do not give her the lumberjack and farmer jobs. The game rule also stops a lumberjack or farmer job she already has, once the round of work she is busy with is over (`/laura stop` ends it at once): she then says so once and leaves the blocks alone.
 
 **How do I fulfil her wish for fireworks?**
 Launch a firework rocket near her. Any rocket within 32 blocks around her counts, whoever launched it.
@@ -334,7 +334,7 @@ Elle ne touche pas à un conteneur quand il est verrouillé (`Lock` du jeu de ba
 Elle cherche dans un rayon de 24 blocs autour d'**elle** (`fetch.radius`) : les objets au sol, puis les rangements, puis les blocs qu'elle peut récolter. Casser des blocs demande la règle de jeu `mobGriefing` (`mob_griefing` sur Minecraft 26.1.2) et ne concerne que le tag de blocs `lauramod:fetch_harvestable`.
 
 **Comment l'empêcher de casser des blocs ?**
-Mettez la règle de jeu `mobGriefing` (`mob_griefing` sur Minecraft 26.1.2) à false, ou mettez `fetch.breakBlocks` à false et ne lui donnez pas les métiers de bûcheronne et de fermière. La règle de jeu arrête aussi un métier de bûcheronne ou de fermière qu'elle a déjà : elle le dit une fois et ne touche plus aux blocs.
+Mettez la règle de jeu `mobGriefing` (`mob_griefing` sur Minecraft 26.1.2) à false, ou mettez `fetch.breakBlocks` à false et ne lui donnez pas les métiers de bûcheronne et de fermière. La règle de jeu arrête aussi un métier de bûcheronne ou de fermière qu'elle a déjà, une fois terminée la tournée de travail en cours (`/laura stop` l'arrête tout de suite) : elle le dit alors une fois et ne touche plus aux blocs.
 
 **Comment réaliser son désir de feux d'artifice ?**
 Lancez une fusée de feu d'artifice près d'elle. Toute fusée dans un rayon de 32 blocs autour d'elle compte, peu importe qui l'a lancée.

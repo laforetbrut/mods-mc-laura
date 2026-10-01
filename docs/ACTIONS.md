@@ -125,7 +125,7 @@ Teleport rules while following:
 
 **Safe teleports.** Every teleport puts her on a safe spot next to you: at the surface of the water when you swim or sit in a boat, on the ground below you when you fly. She takes no fall damage from it. When there is no safe place at all (the void, a lake of lava) she stays where she is: after a call (`/laura come`, the call key, Laura's Heart, `/laura home`) she tells you so, and while she follows you she tries again every 2 seconds.
 
-**Refusals.** With `needs.refuseOrders`, when her mood is sad, angry, jealous, sulking or hungry, she may refuse follow, stay, wander, home, come, fetch, sleep, eat and emotes. The chance depends on `needs.annoyance` (0 % for CHILL and NORMAL, 15 % for NEEDY, 30 % for UNBEARABLE) and doubles while she sulks. Giving the same order again within 20 seconds always works. She only argues face to face: an order sent from out of earshot (further than `dialogue.chatRange` or from another dimension, with a command or the call key) is never refused. What she answers when she is sent home or cannot come to you reaches you even there.
+**Refusals.** With `needs.refuseOrders`, when her mood is sad, angry, jealous, sulking or hungry, she may refuse follow, stay, wander, home, come, sleep and eat, a fetch asked from her menu, and an emote asked with `/laura emote`, from her menu or from the emote wheel. A fetch or an emote asked in chat, and `/laura fetch`, are never refused. The chance depends on `needs.annoyance` (0 % for CHILL and NORMAL, 15 % for NEEDY, 30 % for UNBEARABLE) and doubles while she sulks. Giving the same order again within 20 seconds always works. She only argues face to face: an order sent from out of earshot (further than `dialogue.chatRange` or from another dimension, with a command or the call key) is never refused. What she answers when she is sent home or cannot come to you reaches you even there.
 
 **Hug and kiss.** They are not orders and her needs never count against them, whether you ask in chat, with a command, from the menu or from the emote wheel. A hug is never refused because she is hungry, sad or jealous: it comforts her. She only pushes it away while she sulks or is still angry (after a hit, an insult, a gift or a food she hates), and asking again within 20 seconds gets through. A kiss is refused while she is gagged, while she sulks or is still angry, and when affection is under 200.
 
@@ -179,7 +179,7 @@ A job is continuous work inside an area: a circle around the block where you sto
 - She does not work at night (`work.workAtNight`), while sulking, sleeping, sitting or fighting.
 - Another order (follow, stay...) pauses the jobs. "back to work" or `/laura work` resumes them.
 - When none of her jobs finds anything to do, she says so once and pauses: 1 minute, then 2, then 4 minutes at most, until a job keeps her busy again.
-- The lumberjack and the farmer stop as soon as the `mobGriefing` game rule is turned off, even for a job given earlier. She says so once and leaves the blocks alone. The cook goes on.
+- The lumberjack and the farmer stop when the `mobGriefing` game rule is turned off, even for a job given earlier. The rule is read each time she starts a round of a job or a task: the round under way is finished first (it lasts as long as she finds trees or crops to work on), and `/laura stop` ends it at once. She then says so once and leaves the blocks alone. The cook goes on.
 - With `work.onlyNaturalTrees`, a tree she fells stands on soil (dirt, grass and the other blocks of the dirt tag, or mangrove roots), is made of a single kind of log, spreads at most 6 blocks sideways from the foot of its trunk and carries at least 4 natural leaves in its upper half. She only takes the logs that lead up to a log topped by natural leaves, so a wall, a beam or a roof of logs that touches the tree stays in place. A log pillar of a build with natural leaves growing right on top of it cannot be told from a trunk.
 - As a cook she only takes food out of a furnace or a smoker: ingots, glass or charcoal smelted there by someone else stay where they are.
 
@@ -334,7 +334,7 @@ SSS
 
 - The flower is consumed. When several companions are dead, the one who died first comes back.
 - While a companion is dead and no other is with you, Laura's Heart does not work and reminds you of the grave.
-- You are told about her death wherever you are, another dimension included.
+- With `GRAVE` and `TIMER` you are told about her death wherever you are, another dimension included.
 
 ### 15. Several companions
 
@@ -528,7 +528,7 @@ Règles de téléportation quand elle suit :
 
 **Téléportations sûres.** Chaque téléportation la pose à un endroit sûr à côté de vous : à la surface de l'eau quand vous nagez ou êtes en bateau, au sol sous vous quand vous volez. Elle n'en subit aucun dégât de chute. Quand il n'y a aucun endroit sûr (le vide, un lac de lave) elle reste où elle est : après un appel (`/laura come`, la touche d'appel, le Cœur de Laura, `/laura home`) elle vous le dit, et tant qu'elle vous suit elle réessaie toutes les 2 secondes.
 
-**Refus.** Avec `needs.refuseOrders`, quand son humeur est triste, en colère, jalouse, boudeuse ou affamée, elle peut refuser suivre, rester, se promener, maison, venir, rapporter, dormir, manger et les émotes. La chance dépend de `needs.annoyance` (0 % pour CHILL et NORMAL, 15 % pour NEEDY, 30 % pour UNBEARABLE) et double quand elle boude. Redonner le même ordre dans les 20 secondes marche toujours. Elle ne discute qu'en face à face : un ordre envoyé hors de portée de voix (au-delà de `dialogue.chatRange` ou depuis une autre dimension, par une commande ou la touche d'appel) n'est jamais refusé. Ce qu'elle répond quand elle est envoyée à la maison ou ne peut pas venir vous parvient même là.
+**Refus.** Avec `needs.refuseOrders`, quand son humeur est triste, en colère, jalouse, boudeuse ou affamée, elle peut refuser suivre, rester, se promener, maison, venir, dormir et manger, un objet à rapporter demandé par son menu, et une émote demandée avec `/laura emote`, par son menu ou par la roue des émotes. Un objet à rapporter ou une émote demandés dans le chat, et `/laura fetch`, ne sont jamais refusés. La chance dépend de `needs.annoyance` (0 % pour CHILL et NORMAL, 15 % pour NEEDY, 30 % pour UNBEARABLE) et double quand elle boude. Redonner le même ordre dans les 20 secondes marche toujours. Elle ne discute qu'en face à face : un ordre envoyé hors de portée de voix (au-delà de `dialogue.chatRange` ou depuis une autre dimension, par une commande ou la touche d'appel) n'est jamais refusé. Ce qu'elle répond quand elle est envoyée à la maison ou ne peut pas venir vous parvient même là.
 
 **Câlin et bisou.** Ce ne sont pas des ordres et ses besoins ne jouent jamais contre eux, que vous les demandiez dans le chat, par une commande, par le menu ou par la roue des émotes. Un câlin n'est jamais refusé parce qu'elle a faim, qu'elle est triste ou jalouse : il la réconforte. Elle ne le repousse que lorsqu'elle boude ou est encore en colère (après un coup, une insulte, un cadeau ou un aliment qu'elle déteste), et le redemander dans les 20 secondes passe. Un bisou est refusé quand elle est bâillonnée, quand elle boude ou est encore en colère, et quand l'affection est sous 200.
 
@@ -582,7 +582,7 @@ Un métier est un travail continu dans une zone : un cercle autour du bloc où v
 - Elle ne travaille pas la nuit (`work.workAtNight`), ni quand elle boude, dort, est assise ou se bat.
 - Un autre ordre (suivre, rester...) met les métiers en pause. « au travail » ou `/laura work` les reprend.
 - Quand aucun de ses métiers ne trouve quoi que ce soit à faire, elle le dit une fois et fait une pause : 1 minute, puis 2, puis 4 minutes au plus, jusqu'à ce qu'un métier l'occupe de nouveau.
-- La bûcheronne et la fermière s'arrêtent dès que la règle de jeu `mobGriefing` est désactivée, même pour un métier donné auparavant. Elle le dit une fois et ne touche plus aux blocs. La cuisinière continue.
+- La bûcheronne et la fermière s'arrêtent quand la règle de jeu `mobGriefing` est désactivée, même pour un métier donné auparavant. La règle est lue chaque fois qu'elle commence une tournée d'un métier ou une tâche : la tournée en cours est d'abord terminée (elle dure tant qu'elle trouve des arbres ou des cultures à travailler), et `/laura stop` l'arrête tout de suite. Elle le dit alors une fois et ne touche plus aux blocs. La cuisinière continue.
 - Avec `work.onlyNaturalTrees`, un arbre qu'elle abat repose sur de la terre (terre, herbe et les autres blocs du tag dirt, ou des racines de palétuvier), est fait d'une seule sorte de bûche, s'étend d'au plus 6 blocs sur les côtés depuis le pied de son tronc et porte au moins 4 feuilles naturelles dans sa moitié haute. Elle ne prend que les bûches qui mènent à une bûche surmontée de feuilles naturelles : un mur, une poutre ou un toit en bûches qui touche l'arbre reste donc en place. Un pilier en bûches d'une construction sur lequel poussent directement des feuilles naturelles ne peut pas être distingué d'un tronc.
 - Cuisinière, elle ne sort que de la nourriture d'un fourneau ou d'un fumoir : les lingots, le verre ou le charbon de bois qu'un autre y a fait cuire restent où ils sont.
 
@@ -737,7 +737,7 @@ SSS
 
 - La fleur est consommée. Quand plusieurs compagnes sont mortes, celle qui est morte en premier revient.
 - Tant qu'une compagne est morte et qu'aucune autre n'est avec vous, le Cœur de Laura ne fonctionne pas et vous rappelle la tombe.
-- Vous êtes prévenu de sa mort où que vous soyez, y compris dans une autre dimension.
+- Avec `GRAVE` et `TIMER`, vous êtes prévenu de sa mort où que vous soyez, y compris dans une autre dimension.
 
 ### 15. Plusieurs compagnes
 
