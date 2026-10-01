@@ -76,6 +76,17 @@ public final class LauraEvents {
     }
 
     /**
+     * An entity is being added to a server level. Only the loaders that can move an entity to
+     * another dimension without asking it (the teleporters of Forge and NeoForge on Minecraft
+     * 1.20.1) forward the event they fire then (EntityJoinLevelEvent).
+     */
+    public static void onEntityJoined(Entity entity) {
+        if (entity instanceof LauraEntity laura) {
+            laura.reportArrival();
+        }
+    }
+
+    /**
      * An entity stops being part of a server level: its chunk unloads, or it is removed. Loaders
      * forward the event they fire when entity tracking ends (EntityLeaveLevelEvent, ENTITY_UNLOAD).
      */

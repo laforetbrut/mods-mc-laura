@@ -22,6 +22,8 @@ Repository / Dépôt : <https://github.com/laforetbrut/mods-mc-laura>
 
 The continuous integration starts Gradle with the JDK of the target, except for `fabric-1.20.1`: Fabric Loom needs Java 21 to run, so that project sets its Gradle daemon to Java 21 in `gradle/gradle-daemon-jvm.properties` while the game is still compiled for Java 17. `fabric-26.1.2` sets its daemon to Java 25 the same way.
 
+The continuous integration (`.github/workflows/build.yml`) builds the nine targets and checks the languages when a version tag is pushed (`v2.0.0`, any tag starting with `v`), on pull requests, and when it is started by hand from the Actions page. A plain push to a branch does not start it.
+
 ### Repository layout
 
 ```
@@ -237,6 +239,8 @@ MIT. See the `LICENSE` file at the root of the repository.
 | Python 3, Bash | Uniquement pour les scripts de `tools/`. |
 
 L'intégration continue lance Gradle avec le JDK de la cible, sauf pour `fabric-1.20.1` : Fabric Loom a besoin de Java 21 pour tourner, ce projet règle donc son daemon Gradle sur Java 21 dans `gradle/gradle-daemon-jvm.properties`, tandis que le jeu reste compilé pour Java 17. `fabric-26.1.2` règle son daemon sur Java 25 de la même façon.
+
+L'intégration continue (`.github/workflows/build.yml`) compile les neuf cibles et contrôle les langues quand un tag de version est poussé (`v2.0.0`, tout tag qui commence par `v`), sur les pull requests, et quand elle est lancée à la main depuis la page Actions. Un simple push sur une branche ne la déclenche pas.
 
 ### Organisation du dépôt
 
