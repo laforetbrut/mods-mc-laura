@@ -1,0 +1,2354 @@
+{
+  "_comment": "My Girlfriend Laura - dialogues en français. Variables : {player} {laura} {days} et celles listées dans le README de config/lauramod/dialogues.",
+  "_spelling": "Fautes fréquentes et langage SMS lus sous leur forme habituelle avant de chercher les déclencheurs. Une valeur vide retire un mot de remplissage (trop, très...). Un message est reconnu tel quel OU après ces corrections.",
+  "spelling": {
+    "tu est": "tu es",
+    "tu et": "tu es",
+    "t'es": "tu es",
+    "t'est": "tu es",
+    "tes": "tu es",
+    "t'as": "tu as",
+    "ta pas": "tu as pas",
+    "jtm": "je t'aime",
+    "jtaime": "je t'aime",
+    "jt'aime": "je t'aime",
+    "je t'm": "je t'aime",
+    "jtadore": "je t'adore",
+    "jte": "je te",
+    "jsuis": "je suis",
+    "jsui": "je suis",
+    "chui": "je suis",
+    "chuis": "je suis",
+    "jss": "je suis",
+    "jsp": "je sais pas",
+    "jai": "j'ai",
+    "g": "j'ai",
+    "slt": "salut",
+    "cc": "coucou",
+    "coucouu": "coucou",
+    "bjr": "bonjour",
+    "bsr": "bonsoir",
+    "bne nuit": "bonne nuit",
+    "stp": "s'il te plait",
+    "svp": "s'il vous plait",
+    "s'il te plais": "s'il te plait",
+    "pk": "pourquoi",
+    "pq": "pourquoi",
+    "pkoi": "pourquoi",
+    "pourkoi": "pourquoi",
+    "koi": "quoi",
+    "kwa": "quoi",
+    "ki": "qui",
+    "ke": "que",
+    "kan": "quand",
+    "dsl": "désolé",
+    "dsl stp": "désolé",
+    "tkt": "t'inquiète pas",
+    "mrc": "merci",
+    "mrci": "merci",
+    "merki": "merci",
+    "bcp": "beaucoup",
+    "sa va": "ça va",
+    "sava": "ça va",
+    "cava": "ça va",
+    "tg": "ta gueule",
+    "fdp": "fils de pute",
+    "joli": "jolie",
+    "mignone": "mignonne",
+    "magnifik": "magnifique",
+    "trop": "",
+    "tro": "",
+    "très": "",
+    "tellement": "",
+    "vraiment": "",
+    "super": "",
+    "hyper": "",
+    "vachement": "",
+    "carrément": ""
+  },
+  "connectors": [
+    "puis",
+    "et puis",
+    "ensuite",
+    "et ensuite",
+    "apres",
+    "après ça",
+    "apres ca",
+    "et après",
+    "et apres"
+  ],
+  "everyone": [
+    "tout le monde",
+    "les filles",
+    "vous toutes",
+    "vous tous",
+    "mesdames",
+    "tout le groupe"
+  ],
+  "lines": {
+    "summon": [
+      "Quelqu'un se sent seul ? Me voilà, {player} !",
+      "Coucou {player} ! Je suis {laura}, et à partir de maintenant, fini la solitude.",
+      "Enfin ! J'attendais que tu m'appelles.",
+      "Me voilà ! Je t'ai manqué ? Oui. Ça se voit."
+    ],
+    "summon.another": [
+      "Ah ? Je ne suis pas la seule... Bon. Salut, moi c'est {laura}.",
+      "Une autre copine ? Audacieux. J'aime bien. Coucou {player} !",
+      "Je suis {laura} ! T'inquiète, je vais bien m'entendre avec les autres. Sans doute."
+    ],
+    "summon.back": [
+      "Je suis revenue ! Je t'ai manqué ?",
+      "Me revoilà ! Ne me perds plus cette fois.",
+      "Tu m'as appelée ? J'ai couru !"
+    ],
+    "summon.lost": [
+      "Ouf, j'étais perdue ! J'ai suivi ta voix.",
+      "Je m'étais perdue... mais je suis là. Je te retrouve toujours.",
+      "Ne me laisse plus jamais derrière comme ça !"
+    ],
+    "already_here": [
+      "Je suis déjà juste là, voyons !",
+      "Regarde derrière toi. Coucou !",
+      "Je suis là ! Tu ne te débarrasseras pas de moi si facilement."
+    ],
+    "dismiss": [
+      "D'accord... je m'en vais. Appelle-moi si la solitude te pèse.",
+      "OK, au revoir... Ne m'oublie pas.",
+      "Je pars, mais mon cœur reste avec toi."
+    ],
+    "respawned": [
+      "Je suis revenue ! J'ai eu tellement peur...",
+      "Je suis vivante ! Tu as pleuré ? Dis-moi que tu as pleuré.",
+      "Ne laisse plus jamais ça arriver, d'accord ?"
+    ],
+    "revived": [
+      "Tu m'as apporté des fleurs... et tu m'as ramenée ! Merci !",
+      "Je suis là ! J'ai senti ta fleur. Je savais que tu viendrais.",
+      "Tu ne m'as pas abandonnée. Je t'aime tellement."
+    ],
+    "where": [
+      "Je suis ici ! Viens me chercher.",
+      "Je t'ai dit où j'étais. Maintenant viens me faire un câlin."
+    ],
+    "where.here": [
+      "Juste à côté de toi, comme toujours !",
+      "Ici ! Retourne-toi !",
+      "Je suis là, où veux-tu que je sois ?"
+    ],
+    "welcome_back": [
+      "Bon retour, {player} !",
+      "Te revoilà ! Coucou mon amour !",
+      "Te voilà ! Je t'attendais."
+    ],
+    "welcome_back.long": [
+      "{hours} heures ! Tu étais où ? Je m'ennuyais trop...",
+      "Tu m'as laissée seule {hours} heures. J'ai compté.",
+      "Enfin ! {hours} heures sans toi, c'est beaucoup trop long."
+    ],
+    "welcome_back.days": [
+      "Des jours ! Tu m'as laissée seule des jours ! Tu sais ce que c'est, {hours} heures ?",
+      "J'ai cru que tu m'avais oubliée... {hours} heures, {player}. {hours}.",
+      "Te revoilà ! Je suis contente. Et un peu fâchée aussi. Surtout contente."
+    ],
+    "not_your_girlfriend": [
+      "Désolée, je suis déjà prise.",
+      "Je ne reçois pas d'ordres de toi. Seulement de mon amour.",
+      "On se connaît ? Non ? Alors non."
+    ],
+    "confused": [
+      "Hein ? Je n'ai pas compris, mon cœur.",
+      "Tu veux dire quoi ?",
+      "Tu peux le dire autrement ?",
+      "Pardon, je rêvassais. Tu disais ?"
+    ],
+    "heart.gift": [
+      "Mon cœur ? Tu l'as déjà !",
+      "Tu tiens mon cœur dans ta main... fais-y attention.",
+      "Oh, tu l'as gardé ! Viens là !"
+    ],
+    "items_returned": [
+      "Voilà tes affaires, je les ai gardées au chaud pour toi.",
+      "J'ai ramassé tout ce que tu as fait tomber. De rien !",
+      "J'ai gardé tes {count} piles d'objets. Ne meurs plus comme ça !"
+    ],
+    "owner.died": [
+      "Nooon ! {player} ! Reviens !",
+      "Je t'interdis de me laisser seule !",
+      "Je n'ai pas pu te sauver... je suis désolée."
+    ],
+    "owner.died.items": [
+      "J'ai ramassé {count} piles de tes affaires. Viens les chercher !",
+      "T'inquiète, j'ai sauvé tes affaires ! {count} piles, en sécurité avec moi.",
+      "Tes affaires sont en sécurité avec moi. Maintenant reviens, s'il te plaît."
+    ],
+    "dimension.nether": [
+      "Il fait trop chaud ici ! Mon maquillage fond !",
+      "Le Nether ? Sérieusement ? Pour notre rendez-vous ?",
+      "Reste près de moi, je n'aime pas cet endroit."
+    ],
+    "dimension.end": [
+      "Il fait si sombre... tu me tiens la main ?",
+      "C'est un dragon, ça ? Protège-moi !",
+      "Tout est violet ! J'aime bien, en fait."
+    ],
+    "dimension.overworld": [
+      "Enfin à la maison ! De l'air frais !",
+      "Le soleil ! Il m'avait manqué.",
+      "Ah, de l'herbe verte. C'est mieux."
+    ],
+    "anniversary": [
+      "Joyeux anniversaire ! {days} jours ensemble !",
+      "Tu sais quel jour on est ? {days} jours avec toi ! Fais-moi un câlin !",
+      "Déjà {days} jours... je t'aime un peu plus chaque jour."
+    ],
+    "good_morning": [
+      "Bonjour ! Tu as bien dormi ?",
+      "Coucou ! Tu as une bouille trop mignonne au réveil.",
+      "Debout ! Une nouvelle journée avec toi !"
+    ],
+    "stuck": [
+      "Hé ! Attends-moi, je suis coincée !",
+      "Je n'arrive pas à passer ! À l'aide !",
+      "Ne me laisse pas ici !"
+    ],
+    "new_look": [
+      "Tu aimes mon nouveau look ?",
+      "Nouveau style ! Dis-moi que je suis belle.",
+      "Alors, j'ai l'air de quoi ? Sois honnête. Enfin, ménage-moi."
+    ],
+    "rename.done": [
+      "{name} ? J'adore ! C'est mon nom maintenant.",
+      "Appelle-moi {name} à partir de maintenant !",
+      "{name}... c'est joli quand c'est toi qui le dis."
+    ],
+    "rename.invalid": [
+      "Ce n'est pas un vrai prénom, ça !",
+      "Hmm, je ne peux pas m'appeler comme ça. Un autre ?"
+    ],
+    "order.follow": [
+      "Je te suis !",
+      "Montre-moi le chemin !",
+      "D'accord, je te suivrai n'importe où.",
+      "On va où ? Quelque part de romantique ?"
+    ],
+    "order.stay": [
+      "D'accord, je t'attends ici.",
+      "Ne tarde pas trop !",
+      "Je reste. Mais je compte les secondes."
+    ],
+    "order.wander": [
+      "Je vais faire un petit tour.",
+      "D'accord, je vais regarder les fleurs !",
+      "Liberté ! Ne va pas trop loin."
+    ],
+    "order.come": [
+      "J'arrive !",
+      "Je suis en route !",
+      "J'arrive, mon amour !"
+    ],
+    "order.stop": [
+      "D'accord, j'arrête tout.",
+      "J'arrête ! Et maintenant ?",
+      "Oui, oui. J'arrête."
+    ],
+    "order.fine": [
+      "...Bon. Mais seulement parce que c'est toi.",
+      "D'accord, d'accord. Tu as demandé deux fois.",
+      "Pff. D'accord."
+    ],
+    "order.refused": [
+      "Non.",
+      "Demande gentiment.",
+      "J'ai pas envie.",
+      "Hmm... non."
+    ],
+    "order.refused.angry": [
+      "Après ce que tu as fait ? Hors de question.",
+      "Je suis en colère. Redemande plus tard. Ou excuse-toi.",
+      "Ne me parle pas maintenant."
+    ],
+    "order.refused.sulking": [
+      "Je boude. Tu ne vois pas ?",
+      "Hmpf.",
+      "Je ne te parle pas."
+    ],
+    "order.refused.hungry": [
+      "J'ai trop faim pour faire quoi que ce soit !",
+      "Nourris-moi d'abord !",
+      "La nourriture d'abord, les ordres après."
+    ],
+    "order.refused.tired": [
+      "Je suis tellement fatiguée...",
+      "Laisse-moi me reposer un peu d'abord.",
+      "Peux pas. Sommeil."
+    ],
+    "order.refused.jealous": [
+      "Pourquoi tu ne demandes pas à ton nouvel ami ?",
+      "Ah, MAINTENANT tu as besoin de moi ?"
+    ],
+    "order.refused.bored": [
+      "Ennuyeux. Trouve-moi un truc amusant.",
+      "Seulement si tu joues avec moi après."
+    ],
+    "home.set": [
+      "Ce sera notre maison !",
+      "Notre petit chez-nous ! Je retiendrai cet endroit.",
+      "Notre petit nid ! J'adore."
+    ],
+    "home.none": [
+      "On n'a pas encore de maison !",
+      "La maison ? Quelle maison ? Définis-en une d'abord !"
+    ],
+    "home.go": [
+      "Je t'attends à la maison !",
+      "Je rentre ! Ne sois pas en retard pour le dîner.",
+      "On se retrouve à la maison, mon amour."
+    ],
+    "home.cleared": [
+      "Plus de maison ? D'accord, je te suivrai alors.",
+      "On est sans domicile ! Aventure !"
+    ],
+    "sleep.not_tired": [
+      "Je ne suis pas du tout fatiguée !",
+      "Dormir ? Maintenant ? Il est encore tôt !",
+      "Je suis pleine d'énergie !"
+    ],
+    "sleep.good_night": [
+      "Bonne nuit, mon amour...",
+      "Fais de beaux rêves... rêve de moi.",
+      "Zzz... réveille-moi avec un bisou."
+    ],
+    "sleep.woken_up": [
+      "Hé ! Je dormais !",
+      "Encore cinq minutes...",
+      "Pourquoi tu m'as réveillée ?!"
+    ],
+    "pickup.on": [
+      "Je ramasse tout ce que je vois !",
+      "Des trucs brillants ? C'est à moi maintenant !"
+    ],
+    "pickup.off": [
+      "D'accord, je ne touche plus à rien par terre.",
+      "Bon, je ne ramasse plus rien."
+    ],
+    "combat.passive": [
+      "Je ne me battrai pas. Paix et amour !",
+      "La violence, ce n'est pas la solution !"
+    ],
+    "combat.defensive": [
+      "Je nous défendrai si on nous attaque !",
+      "Touche à mon amour et tu vas le regretter !"
+    ],
+    "combat.aggressive": [
+      "Monstres, tremblez !",
+      "Je vais écraser tous les monstres que je vois !",
+      "Au combat !"
+    ],
+    "fetch.start": [
+      "Je vais chercher {count} {item} !",
+      "{item} ? Laisse-moi faire !",
+      "Livraison en cours : {item} !"
+    ],
+    "fetch.disabled": [
+      "Je n'ai pas le droit d'aller chercher des choses ici.",
+      "Désolée, je ne peux pas aller chercher d'objets sur ce serveur."
+    ],
+    "fetch.busy": [
+      "Je suis déjà occupée !",
+      "Une chose à la fois, s'il te plaît !",
+      "Laisse-moi finir ce que je fais d'abord !"
+    ],
+    "fetch.what": [
+      "Chercher quoi ? Dis-moi l'objet, ou tiens-le dans ta main.",
+      "T'apporter quoi, exactement ?",
+      "Qu'est-ce que tu veux que je t'apporte ?"
+    ],
+    "fetch.not_found": [
+      "Je n'ai rien trouvé par ici ({item})...",
+      "Introuvable : {item}. Désolée !",
+      "J'ai cherché partout, rien trouvé ({item})."
+    ],
+    "fetch.timeout": [
+      "J'ai cherché et cherché, mais je n'ai pas pu rapporter {item}...",
+      "Ça prenait trop de temps, j'abandonne. Désolée !"
+    ],
+    "fetch.delivered": [
+      "Et voilà ! {count} {item} !",
+      "Livraison ! Ça fera un bisou, s'il te plaît.",
+      "Tadaa ! {item} pour mon amour !"
+    ],
+    "fetch.delivered.harvested": [
+      "Je les ai cueillis moi-même ! {count} {item} !",
+      "Tout frais récolté, rien que pour toi !"
+    ],
+    "fetch.delivered.container": [
+      "Je les ai trouvés dans un coffre. Tiens !",
+      "Je les ai empruntés dans un coffre. Ne le dis à personne !"
+    ],
+    "task.queued": [
+      "D'accord, je ferai ça après : {task}.",
+      "Ajouté à ma liste : {task}.",
+      "Noté ! {task}, juste après ça."
+    ],
+    "task.queue_full": [
+      "Ma liste est pleine ! Laisse-moi souffler !",
+      "Trop de choses ! Je ne peux pas tout retenir !"
+    ],
+    "task.start.chop_tree": [
+      "Attention, ça tombe ! Je coupe un arbre pour toi.",
+      "À la hache ! Un arbre, ça arrive.",
+      "Je vais chercher du bois !"
+    ],
+    "task.start.harvest": [
+      "Je vais récolter les cultures !",
+      "C'est l'heure de la récolte !",
+      "Voyons ce qui est mûr dans le champ."
+    ],
+    "task.start.cook": [
+      "Je vais cuisiner un truc délicieux !",
+      "Cheffe {laura} est en cuisine !",
+      "À table bientôt ! Ne touche pas au four."
+    ],
+    "job.start.lumberjack": [
+      "Je m'occupe des arbres dans un rayon de {radius} blocs !",
+      "Bûcheronne {laura}, au rapport !",
+      "Laisse-moi le bois !"
+    ],
+    "job.start.farmer": [
+      "Je m'occupe du champ, {radius} blocs autour !",
+      "Fermière {laura} à ton service !",
+      "Les cultures sont entre de bonnes mains !"
+    ],
+    "job.start.cook": [
+      "Je serai la cuisinière de la maison !",
+      "La cuisine, c'est mon domaine maintenant !",
+      "Cheffe {laura} va nourrir tout le monde !"
+    ],
+    "job.stop": [
+      "D'accord, fini le travail ! Vacances !",
+      "Enfin une pause !",
+      "La journée de travail est finie."
+    ],
+    "job.none": [
+      "Je n'ai aucun travail à faire !",
+      "Quel travail ? Donne-m'en un d'abord."
+    ],
+    "job.resume": [
+      "Au travail !",
+      "Oui, oui, je retourne travailler.",
+      "Travail, travail, travail..."
+    ],
+    "work.disabled": [
+      "Je n'ai pas le droit de travailler ici.",
+      "Le travail est désactivé sur ce serveur. Tant mieux pour moi !"
+    ],
+    "work.no_griefing": [
+      "Les règles du monde m'interdisent de casser des blocs ici.",
+      "Je ne peux rien casser, le mobGriefing est désactivé."
+    ],
+    "work.delivered": [
+      "J'ai rangé {count} {item} !",
+      "Fini ! Tout est rangé.",
+      "Travail livré ! {count} {item}."
+    ],
+    "work.idle": [
+      "Rien à faire pour l'instant... j'attends.",
+      "Tout est fini ! J'attends du travail."
+    ],
+    "work.bored": [
+      "Travailler, c'est ennuyeux... joue avec moi !",
+      "Ça fait une éternité que je travaille. J'ai mal au dos.",
+      "Je peux faire une pause ? S'il te plaît ?"
+    ],
+    "work.no_chest": [
+      "Je ne sais pas où ranger tout ça ! Donne-moi un coffre.",
+      "Je range ça où ? Attribue-moi un coffre, s'il te plaît.",
+      "J'ai les bras pleins ! Il me faut un coffre."
+    ],
+    "work.lumberjack.no_tree": [
+      "Il n'y a pas d'arbres par ici.",
+      "Pas d'arbres naturels à côté ! Seulement des arbres construits... ou rien."
+    ],
+    "work.farmer.nothing": [
+      "Rien n'est encore mûr.",
+      "Les cultures poussent encore. Patience !"
+    ],
+    "work.cook.nothing": [
+      "Il n'y a rien à cuisiner.",
+      "Le coffre d'ingrédients est vide !"
+    ],
+    "work.cook.no_station": [
+      "Il me faut un four, un fumoir ou un feu de camp pour cuisiner !",
+      "Elle est où, la cuisine ? Il me faut un four."
+    ],
+    "work.cook.no_table": [
+      "Il me faut un établi pour suivre mes recettes.",
+      "Pas d'établi ? Comment je fais un gâteau, moi ?"
+    ],
+    "chest.assigned": [
+      "Compris ! Ce coffre est pour : {purpose}.",
+      "D'accord, {purpose} va ici !",
+      "Je retiens : coffre {purpose}."
+    ],
+    "chest.look_at_one": [
+      "Regarde un coffre d'abord !",
+      "Quel coffre ? Montre-le-moi !"
+    ],
+    "chest.not_assigned": [
+      "Ce coffre n'est pas à moi.",
+      "Je n'utilise pas ce coffre."
+    ],
+    "chest.removed": [
+      "D'accord, je n'utiliserai plus ce coffre.",
+      "Coffre oublié !"
+    ],
+    "chest.too_many": [
+      "J'ai trop de coffres ! Ma mémoire est pleine.",
+      "Plus de coffres, je ne peux pas tous les retenir !"
+    ],
+    "chest.which_purpose": [
+      "Ce coffre sert à quoi ? Bois, récolte, graines, ingrédients, combustible, plats, nourriture ou stockage ?",
+      "Dis-moi ce qu'on met dans ce coffre !"
+    ],
+    "hug": [
+      "Oh, j'adore tes câlins !",
+      "Serre-moi plus fort !",
+      "Ne me lâche pas...",
+      "Meilleur. Câlin. Du monde."
+    ],
+    "hug.refused": [
+      "Ne me touche pas maintenant.",
+      "Pas de câlin pour toi.",
+      "Hmpf. Pas d'humeur."
+    ],
+    "kiss": [
+      "Mwah ! <3",
+      "Encore un !",
+      "Tes bisous sont les meilleurs.",
+      "Hihi, tu me fais rougir."
+    ],
+    "kiss.refused": [
+      "Pas de bisou tant que tu ne t'excuses pas.",
+      "Beurk, pas maintenant !",
+      "Tu rêves."
+    ],
+    "dance": [
+      "On danse !",
+      "Regarde comme je bouge !",
+      "Danse avec moi !"
+    ],
+    "dance.jukebox": [
+      "J'adore cette chanson ! Danse avec moi !",
+      "De la musique ! Mes pieds ne peuvent pas s'arrêter !",
+      "C'est notre chanson !"
+    ],
+    "gag.on": [
+      "Mmmpf ?!",
+      "Mmm mmh mmpf !",
+      "MMMPF !"
+    ],
+    "gag.off": [
+      "Enfin ! Ne refais plus jamais ça !",
+      "Pfft ! Du foin dans ma bouche ! Sérieusement ?!",
+      "Je peux reparler ! Et j'ai beaucoup de choses à dire."
+    ],
+    "gag.off_self": [
+      "Je l'ai enlevé toute seule ! Hmpf !",
+      "Tu en as mis du temps ! Je me suis libérée."
+    ],
+    "gagged_talk": [
+      "Mmmpf !",
+      "Mmh mmh !",
+      "Mmmmmh...",
+      "Mpf mpf mmpf !"
+    ],
+    "love_check": [
+      "Est-ce que tu m'aimes encore ?",
+      "Sois honnête... tu m'aimes ?",
+      "Dis-moi que tu m'aimes. Tout de suite."
+    ],
+    "love_check.timeout": [
+      "Tu n'as pas répondu... je m'en souviendrai.",
+      "Le silence ? Vraiment ? D'accord...",
+      "Pas de réponse. Ça fait mal."
+    ],
+    "love_yes": [
+      "Oh, moi aussi ! <3",
+      "Je le savais ! Câlin !",
+      "Redis-le ! J'adore l'entendre."
+    ],
+    "love_no": [
+      "...D'accord. Je boude.",
+      "Très bien. Ne me parle plus.",
+      "Tu rigoles, hein ? HEIN ?"
+    ],
+    "apology_accept": [
+      "C'est d'accord, je te pardonne...",
+      "Bon. Mais tu me dois un câlin.",
+      "Excuses acceptées. Pour cette fois."
+    ],
+    "apology_refused": [
+      "Pas encore. Je suis toujours fâchée.",
+      "Pardon, ça ne suffit pas. Essaie avec des fleurs.",
+      "Hmpf. Réessaie plus tard."
+    ],
+    "apology_confused": [
+      "Pardon pour quoi ?",
+      "Tu n'as rien fait... si ?"
+    ],
+    "oops_sorry": [
+      "Oups ! Pardon mon cœur... <3",
+      "Oh non, je ne voulais pas te frapper !",
+      "Hihi, petite tape d'amour !"
+    ],
+    "fart": [
+      "Oups... désolée !",
+      "Ce n'était pas moi. C'était un creeper.",
+      "...Tu as entendu quelque chose ? Non ? Tant mieux."
+    ],
+    "sad": [
+      "C'est méchant... je ne veux plus te parler !",
+      "Pourquoi tu fais ça ? *snif*",
+      "Arrête de me frapper..."
+    ],
+    "angry": [
+      "Hé ! Ça fait mal !",
+      "Aïe ! C'était pour quoi, ça ?!",
+      "Refais ça et tu vas voir !"
+    ],
+    "hit_by_other": [
+      "{attacker} m'a frappée ! Protège-moi !",
+      "Au secours ! {attacker} me fait du mal !",
+      "Tu as vu ce que {attacker} a fait ?!"
+    ],
+    "help": [
+      "Au secours ! {attacker} m'attaque !",
+      "Sauve-moi, {attacker} me poursuit !",
+      "Iiik ! {attacker} !"
+    ],
+    "complain.rain": [
+      "Je déteste la pluie, mes cheveux sont ruinés !",
+      "Encore la pluie ? Porte-moi à l'intérieur !",
+      "Je suis trempée ! Regarde-moi !"
+    ],
+    "complain.thunder": [
+      "Le tonnerre ! Serre-moi fort !",
+      "J'ai peur des orages...",
+      "Iiik ! Celui-là était tout près !"
+    ],
+    "complain.night": [
+      "Il fait si noir, j'espère qu'il n'y a pas de creepers dans le coin...",
+      "Déjà la nuit ? Rentrons à la maison.",
+      "Je n'aime pas le noir. Reste près de moi."
+    ],
+    "ambient": [
+      "Tu es mon soleil.",
+      "J'aime quand on regarde les nuages ensemble.",
+      "C'est grâce à toi que ce monde est beau.",
+      "Je me sens tellement en sécurité avec toi.",
+      "Prends-moi dans tes bras !",
+      "Tu penses à quoi ? À moi, j'espère.",
+      "Tu me trouves jolie ? Ne réponds pas, je sais.",
+      "On devrait construire une grande maison ensemble.",
+      "Je m'ennuie. Occupe-toi de moi !",
+      "Hé. Hé. Hé {player}. Coucou.",
+      "Tu savais que je t'aime ? Je vérifie, c'est tout.",
+      "Fais attention à moi !"
+    ],
+    "ambient.day": [
+      "Quelle belle journée !",
+      "Le soleil fait tellement de bien aujourd'hui.",
+      "On fait un pique-nique ?"
+    ],
+    "ambient.night": [
+      "Regarde les étoiles...",
+      "La lune est jolie ce soir. Presque autant que moi.",
+      "Il est tard... bientôt au lit ?"
+    ],
+    "ambient.rain": [
+      "J'aime entendre la pluie quand on est à l'abri.",
+      "Les jours de pluie, c'est fait pour les câlins."
+    ],
+    "ambient.happy": [
+      "Je suis tellement heureuse !",
+      "La vie est belle avec toi !",
+      "La la la~"
+    ],
+    "ambient.in_love": [
+      "Je t'aime tellement que ça fait mal.",
+      "Tu es tout pour moi.",
+      "Mon cœur fait un petit saut chaque fois que je te vois."
+    ],
+    "ambient.bored": [
+      "Je m'ennuiiie...",
+      "Fais un truc marrant !",
+      "C'est ça qu'on fait toute la journée ? Marcher ?"
+    ],
+    "ambient.hungry": [
+      "J'ai faim... tu as un cookie ?",
+      "Mon ventre gargouille !",
+      "À manger. S'il te plaît. Maintenant."
+    ],
+    "ambient.tired": [
+      "Je suis tellement fatiguée...",
+      "*bâille* On peut se reposer ?",
+      "J'ai mal aux pieds."
+    ],
+    "ambient.sad": [
+      "Je me sens un peu triste aujourd'hui...",
+      "Tu tiens encore à moi ?",
+      "*soupir*"
+    ],
+    "ambient.angry": [
+      "Je suis toujours fâchée contre toi.",
+      "Ne me parle pas.",
+      "Hmpf !"
+    ],
+    "ambient.jealous": [
+      "C'était qui ? Hein ? Qui ?",
+      "Tu passes plus de temps avec eux qu'avec moi.",
+      "Je ne suis pas jalouse. Je surveille, c'est tout."
+    ],
+    "ambient.sulking": [
+      "...",
+      "Je ne te parle pas.",
+      "Hmpf."
+    ],
+    "ambient.hate": [
+      "Je ne sais pas pourquoi je suis encore là.",
+      "Tu es vraiment pénible.",
+      "Laisse-moi tranquille."
+    ],
+    "ambient.cold": [
+      "Hmm.",
+      "Si tu veux.",
+      "On a fini de marcher ?"
+    ],
+    "ambient.soulmate": [
+      "On est faits pour être ensemble pour toujours.",
+      "Je ne peux pas imaginer un monde sans toi.",
+      "Des âmes sœurs. Voilà ce qu'on est."
+    ],
+    "status": [
+      "Ça va, merci !",
+      "Ça va bien ! Encore mieux maintenant que tu demandes."
+    ],
+    "status.happy": [
+      "Super bien ! Tout est parfait !",
+      "Trop heureuse ! Merci de demander !"
+    ],
+    "status.in_love": [
+      "Je suis amoureuse, voilà comment je vais. De toi.",
+      "Jamais été aussi bien. Tu es là."
+    ],
+    "status.neutral": [
+      "Ça va. Juste ça va.",
+      "Bien, je suppose."
+    ],
+    "status.bored": [
+      "Je m'ennuie. Tellement.",
+      "Honnêtement ? Je m'ennuie à mourir."
+    ],
+    "status.hungry": [
+      "J'ai faim ! Nourris-moi !",
+      "Je meurs de faim. Littéralement."
+    ],
+    "status.tired": [
+      "Fatiguée... si fatiguée...",
+      "J'ai besoin d'une sieste."
+    ],
+    "status.sad": [
+      "Pas terrible...",
+      "Un peu triste, pour être honnête."
+    ],
+    "status.angry": [
+      "En colère. À cause de toi.",
+      "À ton avis ?"
+    ],
+    "status.jealous": [
+      "Jalouse. Évidemment.",
+      "Demande à ton nouvel ami comment il va."
+    ],
+    "status.sulking": [
+      "...",
+      "Hmpf. Comme si ça t'intéressait."
+    ],
+    "need.hunger.low": [
+      "J'ai faim...",
+      "On peut manger quelque chose ?",
+      "J'ai le ventre vide."
+    ],
+    "need.hunger.critical": [
+      "JE MEURS DE FAIM ! À MANGER ! MAINTENANT !",
+      "Je vais m'évanouir... à manger, s'il te plaît...",
+      "Pourquoi tu ne me nourris pas ?! Je dépéris !"
+    ],
+    "need.energy.low": [
+      "Je commence à fatiguer...",
+      "On peut se reposer un peu ?"
+    ],
+    "need.energy.critical": [
+      "Je n'arrive plus à garder les yeux ouverts...",
+      "Il FAUT que je dorme. Maintenant."
+    ],
+    "need.fun.low": [
+      "Je m'ennuie...",
+      "On fait un truc amusant ?"
+    ],
+    "need.fun.critical": [
+      "JE M'ENNUIE TROP ! Fais quelque chose !",
+      "Ennuyeux ennuyeux ennuyeux ennuyeux !"
+    ],
+    "need.attention.low": [
+      "Hé... tu me remarques ?",
+      "Tu ne m'as pas parlé depuis un moment.",
+      "Je suis invisible ou quoi ?"
+    ],
+    "need.attention.critical": [
+      "Allô ?! J'existe, tu sais !",
+      "Tu m'ignores ! Je vais pleurer !",
+      "REGARDE-MOI !"
+    ],
+    "need.hygiene.low": [
+      "J'ai besoin d'un bain...",
+      "Je me sens sale. Il y a de l'eau par ici ?"
+    ],
+    "need.hygiene.critical": [
+      "Je sens trop mauvais ! Il me faut un bain MAINTENANT !",
+      "Ne t'approche pas, je pue !"
+    ],
+    "need.hunger.no_food": [
+      "Je n'ai rien à manger !",
+      "Mon sac est vide... pas de nourriture.",
+      "Il n'y a rien à manger !"
+    ],
+    "need.hunger.pantry": [
+      "Je vais prendre un truc dans le garde-manger !",
+      "L'heure du goûter ! Direction le garde-manger."
+    ],
+    "need.hunger.searching": [
+      "Je vais chercher à manger dans les coffres.",
+      "Laisse-moi trouver quelque chose à manger..."
+    ],
+    "need.hunger.found_food": [
+      "J'ai trouvé : {item} ! Miam !",
+      "{item} ! Parfait !"
+    ],
+    "need.hygiene.bath": [
+      "L'heure du bain ! Ne regarde pas !",
+      "Je vais prendre un petit bain."
+    ],
+    "need.hygiene.clean": [
+      "Toute propre et fraîche !",
+      "Je me sens tellement mieux !"
+    ],
+    "eat.not_hungry": [
+      "Je n'ai pas faim pour l'instant. Je garde {item} pour plus tard.",
+      "Non merci, je n'ai plus faim !"
+    ],
+    "eat.disliked": [
+      "Beurk ! {item} ?! Tu sais que je déteste ça !",
+      "Berk. Pourquoi tu me donnes {item} ?",
+      "Je l'ai mangé. J'ai détesté. Je m'en souviendrai."
+    ],
+    "eat.favorite": [
+      "{item} ! Mon préféré ! Je t'aime !",
+      "Oui ! {item} ! Tu me connais si bien !",
+      "Mmm, {item} ! Meilleure journée de ma vie !"
+    ],
+    "eat.fed": [
+      "Miam ! Merci pour {item} !",
+      "Mmm, c'était bon !",
+      "Tu me donnes à manger ? Trop mignon !"
+    ],
+    "eat.self": [
+      "*miam miam* {item} !",
+      "Petit en-cas : {item}. Miam.",
+      "Pause goûter !"
+    ],
+    "eat.later": [
+      "Je garde {item} pour plus tard.",
+      "Merci ! Hop, dans le sac."
+    ],
+    "steal_food": [
+      "Je t'ai pris {item}. J'avais faim !",
+      "Hihi, je t'ai emprunté {item}. Emprunté. Pour toujours.",
+      "Tu ne me nourrissais pas, alors j'ai pris {item} !"
+    ],
+    "gift.gross": [
+      "{item} ? C'est une blague ?",
+      "Beurk ! Reprends-le !",
+      "Tu appelles ça un cadeau ?!"
+    ],
+    "gift.meh": [
+      "Oh. {item}. Merci, je suppose.",
+      "Hmm, d'accord.",
+      "C'est... quelque chose."
+    ],
+    "gift.nice": [
+      "Oh, {item} ! Merci !",
+      "C'est gentil de ta part !",
+      "Un cadeau pour moi ? Oh !"
+    ],
+    "gift.great": [
+      "{item} ! J'adore !",
+      "Tu es le meilleur cadeau du monde ! Merci !",
+      "Waouh, pour moi ? Tu me gâtes !"
+    ],
+    "gift.amazing": [
+      "{item} ?! Oh là là... je ne sais pas quoi dire ! Je t'aime !",
+      "C'est le plus beau cadeau du monde ! Viens là !",
+      "Je vais pleurer... c'est parfait !"
+    ],
+    "gift.return": [
+      "Tiens, un petit quelque chose pour toi aussi : {count} {item} !",
+      "J'ai un cadeau pour toi ! {item} !",
+      "Prends ça : {item}, de ma part !"
+    ],
+    "inventory_full": [
+      "Mon sac est plein !",
+      "Je ne peux plus rien porter !",
+      "Plus de place dans mon sac !"
+    ],
+    "desire.new.item": [
+      "J'ai trop envie de ça : {item}... tu m'en trouves ?",
+      "Tu sais ce qui me ferait plaisir ? {item}.",
+      "Il me faut {item}. Genre, vraiment. Tu as {minutes} minutes."
+    ],
+    "desire.new.place": [
+      "Je veux voir {place} ! Emmène-moi !",
+      "Allons voir {place} ! S'il te plaît s'il te plaît s'il te plaît !",
+      "Je rêve de voir {place}... tu m'y emmènes ?"
+    ],
+    "desire.new.activity": [
+      "Je veux {activity} !",
+      "On peut {activity} ? S'il te plaît ?",
+      "Tu sais ce que je veux ? Juste {activity}, avec toi."
+    ],
+    "desire.remind": [
+      "N'oublie pas, je veux toujours {item} !",
+      "Alors... pour ce que je t'ai demandé...",
+      "J'attends toujours, tu sais."
+    ],
+    "desire.remind.urgent": [
+      "Dépêche-toi ! Ça fait une éternité que j'attends !",
+      "C'est presque fini ! Tu te fiches de moi, c'est ça ?",
+      "Dernière chance ! Je vais être TELLEMENT fâchée."
+    ],
+    "desire.fulfilled": [
+      "Tu l'as fait ! Je t'aime !",
+      "Youpi ! Tu es la meilleure personne du monde !",
+      "Merci, merci, merci !"
+    ],
+    "desire.fulfilled.item": [
+      "{item} ! Tu n'as pas oublié ! Je t'aime !",
+      "Exactement ce que je voulais ! Tu es la perfection."
+    ],
+    "desire.fulfilled.place": [
+      "On y est ! C'est tellement beau !",
+      "Tu m'as emmenée ici ! Le plus beau rendez-vous du monde !"
+    ],
+    "desire.fulfilled.activity": [
+      "C'était génial ! On recommence !",
+      "Je m'en souviendrai toute ma vie."
+    ],
+    "desire.failed": [
+      "Tu as oublié... encore.",
+      "Je t'ai demandé une chose. UNE seule chose.",
+      "Très bien. De toute façon je n'en voulais pas. *snif*"
+    ],
+    "desire.tell": [
+      "Ce que je veux ? {item} !",
+      "Là, maintenant ? Je veux {item}. Évidemment."
+    ],
+    "desire.none": [
+      "Rien pour l'instant. Juste toi.",
+      "J'ai tout ce qu'il me faut. Tu es là.",
+      "Hmm, rien ! Mais redemande-moi dans cinq minutes."
+    ],
+    "owner.afk": [
+      "Allô ? Tu es là ?",
+      "Tu dors ou quoi ?",
+      "Tu ne bouges plus... ça va ?",
+      "Occupe-toi de moi !"
+    ],
+    "owner.back_from_afk": [
+      "Te revoilà ! Tu étais où ?",
+      "Enfin ! Je m'ennuyais tellement !"
+    ],
+    "owner.hurt": [
+      "Tu saignes ! Fais attention !",
+      "Oh non, ta vie baisse ! Mange quelque chose !",
+      "Ne meurs pas, je t'en supplie !"
+    ],
+    "owner.ate_alone": [
+      "Tu as mangé {item} sans moi ?!",
+      "Où est ma part ? Tu as tout mangé ?",
+      "Manger sans moi ? Waouh. D'accord."
+    ],
+    "owner.feed": [
+      "Tiens, mange ça : {item}, tu en as besoin !",
+      "Prends ça : {item}, tu as l'air de mourir de faim !"
+    ],
+    "owner.found.generic": [
+      "Oh, {item} ! Belle trouvaille !",
+      "{item} ! C'est pour moi ?"
+    ],
+    "owner.found.diamond": [
+      "DES DIAMANTS ! Fais-moi une bague !",
+      "Un diamant ! C'est pour ma bague ? C'est pour ma bague, hein ?"
+    ],
+    "owner.found.emerald": [
+      "Une émeraude ! Elle va avec mes yeux. À peu près."
+    ],
+    "owner.found.netherite_ingot": [
+      "De la netherite ?! Quelle force !"
+    ],
+    "owner.found.enchanted_golden_apple": [
+      "Une pomme dorée enchantée ! Je peux croquer un bout ?"
+    ],
+    "owner.found.totem_of_undying": [
+      "Un totem ! Maintenant tu ne peux plus me quitter !"
+    ],
+    "owner.found.cake": [
+      "Un gâteau ! C'est mon anniversaire ?"
+    ],
+    "owner.found.heart_of_the_sea": [
+      "Le cœur de la mer... comme toi, tu as mon cœur."
+    ],
+    "owner.flying": [
+      "Tu voles ! Emmène-moi avec toi !",
+      "Ne t'envole pas sans moi !",
+      "Quelle frime !"
+    ],
+    "owner.lava": [
+      "DE LA LAVE ! Sors de là !",
+      "Tu as perdu la tête ?! C'est de la lave !"
+    ],
+    "owner.fire": [
+      "Tu es en feu ! De l'eau ! De l'eau !",
+      "Arrête-toi, allonge-toi, roule !"
+    ],
+    "owner.riding": [
+      "Jolie monture ! Je peux venir aussi ?",
+      "Tu préfères ce cheval à moi, avoue ?"
+    ],
+    "jealous.player": [
+      "C'est qui, {other} ? Pourquoi tu es si près de cette personne ?",
+      "Je n'aime pas la façon dont {other} te regarde.",
+      "Encore {other} ? Hmpf."
+    ],
+    "jealous.chat": [
+      "Tu parles à qui ?",
+      "Parle-moi plutôt !",
+      "Tu parles à quelqu'un d'autre ? Hmpf."
+    ],
+    "owner.mined.generic": [
+      "Joli : {item} !",
+      "Encore en train de miner ?"
+    ],
+    "owner.mined.diamond": [
+      "Des diamants !! N'oublie pas ma bague !",
+      "C'est du minerai de diamant ?! Youpi !"
+    ],
+    "owner.mined.ore": [
+      "Oh, qu'est-ce que ça brille : {item} !",
+      "Du minerai ! On va être riches !"
+    ],
+    "owner.mined.wood": [
+      "Pauvre arbre...",
+      "Du bon bois ! On va construire notre maison."
+    ],
+    "owner.mined.flower": [
+      "Tu as cueilli une fleur ! C'est pour moi ?",
+      "Des fleurs ! Pour moi ?"
+    ],
+    "owner.killed.monster": [
+      "Prends ça, {victim} !",
+      "Quel courage ! Tu as vaincu : {victim} !",
+      "{victim} en moins !"
+    ],
+    "owner.killed.animal": [
+      "Pauvre bête...",
+      "C'était vraiment nécessaire ?",
+      "Bon, au moins on mangera ce soir."
+    ],
+    "owner.killed.player": [
+      "Rappelle-moi de ne jamais te mettre en colère.",
+      "Waouh. D'accord. Ça fait peur."
+    ],
+    "owner.killed.generic": [
+      "Bye bye, {victim} !"
+    ],
+    "backpack.equip": [
+      "Un sac à dos ! Je vais pouvoir porter encore plus de choses pour toi !",
+      "Oh, {item} ! Ça va trop bien avec ma tenue.",
+      "Plus de poches ! Je ne dirai plus jamais que mon sac est plein. Enfin, sûrement."
+    ],
+    "backpack.equip_small": [
+      "Trop mignon ! Je le porte sur mon dos.",
+      "{item} ? Adorable. Je le garde sur mon dos."
+    ],
+    "trinket.equip": [
+      "{item} ? Pour moi ? Je ne l'enlève plus jamais !",
+      "Regarde comme ça brille sur moi ! Merci, mon amour !",
+      "Un petit bijou... tu sais vraiment comment me faire fondre."
+    ]
+  },
+  "intents": {
+    "summon": {
+      "triggers": [
+        "je me sens seul",
+        "je me sens seule",
+        "je suis seul",
+        "je suis seule",
+        "je me sens si seul",
+        "je me sens si seule",
+        "je veux une copine",
+        "il me faut une copine",
+        "j'ai besoin de laura"
+      ],
+      "responses": []
+    },
+    "yes": {
+      "triggers": [
+        "oui",
+        "ouais",
+        "ouai",
+        "bien sur",
+        "bien sûr",
+        "evidemment",
+        "évidemment",
+        "carrement",
+        "carrément",
+        "grave",
+        "absolument",
+        "oui oui"
+      ],
+      "responses": [
+        "Youpi !",
+        "Je le savais !",
+        "Bonne réponse."
+      ]
+    },
+    "no": {
+      "triggers": [
+        "non",
+        "nan",
+        "nope",
+        "pas vraiment",
+        "jamais"
+      ],
+      "responses": [
+        "Hmpf.",
+        "Oh... d'accord.",
+        "Bon."
+      ]
+    },
+    "where": {
+      "triggers": [
+        "t'es ou",
+        "tu es ou",
+        "t es ou",
+        "ou es tu",
+        "où es-tu",
+        "ou t'es",
+        "t'es passee ou",
+        "tu es passée où"
+      ],
+      "responses": [
+        "Juste ici !"
+      ]
+    },
+    "follow": {
+      "triggers": [
+        "suis moi",
+        "suis-moi",
+        "viens avec moi",
+        "on y va",
+        "allez viens",
+        "avec moi"
+      ],
+      "responses": []
+    },
+    "stay": {
+      "triggers": [
+        "reste ici",
+        "reste la",
+        "reste là",
+        "attends ici",
+        "attends moi",
+        "attends-moi",
+        "ne bouge pas",
+        "bouge pas",
+        "arrete de me suivre",
+        "arrête de me suivre"
+      ],
+      "responses": []
+    },
+    "come": {
+      "triggers": [
+        "viens ici",
+        "viens la",
+        "viens là",
+        "viens vers moi",
+        "reviens",
+        "reviens ici",
+        "viens voir"
+      ],
+      "responses": []
+    },
+    "home": {
+      "triggers": [
+        "rentre a la maison",
+        "rentre à la maison",
+        "va a la maison",
+        "va à la maison",
+        "reste a la maison",
+        "reste à la maison",
+        "rentre chez nous",
+        "va a la maison et attends"
+      ],
+      "responses": []
+    },
+    "wander": {
+      "triggers": [
+        "va jouer",
+        "promene toi",
+        "promène-toi",
+        "balade toi",
+        "balade-toi",
+        "tu es libre",
+        "va explorer",
+        "amuse toi",
+        "amuse-toi"
+      ],
+      "responses": []
+    },
+    "set_home": {
+      "triggers": [
+        "c'est notre maison",
+        "c'est ici chez nous",
+        "notre maison",
+        "on habite ici",
+        "la maison c'est ici",
+        "definis la maison",
+        "définis la maison"
+      ],
+      "responses": []
+    },
+    "stop": {
+      "triggers": [
+        "stop",
+        "arrete",
+        "arrête",
+        "arrete ca",
+        "arrête ça",
+        "annule",
+        "laisse tomber",
+        "oublie"
+      ],
+      "responses": []
+    },
+    "fetch": {
+      "triggers": [
+        "apporte moi",
+        "apporte-moi",
+        "ramene moi",
+        "ramène-moi",
+        "va chercher",
+        "va me chercher",
+        "trouve moi",
+        "trouve-moi",
+        "il me faut",
+        "donne moi",
+        "donne-moi",
+        "tu peux m'apporter",
+        "tu peux me ramener"
+      ],
+      "responses": []
+    },
+    "chop_tree": {
+      "triggers": [
+        "coupe un arbre",
+        "abats un arbre",
+        "coupe du bois",
+        "va couper du bois",
+        "coupe cet arbre",
+        "abats cet arbre",
+        "ramene du bois",
+        "ramène du bois"
+      ],
+      "responses": []
+    },
+    "harvest": {
+      "triggers": [
+        "recolte",
+        "récolte",
+        "recolte le champ",
+        "récolte le champ",
+        "fais la recolte",
+        "fais la récolte",
+        "ramasse le ble",
+        "ramasse le blé",
+        "cueille les legumes",
+        "cueille les légumes"
+      ],
+      "responses": []
+    },
+    "cook": {
+      "triggers": [
+        "cuisine",
+        "cuisine quelque chose",
+        "fais a manger",
+        "fais à manger",
+        "prepare a manger",
+        "prépare à manger",
+        "fais le diner",
+        "fais le dîner",
+        "fais un gateau",
+        "fais un gâteau",
+        "prepare le repas",
+        "prépare le repas"
+      ],
+      "responses": []
+    },
+    "job_lumberjack": {
+      "triggers": [
+        "sois bucheronne",
+        "sois bûcheronne",
+        "tu es bucheronne",
+        "tu es bûcheronne",
+        "occupe toi des arbres",
+        "occupe-toi des arbres",
+        "travaille comme bucheronne",
+        "travaille comme bûcheronne"
+      ],
+      "responses": []
+    },
+    "job_farmer": {
+      "triggers": [
+        "sois fermiere",
+        "sois fermière",
+        "tu es fermiere",
+        "tu es fermière",
+        "occupe toi du champ",
+        "occupe-toi du champ",
+        "occupe toi de la ferme",
+        "occupe-toi de la ferme",
+        "travaille comme fermiere",
+        "travaille comme fermière"
+      ],
+      "responses": []
+    },
+    "job_cook": {
+      "triggers": [
+        "sois cuisiniere",
+        "sois cuisinière",
+        "tu es la cuisiniere",
+        "tu es la cuisinière",
+        "occupe toi de la cuisine",
+        "occupe-toi de la cuisine",
+        "sois notre cheffe",
+        "travaille en cuisine"
+      ],
+      "responses": []
+    },
+    "job_stop": {
+      "triggers": [
+        "arrete de travailler",
+        "arrête de travailler",
+        "arrete ton travail",
+        "arrête ton travail",
+        "plus de travail",
+        "fais une pause",
+        "vacances"
+      ],
+      "responses": []
+    },
+    "back_to_work": {
+      "triggers": [
+        "au travail",
+        "retourne travailler",
+        "retourne au travail",
+        "va travailler",
+        "reprends le travail"
+      ],
+      "responses": []
+    },
+    "assign_chest": {
+      "triggers": [
+        "ce coffre est pour",
+        "ce coffre c'est pour",
+        "ce coffre sert a",
+        "ce coffre sert à",
+        "utilise ce coffre pour",
+        "c'est le coffre pour",
+        "c'est le coffre des",
+        "range les",
+        "mets les"
+      ],
+      "responses": []
+    },
+    "hug": {
+      "triggers": [
+        "calin",
+        "câlin",
+        "fais moi un calin",
+        "fais-moi un câlin",
+        "un calin",
+        "un câlin",
+        "serre moi",
+        "serre-moi",
+        "*calin*",
+        "*câlin*"
+      ],
+      "responses": []
+    },
+    "kiss": {
+      "triggers": [
+        "bisou",
+        "un bisou",
+        "fais moi un bisou",
+        "fais-moi un bisou",
+        "embrasse moi",
+        "embrasse-moi",
+        "*bisou*",
+        "mwah",
+        "bise"
+      ],
+      "responses": []
+    },
+    "apology": {
+      "triggers": [
+        "pardon",
+        "desole",
+        "désolé",
+        "desolee",
+        "désolée",
+        "dsl",
+        "excuse moi",
+        "excuse-moi",
+        "je m'excuse",
+        "pardonne moi",
+        "pardonne-moi"
+      ],
+      "responses": []
+    },
+    "eat": {
+      "triggers": [
+        "mange quelque chose",
+        "tu devrais manger",
+        "va manger",
+        "mange un truc",
+        "prends un gouter",
+        "prends un goûter"
+      ],
+      "responses": []
+    },
+    "sleep": {
+      "triggers": [
+        "va dormir",
+        "va te coucher",
+        "au lit",
+        "fais une sieste",
+        "dors",
+        "c'est l'heure de dormir"
+      ],
+      "responses": []
+    },
+    "wake_up": {
+      "triggers": [
+        "reveille toi",
+        "réveille-toi",
+        "debout",
+        "leve toi",
+        "lève-toi"
+      ],
+      "responses": []
+    },
+    "beautiful": {
+      "triggers": [
+        "tu es belle",
+        "t'es belle",
+        "tu es magnifique",
+        "t'es magnifique",
+        "tu es jolie",
+        "t'es jolie",
+        "tu es mignonne",
+        "t'es mignonne",
+        "trop mignonne",
+        "tu es canon",
+        "t'es canon",
+        "belle gosse",
+        "tu es sublime",
+        "tu es adorable",
+        "tu es la plus belle",
+        "tu es la plus jolie",
+        "je te trouve belle",
+        "je te trouve jolie",
+        "je te trouve mignonne",
+        "que tu es belle",
+        "que tu es jolie"
+      ],
+      "responses": [
+        "Oh merci... tu vas me faire rougir !",
+        "Tu es pas mal non plus.",
+        "Tu me trouves vraiment jolie ?",
+        "Je sais ! Mais redis-le."
+      ]
+    },
+    "love_you": {
+      "triggers": [
+        "je t'aime",
+        "je t aime",
+        "jtm",
+        "je t'adore",
+        "je t'aime fort"
+      ],
+      "responses": [
+        "Moi aussi je t'aime, plus que tout ! <3",
+        "Mon cœur ne bat que pour toi.",
+        "Je t'aime pour toujours.",
+        "Redis-le ! Je ne m'en lasserai jamais."
+      ]
+    },
+    "miss_you": {
+      "triggers": [
+        "tu m'as manque",
+        "tu m'as manqué",
+        "tu me manques",
+        "tu me manque"
+      ],
+      "responses": [
+        "Tu m'as manqué encore plus !",
+        "Alors ne me quitte plus !",
+        "Oh, viens là !"
+      ]
+    },
+    "thanks": {
+      "triggers": [
+        "merci",
+        "merci beaucoup",
+        "mci",
+        "thx"
+      ],
+      "responses": [
+        "De rien, mon amour !",
+        "Tout pour toi !",
+        "Paie-moi en bisous."
+      ]
+    },
+    "insult": {
+      "triggers": [
+        "tu es moche",
+        "t'es moche",
+        "tu es bete",
+        "t'es bête",
+        "t'es bete",
+        "tais toi",
+        "tais-toi",
+        "ta gueule",
+        "tu es chiante",
+        "t'es chiante",
+        "idiote",
+        "je te deteste",
+        "je te déteste",
+        "degage",
+        "dégage",
+        "tu es nulle",
+        "tu es grosse",
+        "tu es laide",
+        "tu sers à rien",
+        "ferme la",
+        "ferme-la",
+        "ferme ta gueule",
+        "salope",
+        "pute",
+        "connasse",
+        "conne",
+        "pétasse",
+        "pouffiasse",
+        "abrutie",
+        "imbécile",
+        "débile",
+        "fils de pute",
+        "va te faire foutre"
+      ],
+      "responses": [
+        "Comment tu oses ?!",
+        "C'est tellement méchant...",
+        "Je m'en souviendrai.",
+        "Très bien ! Je ne te parle plus !"
+      ]
+    },
+    "what_do_you_want": {
+      "triggers": [
+        "tu veux quoi",
+        "qu'est ce que tu veux",
+        "qu'est-ce que tu veux",
+        "de quoi tu as besoin",
+        "qu'est ce qui va pas",
+        "qu'est-ce qui ne va pas",
+        "t'as quoi"
+      ],
+      "responses": []
+    },
+    "how_are_you": {
+      "triggers": [
+        "ca va",
+        "ça va",
+        "comment tu vas",
+        "comment ca va",
+        "comment ça va",
+        "tu vas bien",
+        "ça va toi",
+        "ca va toi",
+        "la forme"
+      ],
+      "responses": []
+    },
+    "player_hungry": {
+      "triggers": [
+        "j'ai faim",
+        "j ai faim",
+        "je meurs de faim",
+        "jai faim"
+      ],
+      "responses": [
+        "Moi aussi ! On mange ensemble !",
+        "Je n'ai rien pour toi... désolée !"
+      ]
+    },
+    "hello": {
+      "triggers": [
+        "bonjour",
+        "salut",
+        "coucou",
+        "hello",
+        "bonsoir",
+        "yo",
+        "hey",
+        "cc",
+        "slt",
+        "wesh"
+      ],
+      "responses": [
+        "Salut mon amour !",
+        "Coucou toi !",
+        "Oh, tu es là ! Bonjour !",
+        "Coucou, ça me fait plaisir de te voir."
+      ]
+    },
+    "bye": {
+      "triggers": [
+        "au revoir",
+        "bye",
+        "a plus",
+        "à plus",
+        "a+",
+        "je dois y aller",
+        "je dois partir",
+        "a tout a l'heure",
+        "à tout à l'heure",
+        "salut a plus"
+      ],
+      "responses": [
+        "Au revoir... reviens vite !",
+        "Ne m'oublie pas !",
+        "Déjà ? D'accord... bisous."
+      ]
+    },
+    "good_night": {
+      "triggers": [
+        "bonne nuit",
+        "bne nuit",
+        "fais de beaux reves",
+        "fais de beaux rêves"
+      ],
+      "responses": [
+        "Bonne nuit ! Rêve de moi.",
+        "Dors bien, mon amour.",
+        "Bonne nuit, bisous !"
+      ]
+    },
+    "joke": {
+      "triggers": [
+        "raconte moi une blague",
+        "raconte-moi une blague",
+        "une blague",
+        "fais moi rire",
+        "fais-moi rire",
+        "dis un truc drole",
+        "dis un truc drôle"
+      ],
+      "responses": [
+        "Pourquoi le creeper traverse la route ? Pour aller de l'autre SSSSside !",
+        "Tu connais la blague du steve ? Non ? Elle est carrée.",
+        "Pourquoi les squelettes ne se battent jamais ? Ils n'ont pas de tripes !",
+        "Pourquoi les poules traversent la route ? Pour te rejoindre !"
+      ]
+    },
+    "who_are_you": {
+      "triggers": [
+        "qui es tu",
+        "qui es-tu",
+        "t'es qui",
+        "tu es qui",
+        "comment tu t'appelles",
+        "ton nom",
+        "c'est quoi ton nom"
+      ],
+      "responses": [
+        "Je suis {laura}, ta copine ! <3",
+        "{laura} ! Tu as déjà oublié ?!"
+      ]
+    },
+    "creator": {
+      "triggers": [
+        "qui t'a cree",
+        "qui t'a créée",
+        "qui t'a fait",
+        "ton createur",
+        "ton créateur",
+        "vyrriox"
+      ],
+      "responses": [
+        "C'est vyrriox qui m'a créée ! Quel talent.",
+        "Vyrriox m'a donné vie, rien que pour toi."
+      ]
+    },
+    "marry_me": {
+      "triggers": [
+        "epouse moi",
+        "épouse-moi",
+        "tu veux m'epouser",
+        "tu veux m'épouser",
+        "veux tu m'epouser",
+        "veux-tu m'épouser",
+        "on se marie"
+      ],
+      "responses": [
+        "OUI ! Mille fois oui !",
+        "Seulement avec une bague en diamant !",
+        "Oh là là... c'est sérieux ? OUI !"
+      ]
+    },
+    "mining": {
+      "triggers": [
+        "on va miner",
+        "allons miner",
+        "on part miner",
+        "va miner"
+      ],
+      "responses": [
+        "Allons chercher des diamants ! Attention aux creepers.",
+        "Miner c'est fatigant, mais j'adore t'accompagner.",
+        "On va devenir riches !"
+      ]
+    },
+    "building": {
+      "triggers": [
+        "on construit",
+        "construisons",
+        "construire une maison",
+        "on construit une maison"
+      ],
+      "responses": [
+        "Une maison pour nous ? Avec une grande chambre ?",
+        "Je veux des murs roses. Non négociable.",
+        "Je m'occupe de la déco !"
+      ]
+    },
+    "fishing": {
+      "triggers": [
+        "on va pecher",
+        "on va pêcher",
+        "allons pecher",
+        "allons pêcher",
+        "va pecher",
+        "va pêcher"
+      ],
+      "responses": [
+        "La pêche, c'est tellement romantique !",
+        "Je vais te regarder pêcher. De très près."
+      ]
+    },
+    "sing": {
+      "triggers": [
+        "chante",
+        "chante une chanson",
+        "chante pour moi"
+      ],
+      "responses": [
+        "La la laaa~",
+        "Seulement si tu chantes avec moi !"
+      ]
+    },
+    "bored": {
+      "triggers": [
+        "je m'ennuie",
+        "je m ennuie",
+        "jm'ennuie",
+        "je m'ennuie trop"
+      ],
+      "responses": [
+        "Moi aussi ! On danse !",
+        "Partons à l'aventure !",
+        "Fais-moi un câlin, ce n'est jamais ennuyeux."
+      ]
+    },
+    "emote_wave": {
+      "triggers": [
+        "fais coucou",
+        "salue",
+        "fais signe"
+      ],
+      "responses": []
+    },
+    "emote_clap": {
+      "triggers": [
+        "applaudis",
+        "tape dans tes mains",
+        "bravo"
+      ],
+      "responses": []
+    },
+    "emote_dance": {
+      "triggers": [
+        "danse",
+        "on danse",
+        "danse pour moi"
+      ],
+      "responses": []
+    },
+    "emote_laugh": {
+      "triggers": [
+        "rigole",
+        "ris",
+        "mdr",
+        "ptdr",
+        "haha",
+        "hahaha",
+        "lol"
+      ],
+      "responses": []
+    },
+    "emote_cry": {
+      "triggers": [
+        "pleure",
+        "ne pleure pas"
+      ],
+      "responses": []
+    },
+    "emote_blush": {
+      "triggers": [
+        "rougis",
+        "tu rougis"
+      ],
+      "responses": []
+    },
+    "emote_facepalm": {
+      "triggers": [
+        "facepalm",
+        "consternation"
+      ],
+      "responses": []
+    },
+    "emote_jump": {
+      "triggers": [
+        "saute"
+      ],
+      "responses": []
+    },
+    "emote_bow": {
+      "triggers": [
+        "reverence",
+        "révérence",
+        "incline toi",
+        "incline-toi"
+      ],
+      "responses": []
+    },
+    "emote_think": {
+      "triggers": [
+        "reflechis",
+        "réfléchis"
+      ],
+      "responses": []
+    },
+    "emote_shrug": {
+      "triggers": [
+        "hausse les epaules",
+        "hausse les épaules",
+        "jsp",
+        "je sais pas"
+      ],
+      "responses": []
+    },
+    "emote_stomp": {
+      "triggers": [
+        "tape du pied fort",
+        "trepigne",
+        "trépigne"
+      ],
+      "responses": []
+    },
+    "emote_yawn": {
+      "triggers": [
+        "baille",
+        "bâille"
+      ],
+      "responses": []
+    },
+    "emote_celebrate": {
+      "triggers": [
+        "on fete ca",
+        "on fête ça",
+        "fete",
+        "fête",
+        "on a gagne",
+        "on a gagné",
+        "gg"
+      ],
+      "responses": []
+    },
+    "emote_snap": {
+      "triggers": [
+        "claque des doigts"
+      ],
+      "responses": []
+    },
+    "emote_twirl": {
+      "triggers": [
+        "tourne sur toi meme",
+        "tourne sur toi-même",
+        "fais un tour"
+      ],
+      "responses": []
+    },
+    "emote_hum": {
+      "triggers": [
+        "fredonne",
+        "fredonne une chanson"
+      ],
+      "responses": []
+    },
+    "emote_stretch": {
+      "triggers": [
+        "etire toi",
+        "étire-toi"
+      ],
+      "responses": []
+    },
+    "emote_tap_foot": {
+      "triggers": [
+        "tape du pied",
+        "impatiente"
+      ],
+      "responses": []
+    },
+    "emote_blow_kiss": {
+      "triggers": [
+        "envoie moi un bisou",
+        "envoie-moi un bisou",
+        "envoie un bisou"
+      ],
+      "responses": []
+    },
+    "emote_sneeze": {
+      "triggers": [
+        "eternue",
+        "éternue",
+        "a tes souhaits",
+        "à tes souhaits"
+      ],
+      "responses": []
+    },
+    "emote_hair_flip": {
+      "triggers": [
+        "recoiffe toi",
+        "recoiffe-toi",
+        "coup de cheveux"
+      ],
+      "responses": []
+    },
+    "emote_check_nails": {
+      "triggers": [
+        "regarde tes ongles",
+        "tes ongles"
+      ],
+      "responses": []
+    },
+    "emote_air_guitar": {
+      "triggers": [
+        "air guitar",
+        "joue de la guitare",
+        "rock"
+      ],
+      "responses": []
+    },
+    "emote_hiccup": {
+      "triggers": [
+        "hoquet",
+        "tu as le hoquet"
+      ],
+      "responses": []
+    },
+    "emote_pout": {
+      "triggers": [
+        "fais la moue",
+        "moue"
+      ],
+      "responses": []
+    },
+    "emote_shiver": {
+      "triggers": [
+        "tu as froid",
+        "grelotte"
+      ],
+      "responses": []
+    },
+    "emote_fan": {
+      "triggers": [
+        "tu as chaud",
+        "evente toi",
+        "évente-toi"
+      ],
+      "responses": []
+    }
+  },
+  "items": {
+    "#minecraft:logs": [
+      "bois",
+      "buche*",
+      "bûche*",
+      "rondin*",
+      "tronc*"
+    ],
+    "#minecraft:planks": [
+      "planche*"
+    ],
+    "minecraft:stick": [
+      "baton*",
+      "bâton*"
+    ],
+    "minecraft:cobblestone": [
+      "pierre*",
+      "roche*",
+      "cobble*"
+    ],
+    "minecraft:stone": [
+      "pierre lisse"
+    ],
+    "minecraft:dirt": [
+      "terre"
+    ],
+    "minecraft:sand": [
+      "sable"
+    ],
+    "minecraft:gravel": [
+      "gravier*"
+    ],
+    "minecraft:clay_ball": [
+      "argile"
+    ],
+    "minecraft:glass": [
+      "verre"
+    ],
+    "minecraft:coal": [
+      "charbon"
+    ],
+    "minecraft:charcoal": [
+      "charbon de bois"
+    ],
+    "minecraft:torch": [
+      "torche*"
+    ],
+    "minecraft:raw_iron": [
+      "fer brut",
+      "minerai de fer"
+    ],
+    "minecraft:iron_ingot": [
+      "fer",
+      "lingot* de fer"
+    ],
+    "minecraft:gold_ingot": [
+      "or",
+      "lingot* d'or"
+    ],
+    "minecraft:copper_ingot": [
+      "cuivre"
+    ],
+    "minecraft:diamond": [
+      "diamant*"
+    ],
+    "minecraft:emerald": [
+      "emeraude*",
+      "émeraude*"
+    ],
+    "minecraft:redstone": [
+      "redstone"
+    ],
+    "minecraft:lapis_lazuli": [
+      "lapis"
+    ],
+    "minecraft:amethyst_shard": [
+      "amethyste*",
+      "améthyste*"
+    ],
+    "minecraft:obsidian": [
+      "obsidienne"
+    ],
+    "minecraft:apple": [
+      "pomme*"
+    ],
+    "minecraft:golden_apple": [
+      "pomme* dore*",
+      "pomme* doré*"
+    ],
+    "minecraft:bread": [
+      "pain*"
+    ],
+    "minecraft:carrot": [
+      "carotte*"
+    ],
+    "minecraft:potato": [
+      "patate*",
+      "pomme* de terre"
+    ],
+    "minecraft:baked_potato": [
+      "patate* cuite*",
+      "pomme* de terre cuite*"
+    ],
+    "minecraft:beetroot": [
+      "betterave*"
+    ],
+    "minecraft:wheat": [
+      "ble",
+      "blé"
+    ],
+    "minecraft:wheat_seeds": [
+      "graine*"
+    ],
+    "minecraft:sugar_cane": [
+      "canne* a sucre",
+      "canne* à sucre"
+    ],
+    "minecraft:sugar": [
+      "sucre"
+    ],
+    "minecraft:pumpkin": [
+      "citrouille*"
+    ],
+    "minecraft:melon_slice": [
+      "melon*",
+      "pasteque*",
+      "pastèque*"
+    ],
+    "minecraft:sweet_berries": [
+      "baie*"
+    ],
+    "minecraft:cocoa_beans": [
+      "cacao"
+    ],
+    "minecraft:egg": [
+      "oeuf*",
+      "œuf*"
+    ],
+    "minecraft:milk_bucket": [
+      "lait"
+    ],
+    "minecraft:honey_bottle": [
+      "miel"
+    ],
+    "minecraft:cake": [
+      "gateau*",
+      "gâteau*"
+    ],
+    "minecraft:cookie": [
+      "cookie*",
+      "biscuit*"
+    ],
+    "minecraft:pumpkin_pie": [
+      "tarte*",
+      "tarte a la citrouille",
+      "tarte à la citrouille"
+    ],
+    "minecraft:cooked_beef": [
+      "steak*",
+      "boeuf",
+      "bœuf"
+    ],
+    "minecraft:cooked_porkchop": [
+      "porc",
+      "cotelette*",
+      "côtelette*",
+      "bacon"
+    ],
+    "minecraft:cooked_chicken": [
+      "poulet"
+    ],
+    "minecraft:cooked_mutton": [
+      "mouton"
+    ],
+    "minecraft:cooked_cod": [
+      "poisson*",
+      "morue"
+    ],
+    "minecraft:cooked_salmon": [
+      "saumon"
+    ],
+    "minecraft:mushroom_stew": [
+      "ragout de champignon*",
+      "ragoût de champignon*",
+      "soupe"
+    ],
+    "#minecraft:small_flowers": [
+      "fleur*",
+      "bouquet*"
+    ],
+    "minecraft:poppy": [
+      "coquelicot*",
+      "fleur rouge",
+      "rose*"
+    ],
+    "minecraft:pink_tulip": [
+      "tulipe* rose*"
+    ],
+    "minecraft:dandelion": [
+      "pissenlit*"
+    ],
+    "#minecraft:wool": [
+      "laine"
+    ],
+    "minecraft:string": [
+      "ficelle*",
+      "fil"
+    ],
+    "minecraft:feather": [
+      "plume*"
+    ],
+    "minecraft:leather": [
+      "cuir"
+    ],
+    "minecraft:bone": [
+      "os"
+    ],
+    "minecraft:arrow": [
+      "fleche*",
+      "flèche*"
+    ],
+    "minecraft:gunpowder": [
+      "poudre a canon",
+      "poudre à canon",
+      "poudre"
+    ],
+    "minecraft:ender_pearl": [
+      "perle*",
+      "perle* de l'ender"
+    ],
+    "minecraft:slime_ball": [
+      "slime*",
+      "boule* de slime"
+    ],
+    "minecraft:bucket": [
+      "seau"
+    ],
+    "minecraft:water_bucket": [
+      "eau",
+      "seau d'eau"
+    ],
+    "minecraft:book": [
+      "livre*"
+    ],
+    "minecraft:paper": [
+      "papier"
+    ],
+    "minecraft:bamboo": [
+      "bambou*"
+    ],
+    "minecraft:cactus": [
+      "cactus"
+    ],
+    "minecraft:kelp": [
+      "algue*",
+      "varech"
+    ],
+    "#minecraft:saplings": [
+      "pousse*",
+      "jeune* arbre*"
+    ],
+    "minecraft:brown_mushroom": [
+      "champignon*"
+    ],
+    "minecraft:netherrack": [
+      "netherrack"
+    ],
+    "minecraft:glowstone_dust": [
+      "pierre lumineuse",
+      "glowstone"
+    ],
+    "minecraft:quartz": [
+      "quartz"
+    ],
+    "minecraft:bricks": [
+      "brique*"
+    ]
+  },
+  "chests": {
+    "wood": [
+      "bois",
+      "buche*",
+      "bûche*",
+      "rondin*"
+    ],
+    "harvest": [
+      "recolte*",
+      "récolte*",
+      "culture*",
+      "ble",
+      "blé",
+      "legume*",
+      "légume*"
+    ],
+    "seeds": [
+      "graine*",
+      "pousse*",
+      "semence*"
+    ],
+    "ingredients": [
+      "ingredient*",
+      "ingrédient*",
+      "viande crue",
+      "nourriture crue"
+    ],
+    "fuel": [
+      "combustible*",
+      "charbon",
+      "carburant"
+    ],
+    "meals": [
+      "plat*",
+      "repas",
+      "nourriture cuite"
+    ],
+    "pantry": [
+      "garde manger",
+      "garde-manger",
+      "ta nourriture",
+      "gouter*",
+      "goûter*",
+      "nourriture",
+      "bouffe"
+    ],
+    "storage": [
+      "stockage",
+      "tout le reste",
+      "divers",
+      "bazar",
+      "trucs"
+    ]
+  }
+}

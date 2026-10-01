@@ -8,7 +8,7 @@ bin/
 # Compiled
 *.class
 *.jar
-!gradle/wrapper/gradle-wrapper.jar
+!**/gradle/wrapper/gradle-wrapper.jar
 
 # Logs
 *.log
@@ -26,5 +26,13 @@ out/
 .DS_Store
 Thumbs.db
 
-# Minecraft
+# Minecraft dev runs (worlds, configs, local test models and skins)
 runs/
+run/
+run-*/
+
+# Local only
+.claude/
+CLAUDE.md
+test-procedures/
+TEST_PROCEDURE_*.html

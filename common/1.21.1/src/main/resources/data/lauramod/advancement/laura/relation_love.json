@@ -1,0 +1,23 @@
+{
+  "parent": "lauramod:laura/relation_close",
+  "display": {
+    "icon": {
+      "id": "lauramod:laura_heart"
+    },
+    "title": {
+      "translate": "advancements.lauramod.relation_love.title"
+    },
+    "description": {
+      "translate": "advancements.lauramod.relation_love.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

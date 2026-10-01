@@ -1,0 +1,171 @@
+plugins {
+    id 'java-library'
+    id 'idea'
+    id 'net.neoforged.moddev' version '2.0.147'
+}
+
+version = mod_version
+group = mod_group_id
+
+base {
+    archivesName = "${mod_id}-neoforge-${minecraft_version}"
+}
+
+// Minecraft 1.21.1 ships Java 21 to players.
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+// Loader-independent code for this Minecraft version lives in ../common on the main branch.
+// On the per-target branches it is merged into src/main, so this block does nothing there.
+def commonDir = file("../common/${minecraft_version}/src/main")
+if (commonDir.isDirectory()) {
+    sourceSets.main.java.srcDir(new File(commonDir, 'java'))
+    sourceSets.main.resources.srcDir(new File(commonDir, 'resources'))
+}
+
+sourceSets.main.resources {
+    exclude('**/*.bbmodel.license')
+}
+
+neoForge {
+    version = project.neo_version
+
+    parchment {
+        mappingsVersion = project.parchment_mappings_version
+        minecraftVersion = project.parchment_minecraft_version
+    }
+
+    runs {
+        client {
+            client()
+        }
+        server {
+            server()
+            programArgument '--nogui'
+        }
+        // Client that opens every screen of the mod in the quick play world laura_test and saves screenshots.
+        clienttest {
+            client()
+            gameDirectory = project.file('run-clienttest')
+            programArguments.addAll('--quickPlaySingleplayer', 'laura_test')
+            systemProperty 'lauramod.clienttest', 'true'
+        }
+        // Dedicated server that runs the mod's self tests, writes lauramod-selftest.json and stops.
+        selftest {
+            server()
+            programArgument '--nogui'
+            gameDirectory = project.file('run-selftest')
+            systemProperty 'lauramod.selftest', 'true'
+        }
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            logLevel = org.slf4j.event.Level.INFO
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+        }
+    }
+}
+
+repositories {
+    maven {
+        name = 'ModMaven (Applied Energistics 2 API)'
+        url = 'https://modmaven.dev/'
+        content {
+            includeGroup 'appeng'
+        }
+    }
+    maven {
+        name = 'Modrinth (compat test mods)'
+        url = 'https://api.modrinth.com/maven'
+        content {
+            includeGroup 'maven.modrinth'
+        }
+    }
+    maven {
+        name = 'Latvian (KubeJS)'
+        url = 'https://maven.latvian.dev/releases'
+        content {
+            includeGroup 'dev.latvian.mods'
+            includeGroup 'dev.latvian.apps'
+        }
+    }
+    maven {
+        name = 'Illusive Soulworks (Curios API)'
+        url = 'https://maven.theillusivec4.top/'
+        content {
+            includeGroup 'top.theillusivec4.curios'
+        }
+    }
+}
+
+dependencies {
+    // Optional integrations: compiled against their public APIs, never bundled in the jar.
+    compileOnly "appeng:appliedenergistics2:${ae2_version}:api"
+    compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
+    compileOnly "maven.modrinth:farmers-delight:${farmers_delight_version}"
+    compileOnly("dev.latvian.mods:kubejs-neoforge:${kubejs_version}") {
+        exclude group: 'com.github.rtyley'
+    }
+    // Mods loaded only in dev runs started with -PwithCompatMods, to test the integrations for real.
+    if (project.hasProperty('withCompatMods')) {
+        runtimeOnly "maven.modrinth:farmers-delight:${farmers_delight_version}"
+        runtimeOnly("dev.latvian.mods:kubejs-neoforge:${kubejs_version}") {
+            // Only used by KubeJS's client GIF export, and hosted outside the declared repositories.
+            exclude group: 'com.github.rtyley'
+        }
+    }
+}
+
+var generateModMetadata = tasks.register('generateModMetadata', ProcessResources) {
+    var replaceProperties = [
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            neo_version            : neo_version,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version,
+            mod_authors            : mod_authors,
+            mod_description        : mod_description,
+    ]
+    inputs.properties replaceProperties
+    expand replaceProperties
+    from 'src/main/templates'
+    into 'build/generated/sources/modMetadata'
+}
+sourceSets.main.resources.srcDir generateModMetadata
+neoForge.ideSyncTask generateModMetadata
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-Xlint:deprecation'
+}
+
+// The license file sits at the repository root on main and at the project root on a target branch.
+def licenseFile = commonDir.isDirectory() ? file('../LICENSE') : file('LICENSE')
+def licenseName = "LICENSE_${mod_id}"
+tasks.named('jar', Jar).configure {
+    from(licenseFile) {
+        rename { licenseName }
+    }
+    manifest {
+        attributes([
+                'Specification-Title'   : mod_id,
+                'Specification-Vendor'  : mod_authors,
+                'Specification-Version' : '1',
+                'Implementation-Title'  : mod_name,
+                'Implementation-Version': mod_version,
+                'Implementation-Vendor' : mod_authors
+        ])
+    }
+}
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}

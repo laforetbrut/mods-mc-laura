@@ -1,0 +1,137 @@
+plugins {
+    id 'java-library'
+    id 'idea'
+    id 'net.minecraftforge.gradle' version '7.0.40'
+}
+
+version = mod_version
+group = mod_group_id
+
+base {
+    archivesName = "${mod_id}-forge-${minecraft_version}"
+}
+
+// Minecraft 1.21.1 ships Java 21 to players.
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+// Loader-independent code for this Minecraft version lives in ../common on the main branch.
+// On the per-target branches it is merged into src/main, so this block does nothing there.
+def commonDir = file("../common/${minecraft_version}/src/main")
+if (commonDir.isDirectory()) {
+    sourceSets.main.java.srcDir(new File(commonDir, 'java'))
+    sourceSets.main.resources.srcDir(new File(commonDir, 'resources'))
+}
+
+sourceSets.main.resources {
+    exclude('**/*.bbmodel.license')
+}
+
+minecraft {
+    mappings channel: 'official', version: minecraft_version
+
+    runs {
+        configureEach {
+            workingDir = layout.projectDirectory.dir('run')
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            systemProperty 'forge.logging.console.level', 'info'
+        }
+
+        register('client')
+
+        register('server') {
+            args '--nogui'
+        }
+
+        // Forge only ships client, server, data and gameTestServer launch configs. The two runs below
+        // have other names, so they repeat the launch settings of the Forge userdev metadata.
+
+        // Client that opens every screen of the mod in the quick play world laura_test and saves screenshots.
+        register('clienttest') {
+            workingDir = layout.projectDirectory.dir('run-clienttest')
+            mainClass = 'net.minecraftforge.bootstrap.ForgeBootstrap'
+            args '--launchTarget', 'forge_userdev_client', '--version', 'MOD_DEV',
+                    '--assetIndex', '{asset_index}', '--assetsDir', '{assets_root}', '--gameDir', '.',
+                    '--quickPlaySingleplayer', 'laura_test'
+            jvmArgs '-Djava.net.preferIPv6Addresses=system'
+            environment 'MCP_MAPPINGS', '{mcp_mappings}'
+            systemProperty 'lauramod.clienttest', 'true'
+        }
+
+        // Dedicated server that runs the mod's self tests, writes lauramod-selftest.json and stops.
+        register('selftest') {
+            workingDir = layout.projectDirectory.dir('run-selftest')
+            mainClass = 'net.minecraftforge.bootstrap.ForgeBootstrap'
+            args '--launchTarget', 'forge_userdev_server', '--gameDir', '.', '--nogui'
+            jvmArgs '-Djava.net.preferIPv6Addresses=system'
+            environment 'MCP_MAPPINGS', '{mcp_mappings}'
+            systemProperty 'lauramod.selftest', 'true'
+            // -PselftestOnly=name runs only the tests whose name contains it.
+            if (project.hasProperty('selftestOnly')) {
+                systemProperty 'lauramod.selftest.only', project.property('selftestOnly')
+            }
+        }
+    }
+}
+
+repositories {
+    minecraft.mavenizer(it)
+    maven fg.forgeMaven
+    maven fg.minecraftLibsMaven
+    mavenCentral()
+}
+
+dependencies {
+    implementation minecraft.dependency("net.minecraftforge:forge:${minecraft_version}-${forge_version}")
+}
+
+var generateModMetadata = tasks.register('generateModMetadata', ProcessResources) {
+    var replaceProperties = [
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            forge_version          : forge_version,
+            forge_version_range    : forge_version_range,
+            loader_version_range   : loader_version_range,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version,
+            mod_authors            : mod_authors,
+            mod_description        : mod_description,
+    ]
+    inputs.properties replaceProperties
+    expand replaceProperties
+    from 'src/main/templates'
+    into 'build/generated/sources/modMetadata'
+}
+sourceSets.main.resources.srcDir generateModMetadata
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-Xlint:deprecation'
+}
+
+// The license file sits at the repository root on main and at the project root on a target branch.
+def licenseFile = commonDir.isDirectory() ? file('../LICENSE') : file('LICENSE')
+def licenseName = "LICENSE_${mod_id}"
+tasks.named('jar', Jar).configure {
+    from(licenseFile) {
+        rename { licenseName }
+    }
+    manifest {
+        attributes([
+                'Specification-Title'   : mod_id,
+                'Specification-Vendor'  : mod_authors,
+                'Specification-Version' : '1',
+                'Implementation-Title'  : mod_name,
+                'Implementation-Version': mod_version,
+                'Implementation-Vendor' : mod_authors
+        ])
+    }
+}
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}
