@@ -468,6 +468,9 @@ public final class LauraTestCases {
                     twin.load(nether.getEntity(id).saveWithoutId(new CompoundTag()));
                     twin.moveTo(ctx.origin.getX() + 2.5, ctx.origin.getY(), ctx.origin.getZ() + 0.5, 0, 0);
                     ctx.check(ctx.level.addFreshEntity(twin), "could not add the copy");
+                    // Called to where the copy is, the real one stays: the game would not let her in and she would be lost.
+                    LauraEntity real = (LauraEntity) nether.getEntity(id);
+                    ctx.check(LauraManager.teleport(real, ctx.level, ctx.origin) == null && !real.isRemoved(), "she was sent to where a second her already is");
                     ctx.waitFor("the copy to be removed", 200, () -> copies(ctx).size() == 1, () -> {
                         ctx.check(twin.isRemoved() && nether.getEntity(id) instanceof LauraEntity, "the wrong one was kept");
                         ctx.after(25, () -> {
