@@ -37,6 +37,13 @@ public final class ServerAssetStore {
 
     private static final Map<AssetKind, Map<String, Entry>> ENTRIES = new EnumMap<>(AssetKind.class);
 
+    /** Most bytes of skins and model archives kept in memory between two scans. */
+    private static final long PAYLOAD_CACHE_BYTES = 32L * 1024 * 1024;
+    /** What {@link #read} returned, least recently used first. */
+    private static final Map<String, byte[]> PAYLOADS = new LinkedHashMap<>(16, 0.75f, true);
+    private static long payloadBytes;
+    private static long diskReads;
+
     private ServerAssetStore() {
     }
 
@@ -83,6 +90,9 @@ public final class ServerAssetStore {
             }
             ENTRIES.put(kind, found);
         }
+        // Files may have changed: what was read before this scan is not served again.
+        PAYLOADS.clear();
+        payloadBytes = 0;
         LauraMod.LOGGER.info("Server assets: {} skins, {} models", ENTRIES.get(AssetKind.SKIN).size(), ENTRIES.get(AssetKind.MODEL).size());
     }
 
@@ -208,8 +218,37 @@ public final class ServerAssetStore {
         return out;
     }
 
-    /** Skin: the PNG bytes. Model: a zip of its files. */
-    public static byte[] read(Entry entry) {
+    /**
+     * Skin: the PNG bytes. Model: a zip of its files. The result is kept until the next scan (up
+     * to {@link #PAYLOAD_CACHE_BYTES} in total), so a request never costs more than one disk read
+     * per file. Callers must not modify the array.
+     */
+    public static synchronized byte[] read(Entry entry) {
+        String key = entry.kind().name() + "|" + entry.name() + "#" + entry.sha1();
+        byte[] cached = PAYLOADS.get(key);
+        if (cached != null) {
+            return cached;
+        }
+        byte[] bytes = readFromDisk(entry);
+        if (bytes != null && bytes.length <= PAYLOAD_CACHE_BYTES) {
+            PAYLOADS.put(key, bytes);
+            payloadBytes += bytes.length;
+            var oldest = PAYLOADS.entrySet().iterator();
+            while (payloadBytes > PAYLOAD_CACHE_BYTES && oldest.hasNext()) {
+                payloadBytes -= oldest.next().getValue().length;
+                oldest.remove();
+            }
+        }
+        return bytes;
+    }
+
+    /** Number of times an asset was really read from disk since the game started. */
+    public static synchronized long diskReads() {
+        return diskReads;
+    }
+
+    private static byte[] readFromDisk(Entry entry) {
+        diskReads++;
         try {
             if (entry.kind() == AssetKind.SKIN) {
                 return Files.readAllBytes(entry.root().resolve(entry.files().get(0)));

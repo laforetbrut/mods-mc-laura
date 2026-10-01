@@ -5,6 +5,7 @@ import com.vyrriox.lauramod.LauraMod;
 import com.vyrriox.lauramod.client.ClientState;
 import com.vyrriox.lauramod.client.network.LauraClientNetwork;
 import com.vyrriox.lauramod.config.LauraClientConfig;
+import com.vyrriox.lauramod.skin.AssetCache;
 import com.vyrriox.lauramod.skin.AssetKind;
 import com.vyrriox.lauramod.skin.ServerAssetStore;
 import com.vyrriox.lauramod.skin.SkinRef;
@@ -40,8 +41,12 @@ public final class SkinTextures {
         LOADING, READY, FAILED
     }
 
-    private record Entry(State state, ResourceLocation texture) {
+    /** {@code since} is when a server skin was last asked for (0 for everything else). */
+    private record Entry(State state, ResourceLocation texture, long since) {
     }
+
+    /** A request the server did not answer (or answered "missing") is sent again after this long. */
+    private static final long RETRY_MS = 10_000L;
 
     private static final Map<String, Entry> CACHE = new HashMap<>();
     private static final ExecutorService DOWNLOADER = Executors.newSingleThreadExecutor(r -> {
@@ -69,14 +74,29 @@ public final class SkinTextures {
                 }
                 yield lookup(ref.cacheKey(), () -> downloadUrl(ref.cacheKey(), ref.value()));
             }
-            case SERVER -> lookup(ref.cacheKey(), () -> loadServerSkin(ref));
+            case SERVER -> {
+                String key = ref.cacheKey();
+                Entry waiting = CACHE.get(key);
+                long now = System.currentTimeMillis();
+                if (waiting != null && waiting.state() == State.LOADING && waiting.since() > 0 && now - waiting.since() > RETRY_MS) {
+                    // No answer, or the file was missing: ask the server again.
+                    CACHE.put(key, new Entry(State.LOADING, null, now));
+                    loadServerSkin(ref);
+                    yield DEFAULT;
+                }
+                yield lookup(key, now, () -> loadServerSkin(ref));
+            }
         };
     }
 
     private static ResourceLocation lookup(String key, Runnable loader) {
+        return lookup(key, 0, loader);
+    }
+
+    private static ResourceLocation lookup(String key, long since, Runnable loader) {
         Entry entry = CACHE.get(key);
         if (entry == null) {
-            CACHE.put(key, new Entry(State.LOADING, null));
+            CACHE.put(key, new Entry(State.LOADING, null, since));
             loader.run();
             return DEFAULT;
         }
@@ -91,36 +111,68 @@ public final class SkinTextures {
 
     private static void loadServerSkin(SkinRef ref) {
         String key = ref.cacheKey();
-        if (!ref.hash().isEmpty()) {
-            Path cached = cacheDir().resolve(ref.hash() + ".png");
-            if (Files.isRegularFile(cached)) {
-                try {
-                    register(key, Files.readAllBytes(cached));
+        // The reference is written by the server: a name that could be a path is never used, and a
+        // hash that is not a SHA-1 never becomes a file name.
+        if (!ServerAssetStore.isSafeName(ref.value())) {
+            CACHE.put(key, new Entry(State.FAILED, null, 0));
+            return;
+        }
+        Path cached = AssetCache.file(cacheDir(), ref.hash(), ".png");
+        if (cached != null && Files.isRegularFile(cached)) {
+            try {
+                byte[] bytes = Files.readAllBytes(cached);
+                // A file that is not the skin its name promises is ignored and downloaded again.
+                if (AssetCache.matchesSkin(ref.hash(), bytes) && ServerAssetStore.isValidSkinPng(bytes)) {
+                    register(key, bytes);
                     return;
-                } catch (IOException ignored) {
-                    // Fall through to the network.
                 }
+            } catch (IOException ignored) {
+                // Fall through to the network.
             }
         }
         LauraClientNetwork.requestAsset(AssetKind.SKIN, ref.value());
     }
 
+    /** True while a skin with this name was asked from the server and has not arrived. */
+    public static boolean isWaitingFor(String name) {
+        String prefix = "server/" + name + "#";
+        for (Map.Entry<String, Entry> e : CACHE.entrySet()) {
+            if (e.getValue().state() == State.LOADING && e.getKey().startsWith(prefix)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** A skin the server sent. The caller checked that it was asked for and that the hash is a SHA-1. */
     public static void onServerSkinReceived(String name, String sha1, byte[] bytes) {
         if (!ServerAssetStore.isValidSkinPng(bytes)) {
             onServerSkinMissing(name);
             return;
         }
-        try {
-            Files.createDirectories(cacheDir());
-            Files.write(cacheDir().resolve(sha1 + ".png"), bytes);
-        } catch (IOException e) {
-            LauraMod.LOGGER.debug("Could not cache skin {}: {}", name, e.getMessage());
+        // Kept on disk only when the content is what the hash says: a server cannot plant a file
+        // that another server's skin would later be read from.
+        Path target = AssetCache.matchesSkin(sha1, bytes) ? AssetCache.file(cacheDir(), sha1, ".png") : null;
+        if (target != null) {
+            try {
+                Files.createDirectories(target.getParent());
+                Files.write(target, bytes);
+            } catch (IOException e) {
+                LauraMod.LOGGER.debug("Could not cache skin {}: {}", name, e.getMessage());
+            }
         }
-        register("server/" + name + "#" + sha1, bytes);
+        String key = "server/" + name + "#" + sha1;
+        register(key, bytes);
+        // References to another version of this file will not be answered: stop waiting for them.
+        String prefix = "server/" + name + "#";
+        CACHE.replaceAll((k, e) -> e.state() == State.LOADING && k.startsWith(prefix) && !k.equals(key) ? new Entry(State.FAILED, null, 0) : e);
     }
 
+    /** The server has no such skin (or sent something unusable): asked again after {@link #RETRY_MS}. */
     public static void onServerSkinMissing(String name) {
-        CACHE.entrySet().removeIf(e -> e.getKey().startsWith("server/" + name + "#") && e.getValue().state() == State.LOADING);
+        String prefix = "server/" + name + "#";
+        long now = System.currentTimeMillis();
+        CACHE.replaceAll((k, e) -> e.state() == State.LOADING && k.startsWith(prefix) ? new Entry(State.LOADING, null, now) : e);
     }
 
     // ------------------------------------------------------------------ URL skins
@@ -145,7 +197,7 @@ public final class SkinTextures {
                 Minecraft.getInstance().execute(() -> register(key, result));
             } catch (Exception e) {
                 LauraMod.LOGGER.info("Could not download skin {}: {}", url, e.getMessage());
-                Minecraft.getInstance().execute(() -> CACHE.put(key, new Entry(State.FAILED, null)));
+                Minecraft.getInstance().execute(() -> CACHE.put(key, new Entry(State.FAILED, null, 0)));
             }
         });
     }
@@ -201,13 +253,13 @@ public final class SkinTextures {
             NativeImage image = normalize(NativeImage.read(png));
             ResourceLocation location = LauraMod.id("skins/" + (counter++) + "_" + Integer.toHexString(key.hashCode()).toLowerCase(Locale.ROOT));
             Minecraft.getInstance().getTextureManager().register(location, new DynamicTexture(image));
-            Entry previous = CACHE.put(key, new Entry(State.READY, location));
+            Entry previous = CACHE.put(key, new Entry(State.READY, location, 0));
             if (previous != null && previous.texture() != null && !previous.texture().equals(location)) {
                 Minecraft.getInstance().getTextureManager().release(previous.texture());
             }
         } catch (IOException | RuntimeException e) {
             LauraMod.LOGGER.info("Invalid skin image: {}", e.getMessage());
-            CACHE.put(key, new Entry(State.FAILED, null));
+            CACHE.put(key, new Entry(State.FAILED, null, 0));
         }
     }
 

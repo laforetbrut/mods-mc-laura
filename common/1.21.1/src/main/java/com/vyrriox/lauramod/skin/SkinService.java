@@ -274,8 +274,12 @@ public final class SkinService {
                 return;
             }
             try {
-                ModelParser.parse(name.toLowerCase(Locale.ROOT).endsWith(".bbmodel") ? name : name + ".bbmodel", new String(data, StandardCharsets.UTF_8), null);
-            } catch (RuntimeException e) {
+                ModelParser.parseChecked(name.toLowerCase(Locale.ROOT).endsWith(".bbmodel") ? name : name + ".bbmodel", new String(data, StandardCharsets.UTF_8), null);
+            } catch (ModelParser.InvalidModelException e) {
+                if (e.getCause() instanceof Error) {
+                    // Not a mistake in a model: a file made to break the parser.
+                    LauraMod.LOGGER.warn("Model upload {} from {} refused: {}", sanitize(name), player.getGameProfile().getName(), e.getCause().toString());
+                }
                 LauraNetwork.uploadResult(player, false, Component.translatable("lauramod.upload.invalid_model", e.getMessage()));
                 return;
             }

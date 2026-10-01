@@ -63,6 +63,17 @@ def code_keys(java_root):
     return literal
 
 
+def advancement_dir(pkg):
+    """The folder of her advancements. Minecraft renamed the data folders to the singular in 1.21:
+    1.20.1 has data/lauramod/advancements, 1.21.1 and later have data/lauramod/advancement."""
+    data = os.path.normpath(os.path.join(pkg, "..", "..", "..", "..", "resources", "data", "lauramod"))
+    candidates = [os.path.join(data, name, "laura") for name in ("advancement", "advancements")]
+    for candidate in candidates:
+        if os.path.isdir(candidate):
+            return candidate
+    sys.exit("No advancement folder found, looked for: " + ", ".join(candidates))
+
+
 def families(pkg):
     e = lambda rel, name=None: enum_constants(os.path.join(pkg, rel), name)
     keys = set()
@@ -109,8 +120,7 @@ def families(pkg):
     sounds = enum_constants(os.path.join(pkg, "registry/LauraRegistries.java"), "Sound")
     for s in sounds:
         keys.add("subtitles.lauramod.laura_" + s)
-    adv_dir = os.path.join(pkg, "..", "..", "..", "..", "resources", "data", "lauramod", "advancement", "laura")
-    for adv in sorted(os.listdir(adv_dir)):
+    for adv in sorted(os.listdir(advancement_dir(pkg))):
         if adv.endswith(".json"):
             key = adv[:-5]
             keys |= {f"advancements.lauramod.{key}.title", f"advancements.lauramod.{key}.description"}
@@ -187,6 +197,9 @@ def main():
     parser.add_argument("--strict", action="store_true")
     args = parser.parse_args()
     base = os.path.join(ROOT, "common", args.mc, "src", "main")
+    if not os.path.isdir(base):
+        versions = sorted(os.listdir(os.path.join(ROOT, "common"))) if os.path.isdir(os.path.join(ROOT, "common")) else []
+        sys.exit(f"No common/{args.mc} folder. Known versions: {', '.join(versions) or 'none'}")
     pkg = os.path.join(base, "java", "com", "vyrriox", "lauramod")
     lang_dir = os.path.join(base, "resources", "assets", "lauramod", "lang")
     dia_dir = os.path.join(base, "resources", "data", "lauramod", "dialogues")
