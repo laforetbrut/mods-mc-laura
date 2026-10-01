@@ -23,9 +23,10 @@ Option names such as `follow.teleportDistance` refer to `config/lauramod/lauramo
 | Spawn egg | Creative only. Right click an unclaimed companion to make her yours. |
 
 - A new companion follows you, gets the name `general.defaultName` (then the names of `general.extraNames`), the skin `skins.defaultSkin`, 500 affection, and offers a clickable rename button.
+- She appears on a safe spot next to you: on the ground below you when you fly, at the surface of the water when you swim. Only when there is no such place (over the void) does she appear where you are.
 - One player can have 3 companions (`general.maxPerPlayer`). `general.maxPerWorld` can limit the whole world.
 - Two new summons by the same player must be 5 seconds apart (`summoning.summonCooldownSeconds`).
-- Laura's Heart used while a companion is loaded calls her to you (she teleports if she is further than 12 blocks or in another dimension), gives 50 affection and 40 attention, and makes her happy. The heart is consumed.
+- Laura's Heart used while a companion is loaded calls her to you (she teleports if she is further than 12 blocks or in another dimension), gives 50 affection and 40 attention, and makes her happy. The heart is consumed. When there is no safe place for her next to you, she tells you so, stays where she is, and the heart is kept.
 - With no companion loaded, Laura's Heart, `/laura come` and the call key bring back the companions you already have: loaded ones are teleported, the others are recalled from unloaded chunks, a dismissed one returns. A new companion is created only when you have none. More companions come from `/laura summon` or the chat phrase.
 - `/laura dismiss` (or the Dismiss button of the Settings tab, clicked twice) removes her from the world and keeps her data. It costs 20 affection (`general.dismissAffectionPenalty`) and some attention. The next summon brings her back.
 - `/laura release`, then `/laura release confirm`, makes her leave for good: she drops everything she carries and her record is deleted.
@@ -72,12 +73,12 @@ If she does not understand a message that contains her name, she says so.
 
 | What you hold | Result |
 |---|---|
-| Name tag, lead | Vanilla behaviour. |
+| A lead, or a name tag that carries a name | Vanilla behaviour: the name tag renames her. A name tag without a name is an item like any other. |
 | A gag item (hay bale) | Gags her. See section 12. |
 | Shears while she is gagged, or empty hand while sneaking | Removes the gag. |
+| A water bucket | Washes her: +60 hygiene, and the bucket comes back empty (it stays full in creative mode). |
 | A backpack while her back is free | She wears it. |
 | A trinket (with Curios) | She wears it. |
-| A water bucket | Washes her: her hygiene goes back up and the bucket comes back empty. |
 | Food, a gift, or what she wishes for | She eats it, accepts it, or stores the food for later. |
 | Anything else while sneaking | Opens her inventory. |
 | Empty hand | Opens her menu (`controls.menuOnRightClick`). |
@@ -117,12 +118,20 @@ Teleport rules while following:
 - She walks. She only teleports next to you beyond 128 blocks (`follow.teleportDistance`).
 - When stuck for 10 seconds she tells you (`follow.complainWhenStuck`). She teleports in that case only if `follow.teleportWhenStuck` is true.
 - `/laura come` (or "come here") makes her walk when a path exists, and teleport when none exists.
-- When you change dimension she joins you within a few seconds (`follow.followAcrossDimensions`) and arrives on a safe spot next to you. She stays behind when she is not in follow mode (stay, home, wander, work).
+- When you change dimension, the companions in follow mode arrive with you at once (`follow.followAcrossDimensions`), a sulking one included. She stays behind when she is not in follow mode (stay, home, wander, work), when she sleeps or when she is fetching something. Once she is next to you in the Nether, the End or back in the Overworld, she comments on the place.
+- A portal lets her through at once and holds you for a few seconds, so she may arrive before you. She then waits for you on the other side for about 10 seconds; if you do not come, she returns to you. With `follow.followAcrossDimensions` set to false she does not follow you to another dimension and does not take portals herself.
 - After any other long teleport (waystone, command, ender pearl) she is brought to you within a few seconds, even from unloaded chunks.
+- A companion left in unloaded chunks is recalled by loading the place where she was last seen: 5 by 5 chunks, for 15 seconds at most. Nothing stays loaded afterwards, and calling her twice starts a single recall.
 
-**Refusals.** With `needs.refuseOrders`, when her mood is sad, angry, jealous, sulking or hungry, she may refuse follow, stay, wander, home, come, fetch, emote, hug, kiss, sleep and eat. The chance depends on `needs.annoyance` (0 % for CHILL and NORMAL, 15 % for NEEDY, 30 % for UNBEARABLE) and doubles while she sulks. Giving the same order again within 20 seconds always works. A hug is never refused because she is hungry, sad or jealous: it comforts her.
+**Safe teleports.** Every teleport puts her on a safe spot next to you: at the surface of the water when you swim or sit in a boat, on the ground below you when you fly. She takes no fall damage from it. When there is no safe place at all (the void, a lake of lava) she stays where she is: after a call (`/laura come`, the call key, Laura's Heart, `/laura home`) she tells you so, and while she follows you she tries again every 2 seconds.
+
+**Refusals.** With `needs.refuseOrders`, when her mood is sad, angry, jealous, sulking or hungry, she may refuse follow, stay, wander, home, come, sleep and eat, a fetch asked from her menu, and an emote asked with `/laura emote`, from her menu or from the emote wheel. A fetch or an emote asked in chat, and `/laura fetch`, are never refused. The chance depends on `needs.annoyance` (0 % for CHILL and NORMAL, 15 % for NEEDY, 30 % for UNBEARABLE) and doubles while she sulks. Giving the same order again within 20 seconds always works. She only argues face to face: an order sent from out of earshot (further than `dialogue.chatRange` or from another dimension, with a command or the call key) is never refused. What she answers when she is sent home or cannot come to you reaches you even there.
+
+**Hug and kiss.** They are not orders and her needs never count against them, whether you ask in chat, with a command, from the menu or from the emote wheel. A hug is never refused because she is hungry, sad or jealous: it comforts her. She only pushes it away while she sulks or is still angry (after a hit, an insult, a gift or a food she hates), and asking again within 20 seconds gets through. A kiss is refused while she is gagged, while she sulks or is still angry, and when affection is under 200.
 
 **Combat modes**: passive (avoids monsters, never fights), defensive (fights what hurts you or what you attack), aggressive (also attacks monsters that come close, except creepers).
+
+**Other players.** She never fights you, nor your other companions and your pets. She fights another player, or the companion or pet of another player, only when `combat.attackPlayers` is true, PvP is enabled on the server and the two players are not teammates without friendly fire. Where those fights are forbidden, the other side cannot hurt her either (`combat.shieldWithoutPvp`); creative mode players still can.
 
 **Villagers.** While she follows you nearby, villagers within 5 blocks of her walk away, except when they sleep or trade (`personality.jealousOfVillagers`).
 
@@ -138,6 +147,14 @@ She looks, in this order, within 24 blocks (`fetch.radius`):
 
 She then walks back and gives you the items. After 60 seconds (`fetch.timeoutSeconds`) she brings what she has, or gives up. She does one fetch at a time: use `queue` to line up several requests.
 
+What she already carries for a fetch is saved with her: when the fetch is cut short (her chunk unloads, she dies, is dismissed or changes dimension), the items go back into her inventory, and what does not fit is dropped at her feet.
+
+**Containers she may open.** This holds for fetching, for her jobs and for the food she looks for when she is starving:
+
+- A container locked with the vanilla `Lock` is never used, unless she or you hold its key in the main hand.
+- A container you assigned to her (section 7) is hers to use.
+- Any other container is only used on your behalf: you must be in the same dimension and be allowed to open it yourself (spawn protection, world border, and the claims of protection mods).
+
 ### 6. To-do list
 
 - Tasks (fetch, chop a tree, harvest, cook, come, go home, follow, stay, back to work) run one after the other.
@@ -145,6 +162,8 @@ She then walks back and gives you the items. After 60 seconds (`fetch.timeoutSec
 - A new chop, harvest or cook order replaces the current one, unless it is queued (chat connector, `/laura queue add`, Shift + click).
 - "stop" clears the list.
 - When the list is empty and she is in work mode, she goes back to her jobs.
+- A chop, harvest or cook task that finds nothing to do says so once and is removed. The tasks of the same kind still waiting in the list are tried later (after 1 minute, then 2, 4 and at most 8) and without a word, while the other tasks go on. A new direct order is always tried at once.
+- In the menu, the same errand or fetch request sent twice within half a second counts as one click.
 
 ### 7. Jobs and chests
 
@@ -159,8 +178,12 @@ A job is continuous work inside an area: a circle around the block where you sto
 - She can hold several jobs and rotates between them.
 - She does not work at night (`work.workAtNight`), while sulking, sleeping, sitting or fighting.
 - Another order (follow, stay...) pauses the jobs. "back to work" or `/laura work` resumes them.
+- When none of her jobs finds anything to do, she says so once and pauses: 1 minute, then 2, then 4 minutes at most, until a job keeps her busy again.
+- The lumberjack and the farmer stop when the `mobGriefing` game rule is turned off, even for a job given earlier. The rule is read each time she starts a round of a job or a task: the round under way is finished first (it lasts as long as she finds trees or crops to work on), and `/laura stop` ends it at once. She then says so once and leaves the blocks alone. The cook goes on.
+- With `work.onlyNaturalTrees`, a tree she fells stands on soil (dirt, grass and the other blocks of the dirt tag, or mangrove roots), is made of a single kind of log, spreads at most 6 blocks sideways from the foot of its trunk and carries at least 4 natural leaves in its upper half. She only takes the logs that lead up to a log topped by natural leaves, so a wall, a beam or a roof of logs that touches the tree stays in place. A log pillar of a build with natural leaves growing right on top of it cannot be told from a trunk.
+- As a cook she only takes food out of a furnace or a smoker: ingots, glass or charcoal smelted there by someone else stay where they are.
 
-**Chests by purpose.** Look at a container and assign it (`/laura chest <purpose>`, "this chest is for ...", or the Chests page). She remembers 48 containers.
+**Chests by purpose.** Look at a container and assign it (`/laura chest <purpose>`, "this chest is for ...", or the Chests page). She remembers 48 containers. A container you could not open yourself (locked, protected or claimed by someone else) cannot be assigned.
 
 | Purpose | Use |
 |---|---|
@@ -185,8 +208,9 @@ Five needs go from 100 (satisfied) to 0. Disable them all with `needs.enabled`.
 | Energy | 60 min | Sleep (about 3 minutes for a full night). | Under 20 she walks slower. Under 8 she falls asleep on the spot. |
 | Fun | 30 min | Dancing, jukebox music, emotes, gifts, favourite food. | Under 30 she is bored. |
 | Attention | 20 min | Talk to her, hug, kiss, compliment, gifts, stay close. | Under 25 she follows you much closer, then stands in front of you, waves and pokes. |
-| Hygiene | 120 min | Water or rain, or a water bucket: right click her with it to wash her (the bucket comes back empty). | At 25 or less she walks to water within 14 blocks for a bath. |
+| Hygiene | 120 min | Water or rain, or a water bucket: right click her with it to wash her (+60, the bucket comes back empty). | At 25 or less she walks to water within 14 blocks for a bath. |
 
+- Water washes her wherever it comes from: the bath she takes by herself, a pool you lead or push her into, the rain. After 4 seconds in a row in water, or 20 seconds in a row in the rain, she has had her bath, provided her hygiene was under 100 % when it started.
 - With hunger at 60 or more she heals 0.5 health per second (`needs.healWhenFedPerSecond`). There is no free regeneration by default (`general.regenPerSecond` is 0).
 - She reminds you when a need drops under 30, and more urgently under 15.
 - `needs.annoyance` scales how fast needs drop and how often she reminds you.
@@ -259,6 +283,9 @@ Right click her with an item.
 - **Food**: she eats it if she is hungry, if it is a favourite, or if she wishes for it. Otherwise it goes to her inventory for later. Raw meat and fish are kept for cooking unless she is starving.
 - **Favourite food**: more fun, +5 affection. **Disliked food**: -10 affection and 20 seconds of anger.
 - **Gift** (an entry of `gifts.json`): affection and fun change, she reacts according to the tier, and she may give something back. A `GROSS` gift makes her angry for 30 seconds and is not kept. An entry matches an item id, an `#item_tag` or the built-in group `@music_disc`: with the default file, any music disc is a gift, with or without mods.
+- **Same gift again**: the same kind of gift, or the same favourite food, makes her fonder only once every 300 seconds per companion (`needs.giftCooldownSeconds`, 0 for no limit). In between she still takes the gift and eats the food, and a wish is still fulfilled, but she gains no affection and no fun, gives nothing back, and the gift does not count for the gift advancements. A gift she dislikes always counts.
+- A gift is never lost: when her inventory is full it lands at her feet. What she gives you and does not fit in your inventory lands at your feet.
+- She says one line for each item you give her: the gift she gives back, the wish it fulfils, her full inventory, or what she thinks of it.
 
 Worked example of a gift entry (see [CONFIG.md](CONFIG.md) for every field):
 
@@ -285,6 +312,8 @@ The gag is only a way to keep her quiet for a while.
 
 At home she wanders within 12 blocks (`home.radius`), sleeps in a free bed within 10 blocks at night (`home.sleepAtNight`), and teleports back if she ends up further than 48 blocks (`home.teleportDistance`) or in another dimension. `/laura home clear` forgets the home.
 
+`/laura home` works from anywhere, another dimension included, and her answer reaches you even out of earshot. She arrives on a safe spot next to her home; when there is none (the place is walled in or gone) she tells you so and stays where she is.
+
 ### 14. Death, grave and revival
 
 `general.reviveMode` decides what happens when she dies:
@@ -305,13 +334,15 @@ SSS
 
 - The flower is consumed. When several companions are dead, the one who died first comes back.
 - While a companion is dead and no other is with you, Laura's Heart does not work and reminds you of the grave.
+- With `GRAVE` and `TIMER` you are told about her death wherever you are, another dimension included.
 
 ### 15. Several companions
 
 - Each companion is bound to the player who summoned her. Other players cannot give her orders, unless `permissions.othersCanInteract` is true: it opens her menu and the right click to them. Chat orders and `/laura` commands always stay reserved to her partner.
+- A player who may not command her gets her refusal as a private message, at most once every 5 seconds: nobody else reads it and no speech bubble is shown.
 - Commands and the menu act on the selected companion. Select one with `/laura list`, `/laura select <name>`, or by writing her name in chat.
 - A chat message goes to the companion whose name it contains, to every companion in range with a word such as "everyone" (English words: `everyone`, `everybody`, `girls`, `all of you`, `you all`, `ladies`, `y'all`), otherwise to the selected or nearest one.
-- `/laura where` lists them all.
+- `/laura where` lists them all. The position kept for each companion is refreshed every second while she is active, at once after a teleport or a change of dimension, and when her chunk unloads.
 - `/laura dismiss` puts one away until the next summon. `/laura release`, then `/laura release confirm`, removes one for good.
 
 ### 16. Advancements
@@ -366,9 +397,9 @@ The tab "My Girlfriend Laura" holds 58 advancements. Ids are `lauramod:laura/<id
 | Total Makeover | Give her a custom model. | `makeover` |
 | Pack Mule | Give her a backpack to wear. | `backpack` |
 | Put a Ring on It (hidden) | Give her a trinket to wear. | `curio` |
-| Hot Date | Be in the Nether with her, however you get there together. | `nether` |
-| Date at the End of the World | Be in the End with her, however you get there together. | `end` |
-| Squeaky Clean | She gets washed: she takes a bath, or water really washes her (a water bucket for example). | `bath` |
+| Hot Date | Be next to her (16 blocks) in the Nether, however each of you got there: your portal, a portal she took herself, `/laura come`, the call key, Laura's Heart or a teleport command. | `nether` |
+| Date at the End of the World | The same in the End. | `end` |
+| Squeaky Clean | Water washes her: 4 seconds in a row in water or 20 seconds in the rain while her hygiene is under 100 %, or a water bucket you pour over her. | `bath` |
 | Sweet Dreams | Let her sleep in a real bed. | `sleep_bed` |
 | I'm Sorry, Okay? | Get forgiven with an apology. | `apology` |
 | The Silent Treatment (hidden) | Make her sulk. | `sulk` |
@@ -395,9 +426,10 @@ Les noms d'options comme `follow.teleportDistance` renvoient à `config/lauramod
 | Œuf d'apparition | Créatif uniquement. Faites un clic droit sur une compagne sans propriétaire pour qu'elle devienne la vôtre. |
 
 - Une nouvelle compagne vous suit, reçoit le nom `general.defaultName` (puis les noms de `general.extraNames`), le skin `skins.defaultSkin`, 500 points d'affection, et propose un bouton cliquable pour la renommer.
+- Elle apparaît à un endroit sûr à côté de vous : au sol sous vous quand vous volez, à la surface de l'eau quand vous nagez. C'est seulement quand un tel endroit n'existe pas (au-dessus du vide) qu'elle apparaît là où vous êtes.
 - Un joueur peut avoir 3 compagnes (`general.maxPerPlayer`). `general.maxPerWorld` peut limiter le monde entier.
 - Deux nouvelles invocations par le même joueur doivent être espacées de 5 secondes (`summoning.summonCooldownSeconds`).
-- Le Cœur de Laura utilisé alors qu'une compagne est chargée l'appelle à vous (elle se téléporte si elle est à plus de 12 blocs ou dans une autre dimension), donne 50 points d'affection et 40 d'attention, et la rend heureuse. Le cœur est consommé.
+- Le Cœur de Laura utilisé alors qu'une compagne est chargée l'appelle à vous (elle se téléporte si elle est à plus de 12 blocs ou dans une autre dimension), donne 50 points d'affection et 40 d'attention, et la rend heureuse. Le cœur est consommé. Quand il n'y a aucun endroit sûr pour elle à côté de vous, elle vous le dit, reste où elle est, et le cœur est conservé.
 - Sans compagne chargée, le Cœur de Laura, `/laura come` et la touche d'appel ramènent les compagnes que vous avez déjà : celles qui sont chargées sont téléportées, les autres sont rappelées depuis des chunks déchargés, une compagne congédiée revient. Une nouvelle compagne n'est créée que si vous n'en avez aucune. Les compagnes supplémentaires viennent de `/laura summon` ou de la phrase du chat.
 - `/laura dismiss` (ou le bouton Congédier de l'onglet Réglages, cliqué deux fois) la retire du monde et conserve ses données. Cela coûte 20 points d'affection (`general.dismissAffectionPenalty`) et un peu d'attention. La prochaine invocation la ramène.
 - `/laura release`, puis `/laura release confirm`, la fait partir pour de bon : elle lâche tout ce qu'elle porte et sa fiche est supprimée.
@@ -444,12 +476,12 @@ Si elle ne comprend pas un message qui contient son nom, elle le dit.
 
 | Ce que vous tenez | Résultat |
 |---|---|
-| Étiquette, laisse | Comportement du jeu de base. |
+| Une laisse, ou une étiquette qui porte un nom | Comportement du jeu de base : l'étiquette la renomme. Une étiquette sans nom est un objet comme un autre. |
 | Un objet bâillon (botte de foin) | La bâillonne. Voir la section 12. |
 | Des cisailles quand elle est bâillonnée, ou main vide en étant accroupi | Retire le bâillon. |
+| Un seau d'eau | La lave : +60 d'hygiène, et le seau revient vide (il reste plein en mode créatif). |
 | Un sac à dos quand son dos est libre | Elle le porte. |
 | Un bijou (avec Curios) | Elle le porte. |
-| Un seau d'eau | La lave : son hygiène remonte et le seau revient vide. |
 | De la nourriture, un cadeau, ou ce qu'elle désire | Elle mange, accepte, ou range la nourriture pour plus tard. |
 | Autre chose en étant accroupi | Ouvre son inventaire. |
 | Main vide | Ouvre son menu (`controls.menuOnRightClick`). |
@@ -489,12 +521,20 @@ Règles de téléportation quand elle suit :
 - Elle marche. Elle ne se téléporte près de vous qu'au-delà de 128 blocs (`follow.teleportDistance`).
 - Bloquée pendant 10 secondes, elle vous le dit (`follow.complainWhenStuck`). Elle ne se téléporte dans ce cas que si `follow.teleportWhenStuck` vaut true.
 - `/laura come` (ou « viens ici ») la fait marcher quand un chemin existe, et se téléporter quand il n'y en a pas.
-- Quand vous changez de dimension, elle vous rejoint en quelques secondes (`follow.followAcrossDimensions`) et arrive à un endroit sûr à côté de vous. Elle reste sur place quand elle n'est pas en mode suivre (rester, maison, se promener, travail).
+- Quand vous changez de dimension, les compagnes en mode suivre arrivent avec vous aussitôt (`follow.followAcrossDimensions`), y compris une compagne qui boude. Elle reste sur place quand elle n'est pas en mode suivre (rester, maison, se promener, travail), quand elle dort ou quand elle est partie chercher un objet. Une fois à côté de vous dans le Nether, dans l'End ou de retour dans l'Overworld, elle commente l'endroit.
+- Un portail la laisse passer aussitôt et vous retient quelques secondes : elle peut donc arriver avant vous. Elle vous attend alors de l'autre côté pendant environ 10 secondes ; si vous ne venez pas, elle revient près de vous. Avec `follow.followAcrossDimensions` à false elle ne vous suit pas dans une autre dimension et ne prend plus les portails d'elle-même.
 - Après toute autre téléportation lointaine (waystone, commande, perle de l'Ender) elle est ramenée près de vous en quelques secondes, même depuis des chunks déchargés.
+- Une compagne restée dans des chunks déchargés est rappelée en chargeant l'endroit où elle a été vue pour la dernière fois : 5 chunks sur 5, pendant 15 secondes au plus. Rien ne reste chargé ensuite, et l'appeler deux fois ne lance qu'un seul rappel.
 
-**Refus.** Avec `needs.refuseOrders`, quand son humeur est triste, en colère, jalouse, boudeuse ou affamée, elle peut refuser suivre, rester, se promener, maison, venir, rapporter, émote, câlin, bisou, dormir et manger. La chance dépend de `needs.annoyance` (0 % pour CHILL et NORMAL, 15 % pour NEEDY, 30 % pour UNBEARABLE) et double quand elle boude. Redonner le même ordre dans les 20 secondes marche toujours. Un câlin n'est jamais refusé parce qu'elle a faim, qu'elle est triste ou jalouse : il la réconforte.
+**Téléportations sûres.** Chaque téléportation la pose à un endroit sûr à côté de vous : à la surface de l'eau quand vous nagez ou êtes en bateau, au sol sous vous quand vous volez. Elle n'en subit aucun dégât de chute. Quand il n'y a aucun endroit sûr (le vide, un lac de lave) elle reste où elle est : après un appel (`/laura come`, la touche d'appel, le Cœur de Laura, `/laura home`) elle vous le dit, et tant qu'elle vous suit elle réessaie toutes les 2 secondes.
+
+**Refus.** Avec `needs.refuseOrders`, quand son humeur est triste, en colère, jalouse, boudeuse ou affamée, elle peut refuser suivre, rester, se promener, maison, venir, dormir et manger, un objet à rapporter demandé par son menu, et une émote demandée avec `/laura emote`, par son menu ou par la roue des émotes. Un objet à rapporter ou une émote demandés dans le chat, et `/laura fetch`, ne sont jamais refusés. La chance dépend de `needs.annoyance` (0 % pour CHILL et NORMAL, 15 % pour NEEDY, 30 % pour UNBEARABLE) et double quand elle boude. Redonner le même ordre dans les 20 secondes marche toujours. Elle ne discute qu'en face à face : un ordre envoyé hors de portée de voix (au-delà de `dialogue.chatRange` ou depuis une autre dimension, par une commande ou la touche d'appel) n'est jamais refusé. Ce qu'elle répond quand elle est envoyée à la maison ou ne peut pas venir vous parvient même là.
+
+**Câlin et bisou.** Ce ne sont pas des ordres et ses besoins ne jouent jamais contre eux, que vous les demandiez dans le chat, par une commande, par le menu ou par la roue des émotes. Un câlin n'est jamais refusé parce qu'elle a faim, qu'elle est triste ou jalouse : il la réconforte. Elle ne le repousse que lorsqu'elle boude ou est encore en colère (après un coup, une insulte, un cadeau ou un aliment qu'elle déteste), et le redemander dans les 20 secondes passe. Un bisou est refusé quand elle est bâillonnée, quand elle boude ou est encore en colère, et quand l'affection est sous 200.
 
 **Modes de combat** : passive (évite les monstres, ne se bat jamais), defensive (combat ce qui vous blesse ou ce que vous attaquez), aggressive (attaque aussi les monstres qui s'approchent, sauf les creepers).
+
+**Autres joueurs.** Elle ne se bat jamais contre vous, ni contre vos autres compagnes et vos animaux. Elle ne se bat contre un autre joueur, ou contre la compagne ou l'animal d'un autre joueur, que si `combat.attackPlayers` vaut true, que le PvP est activé sur le serveur et que les deux joueurs ne sont pas coéquipiers sans tir ami. Là où ces combats sont interdits, l'autre camp ne peut pas la blesser non plus (`combat.shieldWithoutPvp`) ; les joueurs en mode créatif le peuvent toujours.
 
 **Villageois.** Quand elle vous suit de près, les villageois à moins de 5 blocs d'elle s'éloignent, sauf s'ils dorment ou commercent (`personality.jealousOfVillagers`).
 
@@ -510,6 +550,14 @@ Elle cherche, dans cet ordre, dans un rayon de 24 blocs (`fetch.radius`) :
 
 Elle revient ensuite et vous donne les objets. Après 60 secondes (`fetch.timeoutSeconds`) elle rapporte ce qu'elle a, ou abandonne. Elle fait une seule recherche à la fois : utilisez `queue` pour enchaîner plusieurs demandes.
 
+Ce qu'elle porte déjà pour une recherche est sauvegardé avec elle : quand la recherche est interrompue (son chunk se décharge, elle meurt, est congédiée ou change de dimension), les objets retournent dans son inventaire, et ce qui n'y rentre pas tombe à ses pieds.
+
+**Les conteneurs qu'elle peut ouvrir.** Cela vaut pour les objets à rapporter, pour ses métiers et pour la nourriture qu'elle cherche quand elle meurt de faim :
+
+- Un conteneur verrouillé par le `Lock` du jeu de base n'est jamais utilisé, sauf si elle ou vous tenez sa clé dans la main principale.
+- Un conteneur que vous lui avez attribué (section 7) est à sa disposition.
+- Tout autre conteneur n'est utilisé qu'en votre nom : vous devez être dans la même dimension et avoir vous-même le droit de l'ouvrir (protection du spawn, bordure du monde, et les zones des mods de protection).
+
 ### 6. Liste de tâches
 
 - Les tâches (rapporter, couper un arbre, récolter, cuisiner, venir, rentrer, suivre, rester, retour au travail) s'exécutent l'une après l'autre.
@@ -517,6 +565,8 @@ Elle revient ensuite et vous donne les objets. Après 60 secondes (`fetch.timeou
 - Un nouvel ordre couper, récolter ou cuisiner remplace celui en cours, sauf s'il est mis en file (mot de liaison dans le chat, `/laura queue add`, Maj + clic).
 - « stop » vide la liste.
 - Quand la liste est vide et qu'elle est en mode travail, elle retourne à ses métiers.
+- Une tâche couper, récolter ou cuisiner qui ne trouve rien à faire le dit une fois et est retirée. Les tâches du même type encore en attente dans la liste sont essayées plus tard (après 1 minute, puis 2, 4 et au plus 8) et sans un mot, pendant que les autres tâches continuent. Un nouvel ordre direct est toujours essayé tout de suite.
+- Dans le menu, la même tâche ou la même demande d'objet envoyée deux fois en une demi-seconde compte pour un seul clic.
 
 ### 7. Métiers et coffres
 
@@ -531,8 +581,12 @@ Un métier est un travail continu dans une zone : un cercle autour du bloc où v
 - Elle peut avoir plusieurs métiers et alterne entre eux.
 - Elle ne travaille pas la nuit (`work.workAtNight`), ni quand elle boude, dort, est assise ou se bat.
 - Un autre ordre (suivre, rester...) met les métiers en pause. « au travail » ou `/laura work` les reprend.
+- Quand aucun de ses métiers ne trouve quoi que ce soit à faire, elle le dit une fois et fait une pause : 1 minute, puis 2, puis 4 minutes au plus, jusqu'à ce qu'un métier l'occupe de nouveau.
+- La bûcheronne et la fermière s'arrêtent quand la règle de jeu `mobGriefing` est désactivée, même pour un métier donné auparavant. La règle est lue chaque fois qu'elle commence une tournée d'un métier ou une tâche : la tournée en cours est d'abord terminée (elle dure tant qu'elle trouve des arbres ou des cultures à travailler), et `/laura stop` l'arrête tout de suite. Elle le dit alors une fois et ne touche plus aux blocs. La cuisinière continue.
+- Avec `work.onlyNaturalTrees`, un arbre qu'elle abat repose sur de la terre (terre, herbe et les autres blocs du tag dirt, ou des racines de palétuvier), est fait d'une seule sorte de bûche, s'étend d'au plus 6 blocs sur les côtés depuis le pied de son tronc et porte au moins 4 feuilles naturelles dans sa moitié haute. Elle ne prend que les bûches qui mènent à une bûche surmontée de feuilles naturelles : un mur, une poutre ou un toit en bûches qui touche l'arbre reste donc en place. Un pilier en bûches d'une construction sur lequel poussent directement des feuilles naturelles ne peut pas être distingué d'un tronc.
+- Cuisinière, elle ne sort que de la nourriture d'un fourneau ou d'un fumoir : les lingots, le verre ou le charbon de bois qu'un autre y a fait cuire restent où ils sont.
 
-**Coffres par usage.** Regardez un conteneur et attribuez-le (`/laura chest <usage>`, « ce coffre est pour ... », ou la page des coffres). Elle retient 48 conteneurs.
+**Coffres par usage.** Regardez un conteneur et attribuez-le (`/laura chest <usage>`, « ce coffre est pour ... », ou la page des coffres). Elle retient 48 conteneurs. Un conteneur que vous ne pourriez pas ouvrir vous-même (verrouillé, protégé ou revendiqué par quelqu'un d'autre) ne peut pas être attribué.
 
 | Usage | Rôle |
 |---|---|
@@ -557,8 +611,9 @@ Cinq besoins vont de 100 (satisfait) à 0. Désactivez-les tous avec `needs.enab
 | Énergie | 60 min | Dormir (environ 3 minutes pour une nuit complète). | Sous 20 elle marche moins vite. Sous 8 elle s'endort sur place. |
 | Amusement | 30 min | Danse, musique de jukebox, émotes, cadeaux, aliment préféré. | Sous 30 elle s'ennuie. |
 | Attention | 20 min | Lui parler, câlin, bisou, compliment, cadeaux, rester près d'elle. | Sous 25 elle vous suit de beaucoup plus près, puis se plante devant vous, fait signe et vous pousse du doigt. |
-| Hygiène | 120 min | Eau ou pluie, ou un seau d'eau : faites un clic droit sur elle avec pour la laver (le seau revient vide). | À 25 ou moins elle marche vers de l'eau à moins de 14 blocs pour un bain. |
+| Hygiène | 120 min | Eau ou pluie, ou un seau d'eau : faites un clic droit sur elle avec pour la laver (+60, le seau revient vide). | À 25 ou moins elle marche vers de l'eau à moins de 14 blocs pour un bain. |
 
+- L'eau la lave d'où qu'elle vienne : le bain qu'elle prend d'elle-même, un bassin où vous la menez ou la poussez, la pluie. Après 4 secondes d'affilée dans l'eau, ou 20 secondes d'affilée sous la pluie, elle a pris son bain, à condition que son hygiène ait été sous 100 % au début.
 - Avec une faim de 60 ou plus elle récupère 0,5 point de vie par seconde (`needs.healWhenFedPerSecond`). Il n'y a pas de régénération gratuite par défaut (`general.regenPerSecond` vaut 0).
 - Elle vous prévient quand un besoin passe sous 30, et avec plus d'insistance sous 15.
 - `needs.annoyance` règle la vitesse de baisse des besoins et la fréquence de ses rappels.
@@ -631,6 +686,9 @@ Faites un clic droit sur elle avec un objet.
 - **Nourriture** : elle la mange si elle a faim, si c'est un aliment préféré, ou si elle le désire. Sinon elle la range dans son inventaire pour plus tard. La viande et le poisson crus sont gardés pour la cuisine sauf si elle meurt de faim.
 - **Aliment préféré** : plus d'amusement, +5 d'affection. **Aliment détesté** : -10 d'affection et 20 secondes de colère.
 - **Cadeau** (une entrée de `gifts.json`) : l'affection et l'amusement changent, elle réagit selon le niveau du cadeau, et elle peut offrir quelque chose en retour. Un cadeau `GROSS` la met en colère pendant 30 secondes et n'est pas conservé. Une entrée désigne un identifiant d'objet, un `#tag_d_objets` ou le groupe intégré `@music_disc` : avec le fichier par défaut, n'importe quel disque de musique est un cadeau, avec ou sans mods.
+- **Le même cadeau à nouveau** : un même type de cadeau, ou un même aliment préféré, ne la rend plus affectueuse qu'une fois toutes les 300 secondes par compagne (`needs.giftCooldownSeconds`, 0 pour aucune limite). Entre-temps elle prend quand même le cadeau et mange la nourriture, et un désir est quand même réalisé, mais elle ne gagne ni affection ni amusement, n'offre rien en retour, et le cadeau ne compte pas pour les progrès des cadeaux. Un cadeau qu'elle déteste compte toujours.
+- Un cadeau n'est jamais perdu : quand son inventaire est plein, il tombe à ses pieds. Ce qu'elle vous offre et qui ne rentre pas dans votre inventaire tombe à vos pieds.
+- Elle dit une seule réplique par objet que vous lui donnez : le cadeau qu'elle offre en retour, le désir qu'il réalise, son inventaire plein, ou ce qu'elle en pense.
 
 Exemple complet d'une entrée de cadeau (voir [CONFIG.md](CONFIG.md) pour tous les champs) :
 
@@ -657,6 +715,8 @@ Le bâillon est seulement un moyen de la faire taire un moment.
 
 À la maison elle se promène dans un rayon de 12 blocs (`home.radius`), dort la nuit dans un lit libre à moins de 10 blocs (`home.sleepAtNight`), et se téléporte chez elle si elle se retrouve à plus de 48 blocs (`home.teleportDistance`) ou dans une autre dimension. `/laura home clear` oublie la maison.
 
+`/laura home` fonctionne de partout, y compris depuis une autre dimension, et sa réponse vous parvient même hors de portée de voix. Elle arrive à un endroit sûr à côté de sa maison ; quand il n'y en a pas (l'endroit est muré ou a disparu) elle vous le dit et reste où elle est.
+
 ### 14. Mort, tombe et retour à la vie
 
 `general.reviveMode` décide de ce qui se passe à sa mort :
@@ -677,13 +737,15 @@ SSS
 
 - La fleur est consommée. Quand plusieurs compagnes sont mortes, celle qui est morte en premier revient.
 - Tant qu'une compagne est morte et qu'aucune autre n'est avec vous, le Cœur de Laura ne fonctionne pas et vous rappelle la tombe.
+- Avec `GRAVE` et `TIMER`, vous êtes prévenu de sa mort où que vous soyez, y compris dans une autre dimension.
 
 ### 15. Plusieurs compagnes
 
 - Chaque compagne est liée au joueur qui l'a invoquée. Les autres joueurs ne peuvent pas lui donner d'ordres, sauf si `permissions.othersCanInteract` vaut true : l'option leur ouvre son menu et le clic droit. Les ordres du chat et les commandes `/laura` restent toujours réservés à son partenaire.
+- Un joueur qui n'a pas le droit de lui donner d'ordres reçoit son refus en message privé, au plus une fois toutes les 5 secondes : personne d'autre ne le lit et aucune bulle ne s'affiche.
 - Les commandes et le menu agissent sur la compagne sélectionnée. Sélectionnez-en une avec `/laura list`, `/laura select <nom>`, ou en écrivant son nom dans le chat.
 - Un message du chat va à la compagne dont il contient le nom, à toutes les compagnes à portée avec un mot comme « tout le monde » (mots français : `tout le monde`, `les filles`, `vous toutes`, `vous tous`, `mesdames`, `tout le groupe`), sinon à la compagne sélectionnée ou à la plus proche.
-- `/laura where` les liste toutes.
+- `/laura where` les liste toutes. La position gardée pour chaque compagne est rafraîchie chaque seconde tant qu'elle est active, aussitôt après une téléportation ou un changement de dimension, et quand son chunk se décharge.
 - `/laura dismiss` en met une de côté jusqu'à la prochaine invocation. `/laura release`, puis `/laura release confirm`, en retire une pour de bon.
 
 ### 16. Progrès
@@ -738,9 +800,9 @@ L'onglet « My Girlfriend Laura » contient 58 progrès. Les identifiants sont `
 | Relooking complet | Lui donner un modèle personnalisé. | `makeover` |
 | Bête de somme | Lui donner un sac à dos à porter. | `backpack` |
 | La bague au doigt (caché) | Lui offrir un bijou à porter. | `curio` |
-| Rendez-vous brûlant | Être dans le Nether avec elle, quelle que soit la façon dont vous y arrivez ensemble. | `nether` |
-| Rendez-vous au bout du monde | Être dans l'End avec elle, quelle que soit la façon dont vous y arrivez ensemble. | `end` |
-| Toute propre | Elle est lavée : elle prend un bain, ou de l'eau la lave vraiment (un seau d'eau par exemple). | `bath` |
+| Rendez-vous brûlant | Être à côté d'elle (16 blocs) dans le Nether, quelle que soit la façon dont chacun y est arrivé : votre portail, un portail qu'elle a pris d'elle-même, `/laura come`, la touche d'appel, le Cœur de Laura ou une commande de téléportation. | `nether` |
+| Rendez-vous au bout du monde | La même chose dans l'End. | `end` |
+| Toute propre | L'eau la lave : 4 secondes d'affilée dans l'eau ou 20 secondes sous la pluie quand son hygiène est sous 100 %, ou un seau d'eau que vous lui versez dessus. | `bath` |
 | Fais de beaux rêves | La laisser dormir dans un vrai lit. | `sleep_bed` |
 | Pardon, d'accord ? | Se faire pardonner avec des excuses. | `apology` |
 | La bouderie (caché) | La faire bouder. | `sulk` |

@@ -118,9 +118,9 @@ Each project declares these runs:
 | `clienttest` | `runClienttest` | `run-clienttest/` | A client started with `-Dlauramod.clienttest=true` on the quick play world `laura_test`. It summons a companion, opens every screen of the mod, saves a screenshot of each in `screenshots/`, then quits. |
 | `selftest` | `runSelftest` | `run-selftest/` | A dedicated server started with `-Dlauramod.selftest=true`. It runs the in-game test suite, writes `lauramod-selftest.json` in the game folder and stops. See below. |
 
-- Every project declares `client`, `server` and `selftest`. Every project except `fabric-1.21.1` also declares `clienttest`.
+- Every project declares the four runs.
 - The `clienttest` run needs a singleplayer world named `laura_test` in `run-clienttest/saves`.
-- The system property `lauramod.selftest.only` keeps only the tests whose name contains its value. It is set with `-PselftestOnly=<text>` in `neoforge-1.20.1`, `forge-1.20.1`, `fabric-1.20.1`, `forge-1.21.1` and `forge-26.1.2`. The other four projects do not pass it.
+- The system property `lauramod.selftest.only` keeps only the tests whose name contains its value. It is set with `-PselftestOnly=<text>` in the three 1.20.1 projects, the three 1.21.1 projects and `forge-26.1.2`. `neoforge-26.1.2` and `fabric-26.1.2` do not pass it. On Minecraft 1.21.1 the value can hold several parts of names separated by commas: `-PselftestOnly=hug,bath` runs the tests whose name contains `hug` or `bath`.
 - The run folders are ignored by Git.
 
 ### Running the self tests
@@ -333,9 +333,9 @@ Chaque projet déclare ces lancements :
 | `clienttest` | `runClienttest` | `run-clienttest/` | Un client lancé avec `-Dlauramod.clienttest=true` sur le monde en jeu rapide `laura_test`. Il invoque une compagne, ouvre chaque écran du mod, enregistre une capture de chacun dans `screenshots/`, puis quitte. |
 | `selftest` | `runSelftest` | `run-selftest/` | Un serveur dédié lancé avec `-Dlauramod.selftest=true`. Il exécute la suite de tests en jeu, écrit `lauramod-selftest.json` dans le dossier de jeu et s'arrête. Voir plus bas. |
 
-- Chaque projet déclare `client`, `server` et `selftest`. Tous les projets sauf `fabric-1.21.1` déclarent aussi `clienttest`.
+- Chaque projet déclare les quatre lancements.
 - Le lancement `clienttest` a besoin d'un monde solo nommé `laura_test` dans `run-clienttest/saves`.
-- La propriété système `lauramod.selftest.only` ne garde que les tests dont le nom contient sa valeur. Elle se règle avec `-PselftestOnly=<texte>` dans `neoforge-1.20.1`, `forge-1.20.1`, `fabric-1.20.1`, `forge-1.21.1` et `forge-26.1.2`. Les quatre autres projets ne la transmettent pas.
+- La propriété système `lauramod.selftest.only` ne garde que les tests dont le nom contient sa valeur. Elle se règle avec `-PselftestOnly=<texte>` dans les trois projets 1.20.1, les trois projets 1.21.1 et `forge-26.1.2`. `neoforge-26.1.2` et `fabric-26.1.2` ne la transmettent pas. Sur Minecraft 1.21.1 la valeur peut contenir plusieurs morceaux de noms séparés par des virgules : `-PselftestOnly=hug,bath` lance les tests dont le nom contient `hug` ou `bath`.
 - Les dossiers de lancement sont ignorés par Git.
 
 ### Lancer les self tests

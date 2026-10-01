@@ -64,6 +64,7 @@ Rules:
 - Allowed characters in names: letters, digits, `_`, `-`, `.`, `/` and space. 96 characters at most.
 - A file that is too big or not a valid skin is ignored and reported in the server log.
 - Clients download the file once and keep it in `<game folder>/lauramod/cache/skins`. A client refuses files larger than its own `network.maxSkinDownloadKb` (512 KB). Files of that folder not used for 30 days are deleted when the game starts, and the folder is kept under 64 MB (256 MB for `cache/models`).
+- The server sends skins and models at 640 KB per second to each player, and keeps up to 32 MB of the files it already read in memory until the folders are scanned again. A client asks again after 10 seconds without an answer, only accepts a file it asked for, and only keeps it when its content matches the hash announced by the server.
 - A companion changes skin at most once every 2 seconds (the same goes for her model). A change asked too soon is refused with a message.
 - `/laura skin list` shows the built-in skins and the files of the server.
 
@@ -189,6 +190,7 @@ Règles :
 - Caractères autorisés dans les noms : lettres, chiffres, `_`, `-`, `.`, `/` et espace. 96 caractères au plus.
 - Un fichier trop lourd ou qui n'est pas un skin valide est ignoré et signalé dans le journal du serveur.
 - Les clients téléchargent le fichier une fois et le gardent dans `<dossier du jeu>/lauramod/cache/skins`. Un client refuse les fichiers plus lourds que son propre `network.maxSkinDownloadKb` (512 Ko). Les fichiers de ce dossier qui n'ont pas servi depuis 30 jours sont supprimés au lancement du jeu, et le dossier reste sous 64 Mo (256 Mo pour `cache/models`).
+- Le serveur envoie les skins et les modèles à 640 Ko par seconde à chaque joueur, et garde en mémoire jusqu'à 32 Mo des fichiers déjà lus jusqu'à la prochaine analyse des dossiers. Un client redemande après 10 secondes sans réponse, n'accepte qu'un fichier qu'il a demandé, et ne le garde que si son contenu correspond à l'empreinte annoncée par le serveur.
 - Une compagne change de skin au plus une fois toutes les 2 secondes (de même pour son modèle). Un changement demandé trop tôt est refusé avec un message.
 - `/laura skin list` affiche les skins intégrés et les fichiers du serveur.
 
