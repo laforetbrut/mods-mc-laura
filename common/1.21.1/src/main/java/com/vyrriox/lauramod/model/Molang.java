@@ -53,16 +53,27 @@ public final class Molang {
     public static final Expr ZERO = new Constant(0);
     public static final Expr ONE = new Constant(1);
 
+    /** Longest expression read. Animation values are a few dozen characters. */
+    static final int MAX_LENGTH = 4096;
+    /** Deepest nesting of parentheses, function calls, ternaries and signs. */
+    static final int MAX_DEPTH = 48;
+    /** Most operators and function calls in one expression (also the deepest tree to evaluate). */
+    static final int MAX_NODES = 512;
+
     private Molang() {
     }
 
-    /** Parses an expression; invalid input becomes 0 rather than breaking the model. */
+    /**
+     * Parses an expression; invalid input becomes 0 rather than breaking the model. The limits
+     * above bound the recursion of the parser and of {@link Expr#eval}, so a file made to nest
+     * thousands of levels is read as 0 instead of overflowing the stack.
+     */
     public static Expr parse(String source) {
         if (source == null) {
             return ZERO;
         }
         String s = source.trim();
-        if (s.isEmpty()) {
+        if (s.isEmpty() || s.length() > MAX_LENGTH) {
             return ZERO;
         }
         try {
@@ -263,8 +274,30 @@ public final class Molang {
         final String src;
         int pos;
 
+        private int depth;
+        private int nodes;
+
         Parser(String src) {
             this.src = src;
+        }
+
+        /** One more level of recursion (left again by {@link #leave}). */
+        private void enter() {
+            if (++depth > MAX_DEPTH) {
+                throw new IllegalArgumentException("Expression nested too deep");
+            }
+        }
+
+        private void leave() {
+            depth--;
+        }
+
+        /** Counts an operator or a function call. */
+        private <T extends Expr> T node(T expr) {
+            if (++nodes > MAX_NODES) {
+                throw new IllegalArgumentException("Expression too long");
+            }
+            return expr;
         }
 
         char peek() {
@@ -288,20 +321,25 @@ public final class Molang {
         }
 
         Expr parseTernary() {
-            Expr cond = parseCoalesce();
-            if (peek() == '?' && !src.startsWith("??", pos)) {
-                pos++;
-                Expr yes = parseTernary();
-                Expr no = eat(":") ? parseTernary() : ZERO;
-                return new Ternary(cond, yes, no);
+            enter();
+            try {
+                Expr cond = parseCoalesce();
+                if (peek() == '?' && !src.startsWith("??", pos)) {
+                    pos++;
+                    Expr yes = parseTernary();
+                    Expr no = eat(":") ? parseTernary() : ZERO;
+                    return node(new Ternary(cond, yes, no));
+                }
+                return cond;
+            } finally {
+                leave();
             }
-            return cond;
         }
 
         Expr parseCoalesce() {
             Expr left = parseOr();
             while (eat("??")) {
-                left = new Binary('?', left, parseOr());
+                left = node(new Binary('?', left, parseOr()));
             }
             return left;
         }
@@ -309,7 +347,7 @@ public final class Molang {
         Expr parseOr() {
             Expr left = parseAnd();
             while (eat("||")) {
-                left = new Binary('|', left, parseAnd());
+                left = node(new Binary('|', left, parseAnd()));
             }
             return left;
         }
@@ -317,7 +355,7 @@ public final class Molang {
         Expr parseAnd() {
             Expr left = parseEquality();
             while (eat("&&")) {
-                left = new Binary('&', left, parseEquality());
+                left = node(new Binary('&', left, parseEquality()));
             }
             return left;
         }
@@ -326,9 +364,9 @@ public final class Molang {
             Expr left = parseCompare();
             while (true) {
                 if (eat("==")) {
-                    left = new Binary('=', left, parseCompare());
+                    left = node(new Binary('=', left, parseCompare()));
                 } else if (eat("!=")) {
-                    left = new Binary('!', left, parseCompare());
+                    left = node(new Binary('!', left, parseCompare()));
                 } else {
                     return left;
                 }
@@ -339,13 +377,13 @@ public final class Molang {
             Expr left = parseAdd();
             while (true) {
                 if (eat("<=")) {
-                    left = new Binary('l', left, parseAdd());
+                    left = node(new Binary('l', left, parseAdd()));
                 } else if (eat(">=")) {
-                    left = new Binary('g', left, parseAdd());
+                    left = node(new Binary('g', left, parseAdd()));
                 } else if (eat("<")) {
-                    left = new Binary('<', left, parseAdd());
+                    left = node(new Binary('<', left, parseAdd()));
                 } else if (eat(">")) {
-                    left = new Binary('>', left, parseAdd());
+                    left = node(new Binary('>', left, parseAdd()));
                 } else {
                     return left;
                 }
@@ -358,7 +396,7 @@ public final class Molang {
                 char c = peek();
                 if (c == '+' || c == '-') {
                     pos++;
-                    left = new Binary(c, left, parseMul());
+                    left = node(new Binary(c, left, parseMul()));
                 } else {
                     return left;
                 }
@@ -371,7 +409,7 @@ public final class Molang {
                 char c = peek();
                 if (c == '*' || c == '/' || c == '%') {
                     pos++;
-                    left = new Binary(c, left, parseUnary());
+                    left = node(new Binary(c, left, parseUnary()));
                 } else {
                     return left;
                 }
@@ -380,19 +418,17 @@ public final class Molang {
 
         Expr parseUnary() {
             char c = peek();
-            if (c == '-') {
-                pos++;
-                return new Negate(parseUnary());
+            if (c != '-' && c != '+' && c != '!') {
+                return parsePrimary();
             }
-            if (c == '+') {
-                pos++;
-                return parseUnary();
+            pos++;
+            enter();
+            try {
+                Expr operand = parseUnary();
+                return c == '-' ? node(new Negate(operand)) : c == '!' ? node(new Not(operand)) : operand;
+            } finally {
+                leave();
             }
-            if (c == '!') {
-                pos++;
-                return new Not(parseUnary());
-            }
-            return parsePrimary();
         }
 
         Expr parsePrimary() {
@@ -426,7 +462,7 @@ public final class Molang {
                     }
                     eat(")");
                     String fn = ident.startsWith("math.") ? ident.substring(5) : ident;
-                    return new Function(fn, args);
+                    return node(new Function(fn, args));
                 }
                 return identifier(ident);
             }

@@ -6,13 +6,14 @@ import com.vyrriox.lauramod.client.network.LauraClientNetwork;
 import com.vyrriox.lauramod.config.LauraClientConfig;
 import com.vyrriox.lauramod.model.ModelData;
 import com.vyrriox.lauramod.model.ModelParser;
+import com.vyrriox.lauramod.skin.AssetCache;
 import com.vyrriox.lauramod.skin.AssetKind;
+import com.vyrriox.lauramod.skin.ServerAssetStore;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -24,8 +25,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 /**
  * Custom Blockbench models on the client: from the server ({@code server:name#sha1}), from resource
@@ -39,8 +38,14 @@ public final class ClientModels {
     public record Loaded(ModelData data, List<ResourceLocation> textures) {
     }
 
+    /** Largest model once unpacked. */
+    private static final long MAX_UNPACKED_BYTES = 64L * 1024 * 1024;
+    /** A request the server did not answer (or answered "missing") is sent again after this long. */
+    private static final long RETRY_MS = 10_000L;
+
     private static final Map<String, Optional<Loaded>> CACHE = new HashMap<>();
-    private static final Map<String, Boolean> REQUESTED = new HashMap<>();
+    /** Server references asked for, with the time of the last request. */
+    private static final Map<String, Long> REQUESTED = new HashMap<>();
     private static int counter;
 
     private ClientModels() {
@@ -60,72 +65,110 @@ public final class ClientModels {
             int hash = rest.lastIndexOf('#');
             String name = hash > 0 ? rest.substring(0, hash) : rest;
             String sha1 = hash > 0 ? rest.substring(hash + 1) : "";
-            Path cachedZip = cacheDir().resolve(sha1 + ".zip");
-            if (!sha1.isEmpty() && Files.isRegularFile(cachedZip)) {
-                try {
-                    Loaded loaded = fromZip(name, Files.readAllBytes(cachedZip));
-                    CACHE.put(ref, Optional.ofNullable(loaded));
-                    return loaded;
-                } catch (IOException e) {
-                    LauraMod.LOGGER.debug("Cached model {} unreadable", name);
+            // The reference is written by the server: its name and hash are checked before they
+            // are used for anything, and a hash that is not a SHA-1 never becomes a file name.
+            if (!ServerAssetStore.isSafeName(name)) {
+                CACHE.put(ref, Optional.empty());
+                return null;
+            }
+            Long asked = REQUESTED.get(ref);
+            long now = System.currentTimeMillis();
+            if (asked == null) {
+                Path cachedZip = AssetCache.file(cacheDir(), sha1, ".zip");
+                if (cachedZip != null && Files.isRegularFile(cachedZip)) {
+                    try {
+                        Map<String, byte[]> files = AssetCache.unzip(Files.readAllBytes(cachedZip), MAX_UNPACKED_BYTES);
+                        // A file that is not the model its name promises is ignored and downloaded again.
+                        if (AssetCache.matchesModel(sha1, files)) {
+                            Loaded loaded = fromFiles(name, lowerCaseNames(files));
+                            CACHE.put(ref, Optional.ofNullable(loaded));
+                            return loaded;
+                        }
+                    } catch (IOException | RuntimeException e) {
+                        LauraMod.LOGGER.debug("Cached model {} unreadable", name);
+                    }
                 }
             }
-            if (!REQUESTED.containsKey(ref)) {
-                REQUESTED.put(ref, true);
+            if (asked == null || now - asked > RETRY_MS) {
+                REQUESTED.put(ref, now);
                 LauraClientNetwork.requestAsset(AssetKind.MODEL, name);
             }
             return null;
         }
         String name = ref.startsWith("pack:") ? ref.substring(5) : ref;
-        Loaded loaded = fromResourcePacks(name);
-        if (loaded == null) {
-            loaded = fromFolder(LauraMod.configDir().resolve("models"), name);
+        Loaded loaded = null;
+        // The name becomes a path in the models folder: only plain names, never "..", a drive or a root.
+        if (ServerAssetStore.isSafeName(name)) {
+            loaded = fromResourcePacks(name);
+            if (loaded == null) {
+                loaded = fromFolder(LauraMod.configDir().resolve("models"), name);
+            }
         }
         CACHE.put(ref, Optional.ofNullable(loaded));
         return loaded;
     }
 
-    public static void onServerModelReceived(String name, String sha1, byte[] zip) {
-        try {
-            Files.createDirectories(cacheDir());
-            Files.write(cacheDir().resolve(sha1 + ".zip"), zip);
-        } catch (IOException e) {
-            LauraMod.LOGGER.debug("Could not cache model {}", name);
+    /** True while a model with this name was asked from the server and has not arrived. */
+    public static boolean isWaitingFor(String name) {
+        String prefix = "server:" + name + "#";
+        for (String ref : REQUESTED.keySet()) {
+            if (ref.startsWith(prefix) && !CACHE.containsKey(ref)) {
+                return true;
+            }
         }
+        return false;
+    }
+
+    /** A model the server sent. The caller checked that it was asked for and that the hash is a SHA-1. */
+    public static void onServerModelReceived(String name, String sha1, byte[] zip) {
         String ref = "server:" + name + "#" + sha1;
         try {
-            CACHE.put(ref, Optional.ofNullable(fromZip(name, zip)));
+            Map<String, byte[]> files = AssetCache.unzip(zip, MAX_UNPACKED_BYTES);
+            // Kept on disk only when the content is what the hash says: a server cannot plant a
+            // file that another server's model would later be read from.
+            Path target = AssetCache.matchesModel(sha1, files) ? AssetCache.file(cacheDir(), sha1, ".zip") : null;
+            if (target != null) {
+                try {
+                    Files.createDirectories(target.getParent());
+                    Files.write(target, zip);
+                } catch (IOException e) {
+                    LauraMod.LOGGER.debug("Could not cache model {}", name);
+                }
+            }
+            CACHE.put(ref, Optional.ofNullable(fromFiles(name, lowerCaseNames(files))));
         } catch (IOException | RuntimeException e) {
             LauraMod.LOGGER.warn("Model {} from the server is invalid: {}", name, e.getMessage());
             CACHE.put(ref, Optional.empty());
         }
+        // References to another version of this file will not be answered: stop asking.
+        String prefix = "server:" + name + "#";
+        for (String asked : REQUESTED.keySet()) {
+            if (asked.startsWith(prefix)) {
+                CACHE.putIfAbsent(asked, Optional.empty());
+            }
+        }
     }
 
+    /** The server has no such model (or sent something unusable): asked again after {@link #RETRY_MS}. */
     public static void onServerModelMissing(String name) {
-        REQUESTED.keySet().removeIf(k -> k.startsWith("server:" + name + "#"));
+        String prefix = "server:" + name + "#";
+        long now = System.currentTimeMillis();
+        REQUESTED.replaceAll((ref, asked) -> ref.startsWith(prefix) ? Long.valueOf(now) : asked);
     }
 
     private static Path cacheDir() {
         return Minecraft.getInstance().gameDirectory.toPath().resolve("lauramod").resolve("cache").resolve("models");
     }
 
-    private static Loaded fromZip(String name, byte[] zip) throws IOException {
+    /** Files of an archive by lower case file name, without any folder part. */
+    private static Map<String, byte[]> lowerCaseNames(Map<String, byte[]> archive) {
         Map<String, byte[]> files = new HashMap<>();
-        try (ZipInputStream in = new ZipInputStream(new ByteArrayInputStream(zip))) {
-            ZipEntry entry;
-            long total = 0;
-            while ((entry = in.getNextEntry()) != null) {
-                byte[] data = in.readAllBytes();
-                total += data.length;
-                if (total > 64L * 1024 * 1024) {
-                    throw new IOException("model too large");
-                }
-                String file = entry.getName();
-                file = file.substring(file.lastIndexOf('/') + 1);
-                files.put(file.toLowerCase(Locale.ROOT), data);
-            }
+        for (Map.Entry<String, byte[]> entry : archive.entrySet()) {
+            String file = entry.getKey().replace('\\', '/');
+            file = file.substring(file.lastIndexOf('/') + 1);
+            files.put(file.toLowerCase(Locale.ROOT), entry.getValue());
         }
-        return fromFiles(name, files);
+        return files;
     }
 
     private static Loaded fromFolder(Path root, String name) {
@@ -211,13 +254,19 @@ public final class ClientModels {
         if (main == null) {
             throw new IOException("no .bbmodel or .geo.json file");
         }
-        ModelData data = ModelParser.parse(main, new String(files.get(main), StandardCharsets.UTF_8), f -> files.get(f.toLowerCase(Locale.ROOT)));
-        if (main.endsWith(".geo.json") && data.animations.isEmpty()) {
-            for (Map.Entry<String, byte[]> e : files.entrySet()) {
-                if (e.getKey().endsWith(".animation.json")) {
-                    ModelParser.parseAnimations(data, new String(e.getValue(), StandardCharsets.UTF_8));
+        ModelData data;
+        try {
+            // The file may come from a server or a pack: nothing it holds may crash the game.
+            data = ModelParser.parseChecked(main, new String(files.get(main), StandardCharsets.UTF_8), f -> files.get(f.toLowerCase(Locale.ROOT)));
+            if (main.endsWith(".geo.json") && data.animations.isEmpty()) {
+                for (Map.Entry<String, byte[]> e : files.entrySet()) {
+                    if (e.getKey().endsWith(".animation.json")) {
+                        ModelParser.parseAnimationsChecked(data, new String(e.getValue(), StandardCharsets.UTF_8));
+                    }
                 }
             }
+        } catch (ModelParser.InvalidModelException e) {
+            throw new IOException(e.getMessage(), e);
         }
         if (data.textures.isEmpty()) {
             for (Map.Entry<String, byte[]> e : files.entrySet()) {

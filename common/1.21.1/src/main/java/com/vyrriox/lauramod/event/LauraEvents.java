@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.vyrriox.lauramod.LauraMod;
 import com.vyrriox.lauramod.command.LauraCommand;
 import com.vyrriox.lauramod.entity.LauraEntity;
+import com.vyrriox.lauramod.network.LauraNetwork;
 import com.vyrriox.lauramod.test.LauraSelfTest;
 import com.vyrriox.lauramod.world.LauraChat;
 import com.vyrriox.lauramod.world.LauraManager;
@@ -26,6 +27,7 @@ public final class LauraEvents {
     public static void onServerStarting(MinecraftServer server) {
         LauraMod.reloadAll();
         LauraManager.clear();
+        LauraNetwork.clear();
     }
 
     public static void onServerStarted(MinecraftServer server) {
@@ -34,6 +36,7 @@ public final class LauraEvents {
 
     public static void onServerStopped(MinecraftServer server) {
         LauraManager.clear();
+        LauraNetwork.clear();
         LauraSelfTest.onServerStopped();
     }
 
@@ -43,6 +46,7 @@ public final class LauraEvents {
             LauraMod.reloadAll();
         }
         LauraManager.tick(server);
+        LauraNetwork.tick(server);
         LauraSelfTest.tick(server);
     }
 

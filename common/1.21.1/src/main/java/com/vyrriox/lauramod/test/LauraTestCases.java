@@ -1,6 +1,7 @@
 package com.vyrriox.lauramod.test;
 
 import com.vyrriox.lauramod.LauraMod;
+import com.vyrriox.lauramod.api.LauraAPI;
 import com.vyrriox.lauramod.config.LauraConfig;
 import com.vyrriox.lauramod.desire.Desire;
 import com.vyrriox.lauramod.desire.DesireType;
@@ -13,24 +14,34 @@ import com.vyrriox.lauramod.entity.brain.Needs;
 import com.vyrriox.lauramod.entity.work.ChestPurpose;
 import com.vyrriox.lauramod.entity.work.LauraTask;
 import com.vyrriox.lauramod.gift.GiftTable;
+import com.vyrriox.lauramod.model.ModelData;
+import com.vyrriox.lauramod.model.ModelParser;
+import com.vyrriox.lauramod.model.Molang;
 import com.vyrriox.lauramod.network.LauraAction;
+import com.vyrriox.lauramod.network.LauraNetwork;
 import com.vyrriox.lauramod.platform.CookingPots;
 import com.vyrriox.lauramod.platform.InventoryAccess;
 import com.vyrriox.lauramod.platform.LauraInventories;
 import com.vyrriox.lauramod.registry.LauraRegistries;
+import com.vyrriox.lauramod.skin.AssetCache;
+import com.vyrriox.lauramod.skin.AssetKind;
+import com.vyrriox.lauramod.skin.ServerAssetStore;
 import com.vyrriox.lauramod.skin.SkinService;
 import com.vyrriox.lauramod.util.ItemSpec;
+import com.vyrriox.lauramod.util.TextCodec;
 import com.vyrriox.lauramod.world.LauraActions;
 import com.vyrriox.lauramod.world.LauraAdvancements;
 import com.vyrriox.lauramod.world.LauraChat;
 import com.vyrriox.lauramod.world.LauraManager;
 import com.vyrriox.lauramod.world.LauraWorldData;
+import io.netty.buffer.Unpooled;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
@@ -44,8 +55,17 @@ import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.phys.Vec3;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.function.Consumer;
 
 /**
@@ -538,13 +558,212 @@ public final class LauraTestCases {
                 ctx.check(com.vyrriox.lauramod.gift.GiftTable.isFavoriteFood(new ItemStack(Items.BAKED_POTATO)), "script favorite food missing");
                 ctx.check(intent("kubejs test phrase").equals("kubejs_test"), "script chat trigger missing");
                 ctx.check(com.vyrriox.lauramod.cooking.Cookbook.meals().stream().anyMatch(m -> m.id().equals("kubejs_bread")), "script meal missing");
+                ctx.check(intent("kubejs plain phrase").equals("kubejs_plain"), "second script chat trigger missing");
                 withLaura(ctx, laura -> {
+                    ServerPlayer player = ctx.player();
                     ctx.check(laura.getAffection() >= LauraConfig.startAffection.getInt() + 77, "summon event did not run: " + laura.getAffection());
-                    LauraChat.onChat(ctx.player(), "kubejs test phrase");
-                    ctx.waitFor("the scripted emote", 40, () -> laura.getEmote() == Emote.CELEBRATE, ctx::succeed);
+                    List<Sent> sent = watch(ctx);
+                    // First a phrase no script cancels: her answer is heard, so the check on the
+                    // cancelled phrase below cannot pass just because nothing is ever heard.
+                    LauraChat.onChat(player, "kubejs plain phrase");
+                    ctx.waitFor("her answer to a phrase no script cancels", 40, () -> heard(sent, player, "Plain answers work"), () -> {
+                        sent.clear();
+                        LauraChat.onChat(player, "kubejs test phrase");
+                        ctx.waitFor("the scripted emote", 40, () -> laura.getEmote() == Emote.CELEBRATE, () -> ctx.after(5, () -> {
+                            ctx.check(!heard(sent, player, "Scripts are fun"), "event.cancel() did not stop her answer");
+                            ctx.check(LauraAPI.fire("chat", laura, player, "kubejs_test"), "the chat event does not report the script's cancel");
+                            ctx.check(!LauraAPI.fire("chat", laura, player, "kubejs_plain"), "a chat event no script cancelled is reported as cancelled");
+                            ctx.succeed();
+                        }));
+                    });
                 });
             });
         }
+
+        // ------------------------------------------------------------------ network and untrusted files
+        // A flood of requests for a file costs one disk read, and the file leaves at a fixed pace.
+        add(tests, "asset_request_throttle", 400, ctx -> {
+            ServerPlayer player = ctx.player();
+            byte[] png = new byte[200_000];
+            byte[] header = {(byte) 0x89, 'P', 'N', 'G', '\r', '\n', 0x1A, '\n', 0, 0, 0, 13, 'I', 'H', 'D', 'R', 0, 0, 0, 64, 0, 0, 0, 64};
+            System.arraycopy(header, 0, png, 0, header.length);
+            for (int i = header.length; i < png.length; i++) {
+                png[i] = (byte) (i * 31);
+            }
+            Path file = ServerAssetStore.dir(AssetKind.SKIN).resolve("selftest_throttle.png");
+            Files.write(file, png);
+            ctx.onCleanup(() -> {
+                deleteQuietly(file);
+                ServerAssetStore.rescan();
+            });
+            ServerAssetStore.rescan();
+            ctx.check(ServerAssetStore.get(AssetKind.SKIN, "selftest_throttle") != null, "the test skin was not found by the scan");
+            List<Sent> sent = watch(ctx);
+            long reads = ServerAssetStore.diskReads();
+            byte[] request = assetRequest(AssetKind.SKIN, "selftest_throttle");
+            for (int i = 0; i < 5000; i++) {
+                LauraNetwork.handleServer(player, request);
+            }
+            ctx.check(sent.isEmpty(), "the request handler sent " + sent.size() + " messages itself");
+            ctx.check(ServerAssetStore.diskReads() == reads, "a request read the file from disk");
+            ctx.check(LauraNetwork.queuedAssets(player) == 1, "5000 requests for one file queued " + LauraNetwork.queuedAssets(player) + " transfers");
+            ByteArrayOutputStream received = new ByteArrayOutputStream();
+            int[] seen = {0};
+            ctx.waitFor("the file, one tick at a time", 200, () -> {
+                int thisTick = 0;
+                for (; seen[0] < sent.size(); seen[0]++) {
+                    byte[] chunk = assetChunk(sent.get(seen[0]).bytes());
+                    if (chunk != null) {
+                        thisTick += chunk.length;
+                        received.writeBytes(chunk);
+                    }
+                }
+                ctx.check(thisTick <= LauraNetwork.ASSET_BYTES_PER_TICK, thisTick + " bytes were sent in one tick");
+                return received.size() >= png.length;
+            }, () -> {
+                ctx.check(Arrays.equals(received.toByteArray(), png), "the file arrived damaged");
+                ctx.check(ServerAssetStore.diskReads() == reads + 1, "the file was read " + (ServerAssetStore.diskReads() - reads) + " times from disk");
+                ctx.check(LauraNetwork.queuedAssets(player) == 0, "the transfer is still queued");
+                // The budget of requests is used up: other names are dropped without an answer.
+                sent.clear();
+                for (int i = 0; i < 5000; i++) {
+                    LauraNetwork.handleServer(player, assetRequest(AssetKind.SKIN, "selftest_missing_" + i));
+                    LauraNetwork.handleServer(player, listRequest(AssetKind.SKIN));
+                }
+                ctx.check(sent.size() <= LauraNetwork.ASSET_REQUEST_BURST, "a flood of requests got " + sent.size() + " answers");
+                ctx.succeed();
+            });
+        });
+        // What a client keeps from a server: the hash names the cached file, so it must be a real one.
+        add(tests, "asset_cache_rules", 100, ctx -> {
+            Path dir = LauraMod.platform().gameDir().resolve("lauramod").resolve("cache").resolve("selftest");
+            Path base = dir.toAbsolutePath().normalize();
+            String good = ServerAssetStore.sha1("laura".getBytes(StandardCharsets.UTF_8));
+            ctx.check(AssetCache.isSha1(good), "a real hash was refused: " + good);
+            Path inside = AssetCache.file(dir, good, ".png");
+            ctx.check(inside != null && base.equals(inside.getParent()) && inside.getFileName().toString().equals(good + ".png"), "cache file of a real hash: " + inside);
+            String[] badHashes = {"", "abc", good.toUpperCase(Locale.ROOT), good + "0", good.substring(1), good.substring(1) + "g",
+                    "../../../resourcepacks/planted", "..\\..\\..\\resourcepacks\\planted", "C:\\Windows\\Temp\\planted", "/tmp/planted",
+                    "\\\\host\\share\\planted", good.substring(0, 37) + "/..", good.substring(0, 38) + "\\.", good.substring(0, 38) + "/a",
+                    "0123456789abcdef0123456789abcdef0123456\0"};
+            for (String bad : badHashes) {
+                ctx.check(!AssetCache.isSha1(bad), "accepted as a hash: " + bad);
+                ctx.check(AssetCache.file(dir, bad, ".zip") == null && AssetCache.file(dir, bad, ".png") == null, "a cache path was built from: " + bad);
+            }
+            ctx.check(AssetCache.file(dir, null, ".png") == null, "a cache path was built from no hash");
+            for (String bad : new String[]{"", "..", "../skin", "a/../b", "/root", "C:/skin", "C:\\skin", "a\\b", "\\\\host\\share", "a\0b"}) {
+                ctx.check(!ServerAssetStore.isSafeName(bad), "accepted as an asset name: " + bad);
+            }
+            ctx.check(ServerAssetStore.isSafeName("uploads/steve_my skin-2"), "a plain asset name was refused");
+            // Content is only kept under the hash it really has.
+            byte[] skin = "skin bytes".getBytes(StandardCharsets.UTF_8);
+            ctx.check(AssetCache.matchesSkin(ServerAssetStore.sha1(skin), skin), "a skin does not match its own hash");
+            ctx.check(!AssetCache.matchesSkin(good, skin), "a skin matched the hash of something else");
+            // A model as the server sends it: the client computes the same hash from the archive.
+            Path folder = ServerAssetStore.dir(AssetKind.MODEL).resolve("selftest_cache");
+            Files.createDirectories(folder);
+            Files.writeString(folder.resolve("selftest_cache.bbmodel"), "{\"elements\":[]}", StandardCharsets.UTF_8);
+            Files.write(folder.resolve("texture.png"), new byte[]{1, 2, 3, 4});
+            ctx.onCleanup(() -> {
+                deleteQuietly(folder.resolve("selftest_cache.bbmodel"));
+                deleteQuietly(folder.resolve("texture.png"));
+                deleteQuietly(folder);
+                ServerAssetStore.rescan();
+            });
+            ServerAssetStore.rescan();
+            ServerAssetStore.Entry entry = ServerAssetStore.get(AssetKind.MODEL, "selftest_cache");
+            ctx.check(entry != null && entry.files().size() == 2, "the test model was not found by the scan");
+            ctx.check(AssetCache.isSha1(entry.sha1()), "the server hash is not what clients accept: " + entry.sha1());
+            byte[] zip = ServerAssetStore.read(entry);
+            Map<String, byte[]> files = AssetCache.unzip(zip, 1024 * 1024);
+            ctx.check(files.size() == 2 && AssetCache.matchesModel(entry.sha1(), files), "the archive does not match the server hash");
+            files.put("texture.png", new byte[]{9, 9, 9, 9});
+            ctx.check(!AssetCache.matchesModel(entry.sha1(), files), "a changed archive still matches the server hash");
+            boolean refused = false;
+            try {
+                AssetCache.unzip(zip, 8);
+            } catch (IOException expected) {
+                refused = true;
+            }
+            ctx.check(refused, "an archive larger than the limit was unpacked");
+            ctx.succeed();
+        });
+        // A model file made to overflow the stack is an invalid model, on every path.
+        add(tests, "model_parser_limits", 300, ctx -> withLaura(ctx, laura -> {
+            ServerPlayer player = ctx.player();
+            Molang.Context values = new Molang.Context();
+            ctx.check(Molang.parse("(".repeat(1000) + "1" + ")".repeat(1000)).eval(values) == 0, "1000 nested parentheses");
+            ctx.check(Molang.parse("-".repeat(2000) + "1").eval(values) == 0, "2000 minus signs");
+            ctx.check(Molang.parse("-".repeat(20000) + "1").eval(values) == 0, "20000 minus signs");
+            ctx.check(Molang.parse("q.anim_time" + "+1".repeat(1500)).eval(values) == 0, "a sum of 1500 terms");
+            ctx.check(Molang.parse("1 ? ".repeat(500) + "1").eval(values) == 0, "500 nested ternaries");
+            ctx.check(Molang.parse("(".repeat(40) + "7" + ")".repeat(40)).eval(values) == 7, "40 nested parentheses are fine");
+            ctx.check(Molang.parse("(1 + 2) * 3 - math.max(1, 2)").eval(values) == 7, "ordinary expression");
+            values.animTime = 2;
+            ctx.check(Molang.parse("q.anim_time" + " + 1".repeat(100)).eval(values) == 102, "a sum of 100 terms is fine");
+
+            ModelData deep = parseModel("deep.bbmodel", bbmodel(1, "(".repeat(1000) + "1" + ")".repeat(1000)));
+            ctx.check(deep != null && deep.cubeCount() == 1, "a model with a deep expression should load with that value read as 0");
+            ctx.check(parseModel("ten.bbmodel", bbmodel(10, "0")) != null, "ten nested bones were refused");
+            ctx.check(parseModel("nested.bbmodel", bbmodel(20000, "0")) == null, "20000 nested bones were accepted");
+            // Whatever the parser throws, a caller only ever sees an invalid model.
+            String geo = "{\"minecraft:geometry\":[{\"bones\":[{\"name\":\"b\",\"cubes\":[{\"origin\":[0,0,0],\"size\":[1,1,1]}]}]}]}";
+            for (Throwable thrown : new Throwable[]{new StackOverflowError(), new OutOfMemoryError("test"), new IllegalStateException("test")}) {
+                boolean invalid = false;
+                try {
+                    ModelParser.parseChecked("side.geo.json", geo, f -> rethrow(thrown));
+                } catch (ModelParser.InvalidModelException expected) {
+                    invalid = expected.getCause() == thrown && expected.getMessage() != null && !expected.getMessage().isBlank();
+                }
+                ctx.check(invalid, thrown.getClass().getSimpleName() + " was not reported as an invalid model");
+            }
+            // The same file through the upload packets a client sends.
+            boolean uploads = LauraConfig.allowModelUploads.get();
+            LauraConfig.allowModelUploads.set(true);
+            ctx.onCleanup(() -> LauraConfig.allowModelUploads.set(uploads));
+            List<Sent> sent = watch(ctx);
+            int models = ServerAssetStore.list(AssetKind.MODEL).size();
+            upload(player, laura, AssetKind.MODEL, "selftest_nested.bbmodel", bbmodel(20000, "0").getBytes(StandardCharsets.UTF_8));
+            List<Boolean> results = uploadResults(sent, player);
+            ctx.check(results.size() == 1 && !results.get(0), "the upload of 20000 nested bones answered " + results);
+            ctx.check(ServerAssetStore.list(AssetKind.MODEL).size() == models, "the refused upload was stored");
+            ctx.succeed();
+        }));
+        // Her status (home, jobs, needs) only goes to players who may command her.
+        add(tests, "status_permission", 200, ctx -> withLaura(ctx, laura -> {
+            ServerPlayer owner = ctx.player();
+            ServerPlayer stranger = MockPlayers.create(ctx.level, "LauraStranger");
+            ctx.onCleanup(() -> MockPlayers.remove(stranger));
+            stranger.teleportTo(owner.getX() + 2, owner.getY(), owner.getZ());
+            boolean others = LauraConfig.othersCanInteract.get();
+            LauraConfig.othersCanInteract.set(false);
+            ctx.onCleanup(() -> LauraConfig.othersCanInteract.set(others));
+            ctx.check(!laura.isOwnedBy(stranger) && !stranger.hasPermissions(2), "the second player is not a stranger");
+            List<Sent> sent = watch(ctx);
+            byte[] request = statusRequest(laura.getId());
+            LauraNetwork.handleServer(stranger, request);
+            ctx.check(count(sent, stranger, LauraNetwork.S2C_STATUS) == 0, "a stranger read her status");
+            LauraNetwork.handleServer(owner, request);
+            ctx.check(count(sent, owner, LauraNetwork.S2C_STATUS) == 1, "her owner got no status");
+            LauraConfig.othersCanInteract.set(true);
+            LauraNetwork.handleServer(stranger, request);
+            ctx.check(count(sent, stranger, LauraNetwork.S2C_STATUS) == 1, "othersCanInteract did not open her status to others");
+            ctx.succeed();
+        }));
+        // Arguments made of separators only ("|", ":") are orders like any other, not errors.
+        add(tests, "malformed_action_arguments", 200, ctx -> withLaura(ctx, laura -> {
+            ServerPlayer player = ctx.player();
+            for (String arg : new String[]{"|", "||", "|5|queue", "", " | "}) {
+                LauraActions.perform(player, laura, LauraAction.FETCH, arg, LauraActions.Source.MENU);
+            }
+            for (String arg : new String[]{":", "::", ":on:8", "", " : "}) {
+                LauraActions.perform(player, laura, LauraAction.JOB, arg, LauraActions.Source.MENU);
+                LauraActions.perform(player, laura, LauraAction.TASK, arg, LauraActions.Source.MENU);
+                LauraAPI.order(player, laura, "task", arg);
+            }
+            ctx.check(!laura.workplace().hasJobs() && laura.workplace().queued().isEmpty(), "an empty order started some work");
+            ctx.succeed();
+        }));
         add(tests, "advancement_counters", 100, ctx -> {
             ServerPlayer player = ctx.player();
             LauraAdvancements.add(player, "hugs", 1);
@@ -557,6 +776,153 @@ public final class LauraTestCases {
     private static String intent(String message) {
         DialogueManager.IntentMatch m = DialogueManager.match(message);
         return m == null ? "" : m.intent();
+    }
+
+    // ------------------------------------------------------------------ messages of the mod channel
+
+    /** A message the mod sent to a player while a test was watching. */
+    private record Sent(ServerPlayer to, byte[] bytes) {
+    }
+
+    /** Records every message the mod sends to players until the test ends. */
+    private static List<Sent> watch(TestRunner.Context ctx) {
+        List<Sent> sent = new ArrayList<>();
+        LauraNetwork.observe((to, bytes) -> sent.add(new Sent(to, bytes)));
+        ctx.onCleanup(() -> LauraNetwork.observe(null));
+        return sent;
+    }
+
+    private static FriendlyByteBuf reader(byte[] message) {
+        return new FriendlyByteBuf(Unpooled.wrappedBuffer(message));
+    }
+
+    private static int count(List<Sent> sent, ServerPlayer to, int id) {
+        int n = 0;
+        for (Sent s : sent) {
+            if (s.to() == to && reader(s.bytes()).readVarInt() == id) {
+                n++;
+            }
+        }
+        return n;
+    }
+
+    /** True if she said a line holding this text to the player (the speech bubble message). */
+    private static boolean heard(List<Sent> sent, ServerPlayer to, String text) {
+        for (Sent s : sent) {
+            FriendlyByteBuf buf = reader(s.bytes());
+            if (s.to() == to && buf.readVarInt() == LauraNetwork.S2C_SPEECH) {
+                buf.readVarInt();
+                if (TextCodec.fromJson(buf.readUtf(32000), to.registryAccess()).getString().contains(text)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /** The file bytes of an asset message, or null for any other message. */
+    private static byte[] assetChunk(byte[] message) {
+        FriendlyByteBuf buf = reader(message);
+        if (buf.readVarInt() != LauraNetwork.S2C_ASSET) {
+            return null;
+        }
+        buf.readVarInt();
+        buf.readUtf(256);
+        buf.readUtf(64);
+        buf.readVarInt();
+        buf.readVarInt();
+        return buf.readByteArray();
+    }
+
+    private static List<Boolean> uploadResults(List<Sent> sent, ServerPlayer to) {
+        List<Boolean> out = new ArrayList<>();
+        for (Sent s : sent) {
+            FriendlyByteBuf buf = reader(s.bytes());
+            if (s.to() == to && buf.readVarInt() == LauraNetwork.S2C_UPLOAD_RESULT) {
+                out.add(buf.readBoolean());
+            }
+        }
+        return out;
+    }
+
+    private static byte[] assetRequest(AssetKind kind, String name) {
+        FriendlyByteBuf buf = LauraNetwork.buffer(LauraNetwork.C2S_REQUEST_ASSET);
+        buf.writeVarInt(kind.ordinal());
+        buf.writeUtf(name, 256);
+        return LauraNetwork.toBytes(buf);
+    }
+
+    private static byte[] listRequest(AssetKind kind) {
+        FriendlyByteBuf buf = LauraNetwork.buffer(LauraNetwork.C2S_REQUEST_LIST);
+        buf.writeVarInt(kind.ordinal());
+        return LauraNetwork.toBytes(buf);
+    }
+
+    private static byte[] statusRequest(int entityId) {
+        FriendlyByteBuf buf = LauraNetwork.buffer(LauraNetwork.C2S_REQUEST_STATUS);
+        buf.writeVarInt(entityId);
+        return LauraNetwork.toBytes(buf);
+    }
+
+    /** Sends a file the way a client does: in chunks, through the server's packet handler. */
+    private static void upload(ServerPlayer player, LauraEntity laura, AssetKind kind, String name, byte[] data) {
+        for (int offset = 0; offset < data.length; offset += LauraNetwork.UPLOAD_CHUNK) {
+            FriendlyByteBuf buf = LauraNetwork.buffer(LauraNetwork.C2S_UPLOAD);
+            buf.writeVarInt(kind.ordinal());
+            buf.writeUtf(name, 128);
+            buf.writeVarInt(data.length);
+            buf.writeVarInt(offset);
+            buf.writeByteArray(Arrays.copyOfRange(data, offset, Math.min(data.length, offset + LauraNetwork.UPLOAD_CHUNK)));
+            buf.writeVarInt(laura.getId());
+            buf.writeBoolean(false);
+            LauraNetwork.handleServer(player, LauraNetwork.toBytes(buf));
+        }
+    }
+
+    // ------------------------------------------------------------------ model files
+
+    /**
+     * A Blockbench project with one cube inside {@code depth} bones nested in each other, and one
+     * animation whose only value is {@code expression}.
+     */
+    private static String bbmodel(int depth, String expression) {
+        StringBuilder sb = new StringBuilder(depth * 48 + expression.length() + 512);
+        sb.append("{\"meta\":{\"box_uv\":true},\"resolution\":{\"width\":16,\"height\":16},");
+        sb.append("\"elements\":[{\"type\":\"cube\",\"uuid\":\"c1\",\"from\":[0,0,0],\"to\":[1,1,1]}],\"outliner\":[");
+        for (int i = 0; i < depth; i++) {
+            sb.append("{\"name\":\"bone").append(i).append("\",\"uuid\":\"g").append(i).append("\",\"children\":[");
+        }
+        sb.append("\"c1\"");
+        for (int i = 0; i < depth; i++) {
+            sb.append("]}");
+        }
+        sb.append("],\"animations\":[{\"name\":\"idle\",\"loop\":\"loop\",\"length\":1,\"animators\":{\"g0\":{\"name\":\"bone0\",\"type\":\"bone\",");
+        sb.append("\"keyframes\":[{\"channel\":\"rotation\",\"time\":0,\"data_points\":[{\"x\":\"").append(expression).append("\",\"y\":\"0\",\"z\":\"0\"}]}]}}}]}");
+        return sb.toString();
+    }
+
+    /** The parsed model, or null when the parser refuses the file as invalid. Anything else it throws fails the test. */
+    private static ModelData parseModel(String fileName, String json) {
+        try {
+            return ModelParser.parseChecked(fileName, json, null);
+        } catch (ModelParser.InvalidModelException e) {
+            return null;
+        }
+    }
+
+    private static byte[] rethrow(Throwable t) {
+        if (t instanceof Error error) {
+            throw error;
+        }
+        throw (RuntimeException) t;
+    }
+
+    private static void deleteQuietly(Path path) {
+        try {
+            Files.deleteIfExists(path);
+        } catch (IOException e) {
+            LauraMod.LOGGER.warn("[SELFTEST] could not delete {}: {}", path, e.getMessage());
+        }
     }
 
     private static void resetCooldown(TestRunner.Context ctx) {

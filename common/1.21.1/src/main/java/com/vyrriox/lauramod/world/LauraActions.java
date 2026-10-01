@@ -110,12 +110,13 @@ public final class LauraActions {
             }
             case COME -> come(player, laura);
             case FETCH -> {
-                // "item", or "item|count" and "item|count|queue" from the menu.
-                String[] parts = a.split("\\|");
+                // "item", or "item|count" and "item|count|queue" from the menu. The limit keeps the
+                // empty parts, so an argument made of separators only still has a first part.
+                String[] parts = a.split("\\|", -1);
                 fetch(player, laura, parts[0], parts.length > 1 ? parseInt(parts[1], 0) : 0, parts.length > 2 && parts[2].equalsIgnoreCase("queue"));
             }
             case JOB -> {
-                String[] parts = a.split(":");
+                String[] parts = a.split(":", -1);
                 LauraJob job = LauraJob.byName(parts[0]);
                 boolean on = parts.length > 1 && parts[1].equalsIgnoreCase("on");
                 if (on && job != null && job != LauraJob.NONE) {
@@ -126,7 +127,7 @@ public final class LauraActions {
             }
             case WORK -> backToWork(player, laura);
             case TASK -> {
-                String[] parts = a.split(":");
+                String[] parts = a.split(":", -1);
                 LauraTask.Type type = LauraTask.Type.byName(parts[0]);
                 if (type == null || !type.isErrand() || type == LauraTask.Type.FETCH) {
                     LauraSpeech.say(laura, player, "confused", LineFormatter.values());

@@ -32,14 +32,17 @@ import java.util.Map;
  */
 public class LauraKubeJSPlugin implements KubeJSPlugin {
     public static final EventGroup GROUP = EventGroup.of("LauraEvents");
-    public static final EventHandler SUMMON = GROUP.server("summon", () -> Event.class);
-    public static final EventHandler DEATH = GROUP.server("death", () -> Event.class);
-    public static final EventHandler REVIVE = GROUP.server("revive", () -> Event.class);
-    public static final EventHandler DESIRE_FULFILLED = GROUP.server("desireFulfilled", () -> Event.class);
-    public static final EventHandler DESIRE_FAILED = GROUP.server("desireFailed", () -> Event.class);
-    public static final EventHandler GIFT = GROUP.server("gift", () -> Event.class);
-    public static final EventHandler EMOTE = GROUP.server("emote", () -> Event.class);
-    public static final EventHandler CHAT = GROUP.server("chat", () -> Event.class);
+    // Every handler accepts a result, like the 1.20.1 plugins: without it KubeJS swallows
+    // event.cancel() and logs an error instead. Only the chat event acts on a cancel (it stops her
+    // default answer); for the others a cancel is accepted and changes nothing.
+    public static final EventHandler SUMMON = GROUP.server("summon", () -> Event.class).hasResult();
+    public static final EventHandler DEATH = GROUP.server("death", () -> Event.class).hasResult();
+    public static final EventHandler REVIVE = GROUP.server("revive", () -> Event.class).hasResult();
+    public static final EventHandler DESIRE_FULFILLED = GROUP.server("desireFulfilled", () -> Event.class).hasResult();
+    public static final EventHandler DESIRE_FAILED = GROUP.server("desireFailed", () -> Event.class).hasResult();
+    public static final EventHandler GIFT = GROUP.server("gift", () -> Event.class).hasResult();
+    public static final EventHandler EMOTE = GROUP.server("emote", () -> Event.class).hasResult();
+    public static final EventHandler CHAT = GROUP.server("chat", () -> Event.class).hasResult();
 
     private static final Map<String, EventHandler> HANDLERS = Map.of(
             "summon", SUMMON, "death", DEATH, "revive", REVIVE, "desire_fulfilled", DESIRE_FULFILLED,

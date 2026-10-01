@@ -24,8 +24,52 @@ import java.util.function.Function;
  */
 public final class ModelParser {
     private static final int MAX_CUBES = 4096;
+    /** Deepest chain of bones (a bone inside a bone inside a bone...). Real models stay under 20. */
+    static final int MAX_BONE_DEPTH = 64;
 
     private ModelParser() {
+    }
+
+    /** A model file that cannot be used. The message can be shown to a player. */
+    public static final class InvalidModelException extends Exception {
+        private static final long serialVersionUID = 1L;
+
+        InvalidModelException(String message, Throwable cause) {
+            super(message, cause);
+        }
+    }
+
+    /**
+     * Same as {@link #parse} for files that are not trusted (uploads, files sent by a server):
+     * whatever goes wrong inside the parser, including a stack overflow or a lack of memory caused
+     * by a file made for that, comes out as an {@link InvalidModelException} and nothing else.
+     */
+    public static ModelData parseChecked(String fileName, String json, Function<String, byte[]> sideFiles) throws InvalidModelException {
+        try {
+            return parse(fileName, json, sideFiles);
+        } catch (RuntimeException | Error e) {
+            throw new InvalidModelException(reason(e), e);
+        }
+    }
+
+    /** Same as {@link #parseAnimations} for files that are not trusted. */
+    public static void parseAnimationsChecked(ModelData model, String json) throws InvalidModelException {
+        try {
+            parseAnimations(model, json);
+        } catch (RuntimeException | Error e) {
+            throw new InvalidModelException(reason(e), e);
+        }
+    }
+
+    private static String reason(Throwable e) {
+        if (e instanceof StackOverflowError) {
+            return "the file is nested too deep";
+        }
+        if (e instanceof OutOfMemoryError) {
+            return "the file needs too much memory";
+        }
+        String message = e.getMessage();
+        return message == null || message.isBlank() ? e.getClass().getSimpleName() : message;
     }
 
     /**
@@ -99,7 +143,7 @@ public final class ModelParser {
                     addBbCube(model, looseRoot, element, projectBoxUv);
                 }
             } else if (node.isJsonObject()) {
-                parseBbGroup(model, node.getAsJsonObject(), groups, elements, null, projectBoxUv, uuidToBone);
+                parseBbGroup(model, node.getAsJsonObject(), groups, elements, null, projectBoxUv, uuidToBone, 1);
             }
         }
         List<JsonElement> textures = arr(root, "textures");
@@ -118,7 +162,10 @@ public final class ModelParser {
     }
 
     private static void parseBbGroup(ModelData model, JsonObject node, Map<String, JsonObject> groups, Map<String, JsonObject> elements,
-                                     ModelData.Bone parent, boolean projectBoxUv, Map<String, String> uuidToBone) {
+                                     ModelData.Bone parent, boolean projectBoxUv, Map<String, String> uuidToBone, int depth) {
+        if (depth > MAX_BONE_DEPTH) {
+            throw new IllegalArgumentException("bones nested more than " + MAX_BONE_DEPTH + " deep");
+        }
         JsonObject data = node;
         if (!node.has("name") && node.has("uuid") && groups.containsKey(node.get("uuid").getAsString())) {
             data = groups.get(node.get("uuid").getAsString());
@@ -148,7 +195,7 @@ public final class ModelParser {
                     addBbCube(model, bone, element, projectBoxUv || mirror && element.has("uv_offset"));
                 }
             } else if (child.isJsonObject()) {
-                parseBbGroup(model, child.getAsJsonObject(), groups, elements, bone, projectBoxUv, uuidToBone);
+                parseBbGroup(model, child.getAsJsonObject(), groups, elements, bone, projectBoxUv, uuidToBone, depth + 1);
             }
         }
     }
@@ -323,6 +370,14 @@ public final class ModelParser {
             }
         }
         for (ModelData.Bone bone : order) {
+            // Parents are plain names here: walk up to refuse a loop or an endless chain, which
+            // nothing could render.
+            int depth = 1;
+            for (String up = parents.get(bone); up != null && byName.containsKey(up); up = parents.get(byName.get(up))) {
+                if (++depth > MAX_BONE_DEPTH) {
+                    throw new IllegalArgumentException("bones nested more than " + MAX_BONE_DEPTH + " deep");
+                }
+            }
             String parentName = parents.get(bone);
             ModelData.Bone parent = parentName == null ? null : byName.get(parentName);
             register(model, bone, parent);
@@ -474,15 +529,16 @@ public final class ModelParser {
     }
 
     private static String[] triple(JsonElement e) {
+        // A loop, not a recursion: a "vector" inside a "vector" thousands of times is just skipped.
+        while (e != null && e.isJsonObject() && e.getAsJsonObject().has("vector")) {
+            e = e.getAsJsonObject().get("vector");
+        }
         if (e == null) {
             return new String[]{"0", "0", "0"};
         }
         if (e.isJsonPrimitive()) {
             String s = e.getAsString();
             return new String[]{s, s, s};
-        }
-        if (e.isJsonObject() && e.getAsJsonObject().has("vector")) {
-            return triple(e.getAsJsonObject().get("vector"));
         }
         JsonArray a = e.getAsJsonArray();
         return new String[]{a.get(0).getAsString(), a.size() > 1 ? a.get(1).getAsString() : "0", a.size() > 2 ? a.get(2).getAsString() : "0"};

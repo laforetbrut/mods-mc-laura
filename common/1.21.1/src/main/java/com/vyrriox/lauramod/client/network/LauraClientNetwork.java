@@ -9,7 +9,9 @@ import com.vyrriox.lauramod.config.LauraClientConfig;
 import com.vyrriox.lauramod.inventory.LauraInventoryMenu;
 import com.vyrriox.lauramod.network.LauraAction;
 import com.vyrriox.lauramod.network.LauraNetwork;
+import com.vyrriox.lauramod.skin.AssetCache;
 import com.vyrriox.lauramod.skin.AssetKind;
+import com.vyrriox.lauramod.skin.ServerAssetStore;
 import com.vyrriox.lauramod.util.TextCodec;
 import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
@@ -104,12 +106,20 @@ public final class LauraClientNetwork {
         int total = buf.readVarInt();
         int offset = buf.readVarInt();
         byte[] chunk = buf.readByteArray(LauraNetwork.DOWNLOAD_CHUNK + 16);
-        if (kind == null) {
+        if (kind == null || !ServerAssetStore.isSafeName(name)) {
             return;
         }
         String key = kind.name() + "|" + name;
+        // Only files this client asked for: a server cannot push files of its own choice.
+        boolean expected = kind == AssetKind.SKIN ? SkinTextures.isWaitingFor(name) : ClientModels.isWaitingFor(name);
+        if (!expected) {
+            DOWNLOADS.remove(key);
+            RECEIVED.remove(key);
+            return;
+        }
         int limit = (kind == AssetKind.SKIN ? LauraClientConfig.maxSkinDownloadKb.getInt() : LauraClientConfig.maxModelDownloadKb.getInt()) * 1024;
-        if (total <= 0 || total > limit) {
+        // The hash names the cached file: anything that is not a SHA-1 is refused like a missing file.
+        if (total <= 0 || total > limit || !AssetCache.isSha1(sha1)) {
             DOWNLOADS.remove(key);
             RECEIVED.remove(key);
             if (kind == AssetKind.SKIN) {
