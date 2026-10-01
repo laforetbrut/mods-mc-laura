@@ -36,3 +36,6 @@ run-*/
 CLAUDE.md
 test-procedures/
 TEST_PROCEDURE_*.html
+
+# Local development journal
+ERROR_LOG.md

@@ -117,3 +117,27 @@ tasks.named('jar', Jar).configure {
         ])
     }
 }
+
+// The self test server runs in run-selftest, which is not in git: this task writes what it needs.
+// A Minecraft server only starts once its EULA (https://aka.ms/MinecraftEULA) is accepted: pass
+// -PacceptEula, or create run-selftest/eula.txt with eula=true yourself.
+tasks.register('prepareSelftest') {
+    def dir = layout.projectDirectory.dir('run-selftest').asFile
+    def port = providers.gradleProperty('selftest_port').get()
+    def acceptEula = providers.gradleProperty('acceptEula').isPresent()
+    doLast {
+        dir.mkdirs()
+        def eula = new File(dir, 'eula.txt')
+        if (acceptEula) {
+            eula.text = 'eula=true\n'
+        } else if (!eula.isFile() || !eula.text.contains('eula=true')) {
+            throw new GradleException('The self test starts a Minecraft server. Read https://aka.ms/MinecraftEULA, then run again with -PacceptEula (or create run-selftest/eula.txt with eula=true).')
+        }
+        def properties = new File(dir, 'server.properties')
+        if (!properties.isFile()) {
+            properties.text = ['online-mode=false', 'level-type=minecraft\\:flat', 'spawn-protection=0', 'max-tick-time=-1',
+                               "server-port=${port}", "query.port=${port}"].join('\n') + '\n'
+        }
+    }
+}
+tasks.matching { it.name == 'runSelftest' }.configureEach { dependsOn 'prepareSelftest' }
