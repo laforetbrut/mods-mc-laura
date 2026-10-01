@@ -454,6 +454,8 @@
   "lauramod.skin.changed": "Nowy wygląd: %s",
   "lauramod.skin.reset": "Wróciła do domyślnej skórki.",
   "lauramod.skin.not_allowed": "Nie możesz zmieniać jej wyglądu.",
+  "lauramod.look.cooldown": "Nie tak szybko: odczekaj kilka sekund, zanim znowu zmienisz jej wygląd.",
+  "lauramod.network.server_missing": "My Girlfriend Laura nie jest zainstalowany na tym serwerze. Mod jest potrzebny po obu stronach: poproś serwer o dodanie go albo usuń go ze swojego folderu mods, aby tu grać.",
   "lauramod.skin.url_disabled": "Skórki z adresów URL są wyłączone na tym serwerze.",
   "lauramod.skin.url_refused": "Ta strona jest niedozwolona. Dozwolone: %s",
   "lauramod.skin.file_missing": "Serwer nie ma skórki o nazwie %s.",

@@ -32,9 +32,9 @@ final class LauraChannel {
     }
 
     static void register() {
-        // The mod is optional on both sides: a missing channel is accepted, a different protocol is not.
-        channel = NetworkRegistry.newEventChannel(ID, () -> VERSION,
-                NetworkRegistry.acceptMissingOr(VERSION), NetworkRegistry.acceptMissingOr(VERSION));
+        // The mod is needed on both sides, like on the later versions: a missing channel or another
+        // protocol is refused when the connection is made, on the client and on the server.
+        channel = NetworkRegistry.newEventChannel(ID, () -> VERSION, VERSION::equals, VERSION::equals);
         channel.addListener(LauraChannel::onClientPayload);
         channel.addListener(LauraChannel::onServerPayload);
     }

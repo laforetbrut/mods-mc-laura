@@ -105,10 +105,36 @@ public final class SkinService {
         return laura.isOwnedBy(player) || LauraConfig.othersCanChangeSkin.get() || player.hasPermissions(2);
     }
 
+    /** Seconds between two skin changes, and between two model changes, of the same companion. */
+    private static final double LOOK_CHANGE_SECONDS = 2;
+    /** One account lookup every few seconds per player: each one is a request to the Mojang API. */
+    private static final long PLAYER_LOOKUP_INTERVAL_MS = 5000;
+    private static final java.util.Map<java.util.UUID, Long> PLAYER_LOOKUPS = new java.util.HashMap<>();
+
+    /**
+     * Every client near her downloads and keeps a texture for each new look: a companion changes
+     * skin (or model) at most once every few seconds. Returns false, with a message, when it is too soon.
+     */
+    private static boolean lookReady(ServerPlayer player, LauraEntity laura, String what) {
+        if (laura.brain().readyFixed("look." + what, LOOK_CHANGE_SECONDS)) {
+            return true;
+        }
+        player.sendSystemMessage(Component.translatable("lauramod.look.cooldown"));
+        return false;
+    }
+
+    /** Forgets what was kept about a player who left. */
+    public static void forget(ServerPlayer player) {
+        PLAYER_LOOKUPS.remove(player.getUUID());
+    }
+
     /** Applies a skin reference sent by a client or typed in a command. Returns a feedback message. */
     public static void requestSkin(ServerPlayer player, LauraEntity laura, String rawRef, boolean slim) {
         if (!canChangeLook(player, laura)) {
             player.sendSystemMessage(Component.translatable("lauramod.skin.not_allowed"));
+            return;
+        }
+        if (!lookReady(player, laura, "skin")) {
             return;
         }
         String raw = rawRef == null ? "" : rawRef.trim();
@@ -162,6 +188,13 @@ public final class SkinService {
                     player.sendSystemMessage(Component.translatable("lauramod.skin.player_invalid", ref.value()));
                     return;
                 }
+                long nowMs = System.currentTimeMillis();
+                Long lastLookup = PLAYER_LOOKUPS.get(player.getUUID());
+                if (lastLookup != null && nowMs - lastLookup < PLAYER_LOOKUP_INTERVAL_MS || MojangSkinResolver.isBusy(ref.value())) {
+                    player.sendSystemMessage(Component.translatable("lauramod.look.cooldown"));
+                    return;
+                }
+                PLAYER_LOOKUPS.put(player.getUUID(), nowMs);
                 player.sendSystemMessage(Component.translatable("lauramod.skin.player_searching", ref.value()));
                 MinecraftServer server = player.getServer();
                 MojangSkinResolver.resolve(ref.value()).thenAccept(result -> {
@@ -190,6 +223,9 @@ public final class SkinService {
     public static void requestModel(ServerPlayer player, LauraEntity laura, String rawName) {
         if (!canChangeLook(player, laura)) {
             player.sendSystemMessage(Component.translatable("lauramod.skin.not_allowed"));
+            return;
+        }
+        if (!lookReady(player, laura, "model")) {
             return;
         }
         String name = rawName == null ? "" : rawName.trim();
@@ -243,8 +279,13 @@ public final class SkinService {
         return kind == AssetKind.SKIN ? LauraConfig.maxSkinUploadsPerPlayer.getInt() : LauraConfig.maxModelUploadsPerPlayer.getInt();
     }
 
-    private static String uploadPrefix(ServerPlayer player) {
-        return sanitize(player.getGameProfile().getName()) + "_";
+    /**
+     * The start of every file a player uploads: their UUID without dashes. It has a fixed length, so
+     * it is never the start of another player's prefix (a name could be: "bob_" and "bob_ross_"),
+     * and it does not change when the account is renamed.
+     */
+    public static String uploadPrefix(ServerPlayer player) {
+        return player.getUUID().toString().replace("-", "") + "_";
     }
 
     public static boolean hasUploadRoom(ServerPlayer player, AssetKind kind, String name) {
@@ -274,9 +315,15 @@ public final class SkinService {
                 return;
             }
             try {
-                ModelParser.parse(name.toLowerCase(Locale.ROOT).endsWith(".bbmodel") ? name : name + ".bbmodel", new String(data, StandardCharsets.UTF_8), null);
-            } catch (RuntimeException e) {
-                LauraNetwork.uploadResult(player, false, Component.translatable("lauramod.upload.invalid_model", e.getMessage()));
+                // Whatever the parser throws (a limit, a stack exhausted by a deeply nested file, a lack
+                // of memory), the file is refused like any other bad file.
+                ModelParser.parseChecked(name.toLowerCase(Locale.ROOT).endsWith(".bbmodel") ? name : name + ".bbmodel", new String(data, StandardCharsets.UTF_8), null);
+            } catch (ModelParser.InvalidModelException e) {
+                if (e.getCause() instanceof Error) {
+                    // Not a mistake in a model: a file made to break the parser.
+                    LauraMod.LOGGER.warn("Model upload {} from {} refused: {}", sanitize(name), player.getGameProfile().getName(), e.getCause().toString());
+                }
+                LauraNetwork.uploadResult(player, false, Component.translatable("lauramod.upload.invalid_model", String.valueOf(e.getMessage())));
                 return;
             }
         }

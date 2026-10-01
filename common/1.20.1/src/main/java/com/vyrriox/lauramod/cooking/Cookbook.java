@@ -65,46 +65,66 @@ public final class Cookbook {
             root = JsonParser.parseReader(new JsonReader(new StringReader(DEFAULTS))).getAsJsonObject();
         }
         com.vyrriox.lauramod.api.ScriptData.extend("recipes", root);
-        requireCraftingTable = !root.has("requireCraftingTable") || root.get("requireCraftingTable").getAsBoolean();
-        useCampfires = !root.has("useCampfires") || root.get("useCampfires").getAsBoolean();
+        requireCraftingTable = flag(root, "requireCraftingTable", true);
+        useCampfires = flag(root, "useCampfires", true);
         List<Meal> parsed = new ArrayList<>();
         JsonArray array = root.has("meals") && root.get("meals").isJsonArray() ? root.getAsJsonArray("meals") : new JsonArray();
         for (JsonElement e : array) {
             if (!e.isJsonObject()) {
                 continue;
             }
-            JsonObject o = e.getAsJsonObject();
-            Item result = item(o.has("result") ? o.get("result").getAsString() : "");
-            if (result == null) {
-                LauraMod.LOGGER.warn("recipes.json: unknown result {}", o.get("result"));
-                continue;
-            }
-            Map<ItemSpec, Integer> ingredients = new LinkedHashMap<>();
-            boolean valid = true;
-            JsonObject ing = o.has("ingredients") && o.get("ingredients").isJsonObject() ? o.getAsJsonObject("ingredients") : new JsonObject();
-            for (Map.Entry<String, JsonElement> in : ing.entrySet()) {
-                var spec = ItemSpec.parse(in.getKey());
-                if (spec.isEmpty()) {
-                    LauraMod.LOGGER.warn("recipes.json: unknown ingredient {} in {}", in.getKey(), o.get("result"));
-                    valid = false;
-                    break;
+            // A wrong value (text where a number is expected, a list, null...) only costs its own meal.
+            try {
+                Meal meal = meal(e.getAsJsonObject());
+                if (meal != null) {
+                    parsed.add(meal);
                 }
-                ingredients.put(spec.get(), Math.max(1, in.getValue().getAsInt()));
-            }
-            Map<Item, Integer> returns = new LinkedHashMap<>();
-            JsonObject ret = o.has("returns") && o.get("returns").isJsonObject() ? o.getAsJsonObject("returns") : new JsonObject();
-            for (Map.Entry<String, JsonElement> r : ret.entrySet()) {
-                Item item = item(r.getKey());
-                if (item != null) {
-                    returns.put(item, Math.max(1, r.getValue().getAsInt()));
-                }
-            }
-            if (valid && !ingredients.isEmpty()) {
-                String id = o.has("id") ? o.get("id").getAsString() : BuiltInRegistries.ITEM.getKey(result).getPath();
-                parsed.add(new Meal(id, result, o.has("count") ? Math.max(1, o.get("count").getAsInt()) : 1, ingredients, returns));
+            } catch (RuntimeException ex) {
+                LauraMod.LOGGER.warn("recipes.json: meal {} is invalid and ignored ({})", e, ex.toString());
             }
         }
         meals = List.copyOf(parsed);
+    }
+
+    /** One meal of the file, or null when its result or an ingredient is unknown. Throws on a value of the wrong kind. */
+    private static Meal meal(JsonObject o) {
+        Item result = item(o.has("result") ? o.get("result").getAsString() : "");
+        if (result == null) {
+            LauraMod.LOGGER.warn("recipes.json: unknown result {}", o.get("result"));
+            return null;
+        }
+        Map<ItemSpec, Integer> ingredients = new LinkedHashMap<>();
+        JsonObject ing = o.has("ingredients") && o.get("ingredients").isJsonObject() ? o.getAsJsonObject("ingredients") : new JsonObject();
+        for (Map.Entry<String, JsonElement> in : ing.entrySet()) {
+            var spec = ItemSpec.parse(in.getKey());
+            if (spec.isEmpty()) {
+                LauraMod.LOGGER.warn("recipes.json: unknown ingredient {} in {}", in.getKey(), o.get("result"));
+                return null;
+            }
+            ingredients.put(spec.get(), Math.max(1, in.getValue().getAsInt()));
+        }
+        Map<Item, Integer> returns = new LinkedHashMap<>();
+        JsonObject ret = o.has("returns") && o.get("returns").isJsonObject() ? o.getAsJsonObject("returns") : new JsonObject();
+        for (Map.Entry<String, JsonElement> r : ret.entrySet()) {
+            Item item = item(r.getKey());
+            if (item != null) {
+                returns.put(item, Math.max(1, r.getValue().getAsInt()));
+            }
+        }
+        if (ingredients.isEmpty()) {
+            return null;
+        }
+        String id = o.has("id") ? o.get("id").getAsString() : BuiltInRegistries.ITEM.getKey(result).getPath();
+        return new Meal(id, result, o.has("count") ? Math.max(1, o.get("count").getAsInt()) : 1, ingredients, returns);
+    }
+
+    private static boolean flag(JsonObject o, String key, boolean def) {
+        try {
+            return o.has(key) ? o.get(key).getAsBoolean() : def;
+        } catch (RuntimeException e) {
+            LauraMod.LOGGER.warn("recipes.json: {} must be true or false, using {}", key, def);
+            return def;
+        }
     }
 
     public static List<Meal> meals() {
