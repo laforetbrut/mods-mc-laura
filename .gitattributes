@@ -1,0 +1,14 @@
+# Text files are stored with LF and checked out with the platform's line endings.
+* text=auto
+
+# Scripts that must keep their line endings on every platform.
+gradlew text eol=lf
+*.sh text eol=lf
+*.bat text eol=crlf
+
+# Binary assets.
+*.jar binary
+*.png binary
+*.ogg binary
+*.nbt binary
+*.dat binary
