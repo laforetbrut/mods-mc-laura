@@ -87,6 +87,17 @@ final class NeoForgePlatform implements Platform {
     }
 
     @Override
+    public boolean mayUseContainer(ServerPlayer player, ServerLevel level, BlockPos pos) {
+        // The event NeoForge posts when a player right clicks a block: claim mods deny it there.
+        net.minecraft.world.phys.BlockHitResult hit = new net.minecraft.world.phys.BlockHitResult(
+                net.minecraft.world.phys.Vec3.atCenterOf(pos), net.minecraft.core.Direction.UP, pos, false);
+        net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.RightClickBlock event =
+                new net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.RightClickBlock(player, net.minecraft.world.InteractionHand.MAIN_HAND, pos, hit);
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(event);
+        return !event.isCanceled() && event.getUseBlock() != net.minecraft.util.TriState.FALSE;
+    }
+
+    @Override
     public InventoryAccess inventoryAt(ServerLevel level, BlockPos pos) {
         if (!level.isLoaded(pos)) {
             return null;

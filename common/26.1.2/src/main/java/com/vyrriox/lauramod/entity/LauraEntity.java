@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 import com.vyrriox.lauramod.LauraMod;
 import com.vyrriox.lauramod.config.LauraConfig;
 import com.vyrriox.lauramod.desire.Desire;
-import com.vyrriox.lauramod.dialogue.LineFormatter;
 import com.vyrriox.lauramod.entity.ai.FetchGoal;
 import com.vyrriox.lauramod.entity.ai.LauraAttentionGoal;
 import com.vyrriox.lauramod.entity.ai.LauraBathGoal;
@@ -59,6 +58,7 @@ import net.minecraft.world.entity.EntityReference;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -75,6 +75,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.level.storage.TagValueInput;
 import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.level.storage.ValueInput;
@@ -123,6 +124,14 @@ public class LauraEntity extends TamableAnimal {
     private final LauraWorkplace workplace = new LauraWorkplace(this);
     private LauraWorkGoal workGoal;
     private final List<ItemStack> keptOwnerItems = new ArrayList<>();
+    /** Items of a fetch that was cut short by a save, a death or a change of dimension; put in her bags on her next tick. */
+    private final List<ItemStack> pendingFetchBag = new ArrayList<>();
+    /** Saved items that no longer fit in her bag (inventoryRows was lowered): dropped on her first tick. */
+    private final List<ItemStack> overflow = new ArrayList<>();
+    /** Game time of the sleep order she is following, -1 when she sleeps on her own or is awake. */
+    private long sleepOrderedAt = -1;
+    private int lastInteractTick = -1;
+    private java.util.UUID lastInteractPlayer;
     private BlockPos homePos;
     private ResourceKey<Level> homeDimension;
     private BlockPos wanderCenter;
@@ -132,6 +141,7 @@ public class LauraEntity extends TamableAnimal {
     private long summonGameTime = -1;
     private FetchGoal fetchGoal;
     private final int tickOffset;
+    private boolean tracked;
 
     public LauraEntity(EntityType<? extends TamableAnimal> type, Level level) {
         super(type, level);
@@ -205,6 +215,11 @@ public class LauraEntity extends TamableAnimal {
         if (this.level().isClientSide()) {
             return;
         }
+        if (!tracked) {
+            // First tick of this entity (loaded, created, or just arrived from another dimension).
+            tracked = true;
+            LauraManager.track(this);
+        }
         if (emoteEndTick > 0) {
             Emote emote = getEmote();
             int elapsed = emote.duration - (emoteEndTick - this.tickCount);
@@ -218,16 +233,84 @@ public class LauraEntity extends TamableAnimal {
         if (gagTicks > 0 && --gagTicks == 0 && isGagged()) {
             LauraActions.ungag(null, this, true);
         }
+        if (!overflow.isEmpty()) {
+            for (ItemStack stack : overflow) {
+                this.spawnAtLocation(stack);
+            }
+            overflow.clear();
+        }
+        if (!pendingFetchBag.isEmpty()) {
+            // Not while loading: she has to be in the world to drop what does not fit.
+            for (ItemStack stack : pendingFetchBag) {
+                ItemStack rest = bags().add(stack);
+                if (!rest.isEmpty()) {
+                    this.spawnAtLocation(rest);
+                }
+            }
+            pendingFetchBag.clear();
+        }
         if ((this.tickCount + tickOffset) % 5 == 0) {
             LauraActions.processQueue(this);
-        }
-        if ((this.tickCount + tickOffset) % 20 == 0) {
-            applyConfigAttributes();
-            brain.tickSecond();
-            if ((this.tickCount + tickOffset) % 100 == 0) {
-                LauraManager.track(this);
+            if (this.isRemoved()) {
+                // A queued order sent her to another dimension: she goes on there, as another entity.
+                return;
             }
         }
+        if ((this.tickCount + tickOffset) % 20 == 0) {
+            if (LauraManager.removeTwin(this)) {
+                return;
+            }
+            applyConfigAttributes();
+            brain.tickSecond();
+            LauraManager.track(this);
+        }
+    }
+
+    // ------------------------------------------------------------------ ownership and dimensions
+
+    /** By UUID: a partner who is in another dimension is still her owner and can call her. */
+    @Override
+    public boolean isOwnedBy(LivingEntity entity) {
+        return entity != null && entity.getUUID().equals(this.getOwnerUUID());
+    }
+
+    /**
+     * Her partner when he is in the same dimension as her, null otherwise. Since Minecraft 1.21.5
+     * the vanilla lookup finds him in every dimension, and everything that follows him or measures
+     * a distance to him (her goals, her brain) would take his coordinates for a place in her own
+     * level. What must reach him across dimensions asks {@link LauraSpeech#ownerAnywhere}.
+     */
+    @Nullable
+    @Override
+    public LivingEntity getOwner() {
+        LivingEntity owner = super.getOwner();
+        return owner != null && owner.level() == this.level() ? owner : null;
+    }
+
+    /**
+     * Every change of dimension ends here: portals, the vanilla /tp and /execute in (which go through
+     * this method too since Minecraft 1.21.2), other mods, {@link LauraManager#teleport}. The game
+     * replaces her with a copy in the other level: the world registry learns it at once.
+     */
+    @Nullable
+    @Override
+    public Entity teleport(TeleportTransition transition) {
+        if (transition.newLevel() != this.level() && transition.newLevel().getEntity(this.getUUID()) != null) {
+            // A second her is already there (see LauraManager.removeTwin). The game would not add the
+            // one who arrives, and she would be lost: she stays.
+            return null;
+        }
+        Entity moved = super.teleport(transition);
+        if (moved instanceof LauraEntity copy && copy != this) {
+            LauraManager.onChangedDimension(copy);
+        }
+        return moved;
+    }
+
+    /** Portals only (commands and calls do not ask): with followAcrossDimensions off she does not wander into another dimension alone. */
+    @Override
+    public boolean canTeleport(Level from, Level to) {
+        return LauraConfig.followAcrossDimensions.get() && super.canTeleport(from, to);
     }
 
     private void applyConfigAttributes() {
@@ -252,7 +335,9 @@ public class LauraEntity extends TamableAnimal {
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         boolean client = this.level().isClientSide();
-        if (stack.is(Items.NAME_TAG) || stack.is(Items.LEAD)) {
+        // A name tag that reaches this point is an unnamed one (the game already used the named
+        // ones to rename her): it is a gift or a wish like any other item.
+        if (stack.is(Items.LEAD)) {
             return super.mobInteract(player, hand);
         }
         if (!this.isTame() || this.getOwnerUUID() == null) {
@@ -269,8 +354,16 @@ public class LauraEntity extends TamableAnimal {
             return InteractionResult.SUCCESS;
         }
         ServerPlayer serverPlayer = (ServerPlayer) player;
+        // One interaction per player and per tick: a click that reaches the server twice must not
+        // hand over two items (and make her speak twice).
+        int serverTick = serverPlayer.level().getServer().getTickCount();
+        if (lastInteractTick == serverTick && serverPlayer.getUUID().equals(lastInteractPlayer)) {
+            return InteractionResult.CONSUME;
+        }
+        lastInteractTick = serverTick;
+        lastInteractPlayer = serverPlayer.getUUID();
         if (!this.isOwnedBy(player) && !LauraConfig.othersCanInteract.get()) {
-            LauraSpeech.say(this, serverPlayer, "not_your_girlfriend", LineFormatter.values());
+            LauraSpeech.refuse(this, serverPlayer);
             return InteractionResult.CONSUME;
         }
         if (LauraConfig.gagEnabled.get() && matchesAny(stack, LauraConfig.gagItems.get())) {
@@ -279,6 +372,10 @@ public class LauraEntity extends TamableAnimal {
         }
         if (isGagged() && (matchesAny(stack, LauraConfig.ungagItems.get()) || (stack.isEmpty() && player.isSecondaryUseActive()))) {
             LauraActions.ungag(serverPlayer, this, false);
+            return InteractionResult.CONSUME;
+        }
+        if (stack.is(Items.WATER_BUCKET)) {
+            LauraActions.wash(serverPlayer, this, hand);
             return InteractionResult.CONSUME;
         }
         if (LauraBags.isWearableOnBack(stack) && getBackItem().isEmpty()
@@ -325,6 +422,9 @@ public class LauraEntity extends TamableAnimal {
             return false;
         }
         Entity attacker = source.getEntity();
+        if (attacker instanceof LivingEntity living && !source.isCreativePlayer() && isShieldedFrom(living)) {
+            return false;
+        }
         boolean hurt = super.hurtServer(level, source, amount);
         if (hurt) {
             if (isAsleep()) {
@@ -341,6 +441,89 @@ public class LauraEntity extends TamableAnimal {
             }
         }
         return hurt;
+    }
+
+    // ------------------------------------------------------------------ players and their companions
+
+    /** The player behind an entity: the player itself, or the owner of a companion or a pet. */
+    @Nullable
+    private static UUID playerBehind(LivingEntity entity) {
+        if (entity instanceof Player) {
+            return entity.getUUID();
+        }
+        if (entity instanceof OwnableEntity owned) {
+            EntityReference<LivingEntity> owner = owned.getOwnerReference();
+            return owner == null ? null : owner.getUUID();
+        }
+        return null;
+    }
+
+    /**
+     * Whether the server lets her side and the side of {@code rival} hurt each other: the PvP
+     * setting first, then the teams (friendly fire).
+     */
+    private boolean pvpAllowedWith(UUID rival, LivingEntity entity) {
+        // The PvP setting is a game rule since Minecraft 26.1.
+        if (!(this.level() instanceof ServerLevel level) || !level.isPvpAllowed()) {
+            return false;
+        }
+        Player rivalPlayer = entity instanceof Player p ? p : this.level().getPlayerByUUID(rival);
+        if (rivalPlayer != null && this.getOwner() instanceof Player partner) {
+            return partner.canHarmPlayer(rivalPlayer);
+        }
+        // One of the two players is away: the teams of the entities decide.
+        return !this.isAlliedTo(entity);
+    }
+
+    /**
+     * Whether she may fight this target. Never her partner, nor her partner's other companions
+     * and pets. A player, or the companion or pet of another player, only when the config allows
+     * it and the server lets the two players fight (PvP setting and teams).
+     */
+    public boolean mayFight(LivingEntity target) {
+        if (target == this || this.isOwnedBy(target)) {
+            return false;
+        }
+        UUID rival = playerBehind(target);
+        if (rival == null) {
+            return true;
+        }
+        if (rival.equals(this.getOwnerUUID())) {
+            return false;
+        }
+        return LauraConfig.attackPlayers.get() && pvpAllowedWith(rival, target);
+    }
+
+    /**
+     * The other side of {@link #mayFight}: where the server forbids fights between players, another
+     * player (or their companion or pet) cannot hurt her either, since she could not answer.
+     */
+    private boolean isShieldedFrom(LivingEntity attacker) {
+        if (!LauraConfig.shieldWithoutPvp.get() || this.getOwnerUUID() == null) {
+            return false;
+        }
+        UUID rival = playerBehind(attacker);
+        return rival != null && !rival.equals(this.getOwnerUUID()) && !pvpAllowedWith(rival, attacker);
+    }
+
+    @Override
+    public boolean canAttack(LivingEntity target) {
+        return mayFight(target) && super.canAttack(target);
+    }
+
+    @Override
+    public boolean wantsToAttack(LivingEntity target, LivingEntity owner) {
+        return mayFight(target);
+    }
+
+    @Override
+    public boolean doHurtTarget(ServerLevel level, Entity target) {
+        if (target instanceof LivingEntity living && !mayFight(living)) {
+            // The rules changed during the fight (PvP turned off, teams changed).
+            this.setTarget(null);
+            return false;
+        }
+        return super.doHurtTarget(level, target);
     }
 
     @Override
@@ -363,6 +546,14 @@ public class LauraEntity extends TamableAnimal {
 
     /** Drops everything she carries at her feet: bag, equipment, items kept for her partner, back item. */
     public void dropBelongings() {
+        if (fetchGoal != null) {
+            // What she carries for a fetch goes back into her bag first, and is dropped with the rest.
+            fetchGoal.cancel(false);
+        }
+        for (ItemStack stack : pendingFetchBag) {
+            this.spawnAtLocation(stack);
+        }
+        pendingFetchBag.clear();
         for (int i = 0; i < inventory.getContainerSize(); i++) {
             ItemStack stack = inventory.removeItemNoUpdate(i);
             if (!stack.isEmpty()) {
@@ -380,6 +571,10 @@ public class LauraEntity extends TamableAnimal {
             this.spawnAtLocation(stack);
         }
         keptOwnerItems.clear();
+        for (ItemStack stack : overflow) {
+            this.spawnAtLocation(stack);
+        }
+        overflow.clear();
         if (!getBackItem().isEmpty()) {
             this.spawnAtLocation(getBackItem().copy());
             setBackItem(ItemStack.EMPTY);
@@ -646,6 +841,7 @@ public class LauraEntity extends TamableAnimal {
             this.wanderCenter = this.blockPosition();
         }
         this.getNavigation().stop();
+        LauraManager.modeChanged(this);
     }
 
     public CombatMode getCombatMode() {
@@ -788,12 +984,27 @@ public class LauraEntity extends TamableAnimal {
             setState(STATE_FLOOR_SLEEP, false);
             this.setPose(Pose.STANDING);
         }
+        sleepOrderedAt = -1;
     }
 
     @Override
     public void stopSleeping() {
         super.stopSleeping();
         setState(STATE_FLOOR_SLEEP, false);
+        sleepOrderedAt = -1;
+    }
+
+    /** Marks the sleep she just started as an order: it lasts until she is rested, not until the next daylight check. */
+    public void markSleepOrdered() {
+        sleepOrderedAt = this.level().getGameTime();
+    }
+
+    public boolean isSleepOrdered() {
+        return sleepOrderedAt >= 0;
+    }
+
+    public long sleepOrderedAt() {
+        return sleepOrderedAt;
     }
 
     /** Bed within the radius that nobody sleeps in. */
@@ -905,10 +1116,18 @@ public class LauraEntity extends TamableAnimal {
         tag.putByte("Combat", (byte) getCombatMode().ordinal());
         tag.putBoolean("Pickup", isPickingUpItems());
         tag.putInt("Affection", getAffection());
-        tag.putInt("GagTicks", isGagged() ? Math.max(gagTicks, 1) : 0);
+        // The real value: 0 means "no timer" (gag.durationSeconds = 0), she keeps the gag after a reload.
+        tag.putInt("GagTicks", isGagged() ? gagTicks : 0);
         tag.putBoolean("Gagged", isGagged());
         tag.putLong("SummonTime", summonGameTime);
-        inventory.storeAsItemList(tag.list("Inventory", ItemStack.CODEC));
+        ValueOutput.TypedOutputList<ItemStack> items = tag.list("Inventory", ItemStack.CODEC);
+        inventory.storeAsItemList(items);
+        for (ItemStack stack : overflow) {
+            if (!stack.isEmpty()) {
+                // Not dropped yet (saved before her first tick): kept, they overflow again at the next load.
+                items.add(stack);
+            }
+        }
         if (!getBackItem().isEmpty()) {
             tag.store("BackItem", ItemStack.CODEC, getBackItem());
         }
@@ -917,6 +1136,25 @@ public class LauraEntity extends TamableAnimal {
             if (!stack.isEmpty()) {
                 kept.add(stack);
             }
+        }
+        // The fetch itself is not saved, only what she already carries for it: without this the items
+        // vanish when she is saved and unloaded, dies, is sent away or changes dimension on the way.
+        List<ItemStack> fetchBag = new ArrayList<>();
+        for (ItemStack stack : pendingFetchBag) {
+            if (!stack.isEmpty()) {
+                fetchBag.add(stack);
+            }
+        }
+        if (fetchGoal != null) {
+            for (ItemStack stack : fetchGoal.carried()) {
+                if (!stack.isEmpty()) {
+                    fetchBag.add(stack);
+                }
+            }
+        }
+        if (!fetchBag.isEmpty()) {
+            ValueOutput.TypedOutputList<ItemStack> saved = tag.list("FetchBag", ItemStack.CODEC);
+            fetchBag.forEach(saved::add);
         }
         if (homePos != null) {
             tag.putInt("HomeX", homePos.getX());
@@ -956,10 +1194,23 @@ public class LauraEntity extends TamableAnimal {
             setGagged(true, tag.getIntOr("GagTicks", 0));
         }
         summonGameTime = tag.getLong("SummonTime").orElseGet(() -> this.level().getGameTime());
-        tag.list("Inventory", ItemStack.CODEC).ifPresent(inventory::fromItemList);
+        overflow.clear();
+        tag.list("Inventory", ItemStack.CODEC).ifPresent(items -> {
+            // Like SimpleContainer.fromItemList, but what no longer fits (general.inventoryRows was lowered)
+            // is kept and dropped at her feet on her first tick instead of being deleted.
+            inventory.clearContent();
+            for (ItemStack stack : items) {
+                ItemStack rest = inventory.addItem(stack);
+                if (!rest.isEmpty()) {
+                    overflow.add(rest);
+                }
+            }
+        });
         keptOwnerItems.clear();
         setBackItem(tag.read("BackItem", ItemStack.CODEC).orElse(ItemStack.EMPTY));
         tag.listOrEmpty("KeptOwnerItems", ItemStack.CODEC).forEach(keptOwnerItems::add);
+        pendingFetchBag.clear();
+        tag.listOrEmpty("FetchBag", ItemStack.CODEC).forEach(pendingFetchBag::add);
         Optional<Integer> homeX = tag.getInt("HomeX");
         if (homeX.isPresent()) {
             homePos = new BlockPos(homeX.get(), tag.getIntOr("HomeY", 0), tag.getIntOr("HomeZ", 0));

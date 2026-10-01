@@ -69,7 +69,12 @@ public interface CookingPots {
 
     List<Recipe> recipes(ServerLevel level);
 
-    /** Puts the ingredients and the containers into the pot. False if it could not. */
+    /**
+     * Puts the ingredients and the containers into the pot. False if it could not, and then the pot
+     * is left untouched (another kind of container already sits in its container slot). On success
+     * the containers the pot took are removed from the {@code containers} stack: what is left in it
+     * did not fit and still belongs to the caller.
+     */
     boolean load(ServerLevel level, BlockPos pos, List<ItemStack> ingredients, ItemStack containers);
 
     /** Takes the served meals out. */

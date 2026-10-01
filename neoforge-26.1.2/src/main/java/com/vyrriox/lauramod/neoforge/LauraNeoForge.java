@@ -30,6 +30,7 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.ServerChatEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
@@ -131,6 +132,11 @@ public final class LauraNeoForge {
             if (event.getEntity() instanceof ServerPlayer player) {
                 ServerLevel from = player.level().getServer().getLevel(event.getFrom());
                 LauraEvents.onPlayerChangedDimension(player, from);
+            }
+        });
+        game.addListener(EntityLeaveLevelEvent.class, event -> {
+            if (!event.getLevel().isClientSide()) {
+                LauraEvents.onEntityUnloaded(event.getEntity());
             }
         });
         game.addListener(LivingDeathEvent.class, event -> {

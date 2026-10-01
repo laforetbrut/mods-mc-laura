@@ -9,6 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -19,11 +20,72 @@ import net.minecraft.world.entity.LivingEntity;
  * @author vyrriox
  */
 public final class LauraSpeech {
+    /** A player who may not command her hears "I am not yours" at most this often, per companion. */
+    private static final long REFUSAL_INTERVAL_MS = 5000;
+    private static final java.util.Map<java.util.UUID, java.util.Map<java.util.UUID, Long>> REFUSALS = new java.util.HashMap<>();
+    private static long spoken;
+    private static long refused;
+
     private LauraSpeech() {
+    }
+
+    /** Lines said to everyone in earshot since the game started (read by the self tests). */
+    public static long spokenCount() {
+        return spoken;
+    }
+
+    /** Refusals answered privately since the game started (read by the self tests). */
+    public static long refusalCount() {
+        return refused;
+    }
+
+    /**
+     * Tells a player who may not command her that she is not theirs. Any player can trigger this on
+     * somebody else's companion, so only that player reads it (no speech bubble, nothing for the
+     * others in earshot) and at most once every few seconds per player and companion.
+     */
+    public static boolean refuse(LauraEntity laura, ServerPlayer to) {
+        if (to == null) {
+            return false;
+        }
+        long now = System.currentTimeMillis();
+        java.util.Map<java.util.UUID, Long> last = REFUSALS.computeIfAbsent(to.getUUID(), id -> new java.util.HashMap<>());
+        Long previous = last.get(laura.getUUID());
+        if (previous != null && now - previous < REFUSAL_INTERVAL_MS) {
+            return false;
+        }
+        if (last.size() >= 64) {
+            last.clear();
+        }
+        last.put(laura.getUUID(), now);
+        String line = DialogueManager.pick(to.clientInformation().language(), laura.isGagged() ? "gagged_talk" : "not_your_girlfriend", laura.getRandom());
+        if (line == null) {
+            return false;
+        }
+        to.sendSystemMessage(Component.literal("<").append(nameComponent(laura)).append("> ").append(format(laura, to, line, LineFormatter.values())));
+        refused++;
+        return true;
+    }
+
+    /** Forgets what was kept about a player who left. */
+    public static void forget(ServerPlayer player) {
+        REFUSALS.remove(player.getUUID());
     }
 
     /** Says a dialogue line to a player. Returns false when no line exists for the key. */
     public static boolean say(LauraEntity laura, ServerPlayer to, String key, LineFormatter.Values values) {
+        return say(laura, to, key, values, false);
+    }
+
+    /**
+     * Her answer to something a player asked from out of earshot (a command, the call key, Laura's
+     * Heart): he gets it even from another dimension, where her voice would not carry.
+     */
+    public static boolean tell(LauraEntity laura, ServerPlayer to, String key, LineFormatter.Values values) {
+        return say(laura, to, key, values, true);
+    }
+
+    private static boolean say(LauraEntity laura, ServerPlayer to, String key, LineFormatter.Values values, boolean reach) {
         if (to == null) {
             return false;
         }
@@ -35,8 +97,19 @@ public final class LauraSpeech {
         if (line == null) {
             return false;
         }
-        deliver(laura, to, format(laura, to, line, values));
+        deliver(laura, to, format(laura, to, line, values), reach);
+        if (com.vyrriox.lauramod.test.LauraSelfTest.enabled()) {
+            SAID.merge(effectiveKey, 1, Integer::sum);
+        }
         return true;
+    }
+
+    /** How many times each dialogue key was said. Only filled during the self tests, which read it. */
+    private static final java.util.Map<String, Integer> SAID = new java.util.HashMap<>();
+
+    /** Self tests: how many times a dialogue key was said since the server started. */
+    public static int timesSaid(String key) {
+        return SAID.getOrDefault(key, 0);
     }
 
     /** Tries the keys in order and says the first one that exists. */
@@ -51,7 +124,7 @@ public final class LauraSpeech {
         if (line == null) {
             return false;
         }
-        deliver(laura, to, format(laura, to, line, values));
+        deliver(laura, to, format(laura, to, line, values), false);
         return true;
     }
 
@@ -72,18 +145,25 @@ public final class LauraSpeech {
         if (line == null) {
             return false;
         }
-        deliver(laura, to, format(laura, to, line, values));
+        deliver(laura, to, format(laura, to, line, values), false);
         return true;
     }
 
     /** Sends an already built message with her prefix. */
     public static void sayRaw(LauraEntity laura, ServerPlayer to, Component message) {
-        deliver(laura, to, message.copy());
+        deliver(laura, to, message.copy(), false);
     }
 
+    /** Her partner when he is in the same dimension as her, null otherwise. */
     public static ServerPlayer owner(LauraEntity laura) {
         LivingEntity owner = laura.getOwner();
         return owner instanceof ServerPlayer player ? player : null;
+    }
+
+    /** Her partner wherever he is on the server, for what must reach him across dimensions. */
+    public static ServerPlayer ownerAnywhere(LauraEntity laura) {
+        MinecraftServer server = laura.level().getServer();
+        return server == null || laura.getOwnerUUID() == null ? null : server.getPlayerList().getPlayer(laura.getOwnerUUID());
     }
 
     private static MutableComponent format(LauraEntity laura, ServerPlayer to, String line, LineFormatter.Values values) {
@@ -103,9 +183,10 @@ public final class LauraSpeech {
 
     /**
      * Proximity chat: everybody close enough hears her (not only the player she talks to), and
-     * nobody further away does.
+     * nobody further away does, except the player she answers when {@code reach} is set.
      */
-    private static void deliver(LauraEntity laura, ServerPlayer to, MutableComponent text) {
+    private static void deliver(LauraEntity laura, ServerPlayer to, MutableComponent text, boolean reach) {
+        spoken++;
         LauraNetwork.sendSpeech(laura, text);
         if (!(laura.level() instanceof net.minecraft.server.level.ServerLevel level)) {
             return;
@@ -115,6 +196,9 @@ public final class LauraSpeech {
             if (inEarshot(laura, player)) {
                 player.sendSystemMessage(message);
             }
+        }
+        if (reach && !inEarshot(laura, to)) {
+            to.sendSystemMessage(message);
         }
     }
 

@@ -18,8 +18,11 @@ import com.vyrriox.lauramod.util.ItemSpec;
 import com.vyrriox.lauramod.world.LauraWorldChecks;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -27,6 +30,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.boat.Boat;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.HashMap;
@@ -47,6 +51,8 @@ public final class LauraBrain {
     private final Needs needs = new Needs();
     private final OwnerWatcher watcher;
     private final Map<String, Long> cooldowns = new HashMap<>();
+    /** Kind of gift or food, to the game time until which it gives no affection again. Saved. */
+    private final Map<String, Long> rewardCooldowns = new HashMap<>();
     private Desire desire;
     private long nextDesireTime = -1;
     private long sulkUntil;
@@ -67,6 +73,11 @@ public final class LauraBrain {
     private String lastRefused = "";
     private long lastRefusedTime;
     private Vec3 lastPos;
+    /** Water that ran over her since she was last dry, in hygiene points. */
+    private float washed;
+    private boolean dirtyBeforeBath;
+    /** The dimension she was last in with her partner. */
+    private ResourceKey<Level> togetherIn;
     private boolean wasRaining;
     private boolean wasThundering;
     private boolean wasNight;
@@ -143,6 +154,7 @@ public final class LauraBrain {
         if (needsOn) {
             decayNeeds(owner, ownerNear);
         }
+        tickBath(needsOn);
         regenerate(needsOn);
         if (needsOn && LauraConfig.autoEat.get() && needs.get(Needs.Need.HUNGER) < 35 && now - lastAte > 200 && !laura.isGagged()) {
             eatFromInventory();
@@ -152,6 +164,9 @@ public final class LauraBrain {
             stealFood(owner);
         }
         updateMood(now);
+        if (ownerNear) {
+            arriveTogether(owner);
+        }
         if (owner != null) {
             if (needsOn && LauraConfig.desiresEnabled.get() && !laura.isAsleep()) {
                 tickDesire(now, owner, ownerNear);
@@ -220,16 +235,78 @@ public final class LauraBrain {
         }
         needs.add(Needs.Need.ATTENTION, (float) -(attention * (asleep ? 0.1 : 1.0)));
 
-        if (laura.isInWater()) {
-            needs.add(Needs.Need.HYGIENE, 5F);
-        } else if (laura.isInWaterOrRain()) {
-            needs.add(Needs.Need.HYGIENE, 1F);
-        } else {
+        // Water and rain clean her instead: see tickBath.
+        if (!laura.isInWaterOrRain()) {
             double hygiene = perSecond(LauraConfig.hygieneMinutes.getInt()) * decay * (fighting ? 2.0 : 1.0);
             needs.add(Needs.Need.HYGIENE, (float) -hygiene);
         }
         if (needs.get(Needs.Need.HYGIENE) < 15 && laura.getRandom().nextInt(4) == 0) {
             laura.spawnParticles(ParticleTypes.MYCELIUM, 3, 0.4);
+        }
+    }
+
+    /** Hygiene points of water that make a bath: 4 seconds in water, or 20 seconds of rain, in a row. */
+    private static final float BATH = 20F;
+
+    /**
+     * Water washes her wherever it comes from: the bath she takes by herself, a pool her partner
+     * leads or pushes her into, the rain. Once enough of it ran over a Laura who was not perfectly
+     * clean, she has had her bath.
+     */
+    private void tickBath(boolean needsOn) {
+        float water = laura.isInWater() ? 5F : laura.isInWaterOrRain() ? 1F : 0F;
+        if (water == 0) {
+            washed = 0;
+            return;
+        }
+        if (washed == 0) {
+            dirtyBeforeBath = !needsOn || Math.round(needs.get(Needs.Need.HYGIENE)) < Needs.MAX;
+        }
+        if (needsOn) {
+            needs.add(Needs.Need.HYGIENE, water);
+        }
+        boolean wasBathing = washed < BATH;
+        washed += water;
+        if (dirtyBeforeBath && wasBathing && washed >= BATH) {
+            onWashed(null);
+        }
+    }
+
+    /**
+     * She is clean again: her line, and the bath advancement. {@code by} is the player who washed
+     * her, null when the water did it (her partner then gets it, wherever he is).
+     */
+    public void onWashed(ServerPlayer by) {
+        ServerPlayer partner = by != null ? by : LauraSpeech.ownerAnywhere(laura);
+        // Water washes her at every river she swims across and every shower of rain: she does not say so each time.
+        if (by != null || ready("washed", 300, false)) {
+            LauraSpeech.say(laura, partner, "need.hygiene.clean", LineFormatter.values());
+        }
+        LauraAdvancements.award(partner, "bath");
+    }
+
+    /**
+     * Together in a dimension they were not in a moment ago, however each of them got there (a
+     * portal taken by one or the other, a call, a command): she says what she thinks of the place,
+     * and the Nether and the End count for their advancements.
+     */
+    private void arriveTogether(ServerPlayer owner) {
+        ResourceKey<Level> here = laura.level().dimension();
+        if (here.equals(togetherIn)) {
+            return;
+        }
+        // No line the first time she is seen at all (a summon, an old save): she did not travel.
+        boolean travelled = togetherIn != null;
+        togetherIn = here;
+        String place = here == Level.NETHER ? "nether" : here == Level.END ? "end" : here == Level.OVERWORLD ? "overworld" : null;
+        if (place == null) {
+            return;
+        }
+        if (travelled) {
+            LauraSpeech.say(laura, owner, "dimension." + place, LineFormatter.values());
+        }
+        if (!place.equals("overworld")) {
+            LauraAdvancements.award(owner, place);
         }
     }
 
@@ -302,6 +379,11 @@ public final class LauraBrain {
         return now() < sulkUntil;
     }
 
+    /** She holds something against her partner: she sulks, or is still angry (a hit, an insult, something disgusting to eat). */
+    public boolean holdsGrudge() {
+        return isSulking() || now() < angryUntil;
+    }
+
     public void makeHappy(int seconds) {
         happyUntil = Math.max(happyUntil, now() + seconds * 20L);
         angryUntil = 0;
@@ -332,18 +414,30 @@ public final class LauraBrain {
 
     /** Eats one item of the stack if she can. Returns true if she ate it (the caller consumes it). */
     public boolean eat(ItemStack stack, ServerPlayer from) {
+        return eat(stack, from, true);
+    }
+
+    /**
+     * Eats one item of the stack. She says one line per item, never more: the wish it fulfils, or
+     * what she thinks of the food. With {@code speak} false she says nothing (the caller does).
+     */
+    private boolean eat(ItemStack stack, ServerPlayer from, boolean speak) {
         GiftTable.FoodInfo food = GiftTable.food(stack);
         if (food == null) {
             return false;
         }
         ServerPlayer talkTo = from != null ? from : owner();
         if (laura.isGagged()) {
-            LauraSpeech.say(laura, talkTo, "gagged_talk", LineFormatter.values());
+            if (speak) {
+                LauraSpeech.say(laura, talkTo, "gagged_talk", LineFormatter.values());
+            }
             return false;
         }
         boolean wanted = desire != null && desire.kind() == DesireType.Kind.ITEM && desire.itemSpec() != null && desire.itemSpec().test(stack);
         if (needs.get(Needs.Need.HUNGER) > 92 && food.preference() != GiftTable.Preference.FAVORITE && !wanted) {
-            LauraSpeech.say(laura, talkTo, "eat.not_hungry", LineFormatter.values().with("item", stack.getHoverName()));
+            if (speak) {
+                LauraSpeech.say(laura, talkTo, "eat.not_hungry", LineFormatter.values().with("item", stack.getHoverName()));
+            }
             return false;
         }
         ItemStack eaten = stack.copyWithCount(1);
@@ -353,11 +447,12 @@ public final class LauraBrain {
         laura.playSound(SoundEvents.GENERIC_EAT.value(), 0.8F, 0.9F + laura.getRandom().nextFloat() * 0.2F);
         laura.spawnItemParticles(eaten, 8);
         LineFormatter.Values values = LineFormatter.values().with("item", eaten.getHoverName());
+        String line;
         if (food.preference() == GiftTable.Preference.DISLIKED) {
             needs.add(Needs.Need.HUNGER, food.nutrition() * 2F);
             changeAffection(from != null ? -10 : 0);
             angryUntil = now() + 20 * 20;
-            LauraSpeech.say(laura, talkTo, "eat.disliked", values);
+            line = "eat.disliked";
             if (from != null) {
                 LauraAdvancements.award(from, "disliked_food");
             }
@@ -365,17 +460,20 @@ public final class LauraBrain {
             needs.add(Needs.Need.HUNGER, food.nutrition() * 6F + food.saturation() * 2F);
             laura.heal(food.nutrition() * 2F);
             if (food.preference() == GiftTable.Preference.FAVORITE) {
-                needs.add(Needs.Need.FUN, 10);
-                if (from != null) {
+                // She always eats her favorite food, but being fed the same treat again and again
+                // only makes her fonder once per cooldown.
+                boolean rewarded = from != null && rewardReady(rewardKey(eaten, GiftTable.find(eaten)));
+                if (from == null || rewarded) {
+                    needs.add(Needs.Need.FUN, 10);
+                }
+                if (rewarded) {
                     changeAffection(5);
                     laura.hearts(3);
-                }
-                LauraSpeech.say(laura, talkTo, "eat.favorite", values);
-                if (from != null) {
                     LauraAdvancements.award(from, "favorite_food");
                 }
+                line = "eat.favorite";
             } else {
-                LauraSpeech.say(laura, talkTo, from != null ? "eat.fed" : "eat.self", values);
+                line = from != null ? "eat.fed" : "eat.self";
             }
         }
         if (from != null) {
@@ -386,7 +484,9 @@ public final class LauraBrain {
         // on the spot instead of keeping it. Food she takes from her own bag only counts for wishes
         // that are about eating.
         if (wanted && (desire.mustEat() || from != null)) {
-            fulfillDesire();
+            fulfillDesire(speak);
+        } else if (speak) {
+            LauraSpeech.say(laura, talkTo, line, values);
         }
         laura.level().getServer().schedule(new net.minecraft.server.TickTask(laura.level().getServer().getTickCount() + 30, () -> laura.setCarried(ItemStack.EMPTY)));
         return true;
@@ -437,7 +537,7 @@ public final class LauraBrain {
             if (food != null && food.preference() != GiftTable.Preference.DISLIKED) {
                 ItemStack stolen = stack.copyWithCount(1);
                 laura.swing(net.minecraft.world.InteractionHand.MAIN_HAND);
-                if (eat(stolen, null)) {
+                if (eat(stolen, null, false)) {
                     stack.shrink(1);
                     LauraSpeech.say(laura, owner, "steal_food", LineFormatter.values().with("item", stolen.getHoverName()));
                     LauraAdvancements.award(owner, "steal_food");
@@ -449,7 +549,10 @@ public final class LauraBrain {
 
     // ------------------------------------------------------------------ gifts
 
-    /** Returns true if the item was accepted (the caller consumes it). */
+    /**
+     * Returns true if the item was accepted (the caller consumes it). She says one line per item,
+     * never more: the gift she gives back, the wish it fulfils, her full bag, or what she thinks of it.
+     */
     public boolean receiveGift(ServerPlayer from, ItemStack stack) {
         GiftTable.Gift gift = GiftTable.find(stack);
         boolean wanted = desire != null && desire.kind() == DesireType.Kind.ITEM && desire.itemSpec() != null && desire.itemSpec().test(stack);
@@ -460,56 +563,120 @@ public final class LauraBrain {
         }
         ItemStack given = stack.copyWithCount(1);
         LineFormatter.Values values = LineFormatter.values().with("item", given.getHoverName());
+        // The same kind of gift only counts once per cooldown: it is still stored and still fulfils a
+        // wish, but gives no affection, no fun and no gift back (she can hand it back and be given it
+        // again). A gift she dislikes always counts.
+        boolean rewarded = gift == null || gift.affection() <= 0 || rewardReady(rewardKey(given, gift));
         needs.add(Needs.Need.ATTENTION, 10);
+        String line;
         if (gift != null) {
-            changeAffection(gift.affection());
-            needs.add(Needs.Need.FUN, gift.fun());
+            if (rewarded) {
+                changeAffection(gift.affection());
+                needs.add(Needs.Need.FUN, gift.fun());
+            }
             if (gift.tier() == GiftTable.Tier.GROSS) {
                 angryUntil = now() + 30 * 20;
-            } else if (gift.tier().ordinal() >= GiftTable.Tier.GREAT.ordinal()) {
+            } else if (rewarded && gift.tier().ordinal() >= GiftTable.Tier.GREAT.ordinal()) {
                 makeHappy(120);
                 laura.hearts(5);
             } else {
                 laura.hearts(2);
             }
-            LauraSpeech.say(laura, from, "gift." + gift.tier().key(), values);
-            LauraAdvancements.add(from, "gifts", 1);
+            line = "gift." + gift.tier().key();
             com.vyrriox.lauramod.api.LauraAPI.fire("gift", laura, from, net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(given.getItem()).toString());
-            if (gift.tier() == GiftTable.Tier.AMAZING) {
-                LauraAdvancements.award(from, "gift_amazing");
+            if (rewarded) {
+                LauraAdvancements.add(from, "gifts", 1);
+                if (gift.tier() == GiftTable.Tier.AMAZING) {
+                    LauraAdvancements.award(from, "gift_amazing");
+                }
             }
         } else {
             laura.hearts(3);
-            LauraSpeech.say(laura, from, "gift.nice", values);
+            line = "gift.nice";
         }
+        boolean bagFull = false;
         if (gift == null || gift.tier() != GiftTable.Tier.GROSS) {
-            ItemStack rest = laura.bags().add(given);
-            if (!rest.isEmpty() && laura.getRandom().nextBoolean()) {
-                LauraSpeech.say(laura, from, "inventory_full", values);
+            ItemStack rest = laura.bags().add(given.copy());
+            if (!rest.isEmpty()) {
+                // No room left: the gift is not destroyed, it lands at her feet.
+                laura.spawnAtLocation(rest);
+                bagFull = true;
             }
         }
-        if (gift != null && gift.returnChance() > 0 && laura.getRandom().nextDouble() < gift.returnChance() * affectionFactor()) {
-            ItemStack back = GiftTable.rollReturnGift(laura.getRandom());
-            if (!back.isEmpty()) {
-                laura.playEmote(Emote.BLUSH);
-                giveToPlayer(from, back);
-                LauraSpeech.say(laura, from, "gift.return", LineFormatter.values().with("item", back.getHoverName()).with("count", back.getCount()));
-                LauraAdvancements.award(from, "gift_return");
-            }
+        ItemStack back = ItemStack.EMPTY;
+        if (rewarded && gift != null && gift.returnChance() > 0 && laura.getRandom().nextDouble() < gift.returnChance() * affectionFactor()) {
+            back = giveReturnGift(from);
         }
-        if (wanted || flowerWanted) {
-            fulfillDesire();
+        boolean fulfils = wanted || flowerWanted;
+        if (fulfils) {
+            fulfillDesire(back.isEmpty());
+        }
+        if (!back.isEmpty()) {
+            LauraSpeech.say(laura, from, "gift.return", LineFormatter.values().with("item", back.getHoverName()).with("count", back.getCount()));
+        } else if (!fulfils) {
+            LauraSpeech.say(laura, from, bagFull ? "inventory_full" : line, values);
         }
         return true;
+    }
+
+    /**
+     * Hands one of her return gifts to the player. Returns a copy of what she gave (EMPTY when the
+     * table has none): the name and the count she announces come from that copy, never from a stack
+     * the player's inventory has already taken.
+     */
+    public ItemStack giveReturnGift(ServerPlayer to) {
+        ItemStack back = GiftTable.rollReturnGift(laura.getRandom());
+        if (back.isEmpty()) {
+            return ItemStack.EMPTY;
+        }
+        laura.playEmote(Emote.BLUSH);
+        giveToPlayer(to, back);
+        LauraAdvancements.award(to, "gift_return");
+        return back.copy();
     }
 
     private double affectionFactor() {
         return 0.5 + laura.getAffection() / 1000.0;
     }
 
+    /** One cooldown per gift entry (a tag entry covers all its items), or per item for plain food. */
+    private static String rewardKey(ItemStack stack, GiftTable.Gift gift) {
+        return gift != null ? gift.match().raw() : net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(stack.getItem()).toString();
+    }
+
+    /** True (and arms the cooldown) when this kind of gift or food may give affection again. */
+    private boolean rewardReady(String key) {
+        int seconds = LauraConfig.giftCooldownSeconds.getInt();
+        if (seconds <= 0) {
+            return true;
+        }
+        long now = now();
+        Long until = rewardCooldowns.get(key);
+        if (until != null && now < until) {
+            return false;
+        }
+        if (rewardCooldowns.size() >= 256) {
+            rewardCooldowns.values().removeIf(t -> t <= now);
+            if (rewardCooldowns.size() >= 256) {
+                rewardCooldowns.clear();
+            }
+        }
+        rewardCooldowns.put(key, now + seconds * 20L);
+        return true;
+    }
+
+    /**
+     * Gives the stack to the player; what does not fit in their inventory is dropped at their feet.
+     * The stack passed in is left untouched, so callers can still read its name and its count.
+     */
     public void giveToPlayer(ServerPlayer player, ItemStack stack) {
-        if (!player.getInventory().add(stack) && !stack.isEmpty()) {
-            player.drop(stack, false);
+        if (stack.isEmpty()) {
+            return;
+        }
+        ItemStack moving = stack.copy();
+        player.getInventory().add(moving);
+        if (!moving.isEmpty()) {
+            player.drop(moving, false);
         }
     }
 
@@ -628,6 +795,11 @@ public final class LauraBrain {
     }
 
     private void fulfillDesire() {
+        fulfillDesire(true);
+    }
+
+    /** With {@code speak} false the wish is fulfilled without her line (the caller says one). */
+    private void fulfillDesire(boolean speak) {
         if (desire == null) {
             return;
         }
@@ -644,8 +816,10 @@ public final class LauraBrain {
         laura.hearts(8);
         laura.playLauraSound(LauraRegistries.Sound.HAPPY, 1.0F, 1.1F);
         if (owner != null) {
-            LineFormatter.Values values = LineFormatter.values().with("item", done.describe()).with("place", done.describe()).with("activity", done.describe());
-            LauraSpeech.sayFirst(laura, owner, values, "desire.fulfilled." + done.kind().key(), "desire.fulfilled");
+            if (speak) {
+                LineFormatter.Values values = LineFormatter.values().with("item", done.describe()).with("place", done.describe()).with("activity", done.describe());
+                LauraSpeech.sayFirst(laura, owner, values, "desire.fulfilled." + done.kind().key(), "desire.fulfilled");
+            }
             LauraAdvancements.add(owner, "desires", 1);
             com.vyrriox.lauramod.api.LauraAPI.fire("desire_fulfilled", laura, owner, done.syncString());
             if (done.kind() == DesireType.Kind.PLACE) {
@@ -1082,6 +1256,20 @@ public final class LauraBrain {
         return true;
     }
 
+    /**
+     * Same memory as {@link #refuses}, for what she pushes away herself: true when she refused this
+     * very thing less than 20 seconds ago (asking twice works), otherwise the refusal is remembered.
+     */
+    public boolean askedAgain(String order) {
+        if (order.equals(lastRefused) && now() - lastRefusedTime < 20 * 20) {
+            lastRefused = "";
+            return true;
+        }
+        lastRefused = order;
+        lastRefusedTime = now();
+        return false;
+    }
+
     /** Talking to her in chat (any message from her partner). */
     public void onChatFromOwner() {
         if (ready("chat_attention", 8, false)) {
@@ -1149,6 +1337,7 @@ public final class LauraBrain {
         sulkUntil = 0;
         angryUntil = 0;
         jealousUntil = 0;
+        togetherIn = null;
         makeHappy(120);
     }
 
@@ -1167,6 +1356,16 @@ public final class LauraBrain {
         tag.putLong("HappyLeft", Math.max(0, happyUntil - now));
         tag.putInt("LastAnniversary", lastAnniversary);
         tag.putLong("NextPlayfulHit", nextPlayfulHit < 0 ? -1 : Math.max(0, nextPlayfulHit - now));
+        CompoundTag rewards = new CompoundTag();
+        rewardCooldowns.forEach((key, until) -> {
+            if (until > now) {
+                rewards.putLong(key, until - now);
+            }
+        });
+        tag.put("GiftCooldowns", rewards);
+        if (togetherIn != null) {
+            tag.putString("TogetherIn", togetherIn.identifier().toString());
+        }
         return tag;
     }
 
@@ -1181,6 +1380,13 @@ public final class LauraBrain {
         lastAnniversary = tag.contains("LastAnniversary") ? tag.getIntOr("LastAnniversary", 0) : -1;
         long hit = tag.contains("NextPlayfulHit") ? tag.getLongOr("NextPlayfulHit", 0L) : -1;
         nextPlayfulHit = hit < 0 ? -1 : now + hit;
+        rewardCooldowns.clear();
+        CompoundTag rewards = tag.getCompoundOrEmpty("GiftCooldowns");
+        for (String key : rewards.keySet()) {
+            rewardCooldowns.put(key, now + rewards.getLongOr(key, 0L));
+        }
+        Identifier together = tag.contains("TogetherIn") ? Identifier.tryParse(tag.getStringOr("TogetherIn", "")) : null;
+        togetherIn = together == null ? null : ResourceKey.create(Registries.DIMENSION, together);
     }
 
     /** Used by chat and the menu: which need is the most urgent, and how urgent. */
@@ -1222,6 +1428,22 @@ public final class LauraBrain {
             return true;
         }
         return !night && energy > 40;
+    }
+
+    /**
+     * True when a sleep she was ordered to take is over. Unlike {@link #canWakeUp()}, daylight alone
+     * does not end it: an ordered nap lasts until she is rested (or, when needs are off, until it is
+     * day and she has slept three minutes).
+     */
+    public boolean orderedSleepOver() {
+        ServerPlayer owner = owner();
+        if (owner != null && owner.isSleeping()) {
+            return false;
+        }
+        if (LauraConfig.needsEnabled.get()) {
+            return needs.get(Needs.Need.ENERGY) >= 98;
+        }
+        return !LauraWorldChecks.isNight(laura.level()) && now() - laura.sleepOrderedAt() >= 20 * 180;
     }
 
     public ItemSpec desiredItem() {
