@@ -441,13 +441,7 @@ public final class LauraCommand {
                 }))
                 .then(Commands.literal("remove").then(Commands.argument("player", EntityArgument.player()).executes(c -> {
                     ServerPlayer target = EntityArgument.getPlayer(c, "player");
-                    for (LauraEntity laura : LauraManager.findAll(target)) {
-                        laura.discard();
-                    }
-                    LauraWorldData data = LauraWorldData.get(c.getSource().getServer());
-                    for (LauraWorldData.Record r : data.byOwner(target.getUUID())) {
-                        data.remove(r.laura);
-                    }
+                    LauraManager.removeAll(c.getSource().getServer(), target);
                     c.getSource().sendSuccess(() -> Component.translatable("lauramod.admin.removed", target.getName()), true);
                     return 1;
                 })))

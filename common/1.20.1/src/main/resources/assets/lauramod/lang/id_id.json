@@ -446,6 +446,8 @@
   "lauramod.skin.changed": "Penampilan baru: %s",
   "lauramod.skin.reset": "Kembali ke skin bawaannya.",
   "lauramod.skin.not_allowed": "Kamu tidak boleh mengubah penampilannya.",
+  "lauramod.look.cooldown": "Jangan terburu-buru: tunggu beberapa detik sebelum mengubah penampilannya lagi.",
+  "lauramod.network.server_missing": "My Girlfriend Laura tidak terpasang di server ini. Mod ini diperlukan di kedua sisi: minta server untuk menambahkannya, atau hapus dari folder mods kamu untuk bermain di sini.",
   "lauramod.skin.url_disabled": "Skin dari URL dinonaktifkan di server ini.",
   "lauramod.skin.url_refused": "Situs ini tidak diizinkan. Yang diizinkan: %s",
   "lauramod.skin.file_missing": "Server tidak punya skin bernama %s.",

@@ -40,6 +40,9 @@ final class ForgePlatform implements Platform {
         this.container = container;
         this.ae2 = ModList.get().isLoaded("ae2");
         this.curios = ModList.get().isLoaded("curios");
+        if (this.curios) {
+            CuriosTrinkets.register();
+        }
     }
 
     // The compat classes are only touched behind these checks, so they are never loaded without their mod.
@@ -55,6 +58,18 @@ final class ForgePlatform implements Platform {
     @Override
     public boolean equipTrinket(LivingEntity entity, ItemStack stack, boolean simulate) {
         return curios && CuriosTrinkets.equip(entity, stack, simulate);
+    }
+
+    @Override
+    public java.util.List<ItemStack> trinkets(LivingEntity entity) {
+        return curios ? CuriosTrinkets.worn(entity) : java.util.List.of();
+    }
+
+    @Override
+    public void dropTrinkets(LivingEntity entity) {
+        if (curios) {
+            CuriosTrinkets.dropAll(entity);
+        }
     }
 
     @Override
@@ -126,6 +141,17 @@ final class ForgePlatform implements Platform {
         if (player.connection != null && LauraChannel.isRemotePresent(player.connection.connection)) {
             LauraChannel.sendToPlayer(player, data);
         }
+    }
+
+    @Override
+    public boolean mayUseContainer(ServerPlayer player, ServerLevel level, BlockPos pos) {
+        // The event Forge posts when a player right clicks a block: claim mods deny it there.
+        net.minecraft.world.phys.BlockHitResult hit = new net.minecraft.world.phys.BlockHitResult(
+                net.minecraft.world.phys.Vec3.atCenterOf(pos), net.minecraft.core.Direction.UP, pos, false);
+        net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock event =
+                new net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock(player, net.minecraft.world.InteractionHand.MAIN_HAND, pos, hit);
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event);
+        return !event.isCanceled() && event.getUseBlock() != net.minecraftforge.eventbus.api.Event.Result.DENY;
     }
 
     @Override

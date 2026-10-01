@@ -446,6 +446,8 @@
   "lauramod.skin.changed": "Nový vzhled: %s",
   "lauramod.skin.reset": "Zpět k jejímu výchozímu skinu.",
   "lauramod.skin.not_allowed": "Nemáš oprávnění měnit její vzhled.",
+  "lauramod.look.cooldown": "Ne tak rychle: počkej pár sekund, než znovu změníš její vzhled.",
+  "lauramod.network.server_missing": "My Girlfriend Laura není na tomto serveru nainstalován. Mod je potřeba na obou stranách: požádej server, aby ho přidal, nebo ho odeber ze své složky mods, abys tu mohl hrát.",
   "lauramod.skin.url_disabled": "Skiny z adres URL jsou na tomto serveru vypnuté.",
   "lauramod.skin.url_refused": "Tento web není povolen. Povolené: %s",
   "lauramod.skin.file_missing": "Server nemá skin s názvem %s.",

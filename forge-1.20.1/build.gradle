@@ -155,6 +155,9 @@ dependencies {
         runtimeOnly(fg.deobf("dev.architectury:architectury-forge:${architectury_version}")) {
             transitive = false
         }
+        runtimeOnly(fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")) {
+            transitive = false
+        }
     }
 }
 
