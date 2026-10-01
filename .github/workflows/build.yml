@@ -1,7 +1,11 @@
 name: Build
 
+# Runs for a release (a version tag such as v2.0.0), for pull requests, and by hand from the
+# Actions page. A plain push to a branch does not start it.
 on:
   push:
+    tags:
+      - 'v*'
   pull_request:
   workflow_dispatch:
 
