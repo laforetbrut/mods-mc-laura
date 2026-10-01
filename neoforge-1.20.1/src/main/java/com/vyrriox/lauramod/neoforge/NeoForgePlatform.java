@@ -155,6 +155,12 @@ final class NeoForgePlatform implements Platform {
     }
 
     @Override
+    public boolean mayChangeDimension(net.minecraft.world.entity.Entity entity, net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level> destination) {
+        // The event NeoForge posts before a portal takes an entity to another dimension: other mods cancel it there.
+        return net.minecraftforge.common.ForgeHooks.onTravelToDimension(entity, destination);
+    }
+
+    @Override
     public InventoryAccess inventoryAt(ServerLevel level, BlockPos pos) {
         if (!level.isLoaded(pos)) {
             return null;

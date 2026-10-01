@@ -65,6 +65,16 @@ public interface Platform {
     }
 
     /**
+     * Asks the other mods whether the entity may leave for another dimension, the way the loader
+     * does before a portal takes it (a protection or a dimension mod cancels the trip there). True
+     * when nobody objects. Minecraft 1.20.1 teleports an entity to another level without asking:
+     * the trips the mod makes itself ask here.
+     */
+    default boolean mayChangeDimension(net.minecraft.world.entity.Entity entity, net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level> destination) {
+        return true;
+    }
+
+    /**
      * The inventory inside an item (a backpack), through the loader's item API. Null when the item
      * has none or the loader cannot tell.
      */
