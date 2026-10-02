@@ -1,0 +1,42 @@
+# Fourth session: the Settings tab again, with the display options as they are by default.
+world laura_capture 20261001
+wait 100
+clear
+hud off
+notoast on
+rd 16
+bubbles on
+thoughts on
+time 11800
+tp 877.5 112 -766.5 180 5
+wait 160
+cmd tp @e[type=!minecraft:player,type=!lauramod:laura,distance=..128] ~ -300 ~
+tp 877.5 112 -766.5 180 5
+wait 6
+laura front 4.5
+wait 6
+fov 40
+cam 6.0 1.5 0 1.1 0
+wait 100
+laura emote NONE
+guiscale 2
+mouse 3 3
+lang en_us
+wait 260
+screen menu SETTINGS
+wait 14
+shot m_en_settings
+screen none
+wait 6
+lang fr_fr
+wait 260
+screen menu SETTINGS
+wait 14
+shot m_fr_settings
+screen none
+wait 6
+mouse free
+bubbles off
+thoughts off
+wait 6
+quit

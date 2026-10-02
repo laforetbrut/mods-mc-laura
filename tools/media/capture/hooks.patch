@@ -1,0 +1,29 @@
+diff --git a/common/1.21.1/src/main/java/com/vyrriox/lauramod/client/LauraClient.java b/common/1.21.1/src/main/java/com/vyrriox/lauramod/client/LauraClient.java
+index b188f95..af0ff6e 100644
+--- a/common/1.21.1/src/main/java/com/vyrriox/lauramod/client/LauraClient.java
++++ b/common/1.21.1/src/main/java/com/vyrriox/lauramod/client/LauraClient.java
+@@ -101,6 +101,7 @@ public final class LauraClient {
+         Minecraft mc = Minecraft.getInstance();
+         ClientState.ticks++;
+         ClientSelfTest.tick();
++        CaptureStudio.tick();
+         if (mc.player == null || mc.level == null) {
+             if (joined) {
+                 joined = false;
+diff --git a/neoforge-1.21.1/build.gradle b/neoforge-1.21.1/build.gradle
+index 5b164e2..52b8592 100644
+--- a/neoforge-1.21.1/build.gradle
++++ b/neoforge-1.21.1/build.gradle
+@@ -49,6 +49,12 @@ neoForge {
+             programArguments.addAll('--quickPlaySingleplayer', 'laura_test')
+             systemProperty 'lauramod.clienttest', 'true'
+         }
++        capture {
++            client()
++            gameDirectory = project.file('run-capture')
++            programArguments.addAll('--width', '1600', '--height', '900')
++            systemProperty 'lauramod.capture', project.findProperty('captureScript') ?: 'capture.txt'
++        }
+         // Dedicated server that runs the mod's self tests, writes lauramod-selftest.json and stops.
+         selftest {
+             server()

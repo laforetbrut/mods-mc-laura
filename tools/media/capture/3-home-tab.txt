@@ -1,0 +1,40 @@
+# Third session: the Home tab again, with the pointer in front of her so the preview faces the player.
+world laura_capture 20261001
+wait 100
+clear
+hud off
+notoast on
+rd 16
+bubbles off
+thoughts off
+time 11800
+tp 877.5 112 -766.5 180 5
+wait 160
+cmd tp @e[type=!minecraft:player,type=!lauramod:laura,distance=..128] ~ -300 ~
+tp 877.5 112 -766.5 180 5
+wait 6
+laura front 4.5
+wait 6
+fov 40
+cam 6.0 1.5 0 1.1 0
+wait 100
+laura emote NONE
+guiscale 2
+mouse 650 392
+lang en_us
+wait 260
+screen menu HOME
+wait 14
+shot m_en_home
+screen none
+wait 6
+lang fr_fr
+wait 260
+screen menu HOME
+wait 14
+shot m_fr_home
+screen none
+wait 6
+mouse free
+wait 6
+quit

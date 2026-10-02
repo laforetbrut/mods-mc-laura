@@ -1,0 +1,133 @@
+# Second session: idle clip, the six outfits at rest, the menus without tooltips.
+world laura_capture 20261001
+wait 100
+clear
+hud off
+notoast on
+rd 16
+bubbles off
+thoughts off
+time 11800
+tp 877.5 112 -766.5 180 5
+wait 160
+cmd tp @e[type=!minecraft:player,type=!lauramod:laura,distance=..128] ~ -300 ~
+cmd kill @e[type=minecraft:item]
+laura summon
+wait 120
+laura fill
+laura happy 6000
+laura affection 700
+laura skin laura
+wait 6
+laura emote NONE
+tp 877.5 112 -766.5 180 5
+wait 6
+laura front 4.5
+wait 6
+fov 40
+cam 6.0 1.5 0 1.1 0
+wait 120
+bubble 0 x
+shot r_plate
+record idle_c 70
+wait 76
+laura skin laura_summer
+wait 6
+laura emote NONE
+wait 40
+shot skin2_laura_summer
+laura skin laura_winter
+wait 6
+laura emote NONE
+wait 40
+shot skin2_laura_winter
+laura skin laura_night
+wait 6
+laura emote NONE
+wait 40
+shot skin2_laura_night
+laura skin laura_sporty
+wait 6
+laura emote NONE
+wait 40
+shot skin2_laura_sporty
+laura skin laura_gothic
+wait 6
+laura emote NONE
+wait 40
+shot skin2_laura_gothic
+laura skin laura
+wait 6
+laura emote NONE
+wait 40
+shot skin2_laura
+laura need HUNGER 66
+laura need ENERGY 91
+laura need FUN 97
+laura need HYGIENE 95
+laura desire ITEM minecraft:cake
+wait 10
+guiscale 2
+mouse 3 3
+lang en_us
+wait 260
+screen menu HOME
+wait 14
+shot m_en_home
+screen menu ORDERS
+wait 14
+shot m_en_orders
+screen menu EMOTES
+wait 14
+shot m_en_emotes
+screen menu WORK
+wait 14
+shot m_en_work
+screen menu FETCH
+wait 14
+shot m_en_fetch
+screen menu STYLE
+wait 14
+shot m_en_style
+screen menu SETTINGS
+wait 14
+shot m_en_settings
+mouse 800 450
+screen wheel
+wait 14
+shot w_en
+screen none
+wait 6
+mouse 3 3
+lang fr_fr
+wait 260
+screen menu HOME
+wait 14
+shot m_fr_home
+screen menu ORDERS
+wait 14
+shot m_fr_orders
+screen menu EMOTES
+wait 14
+shot m_fr_emotes
+screen menu WORK
+wait 14
+shot m_fr_work
+screen menu FETCH
+wait 14
+shot m_fr_fetch
+screen menu STYLE
+wait 14
+shot m_fr_style
+screen menu SETTINGS
+wait 14
+shot m_fr_settings
+mouse 800 450
+screen wheel
+wait 14
+shot w_fr
+screen none
+wait 6
+mouse free
+wait 6
+quit

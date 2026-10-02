@@ -1,0 +1,38 @@
+# Fifth session: the farmer at work at the edge of a wheat field. Plants do not wave and the sun does not move (see the README).
+world laura_farm 20261001
+wait 100
+clear
+hud off
+notoast on
+rd 16
+bubbles off
+thoughts off
+time 11800
+cmd gamerule doDaylightCycle false
+tp 877.5 112 -766.5 180 5
+wait 160
+cmd tp @e[type=!minecraft:player,type=!lauramod:laura,distance=..128] ~ -300 ~
+tp 877.5 112 -766.5 180 5
+wait 6
+laura at 877.5 112 -770.5 0
+laura nodesire
+laura fill
+laura happy 6000
+laura emote NONE
+field 870 -778 885 -770 877
+wait 10
+cmd kill @e[type=minecraft:item]
+laura at 877.5 112 -770.5 0
+laura hold minecraft:iron_hoe
+fov 40
+cam 6.5 2.4 0 1.1 0
+wait 80
+shot farm_plate
+crops 868 108 -780 887 116 -768
+record farm 320
+wait 24
+laura job FARMER 6
+wait 300
+crops off
+wait 4
+quit

@@ -1,0 +1,275 @@
+# First session: the banner, the emotes, the chat scenes, the outfits and the menus.
+world laura_capture 20261001
+wait 100
+clear
+hud off
+notoast on
+rd 16
+time 11800
+tp 877.5 112 -766.5 180 5
+wait 160
+cmd tp @e[type=!minecraft:player,type=!lauramod:laura,distance=..128] ~ -300 ~
+cmd kill @e[type=minecraft:item]
+laura summon
+wait 120
+laura fill
+laura happy 6000
+laura affection 700
+laura skin laura
+wait 6
+bubble 0 x
+time 500
+tp 877.5 112 -766.5 135 5
+wait 6
+laura front 3
+wait 6
+fov 40
+cam 6.5 1.45 0 1.1 -12
+bubbles off
+thoughts off
+wait 120
+bubble 0 x
+wait 6
+record hero_wave 76
+wait 6
+laura emote WAVE
+wait 80
+record hero_kiss 60
+wait 6
+laura emote BLOW_KISS
+wait 64
+record hero_idle 40
+wait 46
+laura hide
+wait 25
+shot hero_plate_empty
+time 11800
+tp 877.5 112 -766.5 180 5
+wait 6
+laura front 4.5
+wait 6
+fov 40
+cam 6.0 1.5 0 1.1 0
+wait 100
+bubbles off
+thoughts off
+shot c_plate
+record em_wave 64
+wait 4
+laura emote WAVE
+wait 74
+record em_clap 56
+wait 4
+laura emote CLAP
+wait 66
+record em_laugh 64
+wait 4
+laura emote LAUGH
+wait 74
+record em_jump 44
+wait 4
+laura emote JUMP
+wait 54
+record em_bow 54
+wait 4
+laura emote BOW
+wait 64
+record em_twirl 48
+wait 4
+laura emote TWIRL
+wait 58
+record em_blow_kiss 48
+wait 4
+laura emote BLOW_KISS
+wait 58
+record em_air_guitar 90
+wait 4
+laura emote AIR_GUITAR
+wait 100
+record em_celebrate 94
+wait 4
+laura emote CELEBRATE
+wait 104
+record em_hum 104
+wait 4
+laura emote HUM
+wait 114
+record em_hair_flip 42
+wait 4
+laura emote HAIR_FLIP
+wait 52
+record em_fan 68
+wait 4
+laura emote FAN
+wait 78
+record em_stretch 70
+wait 4
+laura emote STRETCH
+wait 80
+bubbles on
+record talk_en 110
+wait 6
+bubble 5 Look at my moves!
+laura emote DANCE
+wait 110
+laura emote NONE
+wait 12
+bubble 0 x
+wait 10
+record talk_fr 110
+wait 6
+bubble 5 Regarde comme je bouge !
+laura emote DANCE
+wait 110
+laura emote NONE
+wait 12
+bubble 0 x
+wait 10
+bubbles off
+laura skin laura
+wait 8
+bubble 0 x
+wait 16
+shot skin_laura
+laura skin laura_summer
+wait 8
+bubble 0 x
+wait 16
+shot skin_laura_summer
+laura skin laura_winter
+wait 8
+bubble 0 x
+wait 16
+shot skin_laura_winter
+laura skin laura_night
+wait 8
+bubble 0 x
+wait 16
+shot skin_laura_night
+laura skin laura_sporty
+wait 8
+bubble 0 x
+wait 16
+shot skin_laura_sporty
+laura skin laura_gothic
+wait 8
+bubble 0 x
+wait 16
+shot skin_laura_gothic
+laura skin laura
+wait 8
+bubble 0 x
+bubbles on
+laura hide
+wait 25
+shot c_plate_empty
+record meet_en 100
+wait 10
+laura appear 877.5 112 -771 0
+bubble 5 Finally! I was waiting for you to call me.
+wait 96
+bubble 0 x
+wait 6
+laura hide
+wait 25
+record meet_fr 100
+wait 10
+laura appear 877.5 112 -771 0
+bubble 5 Enfin ! J'attendais que tu m'appelles.
+wait 96
+bubble 0 x
+wait 6
+thoughts on
+bubbles off
+laura desire ITEM minecraft:cake
+wait 10
+bubble 0 x
+wait 30
+record thought 70
+wait 76
+laura gag on
+wait 25
+shot gag
+laura gag off
+wait 10
+laura need HUNGER 66
+laura need ENERGY 91
+laura need FUN 97
+laura need HYGIENE 95
+guiscale 2
+lang en_us
+wait 260
+screen menu HOME
+wait 14
+shot menu_en_home
+screen menu ORDERS
+wait 14
+shot menu_en_orders
+screen menu EMOTES
+wait 14
+shot menu_en_emotes
+screen menu WORK
+wait 14
+shot menu_en_work
+screen menu FETCH
+wait 14
+shot menu_en_fetch
+screen menu STYLE
+wait 14
+shot menu_en_style
+screen menu SETTINGS
+wait 14
+shot menu_en_settings
+screen wheel
+wait 14
+shot wheel_en
+screen none
+wait 6
+lang fr_fr
+wait 260
+screen menu HOME
+wait 14
+shot menu_fr_home
+screen menu ORDERS
+wait 14
+shot menu_fr_orders
+screen menu EMOTES
+wait 14
+shot menu_fr_emotes
+screen menu WORK
+wait 14
+shot menu_fr_work
+screen menu FETCH
+wait 14
+shot menu_fr_fetch
+screen menu STYLE
+wait 14
+shot menu_fr_style
+screen menu SETTINGS
+wait 14
+shot menu_fr_settings
+screen wheel
+wait 14
+shot wheel_fr
+screen none
+wait 6
+hud on
+needshud on
+wait 12
+shot needs_hud
+hud off
+needshud off
+thoughts off
+laura hide
+time 500
+wait 20
+fov 70
+tp 877.5 113 -766.5 100 2
+wait 40
+shot plate_sea_sunrise
+time 11800
+tp 877.5 113 -766.5 180 2
+wait 40
+shot plate_grove_gold
+wait 10
+quit
