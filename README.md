@@ -1,5 +1,7 @@
 # My Girlfriend Laura
 
+![My Girlfriend Laura: Laura waves under the cherry trees](https://raw.githubusercontent.com/laforetbrut/mods-mc-laura/main/media/hero.gif)
+
 [![Build](https://github.com/laforetbrut/mods-mc-laura/actions/workflows/build.yml/badge.svg)](https://github.com/laforetbrut/mods-mc-laura/actions/workflows/build.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.20.1%20%7C%201.21.1%20%7C%2026.1.2-green)
@@ -173,8 +175,10 @@ Toolchains, development runs, self tests and the optional mods of each target ar
 ```
 common/<mcversion>/src/main/   code and resources shared by the three loaders of one Minecraft version
 <loader>-<mcversion>/          one standalone Gradle project per target, nine in all
-tools/                         asset generator, language checker, branch generator, jar collector
+tools/                         asset generator, language checker, branch generator, jar collector, page media builder
 docs/                          the ten guides
+media/                         the animated banners of the project page
+screenshots/                   in-game screenshots
 ```
 
 - `main` holds everything: one folder per target (`neoforge-1.20.1` to `fabric-26.1.2`) and one
@@ -384,8 +388,10 @@ chaque cible sont décrits dans [docs/BUILDING.md](docs/BUILDING.md).
 ```
 common/<mcversion>/src/main/   code et ressources partagés par les trois chargeurs d'une version de Minecraft
 <chargeur>-<mcversion>/        un projet Gradle autonome par cible, neuf en tout
-tools/                         générateur de ressources, vérificateur de langues, générateur de branches, collecte des jars
+tools/                         générateur de ressources, vérificateur de langues, générateur de branches, collecte des jars, générateur des médias de la page
 docs/                          les dix guides
+media/                         les bannières animées de la page du projet
+screenshots/                   des captures d'écran en jeu
 ```
 
 - `main` contient tout : un dossier par cible (de `neoforge-1.20.1` à `fabric-26.1.2`) et un

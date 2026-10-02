@@ -2,6 +2,8 @@
 
 <h1 style="font-size: 3em; margin-top: 20px; margin-bottom: 20px;">My Girlfriend Laura</h1>
 
+<p align="center"><img src="https://raw.githubusercontent.com/laforetbrut/mods-mc-laura/main/media/hero.gif" alt="My Girlfriend Laura: Laura waves under the cherry trees" width="800"></p>
+
 <p align="center">
   <a href="https://discord.gg/xjF8Rtzyd4">
     <img src="https://img.shields.io/badge/Discord-Join-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Discord">
@@ -53,6 +55,8 @@
 
 <h3 align="center">Meet Her</h3>
 
+<p align="center"><img src="https://raw.githubusercontent.com/laforetbrut/mods-mc-laura/main/media/meet-en.gif" alt="A player types I feel lonely in chat and Laura appears among hearts and sparkles" width="800"></p>
+
 <p align="center">
 <strong>Chat phrase</strong>: say "I feel lonely" in chat, in the language of your game or in English.<br>
 <strong>Command</strong>: <code>/laura summon</code>.<br>
@@ -65,12 +69,24 @@
 
 <h3 align="center">What She Does</h3>
 
+<p align="center"><img src="https://raw.githubusercontent.com/laforetbrut/mods-mc-laura/main/media/talk-en.gif" alt="A player types dance for me in chat, Laura answers in a bubble and dances" width="800"></p>
+
 <p align="center">
 <strong>Follows you</strong>: she walks with you, and only teleports when you are more than 128 blocks away. She follows you into the Nether and the End too, and arrives on a safe spot next to you: never in mid air, never over the void. If she steps through a portal before you, she waits for you on the other side. She can also stay, wander, come or go home.<br>
-<strong>Talks in your language</strong>: she reads the chat and understands plain sentences such as "follow me", "bring me bread" or "be a farmer". Chain orders with "then". Her answers show in chat and in a bubble above her head.<br>
+<strong>Talks in your language</strong>: she reads the chat and understands plain sentences such as "follow me", "bring me bread" or "be a farmer". Chain orders with "then". Her answers show in chat and in a bubble above her head.
+</p>
+
+<p align="center"><img src="https://raw.githubusercontent.com/laforetbrut/mods-mc-laura/main/media/needs.gif" alt="Her hunger drops, she wishes for food in a thought bubble, then her needs go up again once she is fed" width="800"></p>
+
+<p align="center">
 <strong>Needs and moods</strong>: hunger, energy, fun, attention and hygiene go down over time. She eats, sleeps and bathes on her own when she can, and tells you when something is missing. Right click her with a water bucket to wash her: the bucket comes back empty. Her mood and her affection, from "Hates you" to "Soulmates", change how she behaves. A hug comforts her: she never refuses one because she is hungry, sad or jealous.<br>
 <strong>Desires and gifts</strong>: about every 12 minutes she wishes for an item, a place or an activity (a sunset, a boat ride, fireworks), shown in a thought bubble. You have 15 minutes. Gifts and favourite food raise her affection, and she sometimes gives something back. The same gift counts once every 5 minutes.<br>
-<strong>Fetches items</strong>: say "bring me bread" and she searches 24 blocks around her: items on the ground, then chests, barrels and modded storage, then the logs, flowers and ripe crops she may harvest. Harvested crops are replanted. A number in the message is the count ("bring me 32 bread"); without one she brings up to 16. <code>/laura fetch bread 32</code> and the Fetch tab of her menu do the same.<br>
+<strong>Fetches items</strong>: say "bring me bread" and she searches 24 blocks around her: items on the ground, then chests, barrels and modded storage, then the logs, flowers and ripe crops she may harvest. Harvested crops are replanted. A number in the message is the count ("bring me 32 bread"); without one she brings up to 16. <code>/laura fetch bread 32</code> and the Fetch tab of her menu do the same.
+</p>
+
+<p align="center"><img src="https://raw.githubusercontent.com/laforetbrut/mods-mc-laura/main/media/work.gif" alt="The farmer job is switched on in her menu and Laura harvests a wheat field, crop after crop" width="800"></p>
+
+<p align="center">
 <strong>Works</strong>: as a lumberjack she fells natural trees and replants saplings, never touching the logs of your builds. As a farmer she harvests, replants, sows and uses bone meal. As a cook she uses furnaces, smokers and lit campfires, and prepares meals at a crafting table. She can hold several jobs, do a single task, or follow a to-do list of 16 tasks. By default she works during the day, and felling trees and farming need the <code>mobGriefing</code> game rule (<code>mob_griefing</code> on Minecraft 26.1.2).<br>
 <strong>Uses chests</strong>: assign containers to eight purposes (wood, harvest, seeds, ingredients, fuel, meals, pantry, storage). She takes what she needs there and stores what she produces. She leaves locked containers alone, and only opens a container you could open yourself.<br>
 <strong>Stays home</strong>: set her home with <code>/laura home set</code>, then send her there with <code>/laura home</code>. At home she stays within 12 blocks of it and sleeps in a free bed at night.<br>
@@ -86,13 +102,25 @@
 
 <h3 align="center">Make Her Yours</h3>
 
+<p align="center"><img src="https://raw.githubusercontent.com/laforetbrut/mods-mc-laura/main/media/outfits.gif" alt="Laura changes between her six built-in outfits" width="800"></p>
+
 <p align="center">
 <strong>Skins</strong>: six built-in outfits (Laura, Summer, Winter, Pyjamas, Sporty, Gothic), or any standard Minecraft skin: a PNG of your own skins folder picked in her menu, a file of the server, an image address from an allowed site, or the skin of a Minecraft account.<br>
 <strong>Custom models</strong>: Blockbench projects (<code>.bbmodel</code>) and Bedrock geometries (<code>.geo.json</code>) with their own textures and animations. A model without animations borrows the default ones when its bones have recognisable names.<br>
-<strong>Name</strong>: rename her with <code>/laura name</code>, the pencil in her menu, or a name tag.<br>
+<strong>Name</strong>: rename her with <code>/laura name</code>, the pencil in her menu, or a name tag.
+</p>
+
+<p align="center"><img src="https://raw.githubusercontent.com/laforetbrut/mods-mc-laura/main/media/emotes.gif" alt="The emote wheel, and Laura waving, twirling, blowing a kiss and playing air guitar" width="800"></p>
+
+<p align="center">
 <strong>Emotes</strong>: 30 emotes, from a wave to air guitar, by chat, command, menu or wheel.<br>
-<strong>Menu, key K</strong>: seven tabs (Home, Orders, Emotes, Work, Fetch, Style, Settings). A right click with an empty hand opens it too.<br>
 <strong>Emote wheel, key G</strong>: point at an emote and release the key.
+</p>
+
+<p align="center"><img src="https://raw.githubusercontent.com/laforetbrut/mods-mc-laura/main/media/menu-en.gif" alt="The seven tabs of her menu: Home, Orders, Emotes, Work, Fetch, Style and Settings" width="800"></p>
+
+<p align="center">
+<strong>Menu, key K</strong>: seven tabs (Home, Orders, Emotes, Work, Fetch, Style, Settings). A right click with an empty hand opens it too.
 </p>
 
 <br>
@@ -235,6 +263,8 @@ Nine jars in all: pick the one that matches your Minecraft version and your load
 
 <h3 align="center">La Rencontrer</h3>
 
+<p align="center"><img src="https://raw.githubusercontent.com/laforetbrut/mods-mc-laura/main/media/meet-fr.gif" alt="Un joueur écrit je me sens seul dans le chat et Laura apparaît au milieu des cœurs et des étincelles" width="800"></p>
+
 <p align="center">
 <strong>Phrase dans le chat</strong> : dites « je me sens seul » dans le chat, dans la langue de votre jeu ou en anglais.<br>
 <strong>Commande</strong> : <code>/laura summon</code>.<br>
@@ -247,12 +277,24 @@ Nine jars in all: pick the one that matches your Minecraft version and your load
 
 <h3 align="center">Ce Qu'elle Fait</h3>
 
+<p align="center"><img src="https://raw.githubusercontent.com/laforetbrut/mods-mc-laura/main/media/talk-fr.gif" alt="Un joueur écrit danse pour moi dans le chat, Laura répond dans une bulle et danse" width="800"></p>
+
 <p align="center">
 <strong>Elle vous suit</strong> : elle marche avec vous, et ne se téléporte que si vous êtes à plus de 128 blocs. Elle vous suit aussi dans le Nether et l'End, et arrive à un endroit sûr à côté de vous : jamais en l'air, jamais au-dessus du vide. Si elle passe un portail avant vous, elle vous attend de l'autre côté. Elle peut aussi rester sur place, se promener, venir ou rentrer à la maison.<br>
-<strong>Elle parle votre langue</strong> : elle lit le chat et comprend des phrases simples comme « suis-moi », « apporte-moi du pain » ou « sois fermière ». Enchaînez les ordres avec « puis ». Ses réponses s'affichent dans le chat et dans une bulle au-dessus de sa tête.<br>
+<strong>Elle parle votre langue</strong> : elle lit le chat et comprend des phrases simples comme « suis-moi », « apporte-moi du pain » ou « sois fermière ». Enchaînez les ordres avec « puis ». Ses réponses s'affichent dans le chat et dans une bulle au-dessus de sa tête.
+</p>
+
+<p align="center"><img src="https://raw.githubusercontent.com/laforetbrut/mods-mc-laura/main/media/needs.gif" alt="Sa faim baisse, elle rêve d'un plat dans une bulle de pensée, puis ses besoins remontent une fois nourrie" width="800"></p>
+
+<p align="center">
 <strong>Besoins et humeurs</strong> : la faim, l'énergie, l'amusement, l'attention et l'hygiène baissent avec le temps. Elle mange, dort et se lave seule quand elle le peut, et vous prévient quand il lui manque quelque chose. Faites un clic droit sur elle avec un seau d'eau pour la laver : le seau revient vide. Son humeur et son affection, de « Te déteste » à « Âmes sœurs », changent son comportement. Un câlin la réconforte : elle n'en refuse jamais un parce qu'elle a faim, qu'elle est triste ou jalouse.<br>
 <strong>Désirs et cadeaux</strong> : toutes les 12 minutes environ, elle désire un objet, un lieu ou une activité (un coucher de soleil, un tour en bateau, des feux d'artifice), affiché dans une bulle de pensée. Vous avez 15 minutes. Les cadeaux et ses aliments préférés augmentent son affection, et elle offre parfois quelque chose en retour. Un même cadeau compte une fois toutes les 5 minutes.<br>
-<strong>Elle rapporte des objets</strong> : dites « apporte-moi du pain » et elle cherche dans un rayon de 24 blocs autour d'elle : les objets au sol, puis les coffres, les tonneaux et les rangements de mods, puis les bûches, les fleurs et les cultures mûres qu'elle peut récolter. Les cultures récoltées sont replantées. Un nombre dans le message donne la quantité (« apporte-moi 32 pains ») ; sans nombre, elle en rapporte jusqu'à 16. <code>/laura fetch bread 32</code> et l'onglet Chercher de son menu font la même chose.<br>
+<strong>Elle rapporte des objets</strong> : dites « apporte-moi du pain » et elle cherche dans un rayon de 24 blocs autour d'elle : les objets au sol, puis les coffres, les tonneaux et les rangements de mods, puis les bûches, les fleurs et les cultures mûres qu'elle peut récolter. Les cultures récoltées sont replantées. Un nombre dans le message donne la quantité (« apporte-moi 32 pains ») ; sans nombre, elle en rapporte jusqu'à 16. <code>/laura fetch bread 32</code> et l'onglet Chercher de son menu font la même chose.
+</p>
+
+<p align="center"><img src="https://raw.githubusercontent.com/laforetbrut/mods-mc-laura/main/media/work.gif" alt="Le métier de fermière est activé dans son menu et Laura moissonne un champ de blé, plant après plant" width="800"></p>
+
+<p align="center">
 <strong>Elle travaille</strong> : bûcheronne, elle abat les arbres naturels et replante des pousses, sans jamais toucher aux bûches de vos constructions. Fermière, elle récolte, replante, sème et utilise la poudre d'os. Cuisinière, elle utilise les fourneaux, les fumoirs et les feux de camp allumés, et prépare des plats sur un établi. Elle peut cumuler plusieurs métiers, faire une tâche unique, ou suivre une liste de 16 tâches. Par défaut elle travaille de jour, et l'abattage des arbres et le travail des champs demandent la règle de jeu <code>mobGriefing</code> (<code>mob_griefing</code> sur Minecraft 26.1.2).<br>
 <strong>Elle utilise les coffres</strong> : attribuez des conteneurs à huit usages (bois, récolte, graines, ingrédients, combustible, plats, garde-manger, stockage). Elle y prend ce dont elle a besoin et y range ce qu'elle produit. Elle ne touche pas aux conteneurs verrouillés, et n'ouvre qu'un conteneur que vous pourriez ouvrir vous-même.<br>
 <strong>Elle reste à la maison</strong> : fixez sa maison avec <code>/laura home set</code>, puis envoyez-la là-bas avec <code>/laura home</code>. À la maison, elle reste dans un rayon de 12 blocs autour et dort la nuit dans un lit libre.<br>
@@ -268,13 +310,25 @@ Nine jars in all: pick the one that matches your Minecraft version and your load
 
 <h3 align="center">La Personnaliser</h3>
 
+<p align="center"><img src="https://raw.githubusercontent.com/laforetbrut/mods-mc-laura/main/media/outfits.gif" alt="Laura passe d'une tenue intégrée à l'autre, six en tout" width="800"></p>
+
 <p align="center">
 <strong>Skins</strong> : six tenues intégrées (Laura, Été, Hiver, Pyjama, Sportive, Gothique), ou n'importe quel skin Minecraft standard : un PNG de votre propre dossier de skins choisi dans son menu, un fichier du serveur, l'adresse d'une image sur un site autorisé, ou le skin d'un compte Minecraft.<br>
 <strong>Modèles personnalisés</strong> : des projets Blockbench (<code>.bbmodel</code>) et des géométries Bedrock (<code>.geo.json</code>) avec leurs propres textures et animations. Un modèle sans animation emprunte celles par défaut quand ses os portent des noms reconnaissables.<br>
-<strong>Nom</strong> : renommez-la avec <code>/laura name</code>, le crayon de son menu, ou une étiquette.<br>
+<strong>Nom</strong> : renommez-la avec <code>/laura name</code>, le crayon de son menu, ou une étiquette.
+</p>
+
+<p align="center"><img src="https://raw.githubusercontent.com/laforetbrut/mods-mc-laura/main/media/emotes.gif" alt="La roue des émotes, et Laura qui fait coucou, tourbillonne, envoie un bisou et joue de l'air guitar" width="800"></p>
+
+<p align="center">
 <strong>Émotes</strong> : 30 émotes, du coucou à l'air guitar, par le chat, une commande, le menu ou la roue.<br>
-<strong>Menu, touche K</strong> : sept onglets (Accueil, Ordres, Émotes, Travail, Chercher, Style, Réglages). Un clic droit à main vide l'ouvre aussi.<br>
 <strong>Roue des émotes, touche G</strong> : visez une émote et relâchez la touche.
+</p>
+
+<p align="center"><img src="https://raw.githubusercontent.com/laforetbrut/mods-mc-laura/main/media/menu-fr.gif" alt="Les sept onglets de son menu : Accueil, Ordres, Émotes, Travail, Chercher, Style et Réglages" width="800"></p>
+
+<p align="center">
+<strong>Menu, touche K</strong> : sept onglets (Accueil, Ordres, Émotes, Travail, Chercher, Style, Réglages). Un clic droit à main vide l'ouvre aussi.
 </p>
 
 <br>
