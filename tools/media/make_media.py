@@ -1,10 +1,12 @@
-"""Builds the animated banners of the project page (media/*.gif).
+"""Builds the media of the project page: the animated banners (media/*.gif), the section titles
+and the feature icons.
 
 Usage:  python tools/media/make_media.py [names...] [--src <captured frames>] [--out <folder>]
 
 The footage is captured in game with the shader pack on (see tools/media/README.md); this script
 frames it, adds the animated titles, hearts and labels in the style of the mod's menu, and writes
-GIF files under 2 MB each. Requires Pillow, numpy and ffmpeg.
+GIF files under 2 MB each. The section titles and the icons are drawn from scratch and need no
+footage. Requires Pillow, numpy and ffmpeg.
 
 Author: vyrriox
 """
@@ -680,6 +682,123 @@ def menu(lang):
     return finish(out, f"menu-{lang}.gif")
 
 
+# ------------------------------------------------------------------ section titles
+
+# File name, text, icon of the menu. One title per section of the page, in each language.
+TITLES = [
+    ("title-meet-en", "MEET HER", "AFFECTION"),
+    ("title-does-en", "WHAT SHE DOES", "TAB_WORK"),
+    ("title-yours-en", "MAKE HER YOURS", "TAB_STYLE"),
+    ("title-multiplayer-en", "MULTIPLAYER", "HUG"),
+    ("title-config-en", "CONFIGURATION AND LANGUAGES", "TAB_SETTINGS"),
+    ("title-integrations-en", "OPTIONAL INTEGRATIONS", "BACKPACK"),
+    ("title-versions-en", "SUPPORTED VERSIONS", "CHECK"),
+    ("title-start-en", "GETTING STARTED", "STAR"),
+    ("title-guides", "GUIDES", "TAB_INFO"),
+    ("title-meet-fr", "LA RENCONTRER", "AFFECTION"),
+    ("title-does-fr", "CE QU'ELLE FAIT", "TAB_WORK"),
+    ("title-yours-fr", "LA PERSONNALISER", "TAB_STYLE"),
+    ("title-multiplayer-fr", "MULTIJOUEUR", "HUG"),
+    ("title-config-fr", "CONFIGURATION ET LANGUES", "TAB_SETTINGS"),
+    ("title-integrations-fr", "INTÉGRATIONS FACULTATIVES", "BACKPACK"),
+    ("title-versions-fr", "VERSIONS SUPPORTÉES", "CHECK"),
+    ("title-start-fr", "PREMIERS PAS", "STAR"),
+]
+# The two halves of the page.
+LANGUAGES = [("lang-en", "ENGLISH"), ("lang-fr", "FRANÇAIS")]
+LILAC = (238, 228, 255, 255)
+LILAC_SHADE = (140, 118, 224, 255)
+TITLE_FRAMES = 24       # 80 ms each
+
+
+def hop(t, at, height=3, length=0.24):
+    """Vertical offset of a sprite that hops once per loop, around the moment `at` (0..1)."""
+    k = (t - at) % 1.0
+    return -int(round(math.sin(k / length * math.pi) * height)) if k < length else 0
+
+
+def ribbon(text, icon_name, fill=CREAM, border=PINK_DEEP, shade=ROSE, ink=PLUM):
+    """A section title on a see-through background: the text on a pill between two icons of the menu,
+    with a line, a sparkle and a heart on each side. The icons and the hearts hop in turn."""
+    w, h = W, 60
+    top, body = 6, 44
+    ic = kit.icon(icon_name, 2)
+    tw = font.width(text, 3)
+    pw = 18 + ic.width + 12 + tw + 12 + ic.width + 18
+    px = (w - pw) // 2
+    pill = Image.new("RGBA", (pw, body + 4), (0, 0, 0, 0))
+    pill.alpha_composite(kit.rounded(pw, body, body // 2, shade), (0, 4))
+    pill.alpha_composite(kit.rounded(pw, body, body // 2, fill, border, 3), (0, 0))
+    font.draw(pill, text, 18 + ic.width + 12, (body - font.height(3)) // 2, 3, ink)
+    heart = kit.heart(1, PINK_DEEP, OUTLINE)
+    spark = kit.icon("SPARKLE", 1)
+    y = top + body // 2
+    lines = ((46, px - 14), (px + pw + 14, w - 46))
+    out = []
+    for i in range(TITLE_FRAMES):
+        t = i / TITLE_FRAMES
+        canvas = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+        d = ImageDraw.Draw(canvas)
+        for k, (x0, x1) in enumerate(lines):
+            d.rectangle([x0, y - 1, x1, y + 1], fill=border)
+            # A sparkle blinks on each line, when the line is long enough to hold one.
+            if x1 - x0 >= 64 and (t + 0.5 * k) % 1.0 < 0.42:
+                kit.paste(canvas, spark, (x0 + x1) // 2, y, anchor="c")
+        canvas.alpha_composite(pill, (px, top))
+        canvas.alpha_composite(ic, (px + 18, top + 6 + hop(t, 0.04)))
+        canvas.alpha_composite(ic, (px + pw - 18 - ic.width, top + 6 + hop(t, 0.54)))
+        kit.paste(canvas, heart, 30, y + hop(t, 0.29), anchor="c")
+        kit.paste(canvas, heart, w - 30, y + hop(t, 0.79), anchor="c")
+        out.append(canvas)
+    return out
+
+
+def divider():
+    """A line with three hearts that hop one after the other, to close a part of the page."""
+    w, h = W, 44
+    big = kit.heart(2, PINK_DEEP, OUTLINE)
+    small = kit.heart(1, PINK_DEEP, OUTLINE)
+    y = h // 2
+    out = []
+    for i in range(TITLE_FRAMES):
+        t = i / TITLE_FRAMES
+        canvas = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+        d = ImageDraw.Draw(canvas)
+        d.rectangle([120, y - 1, w // 2 - 52, y + 1], fill=PINK_DEEP)
+        d.rectangle([w // 2 + 52, y - 1, w - 120, y + 1], fill=PINK_DEEP)
+        kit.paste(canvas, small, w // 2 - 32, y + 2 + hop(t, 0.05), anchor="c")
+        kit.paste(canvas, big, w // 2, y + hop(t, 0.20, height=4), anchor="c")
+        kit.paste(canvas, small, w // 2 + 32, y + 2 + hop(t, 0.35), anchor="c")
+        out.append(canvas)
+    return out
+
+
+# The icons of the menu shown next to the names of the features on the page.
+PAGE_ICONS = ["COMBAT_FIGHT", "COMBAT_PASSIVE", "COME", "DESIRE", "EAT", "EMOTE_WAVE", "FOLLOW", "GO_HOME", "HEALTH", "HEART_FULL", "HUG",
+              "INVENTORY", "LOCK", "MOOD_HAPPY", "NEED_ATTENTION", "PENCIL", "PLUS", "QUEUE", "REFRESH", "STAR", "STAY", "TAB_EMOTES",
+              "TAB_FETCH", "TAB_HOME", "TAB_ORDERS", "TAB_SETTINGS", "TAB_STYLE", "TAB_WORK", "UNGAG", "UPLOAD"]
+
+
+def icons():
+    folder = os.path.join(OUT, "icons")
+    os.makedirs(folder, exist_ok=True)
+    for name in PAGE_ICONS:
+        kit.icon(name, 2).save(os.path.join(folder, name.lower().replace("_", "-") + ".png"))
+    print(f"icons: {len(PAGE_ICONS)} files, 32 pixels wide")
+
+
+def titles():
+    os.makedirs(OUT, exist_ok=True)
+    built = [(name, ribbon(text, icon_name)) for name, text, icon_name in TITLES]
+    built += [(name, ribbon(text, "TAB_ORDERS", fill=LILAC, border=LAVENDER_DEEP, shade=LILAC_SHADE)) for name, text in LANGUAGES]
+    built.append(("divider", divider()))
+    total = 0
+    for name, frames in built:
+        total += kit.write_sprite_gif(frames, os.path.join(OUT, name + ".gif"))
+    print(f"titles: {len(built)} files, {frames[0].width} pixels wide, {total / 1e3:.0f} KB in all")
+    return total
+
+
 BUILDERS = {
     "hero": hero,
     "meet-en": lambda: meet("en", "I feel lonely"),
@@ -692,6 +811,8 @@ BUILDERS = {
     "emotes": emotes,
     "menu-en": lambda: menu("en"),
     "menu-fr": lambda: menu("fr"),
+    "titles": titles,
+    "icons": icons,
 }
 
 

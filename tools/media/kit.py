@@ -317,6 +317,36 @@ def write_gif(frames, path, fps=FPS, colors=256, dither="bayer:bayer_scale=5", s
     return os.path.getsize(path)
 
 
+def write_sprite_gif(frames, path, duration=80, threshold=128):
+    """Encodes pixel art drawn on RGBA frames as a GIF with a see-through background: one palette for
+    all the frames, hard edges (a pixel is either shown or not), every frame drawn on a clean slate."""
+    arrays = [np.asarray(f.convert("RGBA")) for f in frames]
+    index = {}
+    packed = []
+    for a in arrays:
+        rgb = (a[:, :, 0].astype(np.uint32) << 16) | (a[:, :, 1].astype(np.uint32) << 8) | a[:, :, 2].astype(np.uint32)
+        packed.append(rgb)
+        for value in np.unique(rgb[a[:, :, 3] >= threshold]):
+            index.setdefault(int(value), len(index) + 1)
+    if len(index) > 255:
+        raise ValueError(f"{len(index)} colors, a GIF holds 255 and the transparent one")
+    palette = [0, 0, 0]
+    for value in index:
+        palette += [value >> 16, (value >> 8) & 255, value & 255]
+    images = []
+    for a, rgb in zip(arrays, packed):
+        values, inverse = np.unique(rgb, return_inverse=True)
+        lookup = np.array([index.get(int(v), 0) for v in values], dtype=np.uint8)
+        pixels = lookup[inverse].reshape(rgb.shape)
+        pixels[a[:, :, 3] < threshold] = 0
+        img = Image.fromarray(pixels, "P")
+        img.putpalette(palette)
+        images.append(img)
+    images[0].save(path, save_all=True, append_images=images[1:], duration=duration, loop=0, transparency=0, disposal=2,
+                   optimize=False)
+    return os.path.getsize(path)
+
+
 def frame_border(img, color=ROSE, inner=WHITE, width=3):
     """The frame around every banner: a rose line, then a thin white one."""
     d = ImageDraw.Draw(img)

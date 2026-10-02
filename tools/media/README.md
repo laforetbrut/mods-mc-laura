@@ -14,17 +14,21 @@ and the palette of the mod.
 | `outfits.gif` | The six built-in outfits |
 | `emotes.gif` | The emote wheel and four emotes |
 | `menu-en.gif`, `menu-fr.gif` | The seven tabs of her menu |
+| `title-*.gif`, `lang-*.gif`, `divider.gif` | The title of each section, the label of each language, a line of hearts |
+| `icons/*.png` | The icons of her menu shown next to the feature names, twice their size |
 
-Every file is 800 pixels wide, plays at 20 frames per second and weighs less than 2 MB, the limit
-of CurseForge for an uploaded image.
+Every banner is 800 pixels wide, plays at 20 frames per second and weighs less than 2 MB, the limit
+of CurseForge for an uploaded image. The titles are small pixel art animations on a see-through
+background, so they sit on the dark page of CurseForge as well as on GitHub.
 
 ## Building the banners
 
 Requirements: Python 3 with Pillow and numpy, and ffmpeg on the PATH.
 
 ```
-python tools/media/make_media.py              # every banner
+python tools/media/make_media.py              # everything
 python tools/media/make_media.py hero work    # only these two
+python tools/media/make_media.py titles icons # the titles and the icons, no footage needed
 ```
 
 The script reads the footage from `neoforge-1.21.1/run-capture/screenshots` (`--src` to read it
@@ -39,6 +43,21 @@ elsewhere) and writes to `media/` (`--out`). The footage is not in the repositor
 How a banner stays small: the background is one still frame, and only the area where she moves
 comes from the footage, with a soft edge. Pixels that barely change from one frame to the next are
 kept identical, so the file only stores what really moves.
+
+## How the page uses the files
+
+`curseforge_page.md` loads the files through the jsDelivr CDN
+(`https://cdn.jsdelivr.net/gh/laforetbrut/mods-mc-laura@main/media/...`), not from
+`raw.githubusercontent.com`: GitHub limits anonymous requests there, and a page that loads many
+images from it ends up with broken ones. jsDelivr keeps a file of a branch for up to 12 hours; after
+changing a file, open `https://purge.jsdelivr.net/gh/laforetbrut/mods-mc-laura@main/media/<file>`
+to refresh it at once.
+
+CurseForge removes `align="center"` and most style properties from a description. It keeps
+`text-align`, `color`, `font-size`, `font-weight`, `display`, `margin-left`, `margin-right` and the
+`width` of images, and it shows headings as small plain text. That is why the page is centered by
+wrappers with `text-align`, why the section titles are images, and why the names of the features are
+colored with `span` tags.
 
 ## Recording the footage
 
@@ -110,17 +129,21 @@ cartes et de cœurs dessinés avec les icônes et la palette du mod.
 | `outfits.gif` | Les six tenues intégrées |
 | `emotes.gif` | La roue des émotes et quatre émotes |
 | `menu-en.gif`, `menu-fr.gif` | Les sept onglets de son menu |
+| `title-*.gif`, `lang-*.gif`, `divider.gif` | Le titre de chaque section, le libellé de chaque langue, une ligne de cœurs |
+| `icons/*.png` | Les icônes de son menu affichées à côté des noms des fonctionnalités, en taille double |
 
-Chaque fichier fait 800 pixels de large, tourne à 20 images par seconde et pèse moins de 2 Mo, la
-limite de CurseForge pour une image envoyée.
+Chaque bannière fait 800 pixels de large, tourne à 20 images par seconde et pèse moins de 2 Mo, la
+limite de CurseForge pour une image envoyée. Les titres sont de petites animations en pixel art sur
+fond transparent : ils passent sur la page sombre de CurseForge comme sur GitHub.
 
 ## Générer les bannières
 
 Prérequis : Python 3 avec Pillow et numpy, et ffmpeg dans le PATH.
 
 ```
-python tools/media/make_media.py              # toutes les bannières
+python tools/media/make_media.py              # tout
 python tools/media/make_media.py hero work    # seulement ces deux-là
+python tools/media/make_media.py titles icons # les titres et les icônes, sans images sources
 ```
 
 Le script lit les images dans `neoforge-1.21.1/run-capture/screenshots` (`--src` pour les lire
@@ -135,6 +158,22 @@ a environ 2 000, au format PNG, pour 6 Go.
 Pourquoi une bannière reste légère : le fond est une seule image fixe, et seule la zone où elle
 bouge vient de l'enregistrement, avec un bord adouci. Les pixels qui changent à peine d'une image
 à l'autre sont gardés identiques, et le fichier ne stocke que ce qui bouge vraiment.
+
+## Comment la page utilise les fichiers
+
+`curseforge_page.md` charge les fichiers par le CDN jsDelivr
+(`https://cdn.jsdelivr.net/gh/laforetbrut/mods-mc-laura@main/media/...`), et non depuis
+`raw.githubusercontent.com` : GitHub y limite les requêtes anonymes, et une page qui y charge
+beaucoup d'images finit avec des images cassées. jsDelivr garde un fichier d'une branche jusqu'à
+12 heures ; après avoir modifié un fichier, ouvrez
+`https://purge.jsdelivr.net/gh/laforetbrut/mods-mc-laura@main/media/<fichier>` pour le rafraîchir
+tout de suite.
+
+CurseForge retire `align="center"` et la plupart des propriétés de style d'une description. Il
+garde `text-align`, `color`, `font-size`, `font-weight`, `display`, `margin-left`, `margin-right`
+et la largeur (`width`) des images, et il affiche les titres comme un petit texte ordinaire. C'est
+pourquoi la page est centrée par des blocs qui portent `text-align`, pourquoi les titres de section
+sont des images, et pourquoi les noms des fonctionnalités sont colorés avec des balises `span`.
 
 ## Enregistrer les images
 
