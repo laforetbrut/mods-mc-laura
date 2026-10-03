@@ -1,6 +1,6 @@
 # Page media
 
-The animated banners of the project page live in `media/`. They are made from footage recorded in
+The animated banners of the project page live in `images/`. They are made from footage recorded in
 game with a shader pack, then framed and dressed with titles, cards and hearts drawn with the icons
 and the palette of the mod.
 
@@ -26,13 +26,13 @@ background, so they sit on the dark page of CurseForge as well as on GitHub.
 Requirements: Python 3 with Pillow and numpy, and ffmpeg on the PATH.
 
 ```
-python tools/media/make_media.py              # everything
-python tools/media/make_media.py hero work    # only these two
-python tools/media/make_media.py titles icons # the titles and the icons, no footage needed
+python images/tools/laura/make_media.py              # everything
+python images/tools/laura/make_media.py hero work    # only these two
+python images/tools/laura/make_media.py titles icons # the titles and the icons, no footage needed
 ```
 
 The script reads the footage from `neoforge-1.21.1/run-capture/screenshots` (`--src` to read it
-elsewhere) and writes to `media/` (`--out`). The footage is not in the repository: it is about
+elsewhere) and writes to `images/` (`--out`). The footage is not in the repository: it is about
 2,000 PNG frames and 6 GB.
 
 - `make_media.py`: one function per banner.
@@ -47,10 +47,10 @@ kept identical, so the file only stores what really moves.
 ## How the page uses the files
 
 `curseforge_page.md` loads the files through the jsDelivr CDN
-(`https://cdn.jsdelivr.net/gh/laforetbrut/mods-mc-laura@main/media/...`), not from
+(`https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/...`), not from
 `raw.githubusercontent.com`: GitHub limits anonymous requests there, and a page that loads many
 images from it ends up with broken ones. jsDelivr keeps a file of a branch for up to 12 hours; after
-changing a file, open `https://purge.jsdelivr.net/gh/laforetbrut/mods-mc-laura@main/media/<file>`
+changing a file, open `https://purge.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/<file>`
 to refresh it at once.
 
 CurseForge removes `align="center"` and most style properties from a description. It keeps
@@ -67,8 +67,8 @@ mod and must never be committed into its sources.
 1. From the repository root, add the tool to the 1.21.1 sources:
 
    ```
-   git apply tools/media/capture/hooks.patch
-   cp tools/media/capture/CaptureStudio.java common/1.21.1/src/main/java/com/vyrriox/lauramod/client/
+   git apply images/tools/laura/capture/hooks.patch
+   cp images/tools/laura/capture/CaptureStudio.java common/1.21.1/src/main/java/com/vyrriox/lauramod/client/
    ```
 
    The patch adds one call in `LauraClient` and a `runCapture` run: a 1600 x 900 window, with
@@ -77,7 +77,7 @@ mod and must never be committed into its sources.
    pack in `shaderpacks/`, and name the pack in `config/iris.properties`. The banners were recorded
    with Iris 1.8.12, Sodium 0.6.13 and Complementary Unbound r5.9.3. None of these files is
    distributed here.
-3. Copy the scripts of `tools/media/capture/` into `neoforge-1.21.1/run-capture/`, then run them in
+3. Copy the scripts of `images/tools/laura/capture/` into `neoforge-1.21.1/run-capture/`, then run them in
    order from `neoforge-1.21.1`:
 
    ```
@@ -115,7 +115,7 @@ Author: vyrriox
 
 # Médias de la page (Version Française)
 
-Les bannières animées de la page du projet se trouvent dans `media/`. Elles sont faites à partir
+Les bannières animées de la page du projet se trouvent dans `images/`. Elles sont faites à partir
 d'images enregistrées en jeu avec un pack de shaders, puis cadrées et habillées de titres, de
 cartes et de cœurs dessinés avec les icônes et la palette du mod.
 
@@ -141,13 +141,13 @@ fond transparent : ils passent sur la page sombre de CurseForge comme sur GitHub
 Prérequis : Python 3 avec Pillow et numpy, et ffmpeg dans le PATH.
 
 ```
-python tools/media/make_media.py              # tout
-python tools/media/make_media.py hero work    # seulement ces deux-là
-python tools/media/make_media.py titles icons # les titres et les icônes, sans images sources
+python images/tools/laura/make_media.py              # tout
+python images/tools/laura/make_media.py hero work    # seulement ces deux-là
+python images/tools/laura/make_media.py titles icons # les titres et les icônes, sans images sources
 ```
 
 Le script lit les images dans `neoforge-1.21.1/run-capture/screenshots` (`--src` pour les lire
-ailleurs) et écrit dans `media/` (`--out`). Les images sources ne sont pas dans le dépôt : il y en
+ailleurs) et écrit dans `images/` (`--out`). Les images sources ne sont pas dans le dépôt : il y en
 a environ 2 000, au format PNG, pour 6 Go.
 
 - `make_media.py` : une fonction par bannière.
@@ -162,11 +162,11 @@ bouge vient de l'enregistrement, avec un bord adouci. Les pixels qui changent à
 ## Comment la page utilise les fichiers
 
 `curseforge_page.md` charge les fichiers par le CDN jsDelivr
-(`https://cdn.jsdelivr.net/gh/laforetbrut/mods-mc-laura@main/media/...`), et non depuis
+(`https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/...`), et non depuis
 `raw.githubusercontent.com` : GitHub y limite les requêtes anonymes, et une page qui y charge
 beaucoup d'images finit avec des images cassées. jsDelivr garde un fichier d'une branche jusqu'à
 12 heures ; après avoir modifié un fichier, ouvrez
-`https://purge.jsdelivr.net/gh/laforetbrut/mods-mc-laura@main/media/<fichier>` pour le rafraîchir
+`https://purge.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/<fichier>` pour le rafraîchir
 tout de suite.
 
 CurseForge retire `align="center"` et la plupart des propriétés de style d'une description. Il
@@ -183,8 +183,8 @@ ne fait pas partie du mod et ne doit jamais être commitée dans ses sources.
 1. Depuis la racine du dépôt, ajoutez l'outil aux sources 1.21.1 :
 
    ```
-   git apply tools/media/capture/hooks.patch
-   cp tools/media/capture/CaptureStudio.java common/1.21.1/src/main/java/com/vyrriox/lauramod/client/
+   git apply images/tools/laura/capture/hooks.patch
+   cp images/tools/laura/capture/CaptureStudio.java common/1.21.1/src/main/java/com/vyrriox/lauramod/client/
    ```
 
    Le patch ajoute un appel dans `LauraClient` et un lancement `runCapture` : une fenêtre de
@@ -193,7 +193,7 @@ ne fait pas partie du mod et ne doit jamais être commitée dans ses sources.
    pack de shaders dans `shaderpacks/`, et indiquez le pack dans `config/iris.properties`. Les
    bannières ont été enregistrées avec Iris 1.8.12, Sodium 0.6.13 et Complementary Unbound r5.9.3.
    Aucun de ces fichiers n'est distribué ici.
-3. Copiez les scripts de `tools/media/capture/` dans `neoforge-1.21.1/run-capture/`, puis lancez-les
+3. Copiez les scripts de `images/tools/laura/capture/` dans `neoforge-1.21.1/run-capture/`, puis lancez-les
    dans l'ordre depuis `neoforge-1.21.1` :
 
    ```

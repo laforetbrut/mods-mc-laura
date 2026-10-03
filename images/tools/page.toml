@@ -1,5 +1,6 @@
 # The CurseForge page of My Girlfriend Laura. Author: vyrriox
 #
+#   python images/tools/laura/make_media.py icons --out images/icons-src
 #   python images/tools/export_icons.py images/tools/page.toml
 #   python images/tools/titles.py images/tools/page.toml
 #   python images/tools/build_page.py images/tools/page.toml
@@ -40,16 +41,16 @@ tagline.en = 'Say "I feel lonely" in chat. She takes it from there.'
 tagline.fr = "Dites « je me sens seul » dans le chat. Elle s'occupe du reste."
 
 [icons]
-affection = "media/icons/heart-full.png"
-orders = "media/icons/tab-orders.png"
-refresh = "media/icons/refresh.png"
-follow = "media/icons/follow.png"
-talk = "media/icons/need-attention.png"
-mood = "media/icons/mood-happy.png"
-fetch = "media/icons/tab-fetch.png"
-work = "media/icons/tab-work.png"
-style = "media/icons/tab-style.png"
-emotes = "media/icons/tab-emotes.png"
+affection = "images/icons-src/icons/heart-full.png"
+orders = "images/icons-src/icons/tab-orders.png"
+refresh = "images/icons-src/icons/refresh.png"
+follow = "images/icons-src/icons/follow.png"
+talk = "images/icons-src/icons/need-attention.png"
+mood = "images/icons-src/icons/mood-happy.png"
+fetch = "images/icons-src/icons/tab-fetch.png"
+work = "images/icons-src/icons/tab-work.png"
+style = "images/icons-src/icons/tab-style.png"
+emotes = "images/icons-src/icons/tab-emotes.png"
 
 [[section]]
 id = "meet"

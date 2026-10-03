@@ -1,9 +1,9 @@
 """Builds the media of the project page: the animated banners (media/*.gif), the section titles
 and the feature icons.
 
-Usage:  python tools/media/make_media.py [names...] [--src <captured frames>] [--out <folder>]
+Usage:  python images/tools/laura/make_media.py [names...] [--src <captured frames>] [--out <folder>]
 
-The footage is captured in game with the shader pack on (see tools/media/README.md); this script
+The footage is captured in game with the shader pack on (see images/tools/laura/README.md); this script
 frames it, adds the animated titles, hearts and labels in the style of the mod's menu, and writes
 GIF files under 2 MB each. The section titles and the icons are drawn from scratch and need no
 footage. Requires Pillow, numpy and ffmpeg.
@@ -19,9 +19,9 @@ import numpy as np
 from PIL import Image, ImageChops, ImageDraw
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(os.path.dirname(HERE))
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))
 sys.path.insert(0, HERE)
-sys.path.insert(0, os.path.join(os.path.dirname(HERE), "assets"))
+sys.path.insert(0, os.path.join(ROOT, "tools", "assets"))
 
 import kit  # noqa: E402
 import pixelfont as font  # noqa: E402
@@ -29,7 +29,7 @@ import skins  # noqa: E402
 from kit import CREAM, LAVENDER_DEEP, LEMON, PINK, PINK_DEEP, PLUM, PLUM_SOFT, ROSE, WHITE  # noqa: E402
 
 SRC = os.path.join(ROOT, "neoforge-1.21.1", "run-capture", "screenshots")
-OUT = os.path.join(ROOT, "media")
+OUT = os.path.join(ROOT, "images")
 SKIN = os.path.join(ROOT, "common", "1.21.1", "src", "main", "resources", "assets", "lauramod", "textures", "entity", "laura", "laura.png")
 
 W = 800
