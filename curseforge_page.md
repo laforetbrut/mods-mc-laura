@@ -91,6 +91,7 @@
 <p>&nbsp;</p>
 <h3><span style="font-size:24px;color:#e5e5e5"><strong>Join the Adventure / Rejoignez l'Aventure</strong></span></h3>
 <p>Discover our other mods in our <strong>Industry, Magic &amp; Exploration</strong> modpack.<br><em>Découvrez nos autres mods dans notre modpack <strong>Industrie, Magie &amp; Exploration</strong>.</em></p>
+<p><a href="https://arcadia-echoes-of-power.fr/"><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/shared/arcadia-v2/server.gif" alt="The Arcadia server" width="800"></a></p>
 <p><a href="https://arcadia-echoes-of-power.fr/"><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/badge-extra-1-en.png" alt="Play now: Modpack"></a></p>
 </div>
 

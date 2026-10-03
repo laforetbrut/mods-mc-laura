@@ -185,6 +185,8 @@ title.en = "Join the Adventure"
 title.fr = "Rejoignez l'Aventure"
 text.en = "Discover our other mods in our <strong>Industry, Magic & Exploration</strong> modpack."
 text.fr = "Découvrez nos autres mods dans notre modpack <strong>Industrie, Magie & Exploration</strong>."
+image = "https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/shared/arcadia-v2/server.gif"
+alt = "The Arcadia server"
 url = "https://arcadia-echoes-of-power.fr/"
 badge = { label = { en = "Play now", fr = "Jouer" }, message = "Modpack", icon = "play" }
 
