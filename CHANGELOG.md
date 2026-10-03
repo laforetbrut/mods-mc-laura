@@ -4,6 +4,18 @@ All notable changes to My Girlfriend Laura are documented here.
 
 ---
 
+## [Unreleased]
+
+### Changed
+
+- **License**: Apache License 2.0 instead of MIT. Forks and redistribution stay allowed; a redistributed copy must keep the copyright, the `LICENSE` and `NOTICE` files, and state what was changed. Apache 2.0 also grants the patent rights of contributors. Releases up to 2.0.0 remain under MIT.
+
+### Modifications
+
+- **Licence**: Apache License 2.0 au lieu de MIT. Les forks et la redistribution restent permis ; une copie redistribuée doit garder le copyright, les fichiers `LICENSE` et `NOTICE`, et indiquer ce qui a été modifié. Apache 2.0 accorde aussi les droits de brevet des contributeurs. Les versions jusqu'à la 2.0.0 restent sous MIT.
+
+---
+
 ## [2.0.0] - 2026-10-01
 
 ### Added

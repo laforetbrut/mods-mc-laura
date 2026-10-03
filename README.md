@@ -3,7 +3,7 @@
 ![My Girlfriend Laura: Laura waves under the cherry trees](https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/hero.gif)
 
 [![Build](https://github.com/laforetbrut/mods-mc-laura/actions/workflows/build.yml/badge.svg)](https://github.com/laforetbrut/mods-mc-laura/actions/workflows/build.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.20.1%20%7C%201.21.1%20%7C%2026.1.2-green)
 ![Loaders](https://img.shields.io/badge/Loaders-NeoForge%20%7C%20Forge%20%7C%20Fabric-orange)
 
@@ -198,7 +198,7 @@ images/tools/                  the builder of the CurseForge page and its banner
 
 ## License
 
-[MIT](LICENSE)
+[Apache License 2.0](LICENSE). Forks and redistribution are welcome; keep the copyright and the [NOTICE](NOTICE) file, and state your changes.
 
 ## Credits
 
@@ -411,7 +411,7 @@ images/tools/                  le générateur de la page CurseForge et de ses b
 
 ## Licence
 
-[MIT](LICENSE)
+[Apache License 2.0](LICENSE). Les forks et la redistribution sont permis ; gardez le copyright et le fichier [NOTICE](NOTICE), et indiquez vos modifications.
 
 ## Credits
 

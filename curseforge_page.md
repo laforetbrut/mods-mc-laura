@@ -98,5 +98,5 @@
 <p><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/divider.gif" alt="" width="800"></p>
 <p><span style="font-size:24px;color:#e5e5e5"><strong>Support the Project / Soutenir le Projet</strong></span></p>
 <p><a href="https://buy.stripe.com/3cI3co6X97Vy4IK50QfIs00"><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/badge-donate.png" alt="Donate: Stripe"></a></p>
-<p><strong>Author / Auteur:</strong> vyrriox &nbsp;|&nbsp; <strong>License / Licence:</strong> MIT</p>
+<p><strong>Author / Auteur:</strong> vyrriox &nbsp;|&nbsp; <strong>License / Licence:</strong> Apache-2.0</p>
 </div>

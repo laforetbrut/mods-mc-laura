@@ -223,7 +223,7 @@ Common code only calls vanilla methods. Anything specific to a loader goes throu
 
 ### License
 
-MIT. See the `LICENSE` file at the root of the repository.
+Apache License 2.0. See the `LICENSE` and `NOTICE` files at the root of the repository.
 
 ---
 
@@ -441,4 +441,4 @@ Le code commun n'appelle que des méthodes du jeu de base. Tout ce qui est propr
 
 ### Licence
 
-MIT. Voir le fichier `LICENSE` à la racine du dépôt.
+Apache License 2.0. Voir les fichiers `LICENSE` et `NOTICE` à la racine du dépôt.
