@@ -1,0 +1,193 @@
+# The CurseForge page of My Girlfriend Laura. Author: vyrriox
+#
+#   python images/tools/export_icons.py images/tools/page.toml
+#   python images/tools/titles.py images/tools/page.toml
+#   python images/tools/build_page.py images/tools/page.toml
+
+[page]
+languages = ["en", "fr"]
+images_base = "https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/"
+images_dir = ".."
+out = "../../curseforge_page.md"
+root = "../.."
+theme = "theme.json"
+author = "vyrriox"
+license = "MIT"
+
+[mod]
+name = "My Girlfriend Laura"
+
+[hero]
+file = "hero.gif"
+alt.en = "My Girlfriend Laura: Laura waves under the cherry trees"
+alt.fr = "My Girlfriend Laura : Laura salue sous les cerisiers"
+
+[links]
+discord = "https://discord.gg/xjF8Rtzyd4"
+website = { url = "https://arcadia-echoes-of-power.fr/", label = "Arcadia" }
+source = "https://github.com/laforetbrut/mods-mc-laura"
+donate = "https://buy.stripe.com/3cI3co6X97Vy4IK50QfIs00"
+partners = { url = "https://www.arcadia-echoes-of-power.fr/partenariat", label = "Partners" }
+
+[badges]
+minecraft = ["1.20.1", "1.21.1", "26.1.2"]
+loaders = ["NeoForge", "Forge", "Fabric"]
+
+[intro]
+pitch.en = "<strong>My Girlfriend Laura</strong> adds a companion who shares your world: she follows you, talks in your language, has needs and moods, fetches items and works for you."
+pitch.fr = "<strong>My Girlfriend Laura</strong> ajoute une compagne qui partage votre monde : elle vous suit, parle votre langue, a des besoins et des humeurs, rapporte des objets et travaille pour vous."
+tagline.en = 'Say "I feel lonely" in chat. She takes it from there.'
+tagline.fr = "Dites « je me sens seul » dans le chat. Elle s'occupe du reste."
+
+[icons]
+affection = "media/icons/heart-full.png"
+orders = "media/icons/tab-orders.png"
+refresh = "media/icons/refresh.png"
+follow = "media/icons/follow.png"
+talk = "media/icons/need-attention.png"
+mood = "media/icons/mood-happy.png"
+fetch = "media/icons/tab-fetch.png"
+work = "media/icons/tab-work.png"
+style = "media/icons/tab-style.png"
+emotes = "media/icons/tab-emotes.png"
+
+[[section]]
+id = "meet"
+title.en = "Meet Her"
+title.fr = "La Rencontrer"
+icon = "affection"
+
+  [[section.banner]]
+  file = "meet.gif"
+  alt.en = "A player types I feel lonely in chat and Laura appears among hearts and sparkles"
+  alt.fr = "Un joueur écrit I feel lonely dans le chat et Laura apparaît au milieu des cœurs"
+
+  [[section.item]]
+  icon = "orders"
+  name.en = "Call her"
+  name.fr = "Appelez-la"
+  text.en = '''say "I feel lonely", run <code>/laura summon</code> or use a Laura's Heart.'''
+  text.fr = "dites « je me sens seul », lancez <code>/laura summon</code> ou utilisez un Cœur de Laura."
+
+  [[section.item]]
+  icon = "refresh"
+  name.en = "She stays"
+  name.fr = "Elle reste"
+  text.en = "never despawns; a flower on her grave brings her back with her items."
+  text.fr = "elle ne disparaît jamais ; une fleur sur sa tombe la ramène avec ses objets."
+
+[[section]]
+id = "does"
+title.en = "What She Does"
+title.fr = "Ce Qu'elle Fait"
+icon = "work"
+
+  [[section.banner]]
+  file = "work.gif"
+  alt.en = "Laura harvests a wheat field while a counter goes up"
+  alt.fr = "Laura récolte un champ de blé pendant qu'un compteur monte"
+
+  [[section.item]]
+  icon = "follow"
+  name.en = "Follows you"
+  name.fr = "Vous suit"
+  text.en = "on foot, into the Nether and the End, always on a safe spot."
+  text.fr = "à pied, dans le Nether et l'End, toujours sur un endroit sûr."
+
+  [[section.item]]
+  icon = "talk"
+  name.en = "Talks"
+  name.fr = "Parle"
+  text.en = 'plain chat orders like "follow me" or "be a farmer", in 18 languages.'
+  text.fr = "des ordres simples comme « suis-moi » ou « sois fermière », en 18 langues."
+
+  [[section.item]]
+  icon = "mood"
+  name.en = "Lives"
+  name.fr = "Vit"
+  text.en = "hunger, energy, fun and wishes change how she behaves."
+  text.fr = "faim, énergie, amusement et envies changent son comportement."
+
+  [[section.item]]
+  icon = "fetch"
+  name.en = "Fetches"
+  name.fr = "Rapporte"
+  text.en = "items from the ground, chests and modded storage within 24 blocks."
+  text.fr = "des objets au sol, dans les coffres et les rangements de mods à 24 blocs."
+
+  [[section.item]]
+  icon = "work"
+  name.en = "Works"
+  name.fr = "Travaille"
+  text.en = "as a lumberjack, farmer or cook, with her own chests."
+  text.fr = "comme bûcheronne, fermière ou cuisinière, avec ses propres coffres."
+
+[[section]]
+id = "yours"
+title.en = "Make Her Yours"
+title.fr = "La Personnaliser"
+icon = "style"
+
+  [[section.item]]
+  icon = "style"
+  name.en = "Looks"
+  name.fr = "Apparence"
+  text.en = "six outfits, any Minecraft skin, or a Blockbench model."
+  text.fr = "six tenues, n'importe quel skin Minecraft ou un modèle Blockbench."
+
+  [[section.item]]
+  icon = "emotes"
+  name.en = "30 emotes"
+  name.fr = "30 émotes"
+  text.en = "from chat, the menu (key K) or the wheel (key G)."
+  text.fr = "depuis le chat, le menu (touche K) ou la roue (touche G)."
+
+[[section]]
+id = "start"
+title.en = "Getting Started"
+title.fr = "Premiers Pas"
+icon = "rocket"
+layout = "steps"
+
+  [[section.item]]
+  text.en = "Put the jar of your version and loader in the <code>mods</code> folder."
+  text.fr = "Placez le jar de votre version et de votre chargeur dans le dossier <code>mods</code>."
+
+  [[section.item]]
+  text.en = 'Say "I feel lonely" in chat, then press <strong>K</strong> near her.'
+  text.fr = "Dites « je me sens seul » dans le chat, puis appuyez sur <strong>K</strong> près d'elle."
+
+  [[section.item]]
+  text.en = 'Guides: <a href="https://github.com/laforetbrut/mods-mc-laura/blob/main/docs/ACTIONS.md">actions</a>, <a href="https://github.com/laforetbrut/mods-mc-laura/blob/main/docs/COMMANDS.md">commands</a>, <a href="https://github.com/laforetbrut/mods-mc-laura/blob/main/docs/FAQ.md">FAQ</a>.'
+  text.fr = 'Guides : <a href="https://github.com/laforetbrut/mods-mc-laura/blob/main/docs/ACTIONS.md">actions</a>, <a href="https://github.com/laforetbrut/mods-mc-laura/blob/main/docs/COMMANDS.md">commandes</a>, <a href="https://github.com/laforetbrut/mods-mc-laura/blob/main/docs/FAQ.md">FAQ</a>.'
+
+[support]
+url = "https://github.com/laforetbrut/mods-mc-laura/issues"
+text.en = 'A problem or an idea? Ask on <a href="https://discord.gg/xjF8Rtzyd4">Discord</a> or'
+text.fr = 'Un problème ou une idée ? Demandez sur <a href="https://discord.gg/xjF8Rtzyd4">Discord</a> ou'
+link.en = "open an issue"
+link.fr = "ouvrez un ticket"
+
+[[partner]]
+shared = true
+title.en = "Official Hosting Partner"
+title.fr = "Hébergeur Officiel Partenaire"
+text.en = "Play with Laura and your friends on your own server."
+text.fr = "Jouez avec Laura et vos amis sur votre propre serveur."
+image = "https://arcadia-echoes-of-power.fr/storage/curseforge/bannerwab.png"
+alt = "WabbaNode"
+url = "https://wabbanode.com/partner/vyrriox"
+
+[[extra]]
+shared = true
+title.en = "Join the Adventure"
+title.fr = "Rejoignez l'Aventure"
+text.en = "Discover our other mods in our <strong>Industry, Magic & Exploration</strong> modpack."
+text.fr = "Découvrez nos autres mods dans notre modpack <strong>Industrie, Magie & Exploration</strong>."
+url = "https://arcadia-echoes-of-power.fr/"
+badge = { label = { en = "Play now", fr = "Jouer" }, message = "Modpack", icon = "play" }
+
+[footer]
+title.en = "Support the Project"
+title.fr = "Soutenir le Projet"
+badges = ["donate"]

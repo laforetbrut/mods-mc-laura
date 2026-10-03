@@ -43,3 +43,7 @@ ERROR_LOG.md
 
 # Built jars collected by tools/collect_jars.sh
 jars/
+
+# Page images: recording folder, script caches, generated pictures (hosted in Team-Arcadia/images)
+images/*
+!images/tools/
