@@ -1,0 +1,120 @@
+{
+  "name": "My Girlfriend Laura",
+  "slug": "laura",
+  "kind": "minecraft-mod",
+  "tagline": "My Girlfriend",
+  "concept": {
+    "en": "An L that ends in a heart: Laura, and what she gives back.",
+    "fr": "Un L qui se termine en cœur : Laura, et ce qu'elle rend."
+  },
+  "palette": {
+    "primary": "#f77fb2",
+    "secondary": "#96285a",
+    "accent": "#ffa0c8",
+    "ink": "#2a1520",
+    "paper": "#fff5f8"
+  },
+  "mark": "mark.svg",
+  "mark_mono": "mark-mono.svg",
+  "mark_small": "mark-small.svg",
+  "wordmark": "wordmark.svg",
+  "wordmark_reverse": "wordmark-reverse.svg",
+  "tagline_font": {
+    "font": "Inter",
+    "weight": 800,
+    "tracking": 160,
+    "case": "upper"
+  },
+  "lockup": {
+    "icon_padding": 0.06,
+    "horizontal": {
+      "gap": 0.22,
+      "wordmark": 0.5,
+      "tagline": 0.14,
+      "tagline_gap": 0.1
+    },
+    "stacked": {
+      "gap": 0.16,
+      "wordmark": 0.34,
+      "max_width": 2.4,
+      "tagline": 0.1,
+      "tagline_gap": 0.08
+    }
+  },
+  "icon": {
+    "background": "#fff0f6",
+    "knockout": false,
+    "mark_on_background": null,
+    "app_scale": 0.7,
+    "radius": 0.22,
+    "maskable_scale": 0.52,
+    "avatar_scale": 0.66
+  },
+  "banner": {
+    "background": "#2a1520",
+    "light": "#f77fb2",
+    "pattern": "mark",
+    "pattern_opacity": 0.05,
+    "texture": null,
+    "grain": 0.25,
+    "vignette": 0.35,
+    "shadow": 40,
+    "tagline": true,
+    "colorway": "reverse",
+    "logo_fill": 0.78
+  },
+  "banners": null,
+  "minecraft": {
+    "logo_layout": "horizontal",
+    "logo_colorway": "color",
+    "logo_width": 600,
+    "icon_scale": 0.9
+  },
+  "ui_font": "Inter",
+  "rationale": {
+    "en": [
+      "The mark is the initial of Laura, the only character of the mod.",
+      "Its foot ends in a heart, like the end of a signature: affection is the core system of the mod, and the heart is the item that summons her.",
+      "Drawn on a 16 pixel grid, the size of an item in the game, with the pinks of Laura's Heart.",
+      "In one color the L and the heart stay two separate shapes, so the idea holds on a favicon or a stamp.",
+      "The wordmark is drawn on the same pixel grid as the mark, with the same outline and shade."
+    ],
+    "fr": [
+      "Le symbole est l'initiale de Laura, le seul personnage du mod.",
+      "Son pied se termine en cœur, comme la fin d'une signature : l'affection est le système central du mod, et le cœur est l'objet qui l'invoque.",
+      "Dessiné sur une grille de 16 pixels, la taille d'un objet du jeu, avec les roses du Cœur de Laura.",
+      "En une couleur, le L et le cœur restent deux formes distinctes : l'idée tient sur un favicon ou un tampon.",
+      "Le logotype est dessiné sur la même grille pixel que le symbole, avec le même contour et la même ombre."
+    ]
+  },
+  "palette_notes": {
+    "primary": {
+      "en": "The pink of Laura's Heart, the item that summons her.",
+      "fr": "Le rose du Cœur de Laura, l'objet qui l'invoque."
+    },
+    "secondary": {
+      "en": "The deep raspberry outline of the same heart.",
+      "fr": "Le contour framboise foncé de ce même cœur."
+    },
+    "accent": {
+      "en": "Its highlight, for light touches only.",
+      "fr": "Son reflet, pour les touches de lumière seulement."
+    },
+    "ink": {
+      "en": "A dark plum, the outline pushed to near black.",
+      "fr": "Une prune sombre, le contour poussé presque au noir."
+    },
+    "paper": {
+      "en": "A warm pink white, the background of her menus.",
+      "fr": "Un blanc rosé chaud, le fond de ses menus."
+    }
+  },
+  "type_note": {
+    "en": "LAURA is drawn by hand on the grid of the mark, with the same outline, fill and bottom shade, so the word and the L read as one piece; Inter Extra Bold in capitals for the tagline.",
+    "fr": "LAURA est dessiné à la main sur la grille du symbole, avec le même contour, le même remplissage et la même ombre en bas : le mot et le L forment un seul ensemble ; Inter Extra Bold en capitales pour la signature."
+  },
+  "color_sources": [
+    "../../common/1.21.1/src/main/resources/assets/lauramod/textures/item/laura_heart.png"
+  ],
+  "grid": 16
+}

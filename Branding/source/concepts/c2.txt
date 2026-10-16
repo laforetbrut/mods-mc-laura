@@ -1,0 +1,28 @@
+palette:
+o = #96285a
+p = #f77fb2
+m = #e0558f
+l = #ffa0c8
+h = #6b3e26
+d = #4a2a1a
+s = #f5d1bc
+k = #2b1a14
+b = #3f8fd6
+c = #f4a3ad
+grid:
+................
+..ooo......ooo..
+.ohhhoo..oohhho.
+ohhhhhhoohhhhhho
+ohhhhhhhhhhhhhho
+ohhhhhhhhhhhhhho
+ohhhshhhhhhshhho
+ohhsssshhssssdho
+.ohkksssssskkdo.
+.ohbbsssssbbsdo.
+..ocsssmmsssco..
+...ossssssssoo..
+....ossssssoo...
+.....ossssoo....
+......oooo......
+................

@@ -1,0 +1,22 @@
+palette:
+o = #fff5f8
+p = #f77fb2
+m = #e0558f
+l = #ffa0c8
+grid:
+oooo...........oooooooo...oooo....oooo.oooooooooo.....oooooooo..
+olpo...........olpppppo...olpo....olpo.olpppppppo.....olpppppo..
+oppo.........ooommmmmmooo.oppo....oppo.oppmmmmmmooo.ooommmmmmooo
+oppo.........olpoooooolpo.oppo....oppo.oppoooooolpo.olpoooooolpo
+oppo.........oppo....oppo.oppo....oppo.oppo....oppo.oppo....oppo
+oppo.........oppo....oppo.oppo....oppo.oppo....oppo.oppo....oppo
+oppo.........oppooooooppo.oppo....oppo.oppoooooommo.oppooooooppo
+oppo.........oppppppppppo.oppo....oppo.oppppppppooo.oppppppppppo
+oppo.........oppmmmmmmppo.oppo....oppo.oppmmppmmo...oppmmmmmmppo
+oppo.........oppooooooppo.oppo....oppo.oppooppooo...oppooooooppo
+oppo.........oppo....oppo.oppo....oppo.oppoommooo...oppo....oppo
+oppo.........oppo....oppo.oppo....oppo.oppoooolpo...oppo....oppo
+oppooooooooo.oppo....oppo.ommoooooommo.oppo..ommooo.oppo....oppo
+oppppppppppo.oppo....oppo.ooolpppppooo.oppo..ooolpo.oppo....oppo
+ommmmmmmmmmo.ommo....ommo...ommmmmmo...ommo....ommo.ommo....ommo
+oooooooooooo.oooo....oooo...oooooooo...oooo....oooo.oooo....oooo
