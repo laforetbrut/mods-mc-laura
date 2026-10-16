@@ -18,6 +18,8 @@ import os
 import re
 import sys
 
+from PIL import Image
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
@@ -86,9 +88,13 @@ def build_badges(badges, theme, out, rows=None):
         check_glyphs(file, label + message)
         drawn[file] = kit.badge(label, message, theme, resolve_icon(icon_name, out), alt)
     for file, img in {**polish.badges(drawn), **sharp}.items():
+        if file in sharp and vector.SCALE > 1:
+            # CurseForge drops the width attribute of linked badges, so a badge drawn at twice its size
+            # would show twice too big: it is saved at the size it is shown.
+            img = img.resize((img.width // vector.SCALE, img.height // vector.SCALE), Image.LANCZOS)
         img.save(os.path.join(out, file), optimize=True, dpi=img.info.get("dpi", (72, 72)))
         total += os.path.getsize(os.path.join(out, file))
-        widths[file] = img.width // (vector.SCALE if file in sharp else 1)
+        widths[file] = img.width
     if badges:
         print(f"badges: {len(badges)} files in {out}, {total / 1e3:.0f} KB in all")
     if widths and max(widths.values()) > kit.W:

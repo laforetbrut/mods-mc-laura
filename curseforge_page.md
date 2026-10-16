@@ -1,7 +1,7 @@
 <div align="center" style="text-align:center">
 <p><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/hero.gif" alt="My Girlfriend Laura: Laura waves under the cherry trees / My Girlfriend Laura : Laura salue sous les cerisiers" width="800"></p>
-<p><a href="https://discord.gg/xjF8Rtzyd4"><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/badge-discord.png" alt="Discord: Join" width="102"></a> <a href="https://arcadia-echoes-of-power.fr/"><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/badge-website.png" alt="Arcadia: Visit" width="102"></a> <a href="https://github.com/laforetbrut/mods-mc-laura"><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/badge-source.png" alt="Source: GitHub" width="97"></a> <a href="https://buy.stripe.com/3cI3co6X97Vy4IK50QfIs00"><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/badge-donate.png" alt="Donate: Stripe" width="98"></a> <a href="https://www.arcadia-echoes-of-power.fr/partenariat"><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/badge-partners.png" alt="Partners: See" width="111"></a></p>
-<p><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/badge-minecraft.png" alt="Minecraft: 1.20.1 | 1.21.1 | 26.1.2" width="250"> <img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/badge-loaders.png" alt="Loaders: NeoForge | Forge | Fabric" width="222"></p>
+<p><a href="https://discord.gg/xjF8Rtzyd4"><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/badge-discord.png" alt="Discord: Join" width="51"></a> <a href="https://arcadia-echoes-of-power.fr/"><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/badge-website.png" alt="Arcadia: Visit" width="51"></a> <a href="https://github.com/laforetbrut/mods-mc-laura"><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/badge-source.png" alt="Source: GitHub" width="49"></a> <a href="https://buy.stripe.com/3cI3co6X97Vy4IK50QfIs00"><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/badge-donate.png" alt="Donate: Stripe" width="49"></a> <a href="https://www.arcadia-echoes-of-power.fr/partenariat"><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/badge-partners.png" alt="Partners: See" width="56"></a></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/badge-minecraft.png" alt="Minecraft: 1.20.1 | 1.21.1 | 26.1.2" width="125"> <img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/badge-loaders.png" alt="Loaders: NeoForge | Forge | Fabric" width="111"></p>
 </div>
 
 <div align="center" style="text-align:center">
@@ -92,12 +92,12 @@
 <h3><span style="font-size:24px;color:#e5e5e5"><strong>Join the Adventure / Rejoignez l'Aventure</strong></span></h3>
 <p>Discover our other mods in our <strong>Industry, Magic &amp; Exploration</strong> modpack.<br><em>Découvrez nos autres mods dans notre modpack <strong>Industrie, Magie &amp; Exploration</strong>.</em></p>
 <p><a href="https://arcadia-echoes-of-power.fr/"><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/shared/arcadia-v2/server.gif" alt="The Arcadia server" width="800"></a></p>
-<p><a href="https://arcadia-echoes-of-power.fr/"><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/badge-extra-1-en.png" alt="Play now: Modpack" width="182"></a></p>
+<p><a href="https://arcadia-echoes-of-power.fr/"><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/badge-extra-1-en.png" alt="Play now: Modpack" width="91"></a></p>
 </div>
 
 <div align="center" style="text-align:center">
 <p><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/divider.gif" alt="" width="800"></p>
 <p><span style="font-size:24px;color:#e5e5e5"><strong>Support the Project / Soutenir le Projet</strong></span></p>
-<p><a href="https://buy.stripe.com/3cI3co6X97Vy4IK50QfIs00"><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/badge-donate.png" alt="Donate: Stripe" width="98"></a></p>
+<p><a href="https://buy.stripe.com/3cI3co6X97Vy4IK50QfIs00"><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/badge-donate.png" alt="Donate: Stripe" width="49"></a></p>
 <p><strong>Author / Auteur:</strong> vyrriox &nbsp;|&nbsp; <strong>License / Licence:</strong> Apache-2.0</p>
 </div>
