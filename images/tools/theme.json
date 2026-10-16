@@ -1,6 +1,7 @@
 {
-  "name": "laura",
+  "name": "My Girlfriend Laura",
   "accent": "#f77fb2",
-  "ornament": "heart",
+  "alt": "#96285a",
+  "ornament": "Branding/icons/favicon-16.png",
   "shape": "pill"
 }
