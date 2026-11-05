@@ -2,6 +2,7 @@ package com.vyrriox.lauramod.client.gui;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.vyrriox.lauramod.LauraCore;
 import com.vyrriox.lauramod.LauraMod;
 import com.vyrriox.lauramod.client.ClientState;
 import com.vyrriox.lauramod.client.LauraClient;
@@ -786,7 +787,7 @@ public class LauraMenuScreen extends Screen {
             try (var stream = Files.list(dir)) {
                 stream.filter(p -> p.getFileName().toString().toLowerCase(Locale.ROOT).endsWith(extension)).sorted().forEach(out::add);
             } catch (Exception e) {
-                LauraMod.LOGGER.debug("Could not list {}", dir, e);
+                LauraCore.LOGGER.debug("Could not list {}", dir, e);
             }
         }
         return out;
@@ -812,7 +813,7 @@ public class LauraMenuScreen extends Screen {
         try {
             LauraClientNetwork.upload(kind, file.getFileName().toString(), Files.readAllBytes(file), laura.getId(), laura.isSlim());
         } catch (Exception e) {
-            LauraMod.LOGGER.warn("Could not read {}", file);
+            LauraCore.LOGGER.warn("Could not read {}", file);
         }
     }
 

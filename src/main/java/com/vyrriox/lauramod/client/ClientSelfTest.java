@@ -1,6 +1,6 @@
 package com.vyrriox.lauramod.client;
 
-import com.vyrriox.lauramod.LauraMod;
+import com.vyrriox.lauramod.LauraCore;
 import com.vyrriox.lauramod.client.gui.EmoteWheelScreen;
 import com.vyrriox.lauramod.client.gui.LauraMenuScreen;
 import com.vyrriox.lauramod.entity.LauraEntity;
@@ -58,7 +58,7 @@ public final class ClientSelfTest {
         try {
             STEPS.get(step++).run();
         } catch (Throwable t) {
-            LauraMod.LOGGER.error("[CLIENTTEST] step {} failed", step, t);
+            LauraCore.LOGGER.error("[CLIENTTEST] step {} failed", step, t);
         }
         wait = 25;
     }
@@ -124,7 +124,7 @@ public final class ClientSelfTest {
 
     private static void shot(Minecraft mc, String name) {
         Screenshot.grab(mc.gameDirectory, "laura_" + name + ".png", mc.getMainRenderTarget(), 1,
-                message -> LauraMod.LOGGER.info("[CLIENTTEST] {}", message.getString()));
+                message -> LauraCore.LOGGER.info("[CLIENTTEST] {}", message.getString()));
     }
 
     private static void plan(Minecraft mc) {
@@ -253,7 +253,7 @@ public final class ClientSelfTest {
         }));
         STEPS.add(() -> shot(mc, "inventory"));
         STEPS.add(() -> {
-            LauraMod.LOGGER.info("[CLIENTTEST] done");
+            LauraCore.LOGGER.info("[CLIENTTEST] done");
             mc.stop();
         });
     }

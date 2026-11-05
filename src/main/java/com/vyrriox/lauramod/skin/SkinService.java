@@ -1,6 +1,7 @@
 package com.vyrriox.lauramod.skin;
 
 import com.vyrriox.lauramod.world.LauraAdvancements;
+import com.vyrriox.lauramod.LauraCore;
 import com.vyrriox.lauramod.LauraMod;
 import com.vyrriox.lauramod.config.LauraConfig;
 import com.vyrriox.lauramod.entity.LauraEntity;
@@ -321,7 +322,7 @@ public final class SkinService {
             } catch (ModelParser.InvalidModelException e) {
                 if (e.getCause() instanceof Error) {
                     // Not a mistake in a model: a file made to break the parser.
-                    LauraMod.LOGGER.warn("Model upload {} from {} refused: {}", sanitize(name), player.getGameProfile().name(), e.getCause().toString());
+                    LauraCore.LOGGER.warn("Model upload {} from {} refused: {}", sanitize(name), player.getGameProfile().name(), e.getCause().toString());
                 }
                 LauraNetwork.uploadResult(player, false, Component.translatable("lauramod.upload.invalid_model", String.valueOf(e.getMessage())));
                 return;
@@ -333,7 +334,7 @@ public final class SkinService {
                 LauraNetwork.uploadResult(player, false, Component.translatable("lauramod.upload.failed"));
                 return;
             }
-            LauraMod.LOGGER.info("{} uploaded {} {}", player.getGameProfile().name(), kind.name().toLowerCase(Locale.ROOT), entry.name());
+            LauraCore.LOGGER.info("{} uploaded {} {}", player.getGameProfile().name(), kind.name().toLowerCase(Locale.ROOT), entry.name());
             LauraNetwork.uploadResult(player, true, Component.translatable("lauramod.upload.done", entry.name()));
             if (kind == AssetKind.SKIN) {
                 laura.setSkin(new SkinRef(SkinRef.Type.SERVER, entry.name(), entry.sha1()), slim);
@@ -343,7 +344,7 @@ public final class SkinService {
                 LauraAdvancements.award(player, "makeover");
             }
         } catch (IOException e) {
-            LauraMod.LOGGER.warn("Upload from {} failed: {}", player.getGameProfile().name(), e.getMessage());
+            LauraCore.LOGGER.warn("Upload from {} failed: {}", player.getGameProfile().name(), e.getMessage());
             LauraNetwork.uploadResult(player, false, Component.translatable("lauramod.upload.failed"));
         }
     }
