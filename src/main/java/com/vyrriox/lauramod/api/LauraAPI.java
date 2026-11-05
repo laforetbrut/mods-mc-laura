@@ -1,6 +1,6 @@
 package com.vyrriox.lauramod.api;
 
-import com.vyrriox.lauramod.LauraMod;
+import com.vyrriox.lauramod.LauraCore;
 import com.vyrriox.lauramod.desire.Desire;
 import com.vyrriox.lauramod.desire.DesireType;
 import com.vyrriox.lauramod.dialogue.LineFormatter;
@@ -81,7 +81,7 @@ public final class LauraAPI {
                 try {
                     listener.handle(laura, player, d);
                 } catch (Throwable t) {
-                    LauraMod.LOGGER.error("A Laura API listener for '{}' failed", event, t);
+                    LauraCore.LOGGER.error("A Laura API listener for '{}' failed", event, t);
                 }
             }
         }
@@ -90,7 +90,7 @@ public final class LauraAPI {
             try {
                 return ext.post(event, laura, player, d);
             } catch (Throwable t) {
-                LauraMod.LOGGER.error("A scripted Laura event '{}' failed", event, t);
+                LauraCore.LOGGER.error("A scripted Laura event '{}' failed", event, t);
             }
         }
         return false;

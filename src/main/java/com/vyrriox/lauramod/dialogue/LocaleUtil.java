@@ -1,8 +1,5 @@
 package com.vyrriox.lauramod.dialogue;
 
-import com.vyrriox.lauramod.LauraMod;
-import net.minecraft.server.level.ServerPlayer;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -45,14 +42,6 @@ public final class LocaleUtil {
             Map.entry("de_ch", "de_de"), Map.entry("nl_be", "nl_nl"));
 
     private LocaleUtil() {
-    }
-
-    /**
-     * The language the player's client reported. Minecraft 1.20.1 has no vanilla accessor for it,
-     * so the loader provides it.
-     */
-    public static String of(ServerPlayer player) {
-        return LauraMod.platform().playerLanguage(player);
     }
 
     /** Lower case, underscores, never empty. */

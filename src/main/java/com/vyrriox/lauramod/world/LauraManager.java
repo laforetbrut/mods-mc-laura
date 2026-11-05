@@ -1,5 +1,6 @@
 package com.vyrriox.lauramod.world;
 
+import com.vyrriox.lauramod.LauraCore;
 import com.vyrriox.lauramod.LauraMod;
 import com.vyrriox.lauramod.config.LauraConfig;
 import com.vyrriox.lauramod.dialogue.LineFormatter;
@@ -96,7 +97,7 @@ public final class LauraManager {
             try {
                 r.run();
             } catch (RuntimeException e) {
-                LauraMod.LOGGER.error("Scheduled Laura task failed", e);
+                LauraCore.LOGGER.error("Scheduled Laura task failed", e);
             }
         }
         if (server.getTickCount() % 10 == 0) {
@@ -374,7 +375,7 @@ public final class LauraManager {
         for (ServerLevel other : level.getServer().getAllLevels()) {
             // Entity ids grow with every entity the server creates: the higher one came last.
             if (other != level && other.getEntity(laura.getUUID()) instanceof LauraEntity twin && twin.isAlive() && twin.getId() < laura.getId()) {
-                LauraMod.LOGGER.warn("{} exists twice (in {} and in {}), removing the one that loaded last", laura.getLauraName(),
+                LauraCore.LOGGER.warn("{} exists twice (in {} and in {}), removing the one that loaded last", laura.getLauraName(),
                         other.dimension().location(), level.dimension().location());
                 laura.discard();
                 return true;
@@ -629,11 +630,11 @@ public final class LauraManager {
         laura.setOrderedToSit(false);
         laura.setMode(LauraMode.FOLLOW);
         if (snapshot != null && !clearOldBody(player.getServer(), laura)) {
-            LauraMod.LOGGER.warn("{} is still alive somewhere, not creating a copy", laura.getLauraName());
+            LauraCore.LOGGER.warn("{} is still alive somewhere, not creating a copy", laura.getLauraName());
             return null;
         }
         if (!level.addFreshEntity(laura)) {
-            LauraMod.LOGGER.warn("Could not add a Laura to the world (duplicate UUID)");
+            LauraCore.LOGGER.warn("Could not add a Laura to the world (duplicate UUID)");
             return null;
         }
         level.sendParticles(ParticleTypes.END_ROD, laura.getX(), laura.getY() + 1, laura.getZ(), 30, 0.4, 0.6, 0.4, 0.05);
@@ -877,7 +878,7 @@ public final class LauraManager {
 
     /** She could not be found: bring her back from her last snapshot. */
     private static void restoreLost(ServerPlayer player, LauraWorldData.Record record) {
-        LauraMod.LOGGER.info("{} of {} could not be found, restoring her from her last snapshot", record.lauraName, player.getGameProfile().getName());
+        LauraCore.LOGGER.info("{} of {} could not be found, restoring her from her last snapshot", record.lauraName, player.getGameProfile().getName());
         if (record.snapshot == null) {
             data(player.getServer()).remove(record.laura);
             return;

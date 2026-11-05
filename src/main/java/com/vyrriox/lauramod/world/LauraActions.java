@@ -5,7 +5,7 @@ import com.vyrriox.lauramod.config.LauraConfig;
 import com.vyrriox.lauramod.cooking.CookingSupport;
 import com.vyrriox.lauramod.dialogue.DialogueManager;
 import com.vyrriox.lauramod.dialogue.LineFormatter;
-import com.vyrriox.lauramod.dialogue.LocaleUtil;
+import com.vyrriox.lauramod.dialogue.PlayerLocale;
 import com.vyrriox.lauramod.dialogue.TextMatcher;
 import com.vyrriox.lauramod.entity.CombatMode;
 import com.vyrriox.lauramod.entity.Emote;
@@ -375,7 +375,7 @@ public final class LauraActions {
         if (direct.isPresent()) {
             return direct.get();
         }
-        List<String> keywords = DialogueManager.matchItems(TextMatcher.Prepared.of(w), LocaleUtil.of(player));
+        List<String> keywords = DialogueManager.matchItems(TextMatcher.Prepared.of(w), PlayerLocale.of(player));
         for (String keyword : keywords) {
             Optional<ItemSpec> spec = ItemSpec.parse(keyword);
             if (spec.isPresent()) {

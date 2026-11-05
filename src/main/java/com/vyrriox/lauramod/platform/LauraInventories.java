@@ -1,5 +1,6 @@
 package com.vyrriox.lauramod.platform;
 
+import com.vyrriox.lauramod.LauraCore;
 import com.vyrriox.lauramod.LauraMod;
 import com.vyrriox.lauramod.entity.LauraEntity;
 import com.vyrriox.lauramod.entity.LauraSpeech;
@@ -55,7 +56,7 @@ public final class LauraInventories {
         try {
             modded = LauraMod.platform().inventoryAt(level, pos);
         } catch (RuntimeException e) {
-            LauraMod.LOGGER.debug("Inventory lookup failed at {}: {}", pos, e.toString());
+            LauraCore.LOGGER.debug("Inventory lookup failed at {}: {}", pos, e.toString());
         }
         if (modded != null) {
             return modded;
@@ -102,7 +103,7 @@ public final class LauraInventories {
                     field.setAccessible(true);
                     return field;
                 } catch (RuntimeException e) {
-                    LauraMod.LOGGER.debug("Container locks will be read from their saved data: {}", e.toString());
+                    LauraCore.LOGGER.debug("Container locks will be read from their saved data: {}", e.toString());
                 }
             }
         }
@@ -180,7 +181,7 @@ public final class LauraInventories {
         try {
             return LauraMod.platform().mayUseContainer(player, level, pos);
         } catch (RuntimeException e) {
-            LauraMod.LOGGER.debug("Container permission check failed at {}: {}", pos, e.toString());
+            LauraCore.LOGGER.debug("Container permission check failed at {}: {}", pos, e.toString());
             return false;
         }
     }
