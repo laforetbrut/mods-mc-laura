@@ -4,6 +4,20 @@ All notable changes to My Girlfriend Laura are documented here.
 
 ---
 
+## [Unreleased]
+
+### Changed
+
+- **License**: Apache License 2.0 instead of MIT. Forks and redistribution stay allowed; a redistributed copy must keep the copyright, the `LICENSE` and `NOTICE` files, and state what was changed. Apache 2.0 also grants the patent rights of contributors. Releases up to 2.0.0 remain under MIT.
+- **Source layout**: the logic that does not depend on Minecraft or a loader (dialogue sets and text matching, the model parser helpers and Molang, config files, skin references, caches, enums) now lives once in `core/src/main/java` and is compiled into the nine targets, instead of one copy per Minecraft version. Packages are unchanged. The mod logger and id moved to `LauraCore`. The continuous integration checks that core never imports the game or a loader.
+
+### Modifications
+
+- **Licence**: Apache License 2.0 au lieu de MIT. Les forks et la redistribution restent permis ; une copie redistribuée doit garder le copyright, les fichiers `LICENSE` et `NOTICE`, et indiquer ce qui a été modifié. Apache 2.0 accorde aussi les droits de brevet des contributeurs. Les versions jusqu'à la 2.0.0 restent sous MIT.
+- **Organisation des sources** : la logique qui ne dépend ni de Minecraft ni d'un chargeur (jeux de dialogues et reconnaissance de texte, outils de l'analyseur de modèles et Molang, fichiers de configuration, références de skins, caches, énumérations) se trouve désormais une seule fois dans `core/src/main/java` et est compilée dans les neuf cibles, au lieu d'une copie par version de Minecraft. Les paquets ne changent pas. Le logger et l'identifiant du mod passent dans `LauraCore`. L'intégration continue vérifie que core n'importe jamais le jeu ni un chargeur.
+
+---
+
 ## [2.0.0] - 2026-10-01
 
 ### Added

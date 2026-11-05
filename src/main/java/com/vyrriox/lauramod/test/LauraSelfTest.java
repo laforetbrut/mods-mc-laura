@@ -3,6 +3,7 @@ package com.vyrriox.lauramod.test;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.vyrriox.lauramod.LauraCore;
 import com.vyrriox.lauramod.LauraMod;
 import net.minecraft.server.MinecraftServer;
 
@@ -36,7 +37,7 @@ public final class LauraSelfTest {
         if (!enabled()) {
             return;
         }
-        LauraMod.LOGGER.info("[SELFTEST] Starting the Laura self test suite");
+        LauraCore.LOGGER.info("[SELFTEST] Starting the Laura self test suite");
         runner = new TestRunner(server, LauraTests.all());
     }
 
@@ -83,13 +84,13 @@ public final class LauraSelfTest {
             Path out = LauraMod.platform().gameDir().resolve("lauramod-selftest.json");
             Files.writeString(out, new GsonBuilder().setPrettyPrinting().create().toJson(root), StandardCharsets.UTF_8);
         } catch (Exception e) {
-            LauraMod.LOGGER.error("[SELFTEST] Could not write the report", e);
+            LauraCore.LOGGER.error("[SELFTEST] Could not write the report", e);
         }
-        LauraMod.LOGGER.info("[SELFTEST] {} passed, {} failed", passed, results.size() - passed);
+        LauraCore.LOGGER.info("[SELFTEST] {} passed, {} failed", passed, results.size() - passed);
         for (String failure : failures) {
-            LauraMod.LOGGER.error("[SELFTEST] FAILED {}", failure);
+            LauraCore.LOGGER.error("[SELFTEST] FAILED {}", failure);
         }
-        LauraMod.LOGGER.info("[SELFTEST] RESULT {}", failures.isEmpty() ? "SUCCESS" : "FAILURE");
+        LauraCore.LOGGER.info("[SELFTEST] RESULT {}", failures.isEmpty() ? "SUCCESS" : "FAILURE");
         exitCode = failures.isEmpty() ? 0 : 1;
         // Never stop in the tick the last fake player left: chunks around it are still generating,
         // and vanilla's stop loop can then spin forever on "Saving worlds". A few seconds of normal
@@ -113,7 +114,7 @@ public final class LauraSelfTest {
         stopped = true;
         if (exitCode < 0) {
             // Stopped before the tests ran (port taken, crash at start...): that is a failure too.
-            LauraMod.LOGGER.error("[SELFTEST] RESULT FAILURE: the server stopped before the tests ran");
+            LauraCore.LOGGER.error("[SELFTEST] RESULT FAILURE: the server stopped before the tests ran");
             exitWhenStopped(2, 0);
         }
     }
@@ -135,7 +136,7 @@ public final class LauraSelfTest {
                     Thread.sleep(200);
                 }
                 if (!stopped) {
-                    LauraMod.LOGGER.error("[SELFTEST] The server did not stop in time, forcing the exit");
+                    LauraCore.LOGGER.error("[SELFTEST] The server did not stop in time, forcing the exit");
                 }
                 Thread.sleep(2000);
             } catch (InterruptedException ignored) {

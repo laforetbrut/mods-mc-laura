@@ -1,6 +1,5 @@
 package com.vyrriox.lauramod;
 
-import com.mojang.logging.LogUtils;
 import com.vyrriox.lauramod.config.LauraConfig;
 import com.vyrriox.lauramod.dialogue.DialogueManager;
 import com.vyrriox.lauramod.gift.GiftTable;
@@ -10,7 +9,6 @@ import com.vyrriox.lauramod.skin.ServerAssetStore;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.permissions.Permission;
 import net.minecraft.server.permissions.PermissionLevel;
-import org.slf4j.Logger;
 
 import java.nio.file.Path;
 
@@ -23,9 +21,8 @@ import java.nio.file.Path;
  * @author vyrriox
  */
 public final class LauraMod {
-    public static final String MODID = "lauramod";
-    public static final String NAME = "My Girlfriend Laura";
-    public static final Logger LOGGER = LogUtils.getLogger();
+    public static final String MODID = LauraCore.MODID;
+    public static final String NAME = LauraCore.NAME;
 
     private static Platform platform;
     private static volatile ClientBridge clientBridge = ClientBridge.NOOP;
@@ -35,7 +32,7 @@ public final class LauraMod {
 
     public static void init(Platform loader) {
         platform = loader;
-        LOGGER.info("{} {} starting on {}", NAME, loader.modVersion(), loader.loaderName());
+        LauraCore.LOGGER.info("{} {} starting on {}", NAME, loader.modVersion(), loader.loaderName());
         LauraConfig.load();
         ServerAssetStore.init();
     }
@@ -62,7 +59,7 @@ public final class LauraMod {
         try {
             loader.run();
         } catch (RuntimeException e) {
-            LOGGER.error("Could not load {}, keeping what was loaded before", what, e);
+            LauraCore.LOGGER.error("Could not load {}, keeping what was loaded before", what, e);
         }
     }
 

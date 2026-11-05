@@ -1,6 +1,7 @@
 package com.vyrriox.lauramod.world;
 
 import com.mojang.serialization.Codec;
+import com.vyrriox.lauramod.LauraCore;
 import com.vyrriox.lauramod.LauraMod;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.UUIDUtil;
@@ -192,10 +193,10 @@ public class LauraWorldData extends SavedData {
         }
         try {
             LauraWorldData data = load(NbtIo.readCompressed(file, NbtAccounter.unlimitedHeap()).getCompoundOrEmpty("data"));
-            LauraMod.LOGGER.info("Read {} companions from the world data of an older version", data.records.size());
+            LauraCore.LOGGER.info("Read {} companions from the world data of an older version", data.records.size());
             return data;
         } catch (IOException | RuntimeException e) {
-            LauraMod.LOGGER.warn("Could not read the old companion data {}: {}", file.getFileName(), e.toString());
+            LauraCore.LOGGER.warn("Could not read the old companion data {}: {}", file.getFileName(), e.toString());
             return null;
         }
     }
