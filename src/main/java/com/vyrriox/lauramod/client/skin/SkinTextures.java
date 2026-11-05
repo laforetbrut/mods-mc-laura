@@ -1,6 +1,7 @@
 package com.vyrriox.lauramod.client.skin;
 
 import com.mojang.blaze3d.platform.NativeImage;
+import com.vyrriox.lauramod.LauraCore;
 import com.vyrriox.lauramod.LauraMod;
 import com.vyrriox.lauramod.client.ClientState;
 import com.vyrriox.lauramod.client.network.LauraClientNetwork;
@@ -163,7 +164,7 @@ public final class SkinTextures {
                 Files.createDirectories(target.getParent());
                 Files.write(target, bytes);
             } catch (IOException e) {
-                LauraMod.LOGGER.debug("Could not cache skin {}: {}", name, e.getMessage());
+                LauraCore.LOGGER.debug("Could not cache skin {}: {}", name, e.getMessage());
             }
         }
         String key = "server/" + name + "#" + sha1;
@@ -202,7 +203,7 @@ public final class SkinTextures {
                 byte[] result = bytes;
                 Minecraft.getInstance().execute(() -> register(key, result));
             } catch (Exception e) {
-                LauraMod.LOGGER.info("Could not download skin {}: {}", url, e.getMessage());
+                LauraCore.LOGGER.info("Could not download skin {}: {}", url, e.getMessage());
                 Minecraft.getInstance().execute(() -> CACHE.put(key, new Entry(State.FAILED, null, 0)));
             }
         });
@@ -264,7 +265,7 @@ public final class SkinTextures {
                 Minecraft.getInstance().getTextureManager().release(previous.texture());
             }
         } catch (IOException | RuntimeException e) {
-            LauraMod.LOGGER.info("Invalid skin image: {}", e.getMessage());
+            LauraCore.LOGGER.info("Invalid skin image: {}", e.getMessage());
             CACHE.put(key, new Entry(State.FAILED, null, 0));
         }
     }

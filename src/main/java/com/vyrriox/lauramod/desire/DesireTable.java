@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
+import com.vyrriox.lauramod.LauraCore;
 import com.vyrriox.lauramod.LauraMod;
 import com.vyrriox.lauramod.util.ItemSpec;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -60,13 +61,13 @@ public final class DesireTable {
                 Files.writeString(file, DEFAULTS, StandardCharsets.UTF_8);
             }
         } catch (IOException e) {
-            LauraMod.LOGGER.warn("Could not read {}: {}", file, e.getMessage());
+            LauraCore.LOGGER.warn("Could not read {}: {}", file, e.getMessage());
         }
         JsonObject root;
         try {
             root = JsonParser.parseReader(new JsonReader(new StringReader(text))).getAsJsonObject();
         } catch (Exception e) {
-            LauraMod.LOGGER.error("{} is invalid ({}), using the defaults", file, e.getMessage());
+            LauraCore.LOGGER.error("{} is invalid ({}), using the defaults", file, e.getMessage());
             root = JsonParser.parseReader(new JsonReader(new StringReader(DEFAULTS))).getAsJsonObject();
         }
         com.vyrriox.lauramod.api.ScriptData.extend("desires", root);

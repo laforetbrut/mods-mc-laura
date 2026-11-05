@@ -14,6 +14,7 @@ Thanks for wanting to make Laura a better companion.
 ## Repository layout
 
 ```
+core/src/main/java/              plain Java shared by every target: no Minecraft, Mojang or loader import
 common/<mcversion>/src/main/     code and resources shared by every loader of that Minecraft version
 <loader>-<mcversion>/            one standalone Gradle project per target (neoforge-1.21.1, forge-1.21.1, fabric-1.21.1...)
 tools/                           asset generator and language checker (Python), target branch script, jar collector
@@ -21,8 +22,8 @@ docs/                            the guides
 ```
 
 - `main` holds everything. There is no root build: each `<loader>-<mcversion>/` folder is a Gradle project with its own wrapper.
-- A loader project adds `../common/<mcversion>/src/main` to its source set. The folder itself only holds the loader glue: entry points, networking, the `Platform` implementation and the optional integrations (`compat` package).
-- One branch per target, named like its folder (`neoforge-1.21.1` for example), is generated from `main` by `tools/make_branches.sh`; the branches are created when `main` is published. Such a branch holds that single project at the repository root, with the common code merged into `src/main`. Never edit these branches by hand, and open every pull request against `main`.
+- A loader project adds `../core/src/main` and `../common/<mcversion>/src/main` to its source set. The folder itself only holds the loader glue: entry points, networking, the `Platform` implementation and the optional integrations (`compat` package).
+- One branch per target, named like its folder (`neoforge-1.21.1` for example), is generated from `main` by `tools/make_branches.sh`; the branches are created when `main` is published. Such a branch holds that single project at the repository root, with the common and core code merged into `src/main`. Never edit these branches by hand, and open every pull request against `main`.
 - The nine targets are on `main`: Minecraft 1.20.1, 1.21.1 and 26.1.2, each on NeoForge, Forge and Fabric. Minecraft 1.21.1 is the reference.
 
 The full description is in [docs/BUILDING.md](docs/BUILDING.md).
@@ -129,6 +130,7 @@ You can try a wording in game without building anything: both kinds of files can
 
 - Code, identifiers, comments, log messages and commit messages are written in English.
 - Common code only calls vanilla Minecraft methods and the `Platform` interface (package `platform`). A method added by a loader does not exist on the others: `ServerPlayer.getLanguage()`, for example, is a NeoForge and Forge patch. What only a loader can provide becomes a method of `Platform`, implemented in each loader project.
+- Logic that does not need the game (parsers, data models, text matching, caches, config files, enums) belongs in `core/`, written once for the nine targets. Core imports only the JDK and the libraries the game ships (SLF4J, Gson, Guava); the game side passes it plain values. Use `LauraCore.LOGGER` and `LauraCore.MODID` there. The continuous integration fails when core imports the game or a loader, or when common imports a loader.
 - `common/1.21.1` is the reference. A change made there is carried to the common folder of every other Minecraft version present on `main`, adapted where the game API differs.
 - Compile every loader project of a Minecraft version before calling a change in its common folder done.
 - Optional integrations live in the `compat` package of a loader project. They are compiled against the public API of the other mod, never bundled and never required.
@@ -176,6 +178,7 @@ Merci de vouloir faire de Laura une meilleure compagne.
 ## Organisation du dépôt
 
 ```
+core/src/main/java/              Java pur partagé par toutes les cibles : aucun import de Minecraft, de Mojang ni d'un chargeur
 common/<mcversion>/src/main/     code et ressources partagés par tous les chargeurs de cette version de Minecraft
 <chargeur>-<mcversion>/          un projet Gradle autonome par cible (neoforge-1.21.1, forge-1.21.1, fabric-1.21.1...)
 tools/                           générateur de ressources et vérificateur de langues (Python), script des branches de cible, collecte des jars
@@ -183,8 +186,8 @@ docs/                            les guides
 ```
 
 - `main` contient tout. Il n'y a pas de build racine : chaque dossier `<chargeur>-<mcversion>/` est un projet Gradle avec son propre wrapper.
-- Un projet de chargeur ajoute `../common/<mcversion>/src/main` à son source set. Le dossier lui-même ne contient que la colle du chargeur : points d'entrée, réseau, implémentation de `Platform` et intégrations facultatives (paquet `compat`).
-- Une branche par cible, qui porte le nom de son dossier (`neoforge-1.21.1` par exemple), est générée à partir de `main` par `tools/make_branches.sh` ; les branches sont créées quand `main` est publié. Une telle branche contient ce seul projet à la racine du dépôt, avec le code commun fusionné dans `src/main`. Ne modifiez jamais ces branches à la main, et ouvrez toutes les pull requests sur `main`.
+- Un projet de chargeur ajoute `../core/src/main` et `../common/<mcversion>/src/main` à son source set. Le dossier lui-même ne contient que la colle du chargeur : points d'entrée, réseau, implémentation de `Platform` et intégrations facultatives (paquet `compat`).
+- Une branche par cible, qui porte le nom de son dossier (`neoforge-1.21.1` par exemple), est générée à partir de `main` par `tools/make_branches.sh` ; les branches sont créées quand `main` est publié. Une telle branche contient ce seul projet à la racine du dépôt, avec le code commun et le code de core fusionnés dans `src/main`. Ne modifiez jamais ces branches à la main, et ouvrez toutes les pull requests sur `main`.
 - Les neuf cibles sont sur `main` : Minecraft 1.20.1, 1.21.1 et 26.1.2, chacun sur NeoForge, Forge et Fabric. Minecraft 1.21.1 est la référence.
 
 La description complète se trouve dans [docs/BUILDING.md](docs/BUILDING.md).
@@ -291,6 +294,7 @@ Vous pouvez essayer une formulation en jeu sans rien compiler : les deux sortes 
 
 - Le code, les identifiants, les commentaires, les messages de log et les messages de commit sont écrits en anglais.
 - Le code commun n'appelle que des méthodes du jeu de base et l'interface `Platform` (paquet `platform`). Une méthode ajoutée par un chargeur n'existe pas sur les autres : `ServerPlayer.getLanguage()`, par exemple, est un patch de NeoForge et de Forge. Ce que seul un chargeur peut fournir devient une méthode de `Platform`, implémentée dans chaque projet de chargeur.
+- La logique qui n'a pas besoin du jeu (analyseurs, modèles de données, reconnaissance de texte, caches, fichiers de configuration, énumérations) va dans `core/`, écrite une seule fois pour les neuf cibles. Core n'importe que le JDK et les bibliothèques fournies par le jeu (SLF4J, Gson, Guava) ; le côté jeu lui passe des valeurs simples. Utilisez-y `LauraCore.LOGGER` et `LauraCore.MODID`. L'intégration continue échoue quand core importe le jeu ou un chargeur, ou quand common importe un chargeur.
 - `common/1.21.1` est la référence. Une modification faite dans ce dossier est reportée dans le dossier commun de chaque autre version de Minecraft présente sur `main`, adaptée là où l'API du jeu diffère.
 - Compilez chaque projet de chargeur d'une version de Minecraft avant de considérer comme terminée une modification de son dossier commun.
 - Les intégrations facultatives se trouvent dans le paquet `compat` d'un projet de chargeur. Elles sont compilées avec l'API publique de l'autre mod, jamais incluses dans le jar et jamais obligatoires.

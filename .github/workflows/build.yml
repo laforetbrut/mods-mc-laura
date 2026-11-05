@@ -28,6 +28,26 @@ jobs:
             python3 tools/check_lang.py --mc "$version"
           done
 
+  # core/ is plain Java compiled into every target: it must not import the game or a loader, and
+  # common/ must not import a loader. Only on main: the target branches merge both into src/main.
+  layers:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check layers
+        run: |
+          if [ ! -d core ]; then echo "No core folder on this branch."; exit 0; fi
+          status=0
+          if grep -rnE --include='*.java' '^import (static )?(net\.minecraft|com\.mojang|net\.neoforged|net\.minecraftforge|net\.fabricmc)\.' core; then
+            echo "::error::core/ imports Minecraft or a loader (lines above): move that code to common/ or pass a plain value."
+            status=1
+          fi
+          if grep -rnE --include='*.java' '^import (static )?(net\.neoforged|net\.minecraftforge|net\.fabricmc)\.' common; then
+            echo "::error::common/ imports a loader (lines above): move that code to the loader folders."
+            status=1
+          fi
+          exit $status
+
   build:
     runs-on: ubuntu-latest
     strategy:

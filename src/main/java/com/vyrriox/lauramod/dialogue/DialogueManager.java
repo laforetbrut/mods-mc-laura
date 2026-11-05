@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
+import com.vyrriox.lauramod.LauraCore;
 import com.vyrriox.lauramod.LauraMod;
 import com.vyrriox.lauramod.config.LauraConfig;
 import net.minecraft.util.RandomSource;
@@ -70,15 +71,15 @@ public final class DialogueManager {
                 }
                 boolean replace = replaceAll || (json.has("mode") && "replace".equalsIgnoreCase(json.get("mode").getAsString()));
                 loaded.computeIfAbsent(locale, DialogueSet::new).merge(json, replace);
-                LauraMod.LOGGER.info("Loaded custom dialogues for {} from {}", locale, file.getFileName());
+                LauraCore.LOGGER.info("Loaded custom dialogues for {} from {}", locale, file.getFileName());
             }
         } catch (IOException e) {
-            LauraMod.LOGGER.warn("Could not list custom dialogues in {}: {}", dir, e.getMessage());
+            LauraCore.LOGGER.warn("Could not list custom dialogues in {}: {}", dir, e.getMessage());
         }
         com.vyrriox.lauramod.api.ScriptData.mergeDialogues(loaded);
         sets = Collections.unmodifiableMap(loaded);
         rebuildIndexes(loaded);
-        LauraMod.LOGGER.info("Dialogues ready: {} languages, {} chat triggers", loaded.size(), triggerIndex.size());
+        LauraCore.LOGGER.info("Dialogues ready: {} languages, {} chat triggers", loaded.size(), triggerIndex.size());
     }
 
     public static Map<String, DialogueSet> sets() {
@@ -398,7 +399,7 @@ public final class DialogueManager {
         List<String> out = new ArrayList<>();
         try (InputStream in = DialogueManager.class.getResourceAsStream(BUILTIN_ROOT + "_index.json")) {
             if (in == null) {
-                LauraMod.LOGGER.error("Built-in dialogue index is missing from the jar");
+                LauraCore.LOGGER.error("Built-in dialogue index is missing from the jar");
                 return out;
             }
             JsonElement root = JsonParser.parseReader(new JsonReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
@@ -406,7 +407,7 @@ public final class DialogueManager {
                 out.add(LocaleUtil.normalize(s));
             }
         } catch (Exception e) {
-            LauraMod.LOGGER.error("Could not read the built-in dialogue index", e);
+            LauraCore.LOGGER.error("Could not read the built-in dialogue index", e);
         }
         return out;
     }
@@ -414,13 +415,13 @@ public final class DialogueManager {
     private static JsonObject readBuiltin(String locale) {
         try (InputStream in = DialogueManager.class.getResourceAsStream(BUILTIN_ROOT + locale + ".json")) {
             if (in == null) {
-                LauraMod.LOGGER.warn("Built-in dialogue file {} is missing", locale);
+                LauraCore.LOGGER.warn("Built-in dialogue file {} is missing", locale);
                 return null;
             }
             String text = new String(in.readAllBytes(), StandardCharsets.UTF_8);
             return parse(text, locale);
         } catch (IOException e) {
-            LauraMod.LOGGER.error("Could not read built-in dialogues {}", locale, e);
+            LauraCore.LOGGER.error("Could not read built-in dialogues {}", locale, e);
             return null;
         }
     }
@@ -429,7 +430,7 @@ public final class DialogueManager {
         try {
             return parse(Files.readString(file, StandardCharsets.UTF_8), file.toString());
         } catch (IOException e) {
-            LauraMod.LOGGER.error("Could not read {}", file, e);
+            LauraCore.LOGGER.error("Could not read {}", file, e);
             return null;
         }
     }
@@ -441,9 +442,9 @@ public final class DialogueManager {
             if (root.isJsonObject()) {
                 return root.getAsJsonObject();
             }
-            LauraMod.LOGGER.error("Dialogue file {} is not a JSON object", source);
+            LauraCore.LOGGER.error("Dialogue file {} is not a JSON object", source);
         } catch (Exception e) {
-            LauraMod.LOGGER.error("Dialogue file {} is invalid: {}", source, e.getMessage());
+            LauraCore.LOGGER.error("Dialogue file {} is invalid: {}", source, e.getMessage());
         }
         return null;
     }
@@ -465,7 +466,7 @@ public final class DialogueManager {
                 }
             }
         } catch (IOException e) {
-            LauraMod.LOGGER.warn("Could not write dialogue help files: {}", e.getMessage());
+            LauraCore.LOGGER.warn("Could not write dialogue help files: {}", e.getMessage());
         }
     }
 

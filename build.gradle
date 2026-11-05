@@ -23,6 +23,14 @@ if (commonDir.isDirectory()) {
     sourceSets.main.resources.srcDir(new File(commonDir, 'resources'))
 }
 
+// Plain Java shared by every target (no Minecraft or loader import) lives in ../core on the main
+// branch. On the per-target branches it is merged into src/main too.
+def coreDir = file("../core/src/main")
+if (coreDir.isDirectory()) {
+    sourceSets.main.java.srcDir(new File(coreDir, 'java'))
+    sourceSets.main.resources.srcDir(new File(coreDir, 'resources'))
+}
+
 sourceSets.main.resources {
     exclude('**/*.bbmodel.license')
 }
