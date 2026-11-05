@@ -9,6 +9,7 @@ bin/
 *.class
 *.jar
 !**/gradle/wrapper/gradle-wrapper.jar
+__pycache__/
 
 # Logs
 *.log
@@ -36,9 +37,14 @@ run-*/
 CLAUDE.md
 test-procedures/
 TEST_PROCEDURE_*.html
+_temp/
 
 # Local development journal
 ERROR_LOG.md
 
 # Built jars collected by tools/collect_jars.sh
 jars/
+
+# Page images: recording folder, script caches, generated pictures (hosted in Team-Arcadia/images)
+images/*
+!images/tools/
