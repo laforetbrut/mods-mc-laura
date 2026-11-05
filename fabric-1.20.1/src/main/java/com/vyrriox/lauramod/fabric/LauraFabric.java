@@ -1,5 +1,6 @@
 package com.vyrriox.lauramod.fabric;
 
+import com.vyrriox.lauramod.LauraCore;
 import com.vyrriox.lauramod.LauraMod;
 import com.vyrriox.lauramod.block.LauraGraveBlock;
 import com.vyrriox.lauramod.entity.LauraEntity;
@@ -152,7 +153,7 @@ public final class LauraFabric implements ModInitializer {
             try {
                 type.spawn(source.getLevel(), stack, null, source.getPos().relative(direction), MobSpawnType.DISPENSER, direction != Direction.UP, false);
             } catch (Exception e) {
-                LauraMod.LOGGER.error("Error while dispensing spawn egg from dispenser at {}", source.getPos(), e);
+                LauraCore.LOGGER.error("Error while dispensing spawn egg from dispenser at {}", source.getPos(), e);
                 return ItemStack.EMPTY;
             }
             stack.shrink(1);

@@ -3,7 +3,7 @@ package com.vyrriox.lauramod.world;
 import com.vyrriox.lauramod.config.LauraConfig;
 import com.vyrriox.lauramod.dialogue.DialogueManager;
 import com.vyrriox.lauramod.dialogue.LineFormatter;
-import com.vyrriox.lauramod.dialogue.LocaleUtil;
+import com.vyrriox.lauramod.dialogue.PlayerLocale;
 import com.vyrriox.lauramod.dialogue.TextMatcher;
 import com.vyrriox.lauramod.entity.Emote;
 import com.vyrriox.lauramod.entity.LauraEntity;
@@ -61,7 +61,7 @@ public final class LauraChat {
         if (nearby.isEmpty()) {
             return nearby;
         }
-        if (DialogueManager.mentionsEveryone(message, LocaleUtil.of(player))) {
+        if (DialogueManager.mentionsEveryone(message, PlayerLocale.of(player))) {
             return nearby;
         }
         List<LauraEntity> named = new ArrayList<>();
@@ -84,10 +84,10 @@ public final class LauraChat {
         if (player.hasDisconnected()) {
             return;
         }
-        List<String> segments = DialogueManager.splitOrders(message, LocaleUtil.of(player));
+        List<String> segments = DialogueManager.splitOrders(message, PlayerLocale.of(player));
         // The summoning words work from anywhere; everything else is proximity chat.
         for (String segment : segments) {
-            DialogueManager.IntentMatch match = DialogueManager.match(segment, LocaleUtil.of(player));
+            DialogueManager.IntentMatch match = DialogueManager.match(segment, PlayerLocale.of(player));
             if (match != null && match.intent().equals("summon")) {
                 LauraManager.summon(player, true);
                 return;
@@ -107,7 +107,7 @@ public final class LauraChat {
             boolean first = true;
             boolean understood = false;
             for (String segment : segments) {
-                DialogueManager.IntentMatch match = DialogueManager.match(segment, LocaleUtil.of(player));
+                DialogueManager.IntentMatch match = DialogueManager.match(segment, PlayerLocale.of(player));
                 if (match == null) {
                     continue;
                 }
@@ -132,7 +132,7 @@ public final class LauraChat {
     private static void notUnderstood(ServerPlayer player, LauraEntity laura, String message) {
         LauraBrain brain = laura.brain();
         if (brain.pendingQuestion() == LauraBrain.Question.LOVE) {
-            DialogueManager.IntentMatch answer = DialogueManager.match(message, ANSWERS, LocaleUtil.of(player));
+            DialogueManager.IntentMatch answer = DialogueManager.match(message, ANSWERS, PlayerLocale.of(player));
             if (answer != null) {
                 brain.answer(player, answer.intent().equals("yes"));
                 return;
@@ -180,7 +180,7 @@ public final class LauraChat {
             case "set_home" -> LauraActions.perform(player, laura, LauraAction.SET_HOME, "", LauraActions.Source.CHAT);
             case "stop" -> LauraActions.perform(player, laura, LauraAction.STOP, "", LauraActions.Source.CHAT);
             case "fetch" -> {
-                List<String> items = DialogueManager.matchItems(prepared, LocaleUtil.of(player));
+                List<String> items = DialogueManager.matchItems(prepared, PlayerLocale.of(player));
                 if (items.isEmpty() && player.getMainHandItem().isEmpty()) {
                     LauraSpeech.say(laura, player, "fetch.what", none);
                     return;
@@ -196,7 +196,7 @@ public final class LauraChat {
             case "job_stop" -> LauraActions.disableJob(player, laura, null);
             case "back_to_work" -> orderOrQueue(player, laura, null, LauraTask.Type.WORK, queue);
             case "assign_chest" -> {
-                String purpose = DialogueManager.matchChestPurpose(prepared, LocaleUtil.of(player));
+                String purpose = DialogueManager.matchChestPurpose(prepared, PlayerLocale.of(player));
                 ChestPurpose p = purpose == null ? null : ChestPurpose.byName(purpose);
                 if (p == null) {
                     LauraSpeech.say(laura, player, "chest.which_purpose", none);

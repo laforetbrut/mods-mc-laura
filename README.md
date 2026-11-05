@@ -173,6 +173,7 @@ Toolchains, development runs, self tests and the optional mods of each target ar
 ## Repository layout
 
 ```
+core/src/main/java/            plain Java shared by every target (no Minecraft or loader import)
 common/<mcversion>/src/main/   code and resources shared by the three loaders of one Minecraft version
 <loader>-<mcversion>/          one standalone Gradle project per target, nine in all
 tools/                         asset generator, language checker, branch generator, jar collector,
@@ -184,8 +185,8 @@ images/tools/                  the builder of the CurseForge page and its banner
   `common/<mcversion>` folder per Minecraft version (1.20.1, 1.21.1, 26.1.2). There is no root build.
 - One branch per target, named like its folder, is generated from `main` by
   `tools/make_branches.sh`; the branches are created when `main` is published. Such a branch
-  holds that single project at the root, with the common code merged into `src/main`. These
-  branches are never edited by hand.
+  holds that single project at the root, with the common and core code merged into `src/main`.
+  These branches are never edited by hand.
 
 ## Contributing and security
 
@@ -385,6 +386,7 @@ chaque cible sont décrits dans [docs/BUILDING.md](docs/BUILDING.md).
 ## Organisation du dépôt
 
 ```
+core/src/main/java/            Java pur partagé par toutes les cibles (aucun import de Minecraft ni d'un chargeur)
 common/<mcversion>/src/main/   code et ressources partagés par les trois chargeurs d'une version de Minecraft
 <chargeur>-<mcversion>/        un projet Gradle autonome par cible, neuf en tout
 tools/                         générateur de ressources, vérificateur de langues, générateur de branches, collecte des jars
@@ -397,8 +399,8 @@ images/tools/                  le générateur de la page CurseForge et de ses b
   de build racine.
 - Une branche par cible, nommée comme son dossier, est générée depuis `main` par
   `tools/make_branches.sh` ; les branches sont créées quand `main` est publié. Une telle branche
-  contient ce seul projet à la racine, avec le code commun fusionné dans `src/main`. Ces branches
-  ne sont jamais modifiées à la main.
+  contient ce seul projet à la racine, avec le code commun et le code de core fusionnés dans
+  `src/main`. Ces branches ne sont jamais modifiées à la main.
 
 ## Contribuer et sécurité
 

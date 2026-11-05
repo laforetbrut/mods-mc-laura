@@ -1,5 +1,6 @@
 package com.vyrriox.lauramod.skin;
 
+import com.vyrriox.lauramod.LauraCore;
 import com.vyrriox.lauramod.LauraMod;
 import com.vyrriox.lauramod.config.LauraConfig;
 
@@ -62,7 +63,7 @@ public final class ServerAssetStore {
                 Files.writeString(modelReadme, MODEL_README, StandardCharsets.UTF_8);
             }
         } catch (IOException e) {
-            LauraMod.LOGGER.warn("Could not prepare the skin and model folders: {}", e.getMessage());
+            LauraCore.LOGGER.warn("Could not prepare the skin and model folders: {}", e.getMessage());
         }
         rescan();
     }
@@ -86,7 +87,7 @@ public final class ServerAssetStore {
                         }
                     }
                 } catch (IOException e) {
-                    LauraMod.LOGGER.warn("Could not scan {}: {}", root, e.getMessage());
+                    LauraCore.LOGGER.warn("Could not scan {}: {}", root, e.getMessage());
                 }
             }
             ENTRIES.put(kind, found);
@@ -94,7 +95,7 @@ public final class ServerAssetStore {
         // Files may have changed: what was read before this scan is not served again.
         PAYLOADS.clear();
         payloadBytes = 0;
-        LauraMod.LOGGER.info("Server assets: {} skins, {} models", ENTRIES.get(AssetKind.SKIN).size(), ENTRIES.get(AssetKind.MODEL).size());
+        LauraCore.LOGGER.info("Server assets: {} skins, {} models", ENTRIES.get(AssetKind.SKIN).size(), ENTRIES.get(AssetKind.MODEL).size());
     }
 
     private static Entry skinEntry(Path root, Path path) throws IOException {
@@ -103,7 +104,7 @@ public final class ServerAssetStore {
         }
         long size = Files.size(path);
         if (size > LauraConfig.maxSkinKb.getInt() * 1024L) {
-            LauraMod.LOGGER.warn("Skin {} is larger than skins.maxSkinKb and is ignored", path.getFileName());
+            LauraCore.LOGGER.warn("Skin {} is larger than skins.maxSkinKb and is ignored", path.getFileName());
             return null;
         }
         String name = relativeName(root, path, ".png");
@@ -112,7 +113,7 @@ public final class ServerAssetStore {
         }
         byte[] bytes = Files.readAllBytes(path);
         if (!isValidSkinPng(bytes)) {
-            LauraMod.LOGGER.warn("Skin {} is not a valid skin PNG (64x64, 64x32 or an HD multiple)", path.getFileName());
+            LauraCore.LOGGER.warn("Skin {} is not a valid skin PNG (64x64, 64x32 or an HD multiple)", path.getFileName());
             return null;
         }
         return new Entry(AssetKind.SKIN, name, sha1(bytes), size, root, List.of(root.relativize(path)));
@@ -165,7 +166,7 @@ public final class ServerAssetStore {
             relative.add(base.relativize(f));
         }
         if (size > LauraConfig.maxModelKb.getInt() * 1024L) {
-            LauraMod.LOGGER.warn("Model {} is larger than models.maxModelKb and is ignored", name);
+            LauraCore.LOGGER.warn("Model {} is larger than models.maxModelKb and is ignored", name);
             return null;
         }
         return new Entry(AssetKind.MODEL, name, HexFormat.of().formatHex(digest.digest()), size, base, relative);
@@ -266,7 +267,7 @@ public final class ServerAssetStore {
             }
             return out.toByteArray();
         } catch (IOException e) {
-            LauraMod.LOGGER.warn("Could not read asset {}: {}", entry.name(), e.getMessage());
+            LauraCore.LOGGER.warn("Could not read asset {}: {}", entry.name(), e.getMessage());
             return null;
         }
     }
@@ -286,7 +287,7 @@ public final class ServerAssetStore {
         try (java.util.stream.Stream<Path> files = Files.list(dir)) {
             return (int) files.map(p -> p.getFileName().toString()).filter(n -> n.startsWith(prefix) && n.endsWith(extension)).count();
         } catch (IOException e) {
-            LauraMod.LOGGER.warn("Could not list uploads: {}", e.getMessage());
+            LauraCore.LOGGER.warn("Could not list uploads: {}", e.getMessage());
             // Unknown count: refuse rather than let the folder grow without limit.
             return Integer.MAX_VALUE;
         }

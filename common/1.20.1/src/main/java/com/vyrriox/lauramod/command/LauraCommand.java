@@ -12,6 +12,7 @@ import com.vyrriox.lauramod.config.LauraConfig;
 import com.vyrriox.lauramod.desire.Desire;
 import com.vyrriox.lauramod.dialogue.DialogueManager;
 import com.vyrriox.lauramod.dialogue.LocaleUtil;
+import com.vyrriox.lauramod.dialogue.PlayerLocale;
 import com.vyrriox.lauramod.entity.CombatMode;
 import com.vyrriox.lauramod.entity.Emote;
 import com.vyrriox.lauramod.entity.LauraEntity;
@@ -414,8 +415,8 @@ public final class LauraCommand {
 
     private static int lang(CommandContext<CommandSourceStack> c) throws CommandSyntaxException {
         ServerPlayer p = c.getSource().getPlayerOrException();
-        List<String> chain = DialogueManager.chainFor(LocaleUtil.of(p));
-        p.sendSystemMessage(Component.translatable("lauramod.lang.player", LocaleUtil.of(p), String.join(" > ", chain)));
+        List<String> chain = DialogueManager.chainFor(PlayerLocale.of(p));
+        p.sendSystemMessage(Component.translatable("lauramod.lang.player", PlayerLocale.of(p), String.join(" > ", chain)));
         p.sendSystemMessage(Component.translatable("lauramod.lang.available", String.join(", ", DialogueManager.languages())));
         String used = chain.stream().filter(code -> DialogueManager.sets().containsKey(code)).findFirst().orElse(LocaleUtil.DEFAULT);
         p.sendSystemMessage(Component.translatable("lauramod.lang.used", used, DialogueManager.lineCounts().getOrDefault(used, 0)));

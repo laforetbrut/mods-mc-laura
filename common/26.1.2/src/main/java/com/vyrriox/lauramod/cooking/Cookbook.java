@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
+import com.vyrriox.lauramod.LauraCore;
 import com.vyrriox.lauramod.LauraMod;
 import com.vyrriox.lauramod.util.ItemSpec;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -55,13 +56,13 @@ public final class Cookbook {
                 Files.writeString(file, DEFAULTS, StandardCharsets.UTF_8);
             }
         } catch (IOException e) {
-            LauraMod.LOGGER.warn("Could not read {}: {}", file, e.getMessage());
+            LauraCore.LOGGER.warn("Could not read {}: {}", file, e.getMessage());
         }
         JsonObject root;
         try {
             root = JsonParser.parseReader(new JsonReader(new StringReader(text))).getAsJsonObject();
         } catch (Exception e) {
-            LauraMod.LOGGER.error("{} is invalid ({}), using the defaults", file, e.getMessage());
+            LauraCore.LOGGER.error("{} is invalid ({}), using the defaults", file, e.getMessage());
             root = JsonParser.parseReader(new JsonReader(new StringReader(DEFAULTS))).getAsJsonObject();
         }
         com.vyrriox.lauramod.api.ScriptData.extend("recipes", root);
@@ -80,7 +81,7 @@ public final class Cookbook {
                     parsed.add(meal);
                 }
             } catch (RuntimeException ex) {
-                LauraMod.LOGGER.warn("recipes.json: meal {} is invalid and ignored ({})", e, ex.toString());
+                LauraCore.LOGGER.warn("recipes.json: meal {} is invalid and ignored ({})", e, ex.toString());
             }
         }
         meals = List.copyOf(parsed);
@@ -90,7 +91,7 @@ public final class Cookbook {
     private static Meal meal(JsonObject o) {
         Item result = item(o.has("result") ? o.get("result").getAsString() : "");
         if (result == null) {
-            LauraMod.LOGGER.warn("recipes.json: unknown result {}", o.get("result"));
+            LauraCore.LOGGER.warn("recipes.json: unknown result {}", o.get("result"));
             return null;
         }
         Map<ItemSpec, Integer> ingredients = new LinkedHashMap<>();
@@ -98,7 +99,7 @@ public final class Cookbook {
         for (Map.Entry<String, JsonElement> in : ing.entrySet()) {
             var spec = ItemSpec.parse(in.getKey());
             if (spec.isEmpty()) {
-                LauraMod.LOGGER.warn("recipes.json: unknown ingredient {} in {}", in.getKey(), o.get("result"));
+                LauraCore.LOGGER.warn("recipes.json: unknown ingredient {} in {}", in.getKey(), o.get("result"));
                 return null;
             }
             ingredients.put(spec.get(), Math.max(1, in.getValue().getAsInt()));
@@ -122,7 +123,7 @@ public final class Cookbook {
         try {
             return o.has(key) ? o.get(key).getAsBoolean() : def;
         } catch (RuntimeException e) {
-            LauraMod.LOGGER.warn("recipes.json: {} must be true or false, using {}", key, def);
+            LauraCore.LOGGER.warn("recipes.json: {} must be true or false, using {}", key, def);
             return def;
         }
     }

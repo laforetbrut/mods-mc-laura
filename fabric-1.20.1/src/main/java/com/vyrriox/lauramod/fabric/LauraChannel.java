@@ -1,5 +1,6 @@
 package com.vyrriox.lauramod.fabric;
 
+import com.vyrriox.lauramod.LauraCore;
 import com.vyrriox.lauramod.LauraMod;
 import com.vyrriox.lauramod.network.LauraNetwork;
 import io.netty.buffer.Unpooled;
@@ -35,7 +36,7 @@ final class LauraChannel {
         try {
             return payload.readByteArray(LauraNetwork.MAX_PACKET);
         } catch (RuntimeException e) {
-            LauraMod.LOGGER.warn("Malformed packet on {}: {}", ID, e.toString());
+            LauraCore.LOGGER.warn("Malformed packet on {}: {}", ID, e.toString());
             return null;
         }
     }

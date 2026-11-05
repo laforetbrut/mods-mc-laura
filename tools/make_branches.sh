@@ -2,9 +2,10 @@
 # Regenerates the per-target branches from main.
 #
 # main holds one folder per target (<loader>-<minecraft version>/) and the shared code of each
-# Minecraft version (common/<minecraft version>/src/main). Each target also has a branch named like
-# its folder, holding that single project at the repository root with the shared code merged into
-# src/main, so it builds on its own with ./gradlew build.
+# Minecraft version (common/<minecraft version>/src/main), plus the plain Java used by every target
+# (core/src/main). Each target also has a branch named like its folder, holding that single project
+# at the repository root with common and core merged into src/main, so it builds on its own with
+# ./gradlew build.
 #
 # The branches are never edited by hand: change main, then run this script from the repository
 # root. An existing branch gets a new commit on top of its history (no force push needed); a branch
@@ -49,6 +50,14 @@ for target in $(git ls-tree -d --name-only "$MAIN"); do
         mkdir -p "$tree_dir/src/main"
         cp -R "$WORK/common-$target/common/$version/src/main/." "$tree_dir/src/main/"
         rm -rf "$WORK/common-$target"
+    fi
+    # Plain Java shared by every target, merged into src/main as well.
+    if git cat-file -e "$MAIN:core/src/main" 2>/dev/null; then
+        mkdir -p "$WORK/core-$target"
+        git archive "$MAIN" "core/src/main" | tar -x -C "$WORK/core-$target"
+        mkdir -p "$tree_dir/src/main"
+        cp -R "$WORK/core-$target/core/src/main/." "$tree_dir/src/main/"
+        rm -rf "$WORK/core-$target"
     fi
     # Shared documents and repository files.
     for item in "${SHARED[@]}"; do

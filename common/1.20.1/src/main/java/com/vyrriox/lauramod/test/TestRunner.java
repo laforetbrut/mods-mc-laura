@@ -1,6 +1,6 @@
 package com.vyrriox.lauramod.test;
 
-import com.vyrriox.lauramod.LauraMod;
+import com.vyrriox.lauramod.LauraCore;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -85,7 +85,7 @@ public final class TestRunner {
         }
         ctx.done = true;
         results.add(new Result(ctx.test.name(), passed, message, ctx.age));
-        LauraMod.LOGGER.info("[SELFTEST] {} {} ({} ticks){}", passed ? "PASS" : "FAIL", ctx.test.name(), ctx.age, message.isEmpty() ? "" : ": " + message);
+        LauraCore.LOGGER.info("[SELFTEST] {} {} ({} ticks){}", passed ? "PASS" : "FAIL", ctx.test.name(), ctx.age, message.isEmpty() ? "" : ": " + message);
         ctx.cleanup();
         current = null;
     }
@@ -217,7 +217,7 @@ public final class TestRunner {
                 fail(e.getMessage());
             } catch (Throwable t) {
                 fail("exception: " + t);
-                LauraMod.LOGGER.error("[SELFTEST] exception in {}", test.name(), t);
+                LauraCore.LOGGER.error("[SELFTEST] exception in {}", test.name(), t);
             }
         }
 

@@ -27,6 +27,7 @@ The continuous integration (`.github/workflows/build.yml`) builds the nine targe
 ### Repository layout
 
 ```
+core/src/main/java/              plain Java shared by every target (no Minecraft or loader import)
 common/<mcversion>/src/main/     code and resources shared by every loader (1.20.1, 1.21.1, 26.1.2)
 neoforge-1.20.1/                 NeoForge project for Minecraft 1.20.1
 forge-1.20.1/                    Forge project for Minecraft 1.20.1
@@ -42,8 +43,8 @@ docs/                            this documentation
 ```
 
 - Each `<loader>-<mcversion>/` folder is a **standalone Gradle project**. There is no root build.
-- Its `build.gradle` adds `../common/<mcversion>/src/main/java` and `../common/<mcversion>/src/main/resources` to the main source set. The loader folder itself only holds the glue: entry points, networking, the `Platform` implementation and the optional integrations (`compat` package).
-- One branch per target, named like its folder (`fabric-26.1.2` for example), is generated from `main` by `tools/make_branches.sh`; the branches are created when `main` is published. On such a branch the project sits at the repository root, the common code is merged into `src/main`, and the include does nothing.
+- Its `build.gradle` adds `../core/src/main/java`, `../common/<mcversion>/src/main/java` and `../common/<mcversion>/src/main/resources` to the main source set. Core holds the logic that never needs a port: it is compiled into the nine targets as it is. The loader folder itself only holds the glue: entry points, networking, the `Platform` implementation and the optional integrations (`compat` package).
+- One branch per target, named like its folder (`fabric-26.1.2` for example), is generated from `main` by `tools/make_branches.sh`; the branches are created when `main` is published. On such a branch the project sits at the repository root, the common and core code are merged into `src/main`, and the includes do nothing.
 - NeoForge for Minecraft 1.20.1 is the 47.1 fork of Forge. Its project uses the legacy plugin of ModDevGradle, and the mod depends on the mod id `forge` there.
 - Version 2.0.0 builds for the nine targets, and the nine pass the in-game self test suite.
 
@@ -192,7 +193,7 @@ cd neoforge-1.21.1
 |---|---|---|
 | `tools/generate_assets.py` | `python tools/generate_assets.py [resources_dir] [--mc <mcversion>] [--no-sounds] [--preview <folder>]` | Generates the skins, GUI icons, item and block textures, block models, the logo and the sound files into the resources folder of a Minecraft version (default `common/1.21.1/src/main/resources`). Requires Pillow, numpy and ffmpeg with libvorbis. |
 | `tools/check_lang.py` | `python tools/check_lang.py [--mc <mcversion>] [--strict]` | Checks that every translation key and dialogue key used by the code exists. For each language and dialogue file it lists the missing keys (English is the reference), the unused keys and the placeholders that differ from English. Exit code 1 when English is incomplete, or when any file is incomplete with `--strict`. Default version: 1.21.1. |
-| `tools/make_branches.sh` | `bash tools/make_branches.sh` | Regenerates the per-target branches from `main`. Run it from the repository root with a clean working tree (no uncommitted or untracked file). Each branch gets its project at the root, the common code of its Minecraft version merged into `src/main`, and the shared files (README, changelog, license, community files, `.github`, `docs`). An existing branch gets a new commit on top of its history, an unchanged one is left alone. Only local branches are updated: push them yourself. |
+| `tools/make_branches.sh` | `bash tools/make_branches.sh` | Regenerates the per-target branches from `main`. Run it from the repository root with a clean working tree (no uncommitted or untracked file). Each branch gets its project at the root, the common code of its Minecraft version and the core code merged into `src/main`, and the shared files (README, changelog, license, community files, `.github`, `docs`). An existing branch gets a new commit on top of its history, an unchanged one is left alone. Only local branches are updated: push them yourself. |
 | `tools/collect_jars.sh` | `bash tools/collect_jars.sh [--build]` | Copies the mod jar of every target from its `build/libs/` into `jars/<mod version>/` at the repository root (`jars/2.0.0/`, then one folder per later version, so earlier jars are kept), a local folder ignored by Git. Sources, dev and javadoc jars are skipped, and so is a jar left in `build/libs/` by another version. With `--build` it first runs `./gradlew build` in each target folder. A target without a jar is reported. |
 
 - Run `check_lang.py` after adding a translatable text or a dialogue key, once per Minecraft version (`--mc 1.20.1`, `--mc 1.21.1`, `--mc 26.1.2`). The continuous integration runs it for each version.
@@ -200,7 +201,7 @@ cd neoforge-1.21.1
 
 ### Code map
 
-Package root: `com.vyrriox.lauramod` in `common/<mcversion>/src/main/java`. The three Minecraft versions have the same packages.
+Package root: `com.vyrriox.lauramod` in `core/src/main/java` and `common/<mcversion>/src/main/java`. The three Minecraft versions have the same packages, and a class keeps its package when it moves to core.
 
 | Package | Content |
 |---|---|
@@ -245,6 +246,7 @@ L'intégration continue (`.github/workflows/build.yml`) compile les neuf cibles 
 ### Organisation du dépôt
 
 ```
+core/src/main/java/              Java pur partagé par toutes les cibles (aucun import de Minecraft ni d'un chargeur)
 common/<mcversion>/src/main/     code et ressources partagés par tous les chargeurs (1.20.1, 1.21.1, 26.1.2)
 neoforge-1.20.1/                 projet NeoForge pour Minecraft 1.20.1
 forge-1.20.1/                    projet Forge pour Minecraft 1.20.1
@@ -260,8 +262,8 @@ docs/                            cette documentation
 ```
 
 - Chaque dossier `<chargeur>-<mcversion>/` est un **projet Gradle autonome**. Il n'y a pas de build racine.
-- Son `build.gradle` ajoute `../common/<mcversion>/src/main/java` et `../common/<mcversion>/src/main/resources` au source set principal. Le dossier du chargeur ne contient que la colle : points d'entrée, réseau, implémentation de `Platform` et intégrations facultatives (paquet `compat`).
-- Une branche par cible, nommée comme son dossier (`fabric-26.1.2` par exemple), est générée depuis `main` par `tools/make_branches.sh` ; les branches sont créées quand `main` est publié. Sur une telle branche, le projet est à la racine du dépôt, le code commun est fusionné dans `src/main`, et l'inclusion ne fait rien.
+- Son `build.gradle` ajoute `../core/src/main/java`, `../common/<mcversion>/src/main/java` et `../common/<mcversion>/src/main/resources` au source set principal. Core contient la logique qui n'a jamais besoin d'un portage : elle est compilée telle quelle dans les neuf cibles. Le dossier du chargeur ne contient que la colle : points d'entrée, réseau, implémentation de `Platform` et intégrations facultatives (paquet `compat`).
+- Une branche par cible, nommée comme son dossier (`fabric-26.1.2` par exemple), est générée depuis `main` par `tools/make_branches.sh` ; les branches sont créées quand `main` est publié. Sur une telle branche, le projet est à la racine du dépôt, le code commun et le code de core sont fusionnés dans `src/main`, et les inclusions ne font rien.
 - NeoForge pour Minecraft 1.20.1 est le fork 47.1 de Forge. Son projet utilise le plugin legacy de ModDevGradle, et le mod y dépend de l'identifiant de mod `forge`.
 - La version 2.0.0 se compile pour les neuf cibles, et les neuf réussissent la suite de self tests en jeu.
 
@@ -410,7 +412,7 @@ cd neoforge-1.21.1
 |---|---|---|
 | `tools/generate_assets.py` | `python tools/generate_assets.py [resources_dir] [--mc <mcversion>] [--no-sounds] [--preview <dossier>]` | Génère les skins, les icônes d'interface, les textures d'objets et de blocs, les modèles de blocs, le logo et les fichiers sonores dans le dossier de ressources d'une version de Minecraft (par défaut `common/1.21.1/src/main/resources`). Demande Pillow, numpy et ffmpeg avec libvorbis. |
 | `tools/check_lang.py` | `python tools/check_lang.py [--mc <mcversion>] [--strict]` | Vérifie que chaque clé de traduction et chaque clé de dialogue utilisée par le code existe. Pour chaque fichier de langue et de dialogues, il liste les clés manquantes (l'anglais sert de référence), les clés inutilisées et les variables qui diffèrent de l'anglais. Code de sortie 1 quand l'anglais est incomplet, ou quand un fichier quelconque est incomplet avec `--strict`. Version par défaut : 1.21.1. |
-| `tools/make_branches.sh` | `bash tools/make_branches.sh` | Régénère les branches par cible depuis `main`. Lancez-le depuis la racine du dépôt, avec un arbre de travail propre (aucun fichier modifié ou non suivi). Chaque branche reçoit son projet à la racine, le code commun de sa version de Minecraft fusionné dans `src/main`, et les fichiers partagés (README, changelog, licence, fichiers communautaires, `.github`, `docs`). Une branche existante reçoit un nouveau commit par-dessus son historique, une branche inchangée n'est pas touchée. Seules les branches locales sont mises à jour : poussez-les vous-même. |
+| `tools/make_branches.sh` | `bash tools/make_branches.sh` | Régénère les branches par cible depuis `main`. Lancez-le depuis la racine du dépôt, avec un arbre de travail propre (aucun fichier modifié ou non suivi). Chaque branche reçoit son projet à la racine, le code commun de sa version de Minecraft et le code de core fusionnés dans `src/main`, et les fichiers partagés (README, changelog, licence, fichiers communautaires, `.github`, `docs`). Une branche existante reçoit un nouveau commit par-dessus son historique, une branche inchangée n'est pas touchée. Seules les branches locales sont mises à jour : poussez-les vous-même. |
 | `tools/collect_jars.sh` | `bash tools/collect_jars.sh [--build]` | Copie le jar du mod de chaque cible depuis son `build/libs/` vers `jars/<version du mod>/` à la racine du dépôt (`jars/2.0.0/`, puis un dossier par version suivante, pour garder les jars précédents), un dossier local ignoré par Git. Les jars de sources, de développement et de javadoc sont ignorés, ainsi qu'un jar laissé dans `build/libs/` par une autre version. Avec `--build`, il lance d'abord `./gradlew build` dans le dossier de chaque cible. Une cible sans jar est signalée. |
 
 - Lancez `check_lang.py` après avoir ajouté un texte traduisible ou une clé de dialogue, une fois par version de Minecraft (`--mc 1.20.1`, `--mc 1.21.1`, `--mc 26.1.2`). L'intégration continue le lance pour chaque version.
@@ -418,7 +420,7 @@ cd neoforge-1.21.1
 
 ### Plan du code
 
-Racine des paquets : `com.vyrriox.lauramod` dans `common/<mcversion>/src/main/java`. Les trois versions de Minecraft ont les mêmes paquets.
+Racine des paquets : `com.vyrriox.lauramod` dans `core/src/main/java` et `common/<mcversion>/src/main/java`. Les trois versions de Minecraft ont les mêmes paquets, et une classe garde son paquet quand elle passe dans core.
 
 | Paquet | Contenu |
 |---|---|

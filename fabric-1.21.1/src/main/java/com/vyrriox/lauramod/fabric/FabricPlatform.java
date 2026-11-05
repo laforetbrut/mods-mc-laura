@@ -1,5 +1,6 @@
 package com.vyrriox.lauramod.fabric;
 
+import com.vyrriox.lauramod.LauraCore;
 import com.vyrriox.lauramod.LauraMod;
 import com.vyrriox.lauramod.platform.CookingPots;
 import com.vyrriox.lauramod.platform.InventoryAccess;
@@ -92,7 +93,7 @@ final class FabricPlatform implements Platform {
     public void sendToServer(byte[] data) {
         Consumer<byte[]> sender = clientSender;
         if (sender == null) {
-            LauraMod.LOGGER.warn("Tried to send a packet to the server outside of a client");
+            LauraCore.LOGGER.warn("Tried to send a packet to the server outside of a client");
             return;
         }
         sender.accept(data);
@@ -125,7 +126,7 @@ final class FabricPlatform implements Platform {
             Class.forName("vectorwing.farmersdelight.refabricated.inventory.ItemStackHandler", false, FabricPlatform.class.getClassLoader());
             return true;
         } catch (ClassNotFoundException e) {
-            LauraMod.LOGGER.warn("Farmer's Delight is installed but is not the Refabricated port: cooking pots are not supported");
+            LauraCore.LOGGER.warn("Farmer's Delight is installed but is not the Refabricated port: cooking pots are not supported");
             return false;
         }
     }
