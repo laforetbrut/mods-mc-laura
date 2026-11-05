@@ -1,6 +1,6 @@
 package com.vyrriox.lauramod.client.network;
 
-import com.vyrriox.lauramod.LauraMod;
+import com.vyrriox.lauramod.LauraCore;
 import com.vyrriox.lauramod.client.ClientState;
 import com.vyrriox.lauramod.client.gui.LauraMenuScreen;
 import com.vyrriox.lauramod.client.model.ClientModels;
@@ -90,10 +90,10 @@ public final class LauraClientNetwork {
                         }
                     }
                 }
-                default -> LauraMod.LOGGER.debug("Unknown Laura packet {}", id);
+                default -> LauraCore.LOGGER.debug("Unknown Laura packet {}", id);
             }
         } catch (RuntimeException e) {
-            LauraMod.LOGGER.warn("Malformed Laura packet: {}", e.toString());
+            LauraCore.LOGGER.warn("Malformed Laura packet: {}", e.toString());
         } finally {
             buf.release();
         }

@@ -2,6 +2,7 @@ package com.vyrriox.lauramod.network;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.vyrriox.lauramod.LauraCore;
 import com.vyrriox.lauramod.LauraMod;
 import com.vyrriox.lauramod.config.LauraConfig;
 import com.vyrriox.lauramod.entity.LauraEntity;
@@ -194,11 +195,11 @@ public final class LauraNetwork {
                     }
                 }
                 case C2S_HELLO -> sendSettings(player);
-                default -> LauraMod.LOGGER.debug("Unknown packet {} from {}", id, player.getGameProfile().getName());
+                default -> LauraCore.LOGGER.debug("Unknown packet {} from {}", id, player.getGameProfile().getName());
             }
         } catch (RuntimeException | StackOverflowError e) {
             // Nothing a client sends may reach the server loop as an error.
-            LauraMod.LOGGER.warn("Malformed packet from {}: {}", player.getGameProfile().getName(), e.toString());
+            LauraCore.LOGGER.warn("Malformed packet from {}: {}", player.getGameProfile().getName(), e.toString());
         } finally {
             buf.release();
         }

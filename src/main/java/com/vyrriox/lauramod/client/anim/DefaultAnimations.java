@@ -1,5 +1,6 @@
 package com.vyrriox.lauramod.client.anim;
 
+import com.vyrriox.lauramod.LauraCore;
 import com.vyrriox.lauramod.LauraMod;
 import com.vyrriox.lauramod.model.ModelData;
 import com.vyrriox.lauramod.model.ModelParser;
@@ -36,18 +37,18 @@ public final class DefaultAnimations {
             if (in != null) {
                 ModelParser.parseAnimations(holder, new String(in.readAllBytes(), StandardCharsets.UTF_8));
             } else {
-                LauraMod.LOGGER.error("Default animations are missing from the jar");
+                LauraCore.LOGGER.error("Default animations are missing from the jar");
             }
         } catch (Exception e) {
-            LauraMod.LOGGER.error("Could not read the default animations", e);
+            LauraCore.LOGGER.error("Could not read the default animations", e);
         }
         Path override = LauraMod.configDir().resolve("animations").resolve(FILE);
         if (Files.isRegularFile(override)) {
             try {
                 ModelParser.parseAnimations(holder, Files.readString(override, StandardCharsets.UTF_8));
-                LauraMod.LOGGER.info("Loaded custom default animations from {}", override);
+                LauraCore.LOGGER.info("Loaded custom default animations from {}", override);
             } catch (Exception e) {
-                LauraMod.LOGGER.error("Custom animations {} are invalid: {}", override, e.getMessage());
+                LauraCore.LOGGER.error("Custom animations {} are invalid: {}", override, e.getMessage());
             }
         }
         animations = Map.copyOf(holder.animations);

@@ -7,7 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.stream.JsonReader;
-import com.vyrriox.lauramod.LauraMod;
+import com.vyrriox.lauramod.LauraCore;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -72,10 +72,10 @@ public final class ConfigFile {
                 if (parsed.isJsonObject()) {
                     root = parsed.getAsJsonObject();
                 } else {
-                    LauraMod.LOGGER.warn("Config {} is not a JSON object, restoring defaults", path);
+                    LauraCore.LOGGER.warn("Config {} is not a JSON object, restoring defaults", path);
                 }
             } catch (Exception e) {
-                LauraMod.LOGGER.error("Config {} could not be parsed ({}). A backup is kept and defaults are used.", path, e.getMessage());
+                LauraCore.LOGGER.error("Config {} could not be parsed ({}). A backup is kept and defaults are used.", path, e.getMessage());
                 backupBroken();
             }
         }
@@ -97,14 +97,14 @@ public final class ConfigFile {
                     continue;
                 }
                 if (!value.read(element)) {
-                    LauraMod.LOGGER.warn("Config {}: invalid value for {}.{} ({}), using {}", path.getFileName(), section.name, value.key, element, value.describeValue());
+                    LauraCore.LOGGER.warn("Config {}: invalid value for {}.{} ({}), using {}", path.getFileName(), section.name, value.key, element, value.describeValue());
                     rewrite = true;
                 }
             }
             if (sectionObject != null) {
                 for (String key : sectionObject.keySet()) {
                     if (section.find(key) == null) {
-                        LauraMod.LOGGER.warn("Config {}: unknown option {}.{} ignored", path.getFileName(), section.name, key);
+                        LauraCore.LOGGER.warn("Config {}: unknown option {}.{} ignored", path.getFileName(), section.name, key);
                     }
                 }
             }
@@ -145,7 +145,7 @@ public final class ConfigFile {
             Files.writeString(tmp, out.toString(), StandardCharsets.UTF_8);
             Files.move(tmp, path, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            LauraMod.LOGGER.error("Could not write config {}", path, e);
+            LauraCore.LOGGER.error("Could not write config {}", path, e);
         }
     }
 
