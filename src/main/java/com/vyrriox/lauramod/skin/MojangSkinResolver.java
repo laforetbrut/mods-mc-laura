@@ -4,7 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.vyrriox.lauramod.LauraMod;
+import com.vyrriox.lauramod.LauraCore;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -122,7 +122,7 @@ public final class MojangSkinResolver {
         }
         lookup.whenComplete((answer, error) -> {
             if (error != null) {
-                LauraMod.LOGGER.warn("Could not resolve the skin of {}: {}", name, error.getMessage());
+                LauraCore.LOGGER.warn("Could not resolve the skin of {}: {}", name, error.getMessage());
             }
             Optional<Result> result = answer == null ? Optional.empty() : answer.result();
             synchronized (LOCK) {
@@ -153,7 +153,7 @@ public final class MojangSkinResolver {
                     }
                     if (status != 200) {
                         // Rate limit (429) or server error: not an answer about the account.
-                        LauraMod.LOGGER.warn("Could not resolve the skin of {}: HTTP {}", name, status);
+                        LauraCore.LOGGER.warn("Could not resolve the skin of {}: HTTP {}", name, status);
                         return CompletableFuture.completedFuture(new Answer(Optional.empty(), 0));
                     }
                     JsonObject profile = JsonParser.parseString(response.body()).getAsJsonObject();
@@ -164,7 +164,7 @@ public final class MojangSkinResolver {
                     return http.sendAsync(texturesRequest, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8))
                             .thenApply(r -> {
                                 if (r.statusCode() != 200) {
-                                    LauraMod.LOGGER.warn("Could not resolve the skin of {}: HTTP {}", name, r.statusCode());
+                                    LauraCore.LOGGER.warn("Could not resolve the skin of {}: HTTP {}", name, r.statusCode());
                                     return new Answer(Optional.empty(), 0);
                                 }
                                 Optional<Result> result = parseTextures(realName, r.body());

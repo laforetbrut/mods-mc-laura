@@ -1,6 +1,6 @@
 package com.vyrriox.lauramod.util;
 
-import com.vyrriox.lauramod.LauraMod;
+import com.vyrriox.lauramod.LauraCore;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -41,7 +41,7 @@ public final class CacheFiles {
                 }
             }
         } catch (IOException e) {
-            LauraMod.LOGGER.debug("Could not list cache folder {}: {}", dir, e.getMessage());
+            LauraCore.LOGGER.debug("Could not list cache folder {}: {}", dir, e.getMessage());
             return 0;
         }
         files.sort(Comparator.comparingLong(Cached::modified));
@@ -60,7 +60,7 @@ public final class CacheFiles {
                 total -= file.size();
                 deleted++;
             } catch (IOException e) {
-                LauraMod.LOGGER.debug("Could not delete cached file {}: {}", file.path(), e.getMessage());
+                LauraCore.LOGGER.debug("Could not delete cached file {}: {}", file.path(), e.getMessage());
             }
         }
         return deleted;
@@ -71,7 +71,7 @@ public final class CacheFiles {
         try {
             Files.setLastModifiedTime(file, FileTime.fromMillis(System.currentTimeMillis()));
         } catch (IOException e) {
-            LauraMod.LOGGER.debug("Could not touch cached file {}: {}", file, e.getMessage());
+            LauraCore.LOGGER.debug("Could not touch cached file {}: {}", file, e.getMessage());
         }
     }
 }
