@@ -1,7 +1,9 @@
 # My Girlfriend Laura
 
+![My Girlfriend Laura: Laura waves under the cherry trees](https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/hero.gif)
+
 [![Build](https://github.com/laforetbrut/mods-mc-laura/actions/workflows/build.yml/badge.svg)](https://github.com/laforetbrut/mods-mc-laura/actions/workflows/build.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.20.1%20%7C%201.21.1%20%7C%2026.1.2-green)
 ![Loaders](https://img.shields.io/badge/Loaders-NeoForge%20%7C%20Forge%20%7C%20Fabric-orange)
 
@@ -171,18 +173,20 @@ Toolchains, development runs, self tests and the optional mods of each target ar
 ## Repository layout
 
 ```
+core/src/main/java/            plain Java shared by every target (no Minecraft or loader import)
 common/<mcversion>/src/main/   code and resources shared by the three loaders of one Minecraft version
 <loader>-<mcversion>/          one standalone Gradle project per target, nine in all
-tools/                         asset generator, language checker, branch generator, jar collector
+tools/                         asset generator, language checker, branch generator, jar collector,
 docs/                          the ten guides
+images/tools/                  the builder of the CurseForge page and its banners (pictures hosted in Team-Arcadia/images)
 ```
 
 - `main` holds everything: one folder per target (`neoforge-1.20.1` to `fabric-26.1.2`) and one
   `common/<mcversion>` folder per Minecraft version (1.20.1, 1.21.1, 26.1.2). There is no root build.
 - One branch per target, named like its folder, is generated from `main` by
   `tools/make_branches.sh`; the branches are created when `main` is published. Such a branch
-  holds that single project at the root, with the common code merged into `src/main`. These
-  branches are never edited by hand.
+  holds that single project at the root, with the common and core code merged into `src/main`.
+  These branches are never edited by hand.
 
 ## Contributing and security
 
@@ -195,7 +199,7 @@ docs/                          the ten guides
 
 ## License
 
-[MIT](LICENSE)
+[Apache License 2.0](LICENSE). Forks and redistribution are welcome; keep the copyright and the [NOTICE](NOTICE) file, and state your changes.
 
 ## Credits
 
@@ -382,10 +386,12 @@ chaque cible sont décrits dans [docs/BUILDING.md](docs/BUILDING.md).
 ## Organisation du dépôt
 
 ```
+core/src/main/java/            Java pur partagé par toutes les cibles (aucun import de Minecraft ni d'un chargeur)
 common/<mcversion>/src/main/   code et ressources partagés par les trois chargeurs d'une version de Minecraft
 <chargeur>-<mcversion>/        un projet Gradle autonome par cible, neuf en tout
 tools/                         générateur de ressources, vérificateur de langues, générateur de branches, collecte des jars
 docs/                          les dix guides
+images/tools/                  le générateur de la page CurseForge et de ses bannières (images hébergées dans Team-Arcadia/images)
 ```
 
 - `main` contient tout : un dossier par cible (de `neoforge-1.20.1` à `fabric-26.1.2`) et un
@@ -393,8 +399,8 @@ docs/                          les dix guides
   de build racine.
 - Une branche par cible, nommée comme son dossier, est générée depuis `main` par
   `tools/make_branches.sh` ; les branches sont créées quand `main` est publié. Une telle branche
-  contient ce seul projet à la racine, avec le code commun fusionné dans `src/main`. Ces branches
-  ne sont jamais modifiées à la main.
+  contient ce seul projet à la racine, avec le code commun et le code de core fusionnés dans
+  `src/main`. Ces branches ne sont jamais modifiées à la main.
 
 ## Contribuer et sécurité
 
@@ -407,7 +413,7 @@ docs/                          les dix guides
 
 ## Licence
 
-[MIT](LICENSE)
+[Apache License 2.0](LICENSE). Les forks et la redistribution sont permis ; gardez le copyright et le fichier [NOTICE](NOTICE), et indiquez vos modifications.
 
 ## Credits
 
