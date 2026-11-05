@@ -1,6 +1,7 @@
 package com.vyrriox.lauramod.client.model;
 
 import com.mojang.blaze3d.platform.NativeImage;
+import com.vyrriox.lauramod.LauraCore;
 import com.vyrriox.lauramod.LauraMod;
 import com.vyrriox.lauramod.client.network.LauraClientNetwork;
 import com.vyrriox.lauramod.config.LauraClientConfig;
@@ -81,7 +82,7 @@ public final class ClientModels {
                     try {
                         files = AssetCache.unzip(Files.readAllBytes(cachedZip), MAX_UNPACKED_BYTES);
                     } catch (IOException | RuntimeException e) {
-                        LauraMod.LOGGER.debug("Cached model {} unreadable", name);
+                        LauraCore.LOGGER.debug("Cached model {} unreadable", name);
                     }
                     // A file that is not the model its name promises is ignored and downloaded again.
                     if (files != null && AssetCache.matchesModel(sha1, files)) {
@@ -92,7 +93,7 @@ public final class ClientModels {
                             return loaded;
                         } catch (IOException | RuntimeException e) {
                             // The cached file is the one the server sent: refused once, refused again, not asked for again.
-                            LauraMod.LOGGER.warn("Model {} from the server is invalid: {}", name, e.getMessage());
+                            LauraCore.LOGGER.warn("Model {} from the server is invalid: {}", name, e.getMessage());
                             CACHE.put(ref, Optional.empty());
                             return null;
                         }
@@ -142,12 +143,12 @@ public final class ClientModels {
                     Files.createDirectories(target.getParent());
                     Files.write(target, zip);
                 } catch (IOException e) {
-                    LauraMod.LOGGER.debug("Could not cache model {}", name);
+                    LauraCore.LOGGER.debug("Could not cache model {}", name);
                 }
             }
             CACHE.put(ref, Optional.ofNullable(fromFiles(name, lowerCaseNames(files))));
         } catch (IOException | RuntimeException e) {
-            LauraMod.LOGGER.warn("Model {} from the server is invalid: {}", name, e.getMessage());
+            LauraCore.LOGGER.warn("Model {} from the server is invalid: {}", name, e.getMessage());
             CACHE.put(ref, Optional.empty());
         }
         // References to another version of this file will not be answered: stop asking.
@@ -211,7 +212,7 @@ public final class ClientModels {
             }
             return fromFiles(name, files);
         } catch (IOException | RuntimeException e) {
-            LauraMod.LOGGER.warn("Could not load model {}: {}", name, e.getMessage());
+            LauraCore.LOGGER.warn("Could not load model {}: {}", name, e.getMessage());
             return null;
         }
     }
@@ -238,7 +239,7 @@ public final class ClientModels {
                 try {
                     return fromFiles(name, files);
                 } catch (IOException | RuntimeException e) {
-                    LauraMod.LOGGER.warn("Model {} from resource pack {} is invalid: {}", name, namespace, e.getMessage());
+                    LauraCore.LOGGER.warn("Model {} from resource pack {} is invalid: {}", name, namespace, e.getMessage());
                 }
             }
         }
@@ -299,7 +300,7 @@ public final class ClientModels {
         if (textures.isEmpty()) {
             textures.add(LauraMod.id("textures/entity/laura/laura.png"));
         }
-        LauraMod.LOGGER.info("Loaded Laura model {} ({} bones, {} cubes, {} animations)", name, data.bones.size(), data.cubeCount(), data.animations.size());
+        LauraCore.LOGGER.info("Loaded Laura model {} ({} bones, {} cubes, {} animations)", name, data.bones.size(), data.cubeCount(), data.animations.size());
         return new Loaded(data, textures);
     }
 

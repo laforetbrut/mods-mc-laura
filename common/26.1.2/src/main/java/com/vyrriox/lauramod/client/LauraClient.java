@@ -1,6 +1,7 @@
 package com.vyrriox.lauramod.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import com.vyrriox.lauramod.LauraCore;
 import com.vyrriox.lauramod.LauraMod;
 import com.vyrriox.lauramod.client.anim.DefaultAnimations;
 import com.vyrriox.lauramod.client.gui.EmoteWheelScreen;
@@ -85,7 +86,7 @@ public final class LauraClient {
             int skins = CacheFiles.prune(cache.resolve("skins"), maxAge, 64L * 1024 * 1024);
             int models = CacheFiles.prune(cache.resolve("models"), maxAge, 256L * 1024 * 1024);
             if (skins + models > 0) {
-                LauraMod.LOGGER.info("Removed {} old skins and {} old models from the download cache", skins, models);
+                LauraCore.LOGGER.info("Removed {} old skins and {} old models from the download cache", skins, models);
             }
         }, "Laura cache cleanup");
         pruner.setDaemon(true);
@@ -121,7 +122,7 @@ public final class LauraClient {
         if (ticksSinceJoin >= 0 && ++ticksSinceJoin > SERVER_CHECK_TICKS) {
             ticksSinceJoin = -1;
             if (!ClientState.serverKnown && !LauraMod.platform().serverHasChannel()) {
-                LauraMod.LOGGER.warn("This server does not have {}: leaving", LauraMod.NAME);
+                LauraCore.LOGGER.warn("This server does not have {}: leaving", LauraMod.NAME);
                 mc.player.connection.getConnection().disconnect(Component.translatable("lauramod.network.server_missing"));
                 return;
             }

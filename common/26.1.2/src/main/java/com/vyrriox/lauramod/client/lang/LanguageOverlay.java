@@ -1,5 +1,6 @@
 package com.vyrriox.lauramod.client.lang;
 
+import com.vyrriox.lauramod.LauraCore;
 import com.vyrriox.lauramod.LauraMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.locale.Language;
@@ -75,9 +76,9 @@ public final class LanguageOverlay extends Language {
         }
         try (InputStream in = Files.newInputStream(file)) {
             Language.loadFromJson(in, map::put);
-            LauraMod.LOGGER.info("Loaded custom translations from {}", file.getFileName());
+            LauraCore.LOGGER.info("Loaded custom translations from {}", file.getFileName());
         } catch (Exception e) {
-            LauraMod.LOGGER.error("Custom translation file {} is invalid: {}", file, e.getMessage());
+            LauraCore.LOGGER.error("Custom translation file {} is invalid: {}", file, e.getMessage());
         }
     }
 

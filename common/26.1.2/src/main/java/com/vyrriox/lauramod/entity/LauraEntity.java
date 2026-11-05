@@ -2,6 +2,7 @@ package com.vyrriox.lauramod.entity;
 
 import com.vyrriox.lauramod.world.LauraAdvancements;
 import com.google.gson.JsonObject;
+import com.vyrriox.lauramod.LauraCore;
 import com.vyrriox.lauramod.LauraMod;
 import com.vyrriox.lauramod.config.LauraConfig;
 import com.vyrriox.lauramod.desire.Desire;
@@ -1230,7 +1231,7 @@ public class LauraEntity extends TamableAnimal {
 
     /** Her whole entity data written into a plain tag: the snapshot kept in the world data. */
     public CompoundTag saveWithoutId(CompoundTag tag) {
-        try (ProblemReporter.ScopedCollector reporter = new ProblemReporter.ScopedCollector(this.problemPath(), LauraMod.LOGGER)) {
+        try (ProblemReporter.ScopedCollector reporter = new ProblemReporter.ScopedCollector(this.problemPath(), LauraCore.LOGGER)) {
             TagValueOutput output = TagValueOutput.createWithContext(reporter, this.registryAccess());
             this.saveWithoutId(output);
             return tag.merge(output.buildResult());
@@ -1239,7 +1240,7 @@ public class LauraEntity extends TamableAnimal {
 
     /** Restores her from a snapshot made by {@link #saveWithoutId(CompoundTag)}. */
     public void load(CompoundTag tag) {
-        try (ProblemReporter.ScopedCollector reporter = new ProblemReporter.ScopedCollector(this.problemPath(), LauraMod.LOGGER)) {
+        try (ProblemReporter.ScopedCollector reporter = new ProblemReporter.ScopedCollector(this.problemPath(), LauraCore.LOGGER)) {
             this.load(TagValueInput.create(reporter, this.registryAccess(), tag));
         }
     }

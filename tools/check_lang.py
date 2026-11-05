@@ -16,6 +16,23 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
+# Plain Java shared by every Minecraft version; same packages as common/<mcversion>.
+CORE_JAVA = os.path.join(ROOT, "core", "src", "main", "java")
+CORE_PKG = os.path.join(CORE_JAVA, "com", "vyrriox", "lauramod")
+
+
+def source(pkg, rel):
+    """A class of the mod: core/ first, then the common folder of the version."""
+    core = os.path.join(CORE_PKG, rel)
+    return core if os.path.isfile(core) else os.path.join(pkg, rel)
+
+
+def java_files(*roots):
+    for java_root in roots:
+        for root, _, files in os.walk(java_root):
+            for f in files:
+                if f.endswith(".java"):
+                    yield os.path.join(root, f)
 
 
 def enum_constants(java_file, enum_name=None):
@@ -52,12 +69,10 @@ def enum_constants(java_file, enum_name=None):
 
 def code_keys(java_root):
     literal = set()
-    for root, _, files in os.walk(java_root):
-        for f in files:
-            if f.endswith(".java"):
-                src = open(os.path.join(root, f), encoding="utf-8").read()
-                for m in re.finditer(r'"((?:lauramod|key|item|block|entity|itemGroup|subtitles|advancements)\.[a-zA-Z0-9_.]*[a-zA-Z0-9_])"', src):
-                    literal.add(m.group(1))
+    for path in java_files(java_root, CORE_JAVA):
+        src = open(path, encoding="utf-8").read()
+        for m in re.finditer(r'"((?:lauramod|key|item|block|entity|itemGroup|subtitles|advancements)\.[a-zA-Z0-9_.]*[a-zA-Z0-9_])"', src):
+            literal.add(m.group(1))
     # JVM system properties, not translation keys.
     literal -= {"lauramod.selftest", "lauramod.selftest.only", "lauramod.clienttest"}
     return literal
@@ -75,7 +90,7 @@ def advancement_dir(pkg):
 
 
 def families(pkg):
-    e = lambda rel, name=None: enum_constants(os.path.join(pkg, rel), name)
+    e = lambda rel, name=None: enum_constants(source(pkg, rel), name)
     keys = set()
     moods = e("entity/Mood.java")
     for m in moods:
@@ -114,10 +129,10 @@ def families(pkg):
         keys.add("lauramod.help." + h)
     for s in ("laura", "laura_summer", "laura_winter", "laura_night", "laura_sporty", "laura_gothic"):
         keys.add("lauramod.skin.builtin." + s)
-    places = re.findall(r'\{ "id": "([a-z_]+)", "biomes"', open(os.path.join(pkg, "desire/DesireTable.java"), encoding="utf-8").read())
+    places = re.findall(r'\{ "id": "([a-z_]+)", "biomes"', open(source(pkg, "desire/DesireTable.java"), encoding="utf-8").read())
     for p in places:
         keys.add("lauramod.place." + p)
-    sounds = enum_constants(os.path.join(pkg, "registry/LauraRegistries.java"), "Sound")
+    sounds = enum_constants(source(pkg, "registry/LauraRegistries.java"), "Sound")
     for s in sounds:
         keys.add("subtitles.lauramod.laura_" + s)
     for adv in sorted(os.listdir(advancement_dir(pkg))):
@@ -132,19 +147,16 @@ def dialogue_keys(pkg, moods):
     """Line keys the code asks for (the specific variants are optional)."""
     required = set()
     optional = set()
-    for root, _, files in os.walk(pkg):
-        for f in files:
-            if not f.endswith(".java"):
-                continue
-            src = open(os.path.join(root, f), encoding="utf-8").read()
-            for m in re.finditer(r'(?:say|sayFirst|sayToOwner|sayFirstToOwner)\((.*?)\);', src, flags=re.S):
-                for k in re.findall(r'"([a-z_]+(?:\.[a-z_]+)*)"', m.group(1)):
-                    if k in ("item", "count", "task", "place", "activity", "hours", "attacker", "victim", "radius", "purpose", "name",
-                             "other", "days", "minutes", "laura", "player") or k.startswith("lauramod"):
-                        continue
-                    required.add(k)
-            for k in re.findall(r'"((?:work|fetch)\.[a-z_]+(?:\.[a-z_]+)*)"', src):
+    for path in java_files(pkg, CORE_PKG):
+        src = open(path, encoding="utf-8").read()
+        for m in re.finditer(r'(?:say|sayFirst|sayToOwner|sayFirstToOwner)\((.*?)\);', src, flags=re.S):
+            for k in re.findall(r'"([a-z_]+(?:\.[a-z_]+)*)"', m.group(1)):
+                if k in ("item", "count", "task", "place", "activity", "hours", "attacker", "victim", "radius", "purpose", "name",
+                         "other", "days", "minutes", "laura", "player") or k.startswith("lauramod"):
+                    continue
                 required.add(k)
+        for k in re.findall(r'"((?:work|fetch)\.[a-z_]+(?:\.[a-z_]+)*)"', src):
+            required.add(k)
     for need in ("hunger", "energy", "fun", "attention", "hygiene"):
         required |= {f"need.{need}.low", f"need.{need}.critical"}
     for tier in ("gross", "meh", "nice", "great", "amazing"):

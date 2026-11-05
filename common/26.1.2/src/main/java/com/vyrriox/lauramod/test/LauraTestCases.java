@@ -1,5 +1,6 @@
 package com.vyrriox.lauramod.test;
 
+import com.vyrriox.lauramod.LauraCore;
 import com.vyrriox.lauramod.LauraMod;
 import com.vyrriox.lauramod.api.LauraAPI;
 import com.vyrriox.lauramod.config.LauraConfig;
@@ -1571,7 +1572,7 @@ public final class LauraTestCases {
         try {
             Files.deleteIfExists(path);
         } catch (IOException e) {
-            LauraMod.LOGGER.warn("[SELFTEST] could not delete {}: {}", path, e.getMessage());
+            LauraCore.LOGGER.warn("[SELFTEST] could not delete {}: {}", path, e.getMessage());
         }
     }
 

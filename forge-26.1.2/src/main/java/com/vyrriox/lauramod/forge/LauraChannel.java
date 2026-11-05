@@ -1,5 +1,6 @@
 package com.vyrriox.lauramod.forge;
 
+import com.vyrriox.lauramod.LauraCore;
 import com.vyrriox.lauramod.LauraMod;
 import com.vyrriox.lauramod.network.LauraNetwork;
 import net.minecraft.network.Connection;
@@ -37,7 +38,7 @@ final class LauraChannel {
 
     /** Creates the channel. Forge only accepts new channels while the mods are being constructed. */
     static void init() {
-        LauraMod.LOGGER.debug("Channel {} ready (protocol {})", CHANNEL.getName(), CHANNEL.getProtocolVersion());
+        LauraCore.LOGGER.debug("Channel {} ready (protocol {})", CHANNEL.getName(), CHANNEL.getProtocolVersion());
     }
 
     /** Called on the game thread, in the order the packets arrived. */

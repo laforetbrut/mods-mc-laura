@@ -3,7 +3,7 @@ package com.vyrriox.lauramod.entity;
 import com.vyrriox.lauramod.config.LauraConfig;
 import com.vyrriox.lauramod.dialogue.DialogueManager;
 import com.vyrriox.lauramod.dialogue.LineFormatter;
-import com.vyrriox.lauramod.dialogue.LocaleUtil;
+import com.vyrriox.lauramod.dialogue.PlayerLocale;
 import com.vyrriox.lauramod.network.LauraNetwork;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -59,7 +59,7 @@ public final class LauraSpeech {
             last.clear();
         }
         last.put(laura.getUUID(), now);
-        String line = DialogueManager.pick(LocaleUtil.of(to), laura.isGagged() ? "gagged_talk" : "not_your_girlfriend", laura.getRandom());
+        String line = DialogueManager.pick(PlayerLocale.of(to), laura.isGagged() ? "gagged_talk" : "not_your_girlfriend", laura.getRandom());
         if (line == null) {
             return false;
         }
@@ -91,7 +91,7 @@ public final class LauraSpeech {
             return false;
         }
         String effectiveKey = laura.isGagged() ? "gagged_talk" : key;
-        String line = DialogueManager.pick(LocaleUtil.of(to), effectiveKey, laura.getRandom());
+        String line = DialogueManager.pick(PlayerLocale.of(to), effectiveKey, laura.getRandom());
         if (line == null && laura.isGagged()) {
             line = "Mmmph!";
         }
@@ -121,7 +121,7 @@ public final class LauraSpeech {
         if (laura.isGagged()) {
             return say(laura, to, "gagged_talk", values);
         }
-        String line = DialogueManager.pickFirst(LocaleUtil.of(to), laura.getRandom(), keys);
+        String line = DialogueManager.pickFirst(PlayerLocale.of(to), laura.getRandom(), keys);
         if (line == null) {
             return false;
         }
@@ -142,7 +142,7 @@ public final class LauraSpeech {
         if (laura.isGagged()) {
             return say(laura, to, "gagged_talk", values);
         }
-        String line = DialogueManager.respond(LocaleUtil.of(to), intent, laura.getRandom());
+        String line = DialogueManager.respond(PlayerLocale.of(to), intent, laura.getRandom());
         if (line == null) {
             return false;
         }
