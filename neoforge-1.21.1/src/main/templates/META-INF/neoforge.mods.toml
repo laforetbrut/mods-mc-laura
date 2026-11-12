@@ -26,3 +26,11 @@ description='''${mod_description}'''
     versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
+
+# The interface kit, a separate mod. Servers do not need it: every minuit call is client side.
+[[dependencies.${mod_id}]]
+    modId="minuit"
+    type="required"
+    versionRange="[2.0,3.0)"
+    ordering="NONE"
+    side="CLIENT"

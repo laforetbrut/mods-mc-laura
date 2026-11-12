@@ -51,6 +51,18 @@ for target in $(git ls-tree -d --name-only "$MAIN"); do
         cp -R "$WORK/common-$target/common/$version/src/main/." "$tree_dir/src/main/"
         rm -rf "$WORK/common-$target"
     fi
+    # The interface kit the target picks with ui_kit (kawaii when it names none): its screens for this
+    # Minecraft version, and the panels shared by every version, merged into src/main too.
+    kit=$(git show "$MAIN:$target/gradle.properties" 2>/dev/null | sed -n 's/^ui_kit=//p' | tr -d '\r')
+    kit=${kit:-kawaii}
+    for ui in "common/$version/src/ui-$kit/java" "common/ui-$kit/src/main/java"; do
+        if git cat-file -e "$MAIN:$ui" 2>/dev/null; then
+            mkdir -p "$WORK/ui-$target" "$tree_dir/src/main/java"
+            git archive "$MAIN" "$ui" | tar -x -C "$WORK/ui-$target"
+            cp -R "$WORK/ui-$target/$ui/." "$tree_dir/src/main/java/"
+            rm -rf "$WORK/ui-$target"
+        fi
+    done
     # Plain Java shared by every target, merged into src/main as well.
     if git cat-file -e "$MAIN:core/src/main" 2>/dev/null; then
         mkdir -p "$WORK/core-$target"

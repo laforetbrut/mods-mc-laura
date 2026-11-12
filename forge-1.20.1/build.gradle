@@ -23,6 +23,20 @@ if (commonDir.isDirectory()) {
     sourceSets.main.resources.srcDir(new File(commonDir, 'resources'))
 }
 
+// The screens come in two kits with the same class names: minuit (a separate mod players install) or
+// the mod's own kawaii widgets, kept for the targets minuit has no build for. ui_kit in
+// gradle.properties picks one; on the per-target branches the chosen kit is merged into src/main.
+def uiKit = providers.gradleProperty('ui_kit').getOrElse('kawaii')
+def uiDir = file("../common/${minecraft_version}/src/ui-${uiKit}")
+if (uiDir.isDirectory()) {
+    sourceSets.main.java.srcDir(new File(uiDir, 'java'))
+}
+// minuit panels written once for every Minecraft version.
+def sharedUiDir = file("../common/ui-${uiKit}/src/main")
+if (sharedUiDir.isDirectory()) {
+    sourceSets.main.java.srcDir(new File(sharedUiDir, 'java'))
+}
+
 // Plain Java shared by every target (no Minecraft or loader import) lives in ../core on the main
 // branch. On the per-target branches it is merged into src/main too.
 def coreDir = file("../core/src/main")
@@ -95,6 +109,9 @@ afterEvaluate {
     minecraft.runs.selftest.merge(minecraft.runs.server, false)
 }
 
+// Until minuit is on Modrinth, -Pminuit_jars=<folder> builds against local minuit-<loader>-<mc>-<version>.jar files.
+def minuitJars = providers.gradleProperty('minuit_jars').orNull
+
 repositories {
     maven {
         name = 'ModMaven (Applied Energistics 2 API)'
@@ -131,10 +148,24 @@ repositories {
             includeGroup 'top.theillusivec4.curios'
         }
     }
+    if (minuitJars != null) {
+        flatDir {
+            dirs minuitJars
+            content {
+                includeGroup 'local.minuit'
+            }
+        }
+    }
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    // The interface kit, a separate mod: never bundled in the jar.
+    if (uiKit == 'minuit') {
+        implementation fg.deobf(minuitJars != null ? "local.minuit:minuit-forge-${minecraft_version}:${minuit_version}"
+                : "maven.modrinth:minuit:${minuit_version}+${minecraft_version}-forge")
+    }
 
     // Optional integrations: compiled against their public APIs, never bundled in the jar.
     // fg.deobf remaps them from SRG names to the development mappings.

@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.vyrriox.lauramod.LauraMod;
 import com.vyrriox.lauramod.client.ClientState;
+import com.vyrriox.lauramod.client.gui.SpeechBubbles;
 import com.vyrriox.lauramod.client.model.ClientModels;
 import com.vyrriox.lauramod.client.skin.SkinTextures;
 import com.vyrriox.lauramod.config.LauraClientConfig;
@@ -158,7 +159,7 @@ public class LauraRenderer extends LivingEntityRenderer<LauraEntity, EntityModel
         }
         boolean nameShown = this.shouldShowName(laura);
         float y = top + (nameShown ? 0.55F : 0.25F);
-        ClientState.Bubble bubble = LauraClientConfig.speechBubbles.get() ? ClientState.bubble(laura.getId()) : null;
+        ClientState.Bubble bubble = LauraClientConfig.speechBubbles.get() && SpeechBubbles.drawnByRenderer() ? ClientState.bubble(laura.getId()) : null;
         if (bubble != null) {
             y = renderSpeech(laura, bubble.text(), y, poseStack, buffer);
         }

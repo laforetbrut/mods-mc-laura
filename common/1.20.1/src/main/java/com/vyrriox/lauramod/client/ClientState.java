@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.vyrriox.lauramod.client.gui.SpeechBubbles;
 import com.vyrriox.lauramod.skin.AssetKind;
 import net.minecraft.network.chat.Component;
 
@@ -88,6 +89,7 @@ public final class ClientState {
 
     public static void addBubble(int entityId, Component text, int seconds) {
         BUBBLES.put(entityId, new Bubble(text, ticks + seconds * 20L));
+        SpeechBubbles.said(entityId, text, seconds);
     }
 
     public static Bubble bubble(int entityId) {
