@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.vyrriox.lauramod.LauraMod;
 import com.vyrriox.lauramod.client.ClientState;
+import com.vyrriox.lauramod.client.gui.SpeechBubbles;
 import com.vyrriox.lauramod.client.model.ClientModels;
 import com.vyrriox.lauramod.client.skin.SkinTextures;
 import com.vyrriox.lauramod.config.LauraClientConfig;
@@ -135,7 +136,7 @@ public class LauraRenderer extends LivingEntityRenderer<LauraEntity, LauraRender
         state.speech = null;
         state.thoughtIcon.clear();
         if (!guiPreview) {
-            ClientState.Bubble bubble = LauraClientConfig.speechBubbles.get() ? ClientState.bubble(laura.getId()) : null;
+            ClientState.Bubble bubble = LauraClientConfig.speechBubbles.get() && SpeechBubbles.drawnByRenderer() ? ClientState.bubble(laura.getId()) : null;
             state.speech = bubble == null ? null : bubble.text();
             if (LauraClientConfig.thoughtBubbles.get()) {
                 this.itemModelResolver.updateForLiving(state.thoughtIcon, thoughtIcon(laura.getThought()), ItemDisplayContext.GUI, laura);
