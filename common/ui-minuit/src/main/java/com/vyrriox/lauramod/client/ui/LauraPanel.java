@@ -189,7 +189,7 @@ public class LauraPanel extends PanelComponent {
     }
 
     private static boolean shift() {
-        return BaseComponent.keys.shift();
+        return BaseComponent.heldKeys().shift();
     }
 
     // ------------------------------------------------------------------ frame: rail, header, footer
