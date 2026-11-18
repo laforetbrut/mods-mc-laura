@@ -891,6 +891,12 @@ public class LauraMenuScreen extends Screen {
         sounds.tooltip(Component.translatable("lauramod.menu.sounds.help"));
     }
 
+    /** Her menu opened on the Sounds page of the Settings tab. */
+    public static LauraMenuScreen soundsPage(LauraEntity laura) {
+        settingsPage = 1;
+        return new LauraMenuScreen(laura, Tab.SETTINGS);
+    }
+
     /** Her sound files: a click plays one, the heart on the right mutes it on this game only. */
     private void buildSounds(int x, int y) {
         button(x, y, 70, 18, "lauramod.menu.sounds.back", Icon.PREV, KButton.Style.LAVENDER, c -> {

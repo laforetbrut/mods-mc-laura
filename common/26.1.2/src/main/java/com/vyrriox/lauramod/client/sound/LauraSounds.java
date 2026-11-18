@@ -113,6 +113,24 @@ public final class LauraSounds {
         manager.play(lastPreview);
     }
 
+    /** How many times a file can be picked by the mod's events right now (0 when muted). For the client test. */
+    public static int audibleCount(String id) {
+        SoundManager manager = Minecraft.getInstance().getSoundManager();
+        int count = 0;
+        for (LauraRegistries.Sound s : LauraRegistries.Sound.values()) {
+            WeighedSoundEvents events = manager.getSoundEvent(LauraMod.id(s.id()));
+            List<Weighted<Sound>> list = events == null ? null : list(events);
+            if (list != null) {
+                for (Weighted<Sound> w : list) {
+                    if (w instanceof Sound sound && idOf(sound).equals(id)) {
+                        count++;
+                    }
+                }
+            }
+        }
+        return count;
+    }
+
     private static String idOf(Sound sound) {
         return sound.getLocation().getPath().toLowerCase(Locale.ROOT);
     }

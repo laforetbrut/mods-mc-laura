@@ -229,6 +229,21 @@ public final class ClientSelfTest {
             }
         });
         STEPS.add(() -> shot(mc, "emote_wheel"));
+        STEPS.add(() -> {
+            LauraEntity l = laura();
+            if (l != null) {
+                mc.setScreen(LauraMenuScreen.soundsPage(l));
+            }
+        });
+        STEPS.add(() -> shot(mc, "menu_sounds"));
+        // Muting a file takes it out of the sound events at once, unmuting puts it back.
+        STEPS.add(() -> {
+            com.vyrriox.lauramod.client.sound.LauraSounds.setMuted("laura_ambient_1", true);
+            int muted = com.vyrriox.lauramod.client.sound.LauraSounds.audibleCount("laura_ambient_1");
+            com.vyrriox.lauramod.client.sound.LauraSounds.setMuted("laura_ambient_1", false);
+            int back = com.vyrriox.lauramod.client.sound.LauraSounds.audibleCount("laura_ambient_1");
+            LauraCore.LOGGER.info("[CLIENTTEST] mute {}", muted == 0 && back > 0 ? "ok" : "FAILED (" + muted + ", " + back + ")");
+        });
         STEPS.add(() -> mc.setScreen(null));
         STEPS.add(() -> onServer(mc, player -> {
             List<LauraEntity> all = LauraManager.findAll(player);
