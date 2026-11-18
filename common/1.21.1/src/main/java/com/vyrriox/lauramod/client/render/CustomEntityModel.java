@@ -62,7 +62,11 @@ public class CustomEntityModel extends EntityModel<LauraEntity> implements Armed
         // A model without animations borrows the default ones, played on the bones found by name.
         boolean borrowed = data.animations.isEmpty();
         Map<String, ModelData.Animation> set = borrowed ? DefaultAnimations.get() : data.animations;
-        poses = LauraAnimator.compute(laura, set, ageInTicks / 20F, gameTime, limbSwingAmount > 0.08F, context);
+        // A model with animations of its own borrows only the emotes it lacks.
+        poses = borrowed
+                ? LauraAnimator.compute(laura, set, ageInTicks / 20F, gameTime, limbSwingAmount > 0.08F, context)
+                : LauraAnimator.compute(laura, set, ageInTicks / 20F, gameTime, limbSwingAmount > 0.08F, context,
+                DefaultAnimations.get(), p -> onModelBones(p, data));
         if (borrowed) {
             poses = onModelBones(poses, data);
         }
@@ -78,7 +82,8 @@ public class CustomEntityModel extends EntityModel<LauraEntity> implements Armed
         if (head == null) {
             head = data.part(HumanoidParts.HEAD);
         }
-        if (head != null && !laura.isAsleep()) {
+        // Yes Steve Model animations turn the head themselves (ysm.head_yaw): not twice.
+        if (head != null && !laura.isAsleep() && !data.headFollowsAnimations) {
             AnimationSampler.BonePose pose = pose(head);
             pose.rotY += netHeadYaw;
             pose.rotX += headPitch;
@@ -137,8 +142,7 @@ public class CustomEntityModel extends EntityModel<LauraEntity> implements Armed
         }
         poseStack.pushPose();
         // Undo the flip of the living entity renderer: Blockbench models are Y up.
-        poseStack.translate(0.0F, 1.501F, 0.0F);
-        poseStack.scale(-1.0F, -1.0F, 1.0F);
+        toModelSpace(poseStack, model.data());
         CustomModelRenderer.render(model.data(), poses, poseStack, buffer, packedLight, packedOverlay, color, 0);
         poseStack.popPose();
     }
@@ -149,10 +153,21 @@ public class CustomEntityModel extends EntityModel<LauraEntity> implements Armed
             return;
         }
         poseStack.pushPose();
-        poseStack.translate(0.0F, 1.501F, 0.0F);
-        poseStack.scale(-1.0F, -1.0F, 1.0F);
+        toModelSpace(poseStack, model.data());
         CustomModelRenderer.render(model.data(), poses, poseStack, buffer, packedLight, packedOverlay, -1, textureIndex);
         poseStack.popPose();
+    }
+
+    /**
+     * From the entity renderer's space to the model's: feet at the origin, Y up, then the model's
+     * own scale around her feet (Yes Steve Model models are drawn at 0.7 by default).
+     */
+    private static void toModelSpace(PoseStack poseStack, ModelData data) {
+        poseStack.translate(0.0F, 1.501F, 0.0F);
+        poseStack.scale(-1.0F, -1.0F, 1.0F);
+        if (data.renderScale != 1F || data.renderWidthScale != 1F) {
+            poseStack.scale(data.renderWidthScale, data.renderScale, data.renderWidthScale);
+        }
     }
 
     /** Moves the pose stack to a bone, following its parents and their animations. */
@@ -179,8 +194,7 @@ public class CustomEntityModel extends EntityModel<LauraEntity> implements Armed
         for (ModelData.Bone b = bone; b != null; b = b.parent) {
             chain.add(0, b);
         }
-        poseStack.translate(0.0F, 1.501F, 0.0F);
-        poseStack.scale(-1.0F, -1.0F, 1.0F);
+        toModelSpace(poseStack, model.data());
         for (ModelData.Bone b : chain) {
             CustomModelRenderer.transform(b, poses.get(b.name.toLowerCase(Locale.ROOT)), poseStack);
         }
@@ -194,8 +208,8 @@ public class CustomEntityModel extends EntityModel<LauraEntity> implements Armed
         boolean right = side == HumanoidArm.RIGHT;
         // A dedicated hand or item bone first, otherwise the arm found by HumanoidParts.
         boolean found = right
-                ? translateToBone(poseStack, "right_hand", "rightitem", "right_item", "hand_right")
-                : translateToBone(poseStack, "left_hand", "leftitem", "left_item", "hand_left");
+                ? translateToBone(poseStack, "right_hand", "righthandlocator", "rightitem", "right_item", "hand_right")
+                : translateToBone(poseStack, "left_hand", "lefthandlocator", "leftitem", "left_item", "hand_left");
         if (!found && model != null) {
             found = translateToBone(poseStack, model.data().part(right ? HumanoidParts.RIGHT_ARM : HumanoidParts.LEFT_ARM));
         }
@@ -205,6 +219,6 @@ public class CustomEntityModel extends EntityModel<LauraEntity> implements Armed
     }
 
     public float heightInBlocks() {
-        return model == null ? 1.8F : model.data().height / 16F;
+        return model == null ? 1.8F : model.data().height * model.data().renderScale / 16F;
     }
 }
