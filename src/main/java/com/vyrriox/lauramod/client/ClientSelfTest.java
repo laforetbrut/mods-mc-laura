@@ -26,6 +26,8 @@ public final class ClientSelfTest {
     private static final boolean ENABLED = Boolean.getBoolean("lauramod.clienttest");
     private static final List<Runnable> STEPS = new ArrayList<>();
     private static int wait = -1;
+    /** Ticks before the next step, when a step needs another delay than the usual 25. */
+    private static int nextWait = -1;
     private static int step;
 
     private ClientSelfTest() {
@@ -60,7 +62,8 @@ public final class ClientSelfTest {
         } catch (Throwable t) {
             LauraCore.LOGGER.error("[CLIENTTEST] step {} failed", step, t);
         }
-        wait = 25;
+        wait = nextWait > 0 ? nextWait : 25;
+        nextWait = -1;
     }
 
     private static void onServer(Minecraft mc, java.util.function.Consumer<ServerPlayer> action) {
@@ -127,6 +130,50 @@ public final class ClientSelfTest {
                 message -> LauraCore.LOGGER.info("[CLIENTTEST] {}", message.getString()));
     }
 
+    /**
+     * Optional: {@code clienttest-emotes.txt} in the game folder lists emotes, one per line, as
+     * {@code name} or {@code name:seconds} (when to take the picture, 1 s by default). Each one is
+     * played and pictured from the front and from her right side, AI paused so she holds still.
+     */
+    private static void emoteShots(Minecraft mc) {
+        java.nio.file.Path file = mc.gameDirectory.toPath().resolve("clienttest-emotes.txt");
+        if (!java.nio.file.Files.isRegularFile(file)) {
+            return;
+        }
+        List<String> lines;
+        try {
+            lines = java.nio.file.Files.readAllLines(file);
+        } catch (java.io.IOException e) {
+            LauraCore.LOGGER.error("[CLIENTTEST] cannot read {}", file, e);
+            return;
+        }
+        for (String line : lines) {
+            String[] parts = line.trim().split(":");
+            com.vyrriox.lauramod.entity.Emote emote = com.vyrriox.lauramod.entity.Emote.byName(parts[0]);
+            if (parts[0].isEmpty() || emote == com.vyrriox.lauramod.entity.Emote.NONE) {
+                continue;
+            }
+            int delay = parts.length > 1 ? Math.max(2, Math.round(Float.parseFloat(parts[1]) * 20)) : 20;
+            for (String view : new String[]{"front", "side"}) {
+                int turn = view.equals("front") ? 0 : -90;
+                STEPS.add(() -> onServer(mc, player -> LauraManager.findAll(player).stream().findFirst().ifPresent(l -> {
+                    l.setNoAi(true);
+                    inFront(player, l);
+                    l.setYRot(l.getYRot() + turn);
+                    l.setYBodyRot(l.getYRot());
+                    l.setYHeadRot(l.getYRot());
+                    l.playEmote(com.vyrriox.lauramod.entity.Emote.NONE);
+                })));
+                STEPS.add(() -> {
+                    onServer(mc, player -> LauraManager.findAll(player).stream().findFirst().ifPresent(l -> l.playEmote(emote)));
+                    nextWait = delay;
+                });
+                STEPS.add(() -> shot(mc, "emote_" + emote.animationName() + "_" + view));
+            }
+        }
+        STEPS.add(() -> onServer(mc, player -> LauraManager.findAll(player).stream().findFirst().ifPresent(l -> l.setNoAi(false))));
+    }
+
     private static void plan(Minecraft mc) {
         STEPS.add(() -> onServer(mc, player -> {
             // The quick play world is kept between runs: start from one new companion, whatever
@@ -188,6 +235,21 @@ public final class ClientSelfTest {
             }
         });
         STEPS.add(() -> shot(mc, "emote_wheel"));
+        STEPS.add(() -> {
+            LauraEntity l = laura();
+            if (l != null) {
+                mc.setScreen(LauraMenuScreen.soundsPage(l));
+            }
+        });
+        STEPS.add(() -> shot(mc, "menu_sounds"));
+        // Muting a file takes it out of the sound events at once, unmuting puts it back.
+        STEPS.add(() -> {
+            com.vyrriox.lauramod.client.sound.LauraSounds.setMuted("laura_ambient_1", true);
+            int muted = com.vyrriox.lauramod.client.sound.LauraSounds.audibleCount("laura_ambient_1");
+            com.vyrriox.lauramod.client.sound.LauraSounds.setMuted("laura_ambient_1", false);
+            int back = com.vyrriox.lauramod.client.sound.LauraSounds.audibleCount("laura_ambient_1");
+            LauraCore.LOGGER.info("[CLIENTTEST] mute {}", muted == 0 && back > 0 ? "ok" : "FAILED (" + muted + ", " + back + ")");
+        });
         STEPS.add(() -> mc.setScreen(null));
         STEPS.add(() -> onServer(mc, player -> {
             List<LauraEntity> all = LauraManager.findAll(player);
@@ -207,6 +269,7 @@ public final class ClientSelfTest {
         }));
         STEPS.add(() -> wave(mc));
         STEPS.add(() -> shot(mc, "default_wave"));
+        emoteShots(mc);
         // Custom model check: config/lauramod/models/test_fr.bbmodel, when present, has French bone
         // names, a nose on its front, a blue right arm and no animation. It shows the borrowed
         // default animations (the same wave, on "bras_d") and the bone lookup (hay on "tete", bag
@@ -245,6 +308,29 @@ public final class ClientSelfTest {
             }
         });
         STEPS.add(() -> shot(mc, "world_back_default"));
+        // Yes Steve Model folder check: config/lauramod/models/ysm_test/, when present, is a model in
+        // YSM's open folder form. It shows the 0.7 scale, its own idle animation and a borrowed emote.
+        STEPS.add(() -> onServer(mc, player -> LauraManager.findAll(player).stream().findFirst().ifPresent(l -> {
+            com.vyrriox.lauramod.world.LauraActions.ungag(player, l, false);
+            inFront(player, l);
+        })));
+        STEPS.add(() -> {
+            LauraEntity l = laura();
+            if (l != null) {
+                com.vyrriox.lauramod.client.network.LauraClientNetwork.setModel(l.getId(), "server:ysm_test");
+            }
+        });
+        STEPS.add(() -> {
+        });
+        STEPS.add(() -> shot(mc, "ysm_idle"));
+        STEPS.add(() -> wave(mc));
+        STEPS.add(() -> shot(mc, "ysm_wave"));
+        STEPS.add(() -> {
+            LauraEntity l = laura();
+            if (l != null) {
+                com.vyrriox.lauramod.client.network.LauraClientNetwork.setModel(l.getId(), "reset");
+            }
+        });
         STEPS.add(() -> onServer(mc, player -> {
             List<LauraEntity> all = LauraManager.findAll(player);
             if (!all.isEmpty()) {

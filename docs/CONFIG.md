@@ -1,6 +1,6 @@
 # Configuration
 
-My Girlfriend Laura 2.0.0 (mod id `lauramod`), author / auteur : vyrriox.
+My Girlfriend Laura 2.1.0 (mod id `lauramod`), author / auteur : vyrriox.
 
 - [English](#english)
 - [Français](#français)
@@ -46,6 +46,7 @@ All files are created with their default content the first time they are needed.
 - The same files are reloaded every time a server or a singleplayer world starts.
 - A problem in one file does not stop the others from loading. When `gifts.json`, `desires.json` or `recipes.json` is not valid JSON, the built-in defaults are used and the log says so. When one of them holds a value of the wrong kind, the error is written to the log and what was loaded before stays in use. In `recipes.json` a meal with a wrong value is skipped alone.
 - `lauramod-client.json` is read when the game starts. The switches of the Settings tab of her menu save the file at once.
+- `/laura admin config <section.key> <value>` changes one setting of `lauramod-common.json` from the game, saves the file and applies it like `/laura reload` (see [COMMANDS.md](COMMANDS.md)).
 - Health, speed and attack damage are applied to every companion once per second, so a reload is enough.
 - `general.inventoryRows` is applied when a companion is loaded. Items that no longer fit are dropped at her feet.
 
@@ -274,6 +275,12 @@ For `attackPlayers` and `shieldWithoutPvp`, the PvP switch is the `pvp` setting 
 | `particles` | `true` | true / false | Hearts, tears, sparkles and other particles. |
 | `showNeedsHud` | `false` | true / false | Shows her needs in a small overlay while she is within 32 blocks. |
 
+#### sounds
+
+| Option | Default | Range or values | Meaning |
+|---|---|---|---|
+| `muted` | `[]` | list of file names | Her sound files you never want to hear, such as `laura_ambient_3`. Easier from her menu: Settings, Sounds, where each file can be played first. She picks another file instead, or stays quiet when every file of a sound is muted. |
+
 #### controls
 
 | Option | Default | Range or values | Meaning |
@@ -415,6 +422,7 @@ Tous les fichiers sont créés avec leur contenu par défaut la première fois q
 - Les mêmes fichiers sont rechargés à chaque démarrage d'un serveur ou d'un monde solo.
 - Un problème dans un fichier n'empêche pas les autres de se charger. Quand `gifts.json`, `desires.json` ou `recipes.json` n'est pas du JSON valide, les valeurs par défaut intégrées sont utilisées et le journal le signale. Quand l'un d'eux contient une valeur du mauvais type, l'erreur est écrite dans le journal et ce qui était chargé auparavant reste utilisé. Dans `recipes.json`, un plat dont une valeur est incorrecte est ignoré seul.
 - `lauramod-client.json` est lu au lancement du jeu. Les interrupteurs de l'onglet Réglages de son menu enregistrent le fichier aussitôt.
+- `/laura admin config <section.clé> <valeur>` change un réglage de `lauramod-common.json` depuis le jeu, enregistre le fichier et l'applique comme `/laura reload` (voir [COMMANDS.md](COMMANDS.md)).
 - La vie, la vitesse et les dégâts sont appliqués à chaque compagne une fois par seconde : un rechargement suffit.
 - `general.inventoryRows` est appliqué au chargement d'une compagne. Les objets qui ne rentrent plus tombent à ses pieds.
 
@@ -642,6 +650,12 @@ Pour `attackPlayers` et `shieldWithoutPvp`, l'interrupteur du PvP est le réglag
 | `remoteSkins` | `true` | true / false | Télécharge les skins depuis internet. Si false, les skins par URL affichent le skin par défaut. |
 | `particles` | `true` | true / false | Cœurs, larmes, étincelles et autres particules. |
 | `showNeedsHud` | `false` | true / false | Affiche ses besoins dans un petit cadre tant qu'elle est à moins de 32 blocs. |
+
+#### sounds
+
+| Option | Défaut | Plage ou valeurs | Signification |
+|---|---|---|---|
+| `muted` | `[]` | liste de noms de fichiers | Ses fichiers sonores que vous ne voulez jamais entendre, comme `laura_ambient_3`. Plus simple depuis son menu : Réglages, Sons, où chaque fichier peut d'abord être écouté. Elle choisit un autre fichier, ou reste silencieuse quand tous les fichiers d'un son sont coupés. |
 
 #### controls
 

@@ -28,6 +28,16 @@ jobs:
             python3 tools/check_lang.py --mc "$version"
           done
 
+  # Default animations must not put an arm through her head or deep into her torso.
+  animations:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check animations
+        run: |
+          if [ ! -f tools/check_animations.py ]; then echo "No tools folder on this branch."; exit 0; fi
+          python3 tools/check_animations.py
+
   # core/ is plain Java compiled into every target: it must not import the game or a loader, and
   # common/ must not import a loader. Only on main: the target branches merge both into src/main.
   layers:

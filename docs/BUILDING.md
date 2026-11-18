@@ -1,6 +1,6 @@
 # Building from source
 
-My Girlfriend Laura 2.0.0 (mod id `lauramod`), author / auteur : vyrriox.
+My Girlfriend Laura 2.1.0 (mod id `lauramod`), author / auteur : vyrriox.
 
 - [English](#english)
 - [Français](#français)
@@ -46,7 +46,7 @@ docs/                            this documentation
 - Its `build.gradle` adds `../core/src/main/java`, `../common/<mcversion>/src/main/java` and `../common/<mcversion>/src/main/resources` to the main source set. Core holds the logic that never needs a port: it is compiled into the nine targets as it is. The loader folder itself only holds the glue: entry points, networking, the `Platform` implementation and the optional integrations (`compat` package).
 - One branch per target, named like its folder (`fabric-26.1.2` for example), is generated from `main` by `tools/make_branches.sh`; the branches are created when `main` is published. On such a branch the project sits at the repository root, the common and core code are merged into `src/main`, and the includes do nothing.
 - NeoForge for Minecraft 1.20.1 is the 47.1 fork of Forge. Its project uses the legacy plugin of ModDevGradle, and the mod depends on the mod id `forge` there.
-- Version 2.0.0 builds for the nine targets, and the nine pass the in-game self test suite.
+- Version 2.1.0 builds for the nine targets, and the nine pass the in-game self test suite.
 
 ### Build a jar
 
@@ -61,15 +61,15 @@ On Windows use `gradlew.bat build`. The jar is written to `build/libs/`:
 
 | Project | Jar |
 |---|---|
-| `neoforge-1.20.1` | `lauramod-neoforge-1.20.1-2.0.0.jar` |
-| `forge-1.20.1` | `lauramod-forge-1.20.1-2.0.0.jar` |
-| `fabric-1.20.1` | `lauramod-fabric-1.20.1-2.0.0.jar` |
-| `neoforge-1.21.1` | `lauramod-neoforge-1.21.1-2.0.0.jar` |
-| `forge-1.21.1` | `lauramod-forge-1.21.1-2.0.0.jar` |
-| `fabric-1.21.1` | `lauramod-fabric-1.21.1-2.0.0.jar` |
-| `neoforge-26.1.2` | `lauramod-neoforge-26.1.2-2.0.0.jar` |
-| `forge-26.1.2` | `lauramod-forge-26.1.2-2.0.0.jar` |
-| `fabric-26.1.2` | `lauramod-fabric-26.1.2-2.0.0.jar` |
+| `neoforge-1.20.1` | `lauramod-neoforge-1.20.1-2.1.0.jar` |
+| `forge-1.20.1` | `lauramod-forge-1.20.1-2.1.0.jar` |
+| `fabric-1.20.1` | `lauramod-fabric-1.20.1-2.1.0.jar` |
+| `neoforge-1.21.1` | `lauramod-neoforge-1.21.1-2.1.0.jar` |
+| `forge-1.21.1` | `lauramod-forge-1.21.1-2.1.0.jar` |
+| `fabric-1.21.1` | `lauramod-fabric-1.21.1-2.1.0.jar` |
+| `neoforge-26.1.2` | `lauramod-neoforge-26.1.2-2.1.0.jar` |
+| `forge-26.1.2` | `lauramod-forge-26.1.2-2.1.0.jar` |
+| `fabric-26.1.2` | `lauramod-fabric-26.1.2-2.1.0.jar` |
 
 - Install the jar of `build/libs/`. Some projects also write a development jar to `build/devlibs/` (NeoForge 1.20.1, Fabric 1.20.1 and 1.21.1): it only works in the development runs.
 - Outside of development, NeoForge and Forge 1.20.1 run on SRG names and Fabric 1.20.1 and 1.21.1 on intermediary names: the jars of these projects are remapped after the build (`reobfJar` on NeoForge and Forge, `remapJar` on Fabric). Minecraft 26.1 is not obfuscated and its jars are not remapped.
@@ -193,6 +193,8 @@ cd neoforge-1.21.1
 |---|---|---|
 | `tools/generate_assets.py` | `python tools/generate_assets.py [resources_dir] [--mc <mcversion>] [--no-sounds] [--preview <folder>]` | Generates the skins, GUI icons, item and block textures, block models, the logo and the sound files into the resources folder of a Minecraft version (default `common/1.21.1/src/main/resources`). Requires Pillow, numpy and ffmpeg with libvorbis. |
 | `tools/check_lang.py` | `python tools/check_lang.py [--mc <mcversion>] [--strict]` | Checks that every translation key and dialogue key used by the code exists. For each language and dialogue file it lists the missing keys (English is the reference), the unused keys and the placeholders that differ from English. Exit code 1 when English is incomplete, or when any file is incomplete with `--strict`. Default version: 1.21.1. |
+| `tools/assets/animations.py` | `python tools/assets/animations.py` | Writes the default animations (`assets/lauramod/animations/laura_humanoid.json`) into the resources of every Minecraft version. Edit the animations here, never in the JSON files. |
+| `tools/check_animations.py` | `python tools/check_animations.py [--mc <mcversion>] [--file <json>] [--verbose]` | Plays every default animation on the player model, slim and wide arms, with the head turned a little to each side, and reports an arm that goes into her head, deep into her torso, or closes over her head. Exit code 1 when anything is found. The continuous integration runs it. |
 | `tools/make_branches.sh` | `bash tools/make_branches.sh` | Regenerates the per-target branches from `main`. Run it from the repository root with a clean working tree (no uncommitted or untracked file). Each branch gets its project at the root, the common code of its Minecraft version and the core code merged into `src/main`, and the shared files (README, changelog, license, community files, `.github`, `docs`). An existing branch gets a new commit on top of its history, an unchanged one is left alone. Only local branches are updated: push them yourself. |
 | `tools/collect_jars.sh` | `bash tools/collect_jars.sh [--build]` | Copies the mod jar of every target from its `build/libs/` into `jars/<mod version>/` at the repository root (`jars/2.0.0/`, then one folder per later version, so earlier jars are kept), a local folder ignored by Git. Sources, dev and javadoc jars are skipped, and so is a jar left in `build/libs/` by another version. With `--build` it first runs `./gradlew build` in each target folder. A target without a jar is reported. |
 
@@ -265,7 +267,7 @@ docs/                            cette documentation
 - Son `build.gradle` ajoute `../core/src/main/java`, `../common/<mcversion>/src/main/java` et `../common/<mcversion>/src/main/resources` au source set principal. Core contient la logique qui n'a jamais besoin d'un portage : elle est compilée telle quelle dans les neuf cibles. Le dossier du chargeur ne contient que la colle : points d'entrée, réseau, implémentation de `Platform` et intégrations facultatives (paquet `compat`).
 - Une branche par cible, nommée comme son dossier (`fabric-26.1.2` par exemple), est générée depuis `main` par `tools/make_branches.sh` ; les branches sont créées quand `main` est publié. Sur une telle branche, le projet est à la racine du dépôt, le code commun et le code de core sont fusionnés dans `src/main`, et les inclusions ne font rien.
 - NeoForge pour Minecraft 1.20.1 est le fork 47.1 de Forge. Son projet utilise le plugin legacy de ModDevGradle, et le mod y dépend de l'identifiant de mod `forge`.
-- La version 2.0.0 se compile pour les neuf cibles, et les neuf réussissent la suite de self tests en jeu.
+- La version 2.1.0 se compile pour les neuf cibles, et les neuf réussissent la suite de self tests en jeu.
 
 ### Construire un jar
 
@@ -280,15 +282,15 @@ Sous Windows, utilisez `gradlew.bat build`. Le jar est écrit dans `build/libs/`
 
 | Projet | Jar |
 |---|---|
-| `neoforge-1.20.1` | `lauramod-neoforge-1.20.1-2.0.0.jar` |
-| `forge-1.20.1` | `lauramod-forge-1.20.1-2.0.0.jar` |
-| `fabric-1.20.1` | `lauramod-fabric-1.20.1-2.0.0.jar` |
-| `neoforge-1.21.1` | `lauramod-neoforge-1.21.1-2.0.0.jar` |
-| `forge-1.21.1` | `lauramod-forge-1.21.1-2.0.0.jar` |
-| `fabric-1.21.1` | `lauramod-fabric-1.21.1-2.0.0.jar` |
-| `neoforge-26.1.2` | `lauramod-neoforge-26.1.2-2.0.0.jar` |
-| `forge-26.1.2` | `lauramod-forge-26.1.2-2.0.0.jar` |
-| `fabric-26.1.2` | `lauramod-fabric-26.1.2-2.0.0.jar` |
+| `neoforge-1.20.1` | `lauramod-neoforge-1.20.1-2.1.0.jar` |
+| `forge-1.20.1` | `lauramod-forge-1.20.1-2.1.0.jar` |
+| `fabric-1.20.1` | `lauramod-fabric-1.20.1-2.1.0.jar` |
+| `neoforge-1.21.1` | `lauramod-neoforge-1.21.1-2.1.0.jar` |
+| `forge-1.21.1` | `lauramod-forge-1.21.1-2.1.0.jar` |
+| `fabric-1.21.1` | `lauramod-fabric-1.21.1-2.1.0.jar` |
+| `neoforge-26.1.2` | `lauramod-neoforge-26.1.2-2.1.0.jar` |
+| `forge-26.1.2` | `lauramod-forge-26.1.2-2.1.0.jar` |
+| `fabric-26.1.2` | `lauramod-fabric-26.1.2-2.1.0.jar` |
 
 - Installez le jar de `build/libs/`. Certains projets écrivent aussi un jar de développement dans `build/devlibs/` (NeoForge 1.20.1, Fabric 1.20.1 et 1.21.1) : il ne fonctionne que dans les lancements de développement.
 - Hors développement, NeoForge et Forge 1.20.1 tournent avec les noms SRG, et Fabric 1.20.1 et 1.21.1 avec les noms intermediary : les jars de ces projets sont remappés après le build (`reobfJar` sur NeoForge et Forge, `remapJar` sur Fabric). Minecraft 26.1 n'est pas obfusqué et ses jars ne sont pas remappés.
@@ -412,6 +414,8 @@ cd neoforge-1.21.1
 |---|---|---|
 | `tools/generate_assets.py` | `python tools/generate_assets.py [resources_dir] [--mc <mcversion>] [--no-sounds] [--preview <dossier>]` | Génère les skins, les icônes d'interface, les textures d'objets et de blocs, les modèles de blocs, le logo et les fichiers sonores dans le dossier de ressources d'une version de Minecraft (par défaut `common/1.21.1/src/main/resources`). Demande Pillow, numpy et ffmpeg avec libvorbis. |
 | `tools/check_lang.py` | `python tools/check_lang.py [--mc <mcversion>] [--strict]` | Vérifie que chaque clé de traduction et chaque clé de dialogue utilisée par le code existe. Pour chaque fichier de langue et de dialogues, il liste les clés manquantes (l'anglais sert de référence), les clés inutilisées et les variables qui diffèrent de l'anglais. Code de sortie 1 quand l'anglais est incomplet, ou quand un fichier quelconque est incomplet avec `--strict`. Version par défaut : 1.21.1. |
+| `tools/assets/animations.py` | `python tools/assets/animations.py` | Écrit les animations par défaut (`assets/lauramod/animations/laura_humanoid.json`) dans les ressources de chaque version de Minecraft. Modifiez les animations ici, jamais dans les fichiers JSON. |
+| `tools/check_animations.py` | `python tools/check_animations.py [--mc <mcversion>] [--file <json>] [--verbose]` | Joue chaque animation par défaut sur le modèle de joueur, bras fins et larges, la tête un peu tournée de chaque côté, et signale un bras qui entre dans sa tête, s'enfonce dans son torse ou se referme au-dessus de sa tête. Code de sortie 1 au moindre problème. L'intégration continue le lance. |
 | `tools/make_branches.sh` | `bash tools/make_branches.sh` | Régénère les branches par cible depuis `main`. Lancez-le depuis la racine du dépôt, avec un arbre de travail propre (aucun fichier modifié ou non suivi). Chaque branche reçoit son projet à la racine, le code commun de sa version de Minecraft et le code de core fusionnés dans `src/main`, et les fichiers partagés (README, changelog, licence, fichiers communautaires, `.github`, `docs`). Une branche existante reçoit un nouveau commit par-dessus son historique, une branche inchangée n'est pas touchée. Seules les branches locales sont mises à jour : poussez-les vous-même. |
 | `tools/collect_jars.sh` | `bash tools/collect_jars.sh [--build]` | Copie le jar du mod de chaque cible depuis son `build/libs/` vers `jars/<version du mod>/` à la racine du dépôt (`jars/2.0.0/`, puis un dossier par version suivante, pour garder les jars précédents), un dossier local ignoré par Git. Les jars de sources, de développement et de javadoc sont ignorés, ainsi qu'un jar laissé dans `build/libs/` par une autre version. Avec `--build`, il lance d'abord `./gradlew build` dans le dossier de chaque cible. Une cible sans jar est signalée. |
 
