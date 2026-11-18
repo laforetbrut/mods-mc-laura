@@ -13,7 +13,7 @@ lumberjack, a farmer or a cook, and wears the skin or the Blockbench model you c
 
 Say "I feel lonely" in chat. She takes it from there.
 
-Version 2.0.0, mod id `lauramod`, for NeoForge, Forge and Fabric on Minecraft 1.20.1, 1.21.1 and
+Version 2.1.0, mod id `lauramod`, for NeoForge, Forge and Fabric on Minecraft 1.20.1, 1.21.1 and
 26.1.2.
 
 ## Features
@@ -31,14 +31,17 @@ Version 2.0.0, mod id `lauramod`, for NeoForge, Forge and Fabric on Minecraft 1.
 - **Fetch, jobs and chests**: she brings items from the ground, chests and modded storage within
   24 blocks, works as a lumberjack, a farmer or a cook, follows a to-do list of 16 tasks, and uses
   chests assigned to eight purposes.
-- **Several companions**: 3 per player by default, each bound to the player who summoned her.
+- **Several companions**: 3 per player by default (operators change it in game with
+  `/laura admin config general.maxPerPlayer <n>`), each bound to the player who summoned her.
   If one dies, a flower on a Laura's Gravestone brings her back with her inventory.
 - **Made for servers**: she follows the PvP setting and the teams of the server, leaves locked
   and protected containers alone, and skin and model transfers are limited in size and rate.
 - **Your look**: six built-in skins, any PNG skin, the skin of a Minecraft account, and custom
-  Blockbench models (`.bbmodel`, `.geo.json`) with their own animations.
+  Blockbench models (`.bbmodel`, `.geo.json`) with their own animations, or a model folder made
+  for Yes Steve Model (not the encrypted `.ysm` files).
 - **Menus**: a menu with seven tabs (key K), an emote wheel with 30 emotes (key G), an inventory
-  with armor, hand and back slots, and an optional needs overlay.
+  with armor, hand and back slots, an optional needs overlay, and a Sounds page to mute the
+  sounds you do not want to hear.
 - **58 advancements** in their own tab.
 - **Readable settings**: JSON files in `config/lauramod/`, applied with `/laura reload`.
 - **For modpacks**: a public Java API, KubeJS scripting on some targets, and optional
@@ -48,15 +51,15 @@ Version 2.0.0, mod id `lauramod`, for NeoForge, Forge and Fabric on Minecraft 1.
 
 | Minecraft | Loader | Built and tested with | Java | Jar |
 |---|---|---|---|---|
-| 1.20.1 | NeoForge | NeoForge 47.1.106 (the 47.1 fork of Forge) | 17 | `lauramod-neoforge-1.20.1-2.0.0.jar` |
-| 1.20.1 | Forge | Forge 47.4.10 | 17 | `lauramod-forge-1.20.1-2.0.0.jar` |
-| 1.20.1 | Fabric | Fabric Loader 0.19.5, Fabric API 0.92.12+1.20.1 | 17 | `lauramod-fabric-1.20.1-2.0.0.jar` |
-| 1.21.1 | NeoForge | NeoForge 21.1.252 | 21 | `lauramod-neoforge-1.21.1-2.0.0.jar` |
-| 1.21.1 | Forge | Forge 52.1.16 | 21 | `lauramod-forge-1.21.1-2.0.0.jar` |
-| 1.21.1 | Fabric | Fabric Loader 0.19.5, Fabric API 0.116.17+1.21.1 | 21 | `lauramod-fabric-1.21.1-2.0.0.jar` |
-| 26.1.2 | NeoForge | NeoForge 26.1.2.109 | 25 | `lauramod-neoforge-26.1.2-2.0.0.jar` |
-| 26.1.2 | Forge | Forge 64.1.3 | 25 | `lauramod-forge-26.1.2-2.0.0.jar` |
-| 26.1.2 | Fabric | Fabric Loader 0.19.5, Fabric API 0.155.3+26.1.2 | 25 | `lauramod-fabric-26.1.2-2.0.0.jar` |
+| 1.20.1 | NeoForge | NeoForge 47.1.106 (the 47.1 fork of Forge) | 17 | `lauramod-neoforge-1.20.1-2.1.0.jar` |
+| 1.20.1 | Forge | Forge 47.4.10 | 17 | `lauramod-forge-1.20.1-2.1.0.jar` |
+| 1.20.1 | Fabric | Fabric Loader 0.19.5, Fabric API 0.92.12+1.20.1 | 17 | `lauramod-fabric-1.20.1-2.1.0.jar` |
+| 1.21.1 | NeoForge | NeoForge 21.1.252 | 21 | `lauramod-neoforge-1.21.1-2.1.0.jar` |
+| 1.21.1 | Forge | Forge 52.1.16 | 21 | `lauramod-forge-1.21.1-2.1.0.jar` |
+| 1.21.1 | Fabric | Fabric Loader 0.19.5, Fabric API 0.116.17+1.21.1 | 21 | `lauramod-fabric-1.21.1-2.1.0.jar` |
+| 26.1.2 | NeoForge | NeoForge 26.1.2.109 | 25 | `lauramod-neoforge-26.1.2-2.1.0.jar` |
+| 26.1.2 | Forge | Forge 64.1.3 | 25 | `lauramod-forge-26.1.2-2.1.0.jar` |
+| 26.1.2 | Fabric | Fabric Loader 0.19.5, Fabric API 0.155.3+26.1.2 | 25 | `lauramod-fabric-26.1.2-2.1.0.jar` |
 
 Each jar is built for one loader and one Minecraft version. Download the one that matches
 yours from the CurseForge page of the mod or from the
@@ -218,7 +221,7 @@ Blockbench de votre choix.
 
 Dites « je me sens seul » dans le chat. Elle s'occupe du reste.
 
-Version 2.0.0, identifiant de mod `lauramod`, pour NeoForge, Forge et Fabric sur Minecraft
+Version 2.1.0, identifiant de mod `lauramod`, pour NeoForge, Forge et Fabric sur Minecraft
 1.20.1, 1.21.1 et 26.1.2.
 
 ## Caractéristiques
@@ -236,15 +239,18 @@ Version 2.0.0, identifiant de mod `lauramod`, pour NeoForge, Forge et Fabric sur
 - **Rapporter, travailler, ranger** : elle rapporte des objets trouvés au sol, dans les coffres et
   les rangements de mods dans un rayon de 24 blocs, travaille comme bûcheronne, fermière ou
   cuisinière, suit une liste de 16 tâches, et utilise des coffres attribués à huit usages.
-- **Plusieurs compagnes** : 3 par joueur par défaut, chacune liée au joueur qui l'a invoquée.
+- **Plusieurs compagnes** : 3 par joueur par défaut (les opérateurs le changent en jeu avec
+  `/laura admin config general.maxPerPlayer <n>`), chacune liée au joueur qui l'a invoquée.
   Si l'une meurt, une fleur sur une Tombe de Laura la ramène avec son inventaire.
 - **Pensée pour les serveurs** : elle suit le réglage PvP et les équipes du serveur, ne touche
   pas aux conteneurs verrouillés ou protégés, et les transferts de skins et de modèles sont
   limités en taille et en débit.
 - **Son apparence** : six skins intégrés, n'importe quel skin PNG, le skin d'un compte Minecraft,
-  et des modèles Blockbench personnalisés (`.bbmodel`, `.geo.json`) avec leurs propres animations.
+  et des modèles Blockbench personnalisés (`.bbmodel`, `.geo.json`) avec leurs propres animations,
+  ou un dossier de modèle fait pour Yes Steve Model (pas les fichiers `.ysm` chiffrés).
 - **Menus** : un menu à sept onglets (touche K), une roue de 30 émotes (touche G), un inventaire
-  avec emplacements d'armure, de mains et de dos, et un cadre des besoins en option.
+  avec emplacements d'armure, de mains et de dos, un cadre des besoins en option, et une page
+  Sons pour couper les sons que vous ne voulez pas entendre.
 - **58 progrès** dans leur propre onglet.
 - **Des réglages lisibles** : des fichiers JSON dans `config/lauramod/`, appliqués avec
   `/laura reload`.
@@ -255,15 +261,15 @@ Version 2.0.0, identifiant de mod `lauramod`, pour NeoForge, Forge et Fabric sur
 
 | Minecraft | Chargeur | Compilé et testé avec | Java | Jar |
 |---|---|---|---|---|
-| 1.20.1 | NeoForge | NeoForge 47.1.106 (le fork 47.1 de Forge) | 17 | `lauramod-neoforge-1.20.1-2.0.0.jar` |
-| 1.20.1 | Forge | Forge 47.4.10 | 17 | `lauramod-forge-1.20.1-2.0.0.jar` |
-| 1.20.1 | Fabric | Fabric Loader 0.19.5, Fabric API 0.92.12+1.20.1 | 17 | `lauramod-fabric-1.20.1-2.0.0.jar` |
-| 1.21.1 | NeoForge | NeoForge 21.1.252 | 21 | `lauramod-neoforge-1.21.1-2.0.0.jar` |
-| 1.21.1 | Forge | Forge 52.1.16 | 21 | `lauramod-forge-1.21.1-2.0.0.jar` |
-| 1.21.1 | Fabric | Fabric Loader 0.19.5, Fabric API 0.116.17+1.21.1 | 21 | `lauramod-fabric-1.21.1-2.0.0.jar` |
-| 26.1.2 | NeoForge | NeoForge 26.1.2.109 | 25 | `lauramod-neoforge-26.1.2-2.0.0.jar` |
-| 26.1.2 | Forge | Forge 64.1.3 | 25 | `lauramod-forge-26.1.2-2.0.0.jar` |
-| 26.1.2 | Fabric | Fabric Loader 0.19.5, Fabric API 0.155.3+26.1.2 | 25 | `lauramod-fabric-26.1.2-2.0.0.jar` |
+| 1.20.1 | NeoForge | NeoForge 47.1.106 (le fork 47.1 de Forge) | 17 | `lauramod-neoforge-1.20.1-2.1.0.jar` |
+| 1.20.1 | Forge | Forge 47.4.10 | 17 | `lauramod-forge-1.20.1-2.1.0.jar` |
+| 1.20.1 | Fabric | Fabric Loader 0.19.5, Fabric API 0.92.12+1.20.1 | 17 | `lauramod-fabric-1.20.1-2.1.0.jar` |
+| 1.21.1 | NeoForge | NeoForge 21.1.252 | 21 | `lauramod-neoforge-1.21.1-2.1.0.jar` |
+| 1.21.1 | Forge | Forge 52.1.16 | 21 | `lauramod-forge-1.21.1-2.1.0.jar` |
+| 1.21.1 | Fabric | Fabric Loader 0.19.5, Fabric API 0.116.17+1.21.1 | 21 | `lauramod-fabric-1.21.1-2.1.0.jar` |
+| 26.1.2 | NeoForge | NeoForge 26.1.2.109 | 25 | `lauramod-neoforge-26.1.2-2.1.0.jar` |
+| 26.1.2 | Forge | Forge 64.1.3 | 25 | `lauramod-forge-26.1.2-2.1.0.jar` |
+| 26.1.2 | Fabric | Fabric Loader 0.19.5, Fabric API 0.155.3+26.1.2 | 25 | `lauramod-fabric-26.1.2-2.1.0.jar` |
 
 Chaque jar est compilé pour un seul chargeur et une seule version de Minecraft. Téléchargez
 celui qui correspond aux vôtres depuis la page CurseForge du mod ou depuis la

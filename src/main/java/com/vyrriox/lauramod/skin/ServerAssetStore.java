@@ -3,6 +3,7 @@ package com.vyrriox.lauramod.skin;
 import com.vyrriox.lauramod.LauraCore;
 import com.vyrriox.lauramod.LauraMod;
 import com.vyrriox.lauramod.config.LauraConfig;
+import com.vyrriox.lauramod.model.YsmImport;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -125,10 +126,15 @@ public final class ServerAssetStore {
         String name;
         Path base;
         if (Files.isDirectory(path) && !path.equals(root) && !path.getFileName().toString().equals("uploads")) {
-            try (Stream<Path> children = Files.list(path)) {
-                children.filter(Files::isRegularFile).filter(ServerAssetStore::isModelFile).sorted().forEach(files::add);
+            Map<String, Path> ysm = ysmFiles(path);
+            if (ysm != null) {
+                files.addAll(ysm.values());
+            } else {
+                try (Stream<Path> children = Files.list(path)) {
+                    children.filter(Files::isRegularFile).filter(ServerAssetStore::isModelFile).sorted().forEach(files::add);
+                }
             }
-            if (files.stream().noneMatch(p -> p.getFileName().toString().endsWith(".bbmodel") || p.getFileName().toString().endsWith(".geo.json"))) {
+            if (ysm == null && files.stream().noneMatch(p -> p.getFileName().toString().endsWith(".bbmodel") || p.getFileName().toString().endsWith(".geo.json"))) {
                 return null;
             }
             name = relativeName(root, path, "");
@@ -161,7 +167,7 @@ public final class ServerAssetStore {
         List<Path> relative = new ArrayList<>();
         for (Path f : files) {
             size += Files.size(f);
-            digest.update(f.getFileName().toString().getBytes(StandardCharsets.UTF_8));
+            digest.update(entryName(base.relativize(f)).getBytes(StandardCharsets.UTF_8));
             digest.update(Files.readAllBytes(f));
             relative.add(base.relativize(f));
         }
@@ -170,6 +176,49 @@ public final class ServerAssetStore {
             return null;
         }
         return new Entry(AssetKind.MODEL, name, HexFormat.of().formatHex(digest.digest()), size, base, relative);
+    }
+
+    /** Most files listed in a Yes Steve Model folder, and how deep its sub folders are read. */
+    private static final int YSM_MAX_FILES = 512;
+    private static final int YSM_MAX_DEPTH = 4;
+
+    /**
+     * The files a Yes Steve Model folder needs (geometry, main and extra animations, default
+     * texture), by relative path, or null when the folder is not one. Its other textures, sounds
+     * and animations are never sent. A folder holding only an encrypted .ysm file is reported.
+     */
+    private static Map<String, Path> ysmFiles(Path dir) throws IOException {
+        Map<String, Path> listed = new LinkedHashMap<>();
+        try (Stream<Path> stream = Files.walk(dir, YSM_MAX_DEPTH)) {
+            for (Path p : stream.sorted().toList()) {
+                if (Files.isRegularFile(p, java.nio.file.LinkOption.NOFOLLOW_LINKS) && listed.size() < YSM_MAX_FILES) {
+                    listed.put(entryName(dir.relativize(p)), p);
+                }
+            }
+        }
+        if (!YsmImport.isYsm(listed.keySet())) {
+            if (YsmImport.onlyEncrypted(listed.keySet())) {
+                LauraCore.LOGGER.warn(YsmImport.encryptedMessage(dir.getFileName().toString()));
+            }
+            return null;
+        }
+        Map<String, Path> out = new LinkedHashMap<>();
+        for (String rel : YsmImport.neededFiles(listed.keySet(), rel -> {
+            try {
+                Path p = listed.get(rel);
+                return p == null || Files.size(p) > LauraConfig.maxModelKb.getInt() * 1024L ? null : Files.readAllBytes(p);
+            } catch (IOException e) {
+                return null;
+            }
+        })) {
+            out.put(rel, listed.get(rel));
+        }
+        return out;
+    }
+
+    /** A relative path as written in the model archive and in its hash: "/" between folders. */
+    private static String entryName(Path relative) {
+        return relative.toString().replace('\\', '/');
     }
 
     /** Only files directly in models/ or models/uploads/ are models on their own; files inside a model folder belong to it. */
@@ -258,7 +307,7 @@ public final class ServerAssetStore {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             try (ZipOutputStream zip = new ZipOutputStream(out)) {
                 for (Path rel : entry.files()) {
-                    ZipEntry ze = new ZipEntry(rel.getFileName().toString());
+                    ZipEntry ze = new ZipEntry(entryName(rel));
                     ze.setTime(0L);
                     zip.putNextEntry(ze);
                     zip.write(Files.readAllBytes(entry.root().resolve(rel)));

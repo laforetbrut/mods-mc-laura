@@ -1,6 +1,6 @@
 # Compatibility
 
-My Girlfriend Laura 2.0.0 (mod id `lauramod`), author / auteur : vyrriox.
+My Girlfriend Laura 2.1.0 (mod id `lauramod`), author / auteur : vyrriox.
 
 - [English](#english)
 - [Français](#français)
@@ -13,7 +13,7 @@ Related guides / Guides liés : [ACTIONS.md](ACTIONS.md), [KUBEJS.md](KUBEJS.md)
 
 ### Targets
 
-Version 2.0.0 exists for nine targets: Minecraft 1.20.1, 1.21.1 and 26.1.2, each on NeoForge, Forge and Fabric. The README of the repository lists them with their loader and Java versions: <https://github.com/laforetbrut/mods-mc-laura>.
+Version 2.1.0 exists for nine targets: Minecraft 1.20.1, 1.21.1 and 26.1.2, each on NeoForge, Forge and Fabric. The README of the repository lists them with their loader and Java versions: <https://github.com/laforetbrut/mods-mc-laura>.
 
 The behaviour described in the guides is the same on the nine targets, because it lives in the shared code of each Minecraft version. Only the optional integrations below differ. None of them is required and none is bundled in the mod.
 
@@ -98,7 +98,7 @@ When she searches an area on her own, these blocks are skipped because they are 
 - She has these trinket slots: `necklace`, `ring`, `bracelet`, `charm`, `head`, `back`, `belt`.
 - Right click her with a trinket. It goes into a free slot that accepts it. She gains 8 affection and you get the "Put a Ring on It" advancement.
 - Food and items listed in `gifts.json` are treated as food or gifts, not as trinkets.
-- Her inventory screen does not show trinket slots in 2.0.0.
+- Her inventory screen does not show trinket slots in 2.1.0.
 - With the `GRAVE` and `TIMER` revive modes her trinkets stay on her when she dies and come back with her. With `NONE` they are left to Curios, which drops the trinkets of an entity that dies.
 - When she leaves for good (`/laura release confirm`, `/laura admin remove`) her trinkets are dropped with everything else she carries.
 
@@ -172,7 +172,7 @@ Companions in stay, home, wander or work mode are not moved.
 
 ### Cibles
 
-La version 2.0.0 existe pour neuf cibles : Minecraft 1.20.1, 1.21.1 et 26.1.2, chacun sur NeoForge, Forge et Fabric. Le README du dépôt les liste avec leurs versions de chargeur et de Java : <https://github.com/laforetbrut/mods-mc-laura>.
+La version 2.1.0 existe pour neuf cibles : Minecraft 1.20.1, 1.21.1 et 26.1.2, chacun sur NeoForge, Forge et Fabric. Le README du dépôt les liste avec leurs versions de chargeur et de Java : <https://github.com/laforetbrut/mods-mc-laura>.
 
 Le comportement décrit dans les guides est le même sur les neuf cibles, car il se trouve dans le code partagé de chaque version de Minecraft. Seules les intégrations facultatives ci-dessous diffèrent. Aucune n'est obligatoire et aucune n'est incluse dans le mod.
 
@@ -257,7 +257,7 @@ Quand elle fouille une zone d'elle-même, ces blocs sont ignorés car ce sont de
 - Elle dispose de ces emplacements de bijoux : `necklace`, `ring`, `bracelet`, `charm`, `head`, `back`, `belt`.
 - Faites un clic droit sur elle avec un bijou. Il va dans un emplacement libre qui l'accepte. Elle gagne 8 points d'affection et vous obtenez le progrès « La bague au doigt ».
 - La nourriture et les objets listés dans `gifts.json` sont traités comme de la nourriture ou des cadeaux, pas comme des bijoux.
-- Son écran d'inventaire n'affiche pas les emplacements de bijoux en 2.0.0.
+- Son écran d'inventaire n'affiche pas les emplacements de bijoux en 2.1.0.
 - Avec les modes de retour `GRAVE` et `TIMER`, ses bijoux restent sur elle à sa mort et reviennent avec elle. Avec `NONE` ils sont laissés à Curios, qui lâche les bijoux d'une entité qui meurt.
 - Quand elle part pour de bon (`/laura release confirm`, `/laura admin remove`) ses bijoux tombent au sol avec tout ce qu'elle porte.
 

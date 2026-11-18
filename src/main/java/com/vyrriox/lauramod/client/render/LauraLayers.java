@@ -96,8 +96,11 @@ public final class LauraLayers {
                 return;
             }
             poseStack.pushPose();
+            boolean onLocator = false;
             if (renderer.isUsingCustomModel()) {
-                if (!renderer.customModel().translateToBone(poseStack, "body", "bipedbody", "torso", "chest")) {
+                // A backpack bone (Yes Steve Model "BackpackLocator") is where the bag goes.
+                onLocator = renderer.customModel().translateToBone(poseStack, "backpacklocator");
+                if (!onLocator && !renderer.customModel().translateToBone(poseStack, "body", "bipedbody", "torso", "chest")) {
                     poseStack.popPose();
                     return;
                 }
@@ -106,7 +109,9 @@ public final class LauraLayers {
             }
             // Model space: Y points down and her back faces +Z.
             // 0.26 down from the neck puts the bag between the shoulder blades instead of on the hips.
-            poseStack.translate(0.0F, 0.26F, 0.26F);
+            if (!onLocator) {
+                poseStack.translate(0.0F, 0.26F, 0.26F);
+            }
             poseStack.mulPose(Axis.XP.rotationDegrees(180));
             poseStack.mulPose(Axis.YP.rotationDegrees(180));
             poseStack.scale(0.55F, 0.55F, 0.55F);

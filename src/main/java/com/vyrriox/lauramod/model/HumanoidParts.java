@@ -35,7 +35,7 @@ public final class HumanoidParts {
     static {
         alias(HEAD, "head", "bipedhead", "tete", "kopf", "cabeza", "testa", "cabeca", "hoofd", "glowa", "huvud", "kafa", "kepala");
         alias(BODY, "body", "bipedbody", "torso", "chest", "corps", "torse", "korper", "rumpf", "cuerpo", "corpo", "tronco",
-                "lichaam", "romp", "cialo", "tulwa", "kropp", "govde", "badan");
+                "lichaam", "romp", "cialo", "tulwa", "kropp", "govde", "badan", "upbody");
         alias(RIGHT_ARM, "rightarm", "armright", "bipedrightarm", "armr", "rarm", "rightupperarm",
                 "brasd", "brasdroit", "rechterarm", "armrechts", "rechterarm", "brazod", "brazoderecho", "brazoder",
                 "bracciod", "bracciodestro", "bracod", "bracodireito", "prawareka", "rekaprawa", "hogerarm", "sagkol", "lengankanan");
@@ -48,7 +48,7 @@ public final class HumanoidParts {
         alias(LEFT_LEG, "leftleg", "legleft", "bipedleftleg", "legl", "lleg", "leftupperleg",
                 "jambeg", "jambegauche", "linkerbeen", "beinlinks", "linkesbein", "piernai", "piernaizquierda", "piernaizq",
                 "gambas", "gambasinistra", "pernae", "pernaesquerda", "lewanoga", "noga lewa", "vansterben", "solbacak", "kakikiri");
-        alias(ROOT, "root", "racine", "raiz", "radice", "wurzel", "wortel", "korzen");
+        alias(ROOT, "root", "racine", "raiz", "radice", "wurzel", "wortel", "korzen", "allbody");
     }
 
     private HumanoidParts() {
