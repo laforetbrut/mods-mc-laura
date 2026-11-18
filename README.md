@@ -13,7 +13,7 @@ lumberjack, a farmer or a cook, and wears the skin or the Blockbench model you c
 
 Say "I feel lonely" in chat. She takes it from there.
 
-Version 2.0.0, mod id `lauramod`, for NeoForge, Forge and Fabric on Minecraft 1.20.1, 1.21.1 and
+Version 2.1.0, mod id `lauramod`, for NeoForge, Forge and Fabric on Minecraft 1.20.1, 1.21.1 and
 26.1.2.
 
 ## Features
@@ -51,15 +51,15 @@ Version 2.0.0, mod id `lauramod`, for NeoForge, Forge and Fabric on Minecraft 1.
 
 | Minecraft | Loader | Built and tested with | Java | Jar |
 |---|---|---|---|---|
-| 1.20.1 | NeoForge | NeoForge 47.1.106 (the 47.1 fork of Forge) | 17 | `lauramod-neoforge-1.20.1-2.0.0.jar` |
-| 1.20.1 | Forge | Forge 47.4.10 | 17 | `lauramod-forge-1.20.1-2.0.0.jar` |
-| 1.20.1 | Fabric | Fabric Loader 0.19.5, Fabric API 0.92.12+1.20.1 | 17 | `lauramod-fabric-1.20.1-2.0.0.jar` |
-| 1.21.1 | NeoForge | NeoForge 21.1.252 | 21 | `lauramod-neoforge-1.21.1-2.0.0.jar` |
-| 1.21.1 | Forge | Forge 52.1.16 | 21 | `lauramod-forge-1.21.1-2.0.0.jar` |
-| 1.21.1 | Fabric | Fabric Loader 0.19.5, Fabric API 0.116.17+1.21.1 | 21 | `lauramod-fabric-1.21.1-2.0.0.jar` |
-| 26.1.2 | NeoForge | NeoForge 26.1.2.109 | 25 | `lauramod-neoforge-26.1.2-2.0.0.jar` |
-| 26.1.2 | Forge | Forge 64.1.3 | 25 | `lauramod-forge-26.1.2-2.0.0.jar` |
-| 26.1.2 | Fabric | Fabric Loader 0.19.5, Fabric API 0.155.3+26.1.2 | 25 | `lauramod-fabric-26.1.2-2.0.0.jar` |
+| 1.20.1 | NeoForge | NeoForge 47.1.106 (the 47.1 fork of Forge) | 17 | `lauramod-neoforge-1.20.1-2.1.0.jar` |
+| 1.20.1 | Forge | Forge 47.4.10 | 17 | `lauramod-forge-1.20.1-2.1.0.jar` |
+| 1.20.1 | Fabric | Fabric Loader 0.19.5, Fabric API 0.92.12+1.20.1 | 17 | `lauramod-fabric-1.20.1-2.1.0.jar` |
+| 1.21.1 | NeoForge | NeoForge 21.1.252 | 21 | `lauramod-neoforge-1.21.1-2.1.0.jar` |
+| 1.21.1 | Forge | Forge 52.1.16 | 21 | `lauramod-forge-1.21.1-2.1.0.jar` |
+| 1.21.1 | Fabric | Fabric Loader 0.19.5, Fabric API 0.116.17+1.21.1 | 21 | `lauramod-fabric-1.21.1-2.1.0.jar` |
+| 26.1.2 | NeoForge | NeoForge 26.1.2.109 | 25 | `lauramod-neoforge-26.1.2-2.1.0.jar` |
+| 26.1.2 | Forge | Forge 64.1.3 | 25 | `lauramod-forge-26.1.2-2.1.0.jar` |
+| 26.1.2 | Fabric | Fabric Loader 0.19.5, Fabric API 0.155.3+26.1.2 | 25 | `lauramod-fabric-26.1.2-2.1.0.jar` |
 
 Each jar is built for one loader and one Minecraft version. Download the one that matches
 yours from the CurseForge page of the mod or from the
@@ -221,7 +221,7 @@ Blockbench de votre choix.
 
 Dites « je me sens seul » dans le chat. Elle s'occupe du reste.
 
-Version 2.0.0, identifiant de mod `lauramod`, pour NeoForge, Forge et Fabric sur Minecraft
+Version 2.1.0, identifiant de mod `lauramod`, pour NeoForge, Forge et Fabric sur Minecraft
 1.20.1, 1.21.1 et 26.1.2.
 
 ## Caractéristiques
@@ -261,15 +261,15 @@ Version 2.0.0, identifiant de mod `lauramod`, pour NeoForge, Forge et Fabric sur
 
 | Minecraft | Chargeur | Compilé et testé avec | Java | Jar |
 |---|---|---|---|---|
-| 1.20.1 | NeoForge | NeoForge 47.1.106 (le fork 47.1 de Forge) | 17 | `lauramod-neoforge-1.20.1-2.0.0.jar` |
-| 1.20.1 | Forge | Forge 47.4.10 | 17 | `lauramod-forge-1.20.1-2.0.0.jar` |
-| 1.20.1 | Fabric | Fabric Loader 0.19.5, Fabric API 0.92.12+1.20.1 | 17 | `lauramod-fabric-1.20.1-2.0.0.jar` |
-| 1.21.1 | NeoForge | NeoForge 21.1.252 | 21 | `lauramod-neoforge-1.21.1-2.0.0.jar` |
-| 1.21.1 | Forge | Forge 52.1.16 | 21 | `lauramod-forge-1.21.1-2.0.0.jar` |
-| 1.21.1 | Fabric | Fabric Loader 0.19.5, Fabric API 0.116.17+1.21.1 | 21 | `lauramod-fabric-1.21.1-2.0.0.jar` |
-| 26.1.2 | NeoForge | NeoForge 26.1.2.109 | 25 | `lauramod-neoforge-26.1.2-2.0.0.jar` |
-| 26.1.2 | Forge | Forge 64.1.3 | 25 | `lauramod-forge-26.1.2-2.0.0.jar` |
-| 26.1.2 | Fabric | Fabric Loader 0.19.5, Fabric API 0.155.3+26.1.2 | 25 | `lauramod-fabric-26.1.2-2.0.0.jar` |
+| 1.20.1 | NeoForge | NeoForge 47.1.106 (le fork 47.1 de Forge) | 17 | `lauramod-neoforge-1.20.1-2.1.0.jar` |
+| 1.20.1 | Forge | Forge 47.4.10 | 17 | `lauramod-forge-1.20.1-2.1.0.jar` |
+| 1.20.1 | Fabric | Fabric Loader 0.19.5, Fabric API 0.92.12+1.20.1 | 17 | `lauramod-fabric-1.20.1-2.1.0.jar` |
+| 1.21.1 | NeoForge | NeoForge 21.1.252 | 21 | `lauramod-neoforge-1.21.1-2.1.0.jar` |
+| 1.21.1 | Forge | Forge 52.1.16 | 21 | `lauramod-forge-1.21.1-2.1.0.jar` |
+| 1.21.1 | Fabric | Fabric Loader 0.19.5, Fabric API 0.116.17+1.21.1 | 21 | `lauramod-fabric-1.21.1-2.1.0.jar` |
+| 26.1.2 | NeoForge | NeoForge 26.1.2.109 | 25 | `lauramod-neoforge-26.1.2-2.1.0.jar` |
+| 26.1.2 | Forge | Forge 64.1.3 | 25 | `lauramod-forge-26.1.2-2.1.0.jar` |
+| 26.1.2 | Fabric | Fabric Loader 0.19.5, Fabric API 0.155.3+26.1.2 | 25 | `lauramod-fabric-26.1.2-2.1.0.jar` |
 
 Chaque jar est compilé pour un seul chargeur et une seule version de Minecraft. Téléchargez
 celui qui correspond aux vôtres depuis la page CurseForge du mod ou depuis la

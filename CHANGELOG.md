@@ -4,7 +4,7 @@ All notable changes to My Girlfriend Laura are documented here.
 
 ---
 
-## [Unreleased]
+## [2.1.0] - 2026-11-18
 
 ### Added
 

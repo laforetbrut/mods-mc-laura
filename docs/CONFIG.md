@@ -1,6 +1,6 @@
 # Configuration
 
-My Girlfriend Laura 2.0.0 (mod id `lauramod`), author / auteur : vyrriox.
+My Girlfriend Laura 2.1.0 (mod id `lauramod`), author / auteur : vyrriox.
 
 - [English](#english)
 - [Français](#français)

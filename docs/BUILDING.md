@@ -1,6 +1,6 @@
 # Building from source
 
-My Girlfriend Laura 2.0.0 (mod id `lauramod`), author / auteur : vyrriox.
+My Girlfriend Laura 2.1.0 (mod id `lauramod`), author / auteur : vyrriox.
 
 - [English](#english)
 - [Français](#français)
@@ -46,7 +46,7 @@ docs/                            this documentation
 - Its `build.gradle` adds `../core/src/main/java`, `../common/<mcversion>/src/main/java` and `../common/<mcversion>/src/main/resources` to the main source set. Core holds the logic that never needs a port: it is compiled into the nine targets as it is. The loader folder itself only holds the glue: entry points, networking, the `Platform` implementation and the optional integrations (`compat` package).
 - One branch per target, named like its folder (`fabric-26.1.2` for example), is generated from `main` by `tools/make_branches.sh`; the branches are created when `main` is published. On such a branch the project sits at the repository root, the common and core code are merged into `src/main`, and the includes do nothing.
 - NeoForge for Minecraft 1.20.1 is the 47.1 fork of Forge. Its project uses the legacy plugin of ModDevGradle, and the mod depends on the mod id `forge` there.
-- Version 2.0.0 builds for the nine targets, and the nine pass the in-game self test suite.
+- Version 2.1.0 builds for the nine targets, and the nine pass the in-game self test suite.
 
 ### Build a jar
 
@@ -61,15 +61,15 @@ On Windows use `gradlew.bat build`. The jar is written to `build/libs/`:
 
 | Project | Jar |
 |---|---|
-| `neoforge-1.20.1` | `lauramod-neoforge-1.20.1-2.0.0.jar` |
-| `forge-1.20.1` | `lauramod-forge-1.20.1-2.0.0.jar` |
-| `fabric-1.20.1` | `lauramod-fabric-1.20.1-2.0.0.jar` |
-| `neoforge-1.21.1` | `lauramod-neoforge-1.21.1-2.0.0.jar` |
-| `forge-1.21.1` | `lauramod-forge-1.21.1-2.0.0.jar` |
-| `fabric-1.21.1` | `lauramod-fabric-1.21.1-2.0.0.jar` |
-| `neoforge-26.1.2` | `lauramod-neoforge-26.1.2-2.0.0.jar` |
-| `forge-26.1.2` | `lauramod-forge-26.1.2-2.0.0.jar` |
-| `fabric-26.1.2` | `lauramod-fabric-26.1.2-2.0.0.jar` |
+| `neoforge-1.20.1` | `lauramod-neoforge-1.20.1-2.1.0.jar` |
+| `forge-1.20.1` | `lauramod-forge-1.20.1-2.1.0.jar` |
+| `fabric-1.20.1` | `lauramod-fabric-1.20.1-2.1.0.jar` |
+| `neoforge-1.21.1` | `lauramod-neoforge-1.21.1-2.1.0.jar` |
+| `forge-1.21.1` | `lauramod-forge-1.21.1-2.1.0.jar` |
+| `fabric-1.21.1` | `lauramod-fabric-1.21.1-2.1.0.jar` |
+| `neoforge-26.1.2` | `lauramod-neoforge-26.1.2-2.1.0.jar` |
+| `forge-26.1.2` | `lauramod-forge-26.1.2-2.1.0.jar` |
+| `fabric-26.1.2` | `lauramod-fabric-26.1.2-2.1.0.jar` |
 
 - Install the jar of `build/libs/`. Some projects also write a development jar to `build/devlibs/` (NeoForge 1.20.1, Fabric 1.20.1 and 1.21.1): it only works in the development runs.
 - Outside of development, NeoForge and Forge 1.20.1 run on SRG names and Fabric 1.20.1 and 1.21.1 on intermediary names: the jars of these projects are remapped after the build (`reobfJar` on NeoForge and Forge, `remapJar` on Fabric). Minecraft 26.1 is not obfuscated and its jars are not remapped.
@@ -267,7 +267,7 @@ docs/                            cette documentation
 - Son `build.gradle` ajoute `../core/src/main/java`, `../common/<mcversion>/src/main/java` et `../common/<mcversion>/src/main/resources` au source set principal. Core contient la logique qui n'a jamais besoin d'un portage : elle est compilée telle quelle dans les neuf cibles. Le dossier du chargeur ne contient que la colle : points d'entrée, réseau, implémentation de `Platform` et intégrations facultatives (paquet `compat`).
 - Une branche par cible, nommée comme son dossier (`fabric-26.1.2` par exemple), est générée depuis `main` par `tools/make_branches.sh` ; les branches sont créées quand `main` est publié. Sur une telle branche, le projet est à la racine du dépôt, le code commun et le code de core sont fusionnés dans `src/main`, et les inclusions ne font rien.
 - NeoForge pour Minecraft 1.20.1 est le fork 47.1 de Forge. Son projet utilise le plugin legacy de ModDevGradle, et le mod y dépend de l'identifiant de mod `forge`.
-- La version 2.0.0 se compile pour les neuf cibles, et les neuf réussissent la suite de self tests en jeu.
+- La version 2.1.0 se compile pour les neuf cibles, et les neuf réussissent la suite de self tests en jeu.
 
 ### Construire un jar
 
@@ -282,15 +282,15 @@ Sous Windows, utilisez `gradlew.bat build`. Le jar est écrit dans `build/libs/`
 
 | Projet | Jar |
 |---|---|
-| `neoforge-1.20.1` | `lauramod-neoforge-1.20.1-2.0.0.jar` |
-| `forge-1.20.1` | `lauramod-forge-1.20.1-2.0.0.jar` |
-| `fabric-1.20.1` | `lauramod-fabric-1.20.1-2.0.0.jar` |
-| `neoforge-1.21.1` | `lauramod-neoforge-1.21.1-2.0.0.jar` |
-| `forge-1.21.1` | `lauramod-forge-1.21.1-2.0.0.jar` |
-| `fabric-1.21.1` | `lauramod-fabric-1.21.1-2.0.0.jar` |
-| `neoforge-26.1.2` | `lauramod-neoforge-26.1.2-2.0.0.jar` |
-| `forge-26.1.2` | `lauramod-forge-26.1.2-2.0.0.jar` |
-| `fabric-26.1.2` | `lauramod-fabric-26.1.2-2.0.0.jar` |
+| `neoforge-1.20.1` | `lauramod-neoforge-1.20.1-2.1.0.jar` |
+| `forge-1.20.1` | `lauramod-forge-1.20.1-2.1.0.jar` |
+| `fabric-1.20.1` | `lauramod-fabric-1.20.1-2.1.0.jar` |
+| `neoforge-1.21.1` | `lauramod-neoforge-1.21.1-2.1.0.jar` |
+| `forge-1.21.1` | `lauramod-forge-1.21.1-2.1.0.jar` |
+| `fabric-1.21.1` | `lauramod-fabric-1.21.1-2.1.0.jar` |
+| `neoforge-26.1.2` | `lauramod-neoforge-26.1.2-2.1.0.jar` |
+| `forge-26.1.2` | `lauramod-forge-26.1.2-2.1.0.jar` |
+| `fabric-26.1.2` | `lauramod-fabric-26.1.2-2.1.0.jar` |
 
 - Installez le jar de `build/libs/`. Certains projets écrivent aussi un jar de développement dans `build/devlibs/` (NeoForge 1.20.1, Fabric 1.20.1 et 1.21.1) : il ne fonctionne que dans les lancements de développement.
 - Hors développement, NeoForge et Forge 1.20.1 tournent avec les noms SRG, et Fabric 1.20.1 et 1.21.1 avec les noms intermediary : les jars de ces projets sont remappés après le build (`reobfJar` sur NeoForge et Forge, `remapJar` sur Fabric). Minecraft 26.1 n'est pas obfusqué et ses jars ne sont pas remappés.
