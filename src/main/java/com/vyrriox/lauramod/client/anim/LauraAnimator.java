@@ -11,6 +11,7 @@ import com.vyrriox.lauramod.model.Molang;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
+import java.util.function.UnaryOperator;
 
 /**
  * Chooses and blends Laura's animations: one looping "state" animation (idle, walk, sit, sad,
@@ -74,6 +75,18 @@ public final class LauraAnimator {
      */
     public static Map<String, AnimationSampler.BonePose> compute(LauraEntity laura, Map<String, ModelData.Animation> animations,
                                                                  float time, float gameTime, boolean moving, Molang.Context ctx) {
+        return compute(laura, animations, time, gameTime, moving, ctx, null, null);
+    }
+
+    /**
+     * Same, with emotes borrowed from another set when this one lacks them (custom models that
+     * have their own idle and walk but no wave). The borrowed emote is sampled on its own bones,
+     * moved onto this model's bones by {@code remap}, then blended like an emote of the model.
+     */
+    public static Map<String, AnimationSampler.BonePose> compute(LauraEntity laura, Map<String, ModelData.Animation> animations,
+                                                                 float time, float gameTime, boolean moving, Molang.Context ctx,
+                                                                 Map<String, ModelData.Animation> fallbackEmotes,
+                                                                 UnaryOperator<Map<String, AnimationSampler.BonePose>> remap) {
         Map<String, AnimationSampler.BonePose> poses = new HashMap<>();
         if (!LauraClientConfig.animations.get() || animations.isEmpty()) {
             return poses;
@@ -91,6 +104,11 @@ public final class LauraAnimator {
 
         Emote emote = laura.getEmote();
         ModelData.Animation emoteAnim = emote == Emote.NONE ? null : animations.get(emote.animationName());
+        boolean emoteBorrowed = false;
+        if (emoteAnim == null && emote != Emote.NONE && fallbackEmotes != null && remap != null) {
+            emoteAnim = fallbackEmotes.get(emote.animationName());
+            emoteBorrowed = emoteAnim != null;
+        }
         float emoteWeight = 0;
         float emoteTime = 0;
         if (emoteAnim != null) {
@@ -113,9 +131,36 @@ public final class LauraAnimator {
             }
         }
         if (emoteAnim != null && emoteWeight > 0) {
-            AnimationSampler.apply(emoteAnim, emoteTime, emoteWeight, ctx, poses);
+            if (emoteBorrowed) {
+                Map<String, AnimationSampler.BonePose> borrowed = new HashMap<>();
+                AnimationSampler.apply(emoteAnim, emoteTime, emoteWeight, ctx, borrowed);
+                for (Map.Entry<String, AnimationSampler.BonePose> e : remap.apply(borrowed).entrySet()) {
+                    add(poses.computeIfAbsent(e.getKey(), k -> new AnimationSampler.BonePose()), e.getValue());
+                }
+            } else {
+                AnimationSampler.apply(emoteAnim, emoteTime, emoteWeight, ctx, poses);
+            }
+        }
+        // Yes Steve Model "parallel" animations (ears, tails, blinking) always play on top.
+        for (int i = 0; i < 8; i++) {
+            ModelData.Animation parallel = animations.get("parallel" + i);
+            if (parallel != null) {
+                AnimationSampler.apply(parallel, time, 1F, ctx, poses);
+            }
         }
         return poses;
+    }
+
+    private static void add(AnimationSampler.BonePose t, AnimationSampler.BonePose p) {
+        t.rotX += p.rotX;
+        t.rotY += p.rotY;
+        t.rotZ += p.rotZ;
+        t.posX += p.posX;
+        t.posY += p.posY;
+        t.posZ += p.posZ;
+        t.scaleX *= p.scaleX;
+        t.scaleY *= p.scaleY;
+        t.scaleZ *= p.scaleZ;
     }
 
     /** Falls back to simpler animations when a model does not have the exact one. */
@@ -125,7 +170,8 @@ public final class LauraAnimator {
         }
         return switch (name) {
             case "carry_walk" -> animations.containsKey("carry") ? "carry" : resolve(animations, "walk");
-            case "happy", "tired", "hungry", "angry", "sad", "gagged", "carry", "swim", "sleep", "sit" -> animations.containsKey("idle") ? "idle" : name;
+            case "sit" -> animations.containsKey("ride") ? "ride" : animations.containsKey("idle") ? "idle" : name;
+            case "happy", "tired", "hungry", "angry", "sad", "gagged", "carry", "swim", "sleep" -> animations.containsKey("idle") ? "idle" : name;
             default -> name;
         };
     }

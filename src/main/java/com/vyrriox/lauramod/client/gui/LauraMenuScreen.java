@@ -13,6 +13,7 @@ import com.vyrriox.lauramod.client.gui.kawaii.KDraw;
 import com.vyrriox.lauramod.client.gui.kawaii.KList;
 import com.vyrriox.lauramod.client.gui.kawaii.KSlider;
 import com.vyrriox.lauramod.client.gui.kawaii.KToggle;
+import com.vyrriox.lauramod.client.sound.LauraSounds;
 import com.vyrriox.lauramod.client.gui.kawaii.KWidget;
 import com.vyrriox.lauramod.client.gui.kawaii.Kawaii;
 import com.vyrriox.lauramod.client.network.LauraClientNetwork;
@@ -87,6 +88,8 @@ public class LauraMenuScreen extends Screen {
     private static Tab lastTab = Tab.HOME;
     private static int workPage;
     private static int stylePage;
+    /** 0: settings, 1: her sounds (listen to each file, mute some). */
+    private static int settingsPage;
     private static int jobRadius = 10;
     private static int fetchCount = 16;
 
@@ -836,6 +839,10 @@ public class LauraMenuScreen extends Screen {
     private void buildSettings() {
         int x = cx0();
         int y = cy0();
+        if (settingsPage == 1) {
+            buildSounds(x, y);
+            return;
+        }
         renameBox = box(x, y, cw() - 74, "lauramod.menu.rename.hint", 32);
         renameBox.setValue(laura.getLauraName());
         button(x + cw() - 70, y, 70, 18, "lauramod.menu.rename", Icon.PENCIL, KButton.Style.PINK, c -> rename());
@@ -875,6 +882,41 @@ public class LauraMenuScreen extends Screen {
                     }
                 });
         dismiss.tooltip(Component.translatable("lauramod.menu.dismiss.help"));
+        KButton sounds = button(x + cw() - 96, by + 26, 96, 20, "lauramod.menu.sounds", Icon.SPARKLE, KButton.Style.PINK, c -> {
+            settingsPage = 1;
+            rebuild();
+        });
+        sounds.tooltip(Component.translatable("lauramod.menu.sounds.help"));
+    }
+
+    /** Her menu opened on the Sounds page of the Settings tab. */
+    public static LauraMenuScreen soundsPage(LauraEntity laura) {
+        settingsPage = 1;
+        return new LauraMenuScreen(laura, Tab.SETTINGS);
+    }
+
+    /** Her sound files: a click plays one, the heart on the right mutes it on this game only. */
+    private void buildSounds(int x, int y) {
+        button(x, y, 70, 18, "lauramod.menu.sounds.back", Icon.PREV, KButton.Style.LAVENDER, c -> {
+            settingsPage = 0;
+            rebuild();
+        });
+        KList<LauraSounds.Clip> list = new KList<>(x, y + 34, cw(), 128, 13,
+                (d, item, rx, ry, rw, rh, hovered, index) -> {
+                    boolean muted = LauraSounds.isMuted(item.id());
+                    d.textFit(item.label(), rx, ry + 3, rw - 30, muted ? Kawaii.DISABLED_TEXT : Kawaii.PLUM);
+                    Kawaii.rounded(d, rx + rw - 26, ry + 1, 26, rh - 2, 4, muted ? Kawaii.DISABLED : Kawaii.MINT);
+                    d.icon(muted ? Icon.HEART_EMPTY : Icon.HEART_FULL, rx + rw - 18, ry + 1, 11);
+                },
+                (item, index, localX, mouseButton) -> {
+                    if (localX >= cw() - 14 - 26 + 4) {
+                        LauraSounds.setMuted(item.id(), !LauraSounds.isMuted(item.id()));
+                    } else {
+                        LauraSounds.preview(item);
+                    }
+                });
+        list.setItems(LauraSounds.clips());
+        widgets.add(list);
     }
 
     private void rename() {
@@ -1131,6 +1173,10 @@ public class LauraMenuScreen extends Screen {
     }
 
     private void drawSettings(KDraw d) {
+        if (settingsPage == 1) {
+            small(d, Component.translatable("lauramod.menu.sounds.hint"), cx0(), cy0() + 22, Kawaii.PLUM_SOFT);
+            return;
+        }
         Kawaii.rounded(d, cx0(), cy0(), cw() - 74, 18, 4, Kawaii.WHITE);
         JsonObject s = status();
         int y = cy0() + 26 + 4 * 17 + 32;

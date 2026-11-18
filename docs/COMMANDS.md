@@ -1,6 +1,6 @@
 # Commands
 
-My Girlfriend Laura 2.0.0 (mod id `lauramod`), author / auteur : vyrriox.
+My Girlfriend Laura 2.1.0 (mod id `lauramod`), author / auteur : vyrriox.
 
 - [English](#english)
 - [Français](#français)
@@ -153,6 +153,7 @@ Look at a container (6 blocks at most), then:
 | `/laura admin desire <player> clear` | Removes her current desire. |
 | `/laura admin desire <player> roll` | Gives her a new random desire now. |
 | `/laura admin emote <player> <emote>` | Plays any emote on that player's companion. |
+| `/laura admin config <setting> [value]` | Shows a setting of `lauramod-common.json` (`section.key`, for example `general.maxPerPlayer`), or changes it, saves the file and applies it like `/laura reload`. Lists are written `a, b`. Settings of the `permissions` section need permission level 4. |
 
 Admin commands target the selected companion of the player, or the nearest loaded one.
 
@@ -325,6 +326,7 @@ Regardez un conteneur (6 blocs au plus), puis :
 | `/laura admin desire <joueur> clear` | Retire son désir en cours. |
 | `/laura admin desire <joueur> roll` | Lui donne tout de suite un nouveau désir aléatoire. |
 | `/laura admin emote <joueur> <émote>` | Joue n'importe quelle émote sur la compagne de ce joueur. |
+| `/laura admin config <réglage> [valeur]` | Affiche un réglage de `lauramod-common.json` (`section.clé`, par exemple `general.maxPerPlayer`), ou le change, enregistre le fichier et l'applique comme `/laura reload`. Les listes s'écrivent `a, b`. Les réglages de la section `permissions` demandent le niveau de permission 4. |
 
 Les commandes d'administration visent la compagne sélectionnée du joueur, ou la plus proche chargée.
 
