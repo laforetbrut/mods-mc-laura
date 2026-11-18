@@ -7,6 +7,7 @@ import com.vyrriox.lauramod.client.network.LauraClientNetwork;
 import com.vyrriox.lauramod.config.LauraClientConfig;
 import com.vyrriox.lauramod.model.ModelData;
 import com.vyrriox.lauramod.model.ModelParser;
+import com.vyrriox.lauramod.model.YsmImport;
 import com.vyrriox.lauramod.skin.AssetCache;
 import com.vyrriox.lauramod.skin.AssetKind;
 import com.vyrriox.lauramod.skin.ServerAssetStore;
@@ -20,9 +21,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -42,6 +45,10 @@ public final class ClientModels {
 
     /** Largest model once unpacked. */
     private static final long MAX_UNPACKED_BYTES = 64L * 1024 * 1024;
+    /** Deepest sub folder read inside a model folder (Yes Steve Model 2 keeps files in models/, textures/...). */
+    private static final int MAX_FOLDER_DEPTH = 4;
+    /** Most files listed in a model folder. */
+    private static final int MAX_FOLDER_FILES = 512;
     /** A request the server did not answer (or answered "missing") is sent again after this long. */
     private static final long RETRY_MS = 10_000L;
 
@@ -87,7 +94,7 @@ public final class ClientModels {
                     // A file that is not the model its name promises is ignored and downloaded again.
                     if (files != null && AssetCache.matchesModel(sha1, files)) {
                         try {
-                            Loaded loaded = fromFiles(name, lowerCaseNames(files));
+                            Loaded loaded = fromFiles(name, files);
                             CACHE.put(ref, Optional.ofNullable(loaded));
                             CacheFiles.touch(cachedZip);
                             return loaded;
@@ -146,7 +153,7 @@ public final class ClientModels {
                     LauraCore.LOGGER.debug("Could not cache model {}", name);
                 }
             }
-            CACHE.put(ref, Optional.ofNullable(fromFiles(name, lowerCaseNames(files))));
+            CACHE.put(ref, Optional.ofNullable(fromFiles(name, files)));
         } catch (IOException | RuntimeException e) {
             LauraCore.LOGGER.warn("Model {} from the server is invalid: {}", name, e.getMessage());
             CACHE.put(ref, Optional.empty());
@@ -200,20 +207,61 @@ public final class ClientModels {
                     }
                 }
             } else if (Files.isDirectory(dir)) {
-                try (var stream = Files.list(dir)) {
-                    for (Path p : stream.toList()) {
-                        if (Files.isRegularFile(p)) {
-                            files.put(p.getFileName().toString().toLowerCase(Locale.ROOT), Files.readAllBytes(p));
-                        }
-                    }
-                }
+                readFolder(dir, files);
             } else {
+                if (Files.isRegularFile(root.resolve(name + ".ysm"))) {
+                    LauraCore.LOGGER.warn(YsmImport.encryptedMessage(name));
+                }
                 return null;
             }
             return fromFiles(name, files);
         } catch (IOException | RuntimeException e) {
             LauraCore.LOGGER.warn("Could not load model {}: {}", name, e.getMessage());
             return null;
+        }
+    }
+
+    /**
+     * Reads a model folder into relative path to bytes. A Yes Steve Model folder may hold sub
+     * folders, sounds and many textures: only the files it needs are read. Other folders keep the
+     * old rule, top level files only. Encrypted .ysm files are never read.
+     */
+    private static void readFolder(Path dir, Map<String, byte[]> files) throws IOException {
+        Map<String, Path> listed = new LinkedHashMap<>();
+        try (var stream = Files.walk(dir, MAX_FOLDER_DEPTH)) {
+            for (Path p : stream.sorted().toList()) {
+                if (!Files.isRegularFile(p, LinkOption.NOFOLLOW_LINKS)) {
+                    continue;
+                }
+                if (listed.size() >= MAX_FOLDER_FILES) {
+                    throw new IOException("too many files in the model folder");
+                }
+                listed.put(dir.relativize(p).toString().replace('\\', '/'), p);
+            }
+        }
+        List<String> wanted;
+        if (YsmImport.isYsm(listed.keySet())) {
+            wanted = YsmImport.neededFiles(listed.keySet(), rel -> {
+                try {
+                    Path p = listed.get(rel);
+                    return p == null || Files.size(p) > MAX_UNPACKED_BYTES ? null : Files.readAllBytes(p);
+                } catch (IOException e) {
+                    return null;
+                }
+            });
+        } else if (YsmImport.onlyEncrypted(listed.keySet())) {
+            throw new IOException(YsmImport.encryptedMessage(dir.getFileName().toString()));
+        } else {
+            wanted = listed.keySet().stream().filter(rel -> !rel.contains("/") && !rel.toLowerCase(Locale.ROOT).endsWith(".ysm")).toList();
+        }
+        long total = 0;
+        for (String rel : wanted) {
+            Path p = listed.get(rel);
+            total += Files.size(p);
+            if (total > MAX_UNPACKED_BYTES) {
+                throw new IOException("model too large");
+            }
+            files.put(rel, Files.readAllBytes(p));
         }
     }
 
@@ -246,7 +294,21 @@ public final class ClientModels {
         return null;
     }
 
-    private static Loaded fromFiles(String name, Map<String, byte[]> files) throws IOException {
+    /**
+     * Parses a model from its files, keyed by path relative to the model (any case). A Yes Steve
+     * Model folder is first turned into the files Laura reads; folders are then flattened.
+     */
+    private static Loaded fromFiles(String name, Map<String, byte[]> source) throws IOException {
+        YsmImport.Result ysm;
+        try {
+            ysm = YsmImport.convert(name, source);
+        } catch (IllegalArgumentException e) {
+            throw new IOException(e.getMessage(), e);
+        }
+        if (ysm == null && YsmImport.onlyEncrypted(source.keySet())) {
+            throw new IOException(YsmImport.encryptedMessage(name));
+        }
+        Map<String, byte[]> files = lowerCaseNames(ysm != null ? ysm.files() : source);
         String main = null;
         for (String file : files.keySet()) {
             if (file.endsWith(".bbmodel")) {
@@ -278,6 +340,11 @@ public final class ClientModels {
             }
         } catch (ModelParser.InvalidModelException e) {
             throw new IOException(e.getMessage(), e);
+        }
+        if (ysm != null) {
+            data.renderScale = ysm.heightScale();
+            data.renderWidthScale = ysm.widthScale();
+            data.headFollowsAnimations = !data.animations.isEmpty();
         }
         if (data.textures.isEmpty()) {
             for (Map.Entry<String, byte[]> e : files.entrySet()) {

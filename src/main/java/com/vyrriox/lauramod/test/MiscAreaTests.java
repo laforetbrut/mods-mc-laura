@@ -11,7 +11,10 @@ import com.vyrriox.lauramod.entity.LauraEntity;
 import com.vyrriox.lauramod.entity.LauraSpeech;
 import com.vyrriox.lauramod.entity.brain.Needs;
 import com.vyrriox.lauramod.gift.GiftTable;
+import com.vyrriox.lauramod.model.HumanoidParts;
+import com.vyrriox.lauramod.model.ModelData;
 import com.vyrriox.lauramod.model.ModelParser;
+import com.vyrriox.lauramod.model.YsmImport;
 import com.vyrriox.lauramod.model.Molang;
 import com.vyrriox.lauramod.network.LauraAction;
 import com.vyrriox.lauramod.network.LauraNetwork;
@@ -74,6 +77,15 @@ public final class MiscAreaTests {
     @FunctionalInterface
     private interface TestBody {
         void run(TestRunner.Context ctx) throws Exception;
+    }
+
+    /** JSON written with single quotes, to keep the inline models readable. */
+    private static String q(String json) {
+        return json.replace('\'', '"');
+    }
+
+    private static byte[] bytes(String text) {
+        return text.getBytes(java.nio.charset.StandardCharsets.UTF_8);
     }
 
     private static void add(List<TestRunner.TestCase> tests, String name, int timeoutTicks, TestBody body) {
@@ -550,6 +562,97 @@ public final class MiscAreaTests {
                 loopRefused = true;
             }
             ctx.check(loopRefused, "bones that are each other's parent were accepted");
+            ctx.succeed();
+        });
+        // Models made for Yes Steve Model, in their open folder form (1.x and 2.x layouts).
+        add(tests, "ysm_import", 100, ctx -> {
+            String geo = q("{'format_version':'1.12.0','minecraft:geometry':[{'description':{'identifier':'geometry.unknown','texture_width':64,'texture_height':64,"
+                    + "'ysm_extra_info':{'name':'Test girl'}},'bones':["
+                    + "{'name':'Root','pivot':[0,0,0]},{'name':'AllBody','parent':'Root','pivot':[0,20,0]},"
+                    + "{'name':'UpBody','parent':'AllBody','pivot':[0,20,0],'cubes':[{'origin':[-4,20,-2],'size':[8,10,4],'uv':[0,0]}]},"
+                    + "{'name':'AllHead','parent':'UpBody','pivot':[0,32,0]},{'name':'Head','parent':'AllHead','pivot':[0,32,0]},"
+                    + "{'name':'Arm','parent':'UpBody','pivot':[0,31,0]},"
+                    + "{'name':'LeftArm','parent':'Arm','pivot':[3.4,31,0]},{'name':'LeftHandLocator','parent':'LeftArm','pivot':[4,19,0]},"
+                    + "{'name':'RightArm','parent':'Arm','pivot':[-3.4,31,0]},{'name':'RightHandLocator','parent':'RightArm','pivot':[-4,19,0]},"
+                    + "{'name':'DownBody','parent':'AllBody','pivot':[0,20,0]},{'name':'Leg','parent':'DownBody','pivot':[0,20,0]},"
+                    + "{'name':'LeftLeg','parent':'Leg','pivot':[2.4,20,0]},{'name':'RightLeg','parent':'Leg','pivot':[-2.4,20,0]}]}]}");
+            String mainAnim = q("{'format_version':'1.8.0','animations':{'idle':{'loop':true,'bones':{'Head':{'rotation':['ysm.head_pitch','ysm.head_yaw',0]}}},"
+                    + "'walk':{'loop':true,'bones':{'RightArm':{'rotation':['math.cos(ysm.ground_speed2)',0,0]}}},'ride':{'loop':true,'bones':{}}}}");
+            String extraAnim = q("{'format_version':'1.8.0','animations':{'extra0':{'bones':{}},'idle':{'bones':{}}}}");
+            byte[] png = {1, 2, 3};
+            byte[] blue = {4, 5, 6};
+
+            // 1.x: main.json beside its animations and textures, no manifest.
+            java.util.Map<String, byte[]> v1 = new java.util.LinkedHashMap<>();
+            v1.put("main.json", bytes(geo));
+            v1.put("arm.json", bytes("{}"));
+            v1.put("main.animation.json", bytes(mainAnim));
+            v1.put("extra.animation.json", bytes(extraAnim));
+            v1.put("tac.animation.json", bytes("{}"));
+            v1.put("blue.png", blue);
+            v1.put("default.png", png);
+            ctx.check(YsmImport.isYsm(v1.keySet()), "a 1.x folder is not seen as a YSM model");
+            List<String> needed = YsmImport.neededFiles(v1.keySet(), v1::get);
+            ctx.check(needed.containsAll(List.of("main.json", "main.animation.json", "extra.animation.json", "default.png"))
+                    && !needed.contains("blue.png") && !needed.contains("arm.json") && !needed.contains("tac.animation.json"), "1.x needed files: " + needed);
+            YsmImport.Result r1 = YsmImport.convert("Girl", v1);
+            ctx.check(r1 != null && r1.files().keySet().equals(java.util.Set.of("girl.geo.json", "girl.animation.json", "girl.png")), "1.x converted files: " + (r1 == null ? null : r1.files().keySet()));
+            ctx.check(r1.files().get("girl.png") == png, "1.x did not pick default.png");
+            ctx.check(r1.heightScale() == YsmImport.DEFAULT_SCALE && r1.widthScale() == YsmImport.DEFAULT_SCALE, "1.x scale is not 0.7");
+            ctx.check("Test girl".equals(r1.displayName()), "1.x name from ysm_extra_info: " + r1.displayName());
+            ModelData data = ModelParser.parse("girl.geo.json", new String(r1.files().get("girl.geo.json"), java.nio.charset.StandardCharsets.UTF_8), null);
+            ModelParser.parseAnimations(data, new String(r1.files().get("girl.animation.json"), java.nio.charset.StandardCharsets.UTF_8));
+            ctx.check(data.animations.keySet().containsAll(List.of("idle", "walk", "ride", "extra0")), "merged animations: " + data.animations.keySet());
+            ctx.check(data.animations.get("idle").bones.containsKey("head"), "the main idle was replaced by the extra one");
+            // Bedrock files put the right arm at negative X: it must stay her right arm (the wave uses it).
+            ModelData.Bone right = data.part(HumanoidParts.RIGHT_ARM);
+            ctx.check(right != null && right.name.equals("RightArm"), "right arm is " + (right == null ? null : right.name));
+            ctx.check(data.part(HumanoidParts.LEFT_LEG) != null && data.part(HumanoidParts.LEFT_LEG).name.equals("LeftLeg"), "left leg is wrong");
+            ctx.check(data.part(HumanoidParts.BODY) != null && data.part(HumanoidParts.BODY).name.equals("UpBody"), "UpBody is not her body");
+            ctx.check(data.part(HumanoidParts.ROOT) != null && data.part(HumanoidParts.ROOT).name.equals("Root"), "root is wrong");
+            ctx.check(data.bone("righthandlocator").pivotX > data.bone("lefthandlocator").pivotX, "hand locators are on the wrong sides");
+
+            // Molang of YSM: head angles and ground speed are read, other ysm.* values are 0.
+            Molang.Context molang = new Molang.Context();
+            molang.headYaw = 30;
+            molang.headPitch = -10;
+            molang.groundSpeed = 2;
+            ctx.check(Molang.parse("ysm.head_yaw").eval(molang) == 30 && Molang.parse("ysm.head_pitch").eval(molang) == -10, "ysm head angles are not read");
+            ctx.check(Molang.parse("ysm.ground_speed2").eval(molang) == 2, "ysm.ground_speed2 is not read");
+            ctx.check(Molang.parse("ysm.is_close_eyes ? -1 : 0").eval(molang) == 0 && Molang.parse("v.foo + ysm.unknown").eval(molang) == 0, "unknown ysm values are not 0");
+
+            // 2.x: ysm.json names files in sub folders, textures may be objects.
+            String manifest = q("{'spec':2,'metadata':{'name':'Second','authors':[{'name':'someone'}]},"
+                    + "'properties':{'height_scale':0.9,'width_scale':0.8,'default_texture':'red'},"
+                    + "'files':{'player':{'model':{'main':'models/main.json','arm':'models/arm.json'},"
+                    + "'animation':{'main':'animations/main.animation.json','extra':'animations/extra.animation.json','tac':'animations/tac.animation.json'},"
+                    + "'texture':['textures/default.png',{'uv':'textures/red.png','normal':'textures/red_n.png'}]}}}");
+            java.util.Map<String, byte[]> v2 = new java.util.LinkedHashMap<>();
+            v2.put("ysm.json", bytes(manifest));
+            v2.put("models/main.json", bytes(geo));
+            v2.put("models/arm.json", bytes("{}"));
+            v2.put("animations/main.animation.json", bytes(mainAnim));
+            v2.put("animations/extra.animation.json", bytes(extraAnim));
+            v2.put("animations/tac.animation.json", bytes("{}"));
+            v2.put("textures/default.png", png);
+            v2.put("textures/red.png", blue);
+            v2.put("textures/red_n.png", png);
+            v2.put("sounds/hello.ogg", png);
+            needed = YsmImport.neededFiles(v2.keySet(), v2::get);
+            ctx.check(needed.equals(List.of("ysm.json", "models/main.json", "animations/main.animation.json", "animations/extra.animation.json", "textures/red.png")),
+                    "2.x needed files: " + needed);
+            YsmImport.Result r2 = YsmImport.convert("group/Second", v2);
+            ctx.check(r2 != null && r2.files().keySet().equals(java.util.Set.of("second.geo.json", "second.animation.json", "second.png")), "2.x converted files: " + (r2 == null ? null : r2.files().keySet()));
+            ctx.check(r2.files().get("second.png") == blue, "2.x did not pick the default_texture object");
+            ctx.check(Math.abs(r2.heightScale() - 0.9F) < 1e-6 && Math.abs(r2.widthScale() - 0.8F) < 1e-6, "2.x scale not read: " + r2.heightScale() + " " + r2.widthScale());
+            ctx.check("Second".equals(r2.displayName()), "2.x name: " + r2.displayName());
+
+            // Encrypted .ysm files are refused, never read.
+            ctx.check(YsmImport.onlyEncrypted(List.of("girl.ysm")), "a folder with only a .ysm file was not refused");
+            ctx.check(!YsmImport.isYsm(List.of("girl.ysm")) && YsmImport.convert("girl", java.util.Map.of("girl.ysm", png)) == null, "a .ysm file was converted");
+            ctx.check(!YsmImport.onlyEncrypted(v1.keySet()) && !YsmImport.onlyEncrypted(List.of("girl.ysm", "girl.geo.json")), "a readable model was refused");
+            // A plain Bedrock model is not mistaken for a YSM one.
+            ctx.check(!YsmImport.isYsm(List.of("main.json", "main.png")) && !YsmImport.isYsm(List.of("girl.geo.json", "girl.animation.json")), "a plain model was taken for YSM");
             ctx.succeed();
         });
         // What the client uses to keep its downloads in check (memory and disk), without a client.

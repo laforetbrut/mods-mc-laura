@@ -21,6 +21,7 @@ public final class LauraClientConfig {
     public static ConfigFile.BoolValue showNeedsHud;
     public static ConfigFile.IntValue maxSkinDownloadKb;
     public static ConfigFile.IntValue maxModelDownloadKb;
+    public static ConfigFile.StringListValue mutedSounds;
 
     private LauraClientConfig() {
     }
@@ -52,6 +53,10 @@ public final class LauraClientConfig {
         remoteSkins = display.bool("remoteSkins", true, "Download skins from the internet. If false, URL skins show the default skin.");
         particles = display.bool("particles", true, "Hearts, tears, sparkles and other particles.");
         showNeedsHud = display.bool("showNeedsHud", false, "Show her needs in a small overlay while she is near you.");
+
+        ConfigFile.Section sounds = f.section("sounds", "What you hear.");
+        mutedSounds = sounds.list("muted", java.util.List.of(), "Sound files of Laura you never want to hear, by file name (laura_ambient_3, laura_happy_1...). "
+                + "Easier from her menu: Settings, Sounds, where each file can be played first. She picks another file instead, or stays quiet when all the files of a sound are muted.");
 
         ConfigFile.Section controls = f.section("controls", "Interaction.");
         menuOnRightClick = controls.bool("menuOnRightClick", true, "Right click opens her menu. Sneak + right click always opens her inventory.");

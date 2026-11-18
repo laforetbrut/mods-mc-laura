@@ -489,6 +489,15 @@ public final class Molang {
             if (prefix.equals("query") || prefix.equals("q")) {
                 return new Variable(name);
             }
+            if (prefix.equals("ysm")) {
+                // Yes Steve Model values: the head angles and the ground speed are read, the rest is 0.
+                return switch (name) {
+                    case "head_yaw" -> new Variable("head_y_rotation");
+                    case "head_pitch" -> new Variable("head_x_rotation");
+                    case "ground_speed2" -> new Variable("ground_speed");
+                    default -> ZERO;
+                };
+            }
             // variable.*, temp.*, context.*: not supported, read as 0.
             return ZERO;
         }
