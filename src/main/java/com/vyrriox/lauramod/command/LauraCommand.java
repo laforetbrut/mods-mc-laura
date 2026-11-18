@@ -424,8 +424,64 @@ public final class LauraCommand {
 
     // ------------------------------------------------------------------ admin
 
+    private static final SuggestionProvider<CommandSourceStack> CONFIG_KEYS = (ctx, builder) ->
+            SharedSuggestionProvider.suggest(LauraConfig.file().paths(), builder);
+
+    /**
+     * {@code /laura admin config <setting> [value]}: shows or changes a setting of
+     * lauramod-common.json without leaving the game, saves the file and applies it like
+     * {@code /laura reload}. Settings of the "permissions" section need permission level 4, so an
+     * operator cannot raise their own rights.
+     */
+    private static LiteralArgumentBuilder<CommandSourceStack> configCommand() {
+        return Commands.literal("config")
+                .executes(c -> {
+                    c.getSource().sendSuccess(() -> Component.translatable("lauramod.admin.config.usage"), false);
+                    return 1;
+                })
+                .then(Commands.argument("setting", StringArgumentType.string()).suggests(CONFIG_KEYS)
+                        .executes(c -> {
+                            String path = StringArgumentType.getString(c, "setting");
+                            com.vyrriox.lauramod.config.ConfigFile.Value<?> value = LauraConfig.file().find(path);
+                            if (value == null) {
+                                c.getSource().sendFailure(Component.translatable("lauramod.admin.config.unknown", path));
+                                return 0;
+                            }
+                            c.getSource().sendSuccess(() -> Component.translatable("lauramod.admin.config.value", path, value.currentText())
+                                    .append(Component.literal(" (" + value.describe() + ")").withStyle(ChatFormatting.GRAY)), false);
+                            return 1;
+                        })
+                        .then(Commands.argument("value", StringArgumentType.greedyString()).executes(c -> {
+                            String path = StringArgumentType.getString(c, "setting");
+                            com.vyrriox.lauramod.config.ConfigFile.Value<?> value = LauraConfig.file().find(path);
+                            if (value == null) {
+                                c.getSource().sendFailure(Component.translatable("lauramod.admin.config.unknown", path));
+                                return 0;
+                            }
+                            if (path.startsWith("permissions.") && !c.getSource().permissions().hasPermission(LauraMod.permission(4))) {
+                                c.getSource().sendFailure(Component.translatable("lauramod.admin.config.owner_only", path));
+                                return 0;
+                            }
+                            String error = value.setFromText(StringArgumentType.getString(c, "value"));
+                            if (error != null) {
+                                c.getSource().sendFailure(Component.translatable("lauramod.admin.config.invalid", path, error));
+                                return 0;
+                            }
+                            LauraConfig.file().save();
+                            LauraMod.reloadAll();
+                            for (ServerPlayer p : c.getSource().getServer().getPlayerList().getPlayers()) {
+                                com.vyrriox.lauramod.network.LauraNetwork.sendSettings(p);
+                            }
+                            com.vyrriox.lauramod.config.ConfigFile.Value<?> now = LauraConfig.file().find(path);
+                            String shown = now == null ? value.currentText() : now.currentText();
+                            c.getSource().sendSuccess(() -> Component.translatable("lauramod.admin.config.set", path, shown), true);
+                            return 1;
+                        })));
+    }
+
     private static LiteralArgumentBuilder<CommandSourceStack> adminCommand() {
         return Commands.literal("admin").requires(s -> s.permissions().hasPermission(LauraMod.permission(LauraConfig.reloadPermissionLevel.getInt())))
+                .then(configCommand())
                 .then(Commands.literal("list").executes(c -> {
                     LauraWorldData data = LauraWorldData.get(c.getSource().getServer());
                     if (data.all().isEmpty()) {
