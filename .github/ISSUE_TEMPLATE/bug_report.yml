@@ -38,7 +38,7 @@ body:
     attributes:
       label: Mod version
       description: The version in the name of the jar.
-      placeholder: e.g. 2.0.0
+      placeholder: e.g. 2.1.0
     validations:
       required: true
   - type: dropdown
