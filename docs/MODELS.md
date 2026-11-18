@@ -119,6 +119,19 @@ root
     left_leg
 ```
 
+### Yes Steve Model folders
+
+A model made for the Yes Steve Model mod can be worn by Laura too, when you have it as a folder (not as an encrypted `.ysm` file). Put the whole folder in `config/lauramod/models/` (or on the server, in the server's `config/lauramod/models/`). The folder name is the model name: `config/lauramod/models/maid/` is the model `maid`.
+
+- **Version 1 folders** (no `ysm.json`): `main.json` (geometry), `main.animation.json`, optionally `extra.animation.json`, and the textures. She wears `default.png`, or the first PNG of the folder when there is none.
+- **Version 2 folders**: a `ysm.json` at the root of the folder names every file, usually in `models/`, `animations/` and `textures/`. She wears the texture named by `default_texture` (`default` when unset), or the first texture listed.
+- **Encrypted `.ysm` files are not supported** and are never read. A folder holding only a `.ysm` file is skipped with one line in the log.
+- Only what she needs is used and sent to players: the main geometry, the main and extra animations and the default texture. Arm models, sounds, other textures and other animation files stay on the disk.
+- **Size.** Like in Yes Steve Model, the model is drawn at its `height_scale` and `width_scale` (0.7 when unset, also for version 1 folders), so it ends up player sized. Her hit box does not change.
+- **Bones.** `UpBody` is her body, `Root` (or `AllBody`) her root, `RightHandLocator` and `LeftHandLocator` hold her items, and a `BackpackLocator` bone carries her backpack.
+- **Animations.** She plays the model's `idle`, `walk`, `sleep`, `swim` and `sit` (`ride` when the model has no `sit`). The `parallel0` to `parallel7` animations (ears, tails, blinking) always play on top. The `extra0` to `extra7` animations are kept but not played. `ysm.head_yaw`, `ysm.head_pitch` and `ysm.ground_speed2` are read; other `ysm.` values are 0. The model's own animations turn her head, so she does not add her look on top of them.
+- **Emotes.** These models have no `wave`, `hug` or `clap`: any emote the model lacks is borrowed from the default animations and played on the recognised arms, legs, head and body, blended over the model's own animation.
+
 ### Animations she plays
 
 An animation is found by the last part of its name, in lower case: `animation.laura.walk` is `walk`. Missing animations are simply skipped.
@@ -128,7 +141,7 @@ An animation is found by the last part of its name, in lower case: `animation.la
 | Situation | Animation | Used instead when missing |
 |---|---|---|
 | Asleep | `sleep` | `idle` |
-| Sitting (stay order) or riding | `sit` | `idle` |
+| Sitting (stay order) or riding | `sit` | `ride`, then `idle` |
 | Swimming | `swim` | `idle` |
 | Fetching or carrying an item, moving | `carry_walk` | `carry`, then `walk` |
 | Fetching or carrying an item, standing | `carry` | `idle` |
@@ -148,6 +161,8 @@ Rules:
 - Loop modes: loop, hold on last frame, play once.
 - Changes of state cross-fade over 0.25 second.
 - A model **without any animation** borrows the default animations. They are applied to the bones recognised as head, body, arms, legs and root.
+- A model **with animations but without a given emote** borrows that emote from the default animations, on the same recognised bones, blended over its own state animation.
+- `parallel0` to `parallel7` animations always play on top of everything else.
 - A model **without a `walk` animation** gets the player-like swing of arms and legs on the recognised bones.
 - Keyframe interpolation: linear, step, and smooth (catmullrom and bezier are both played as a smooth curve).
 
@@ -156,6 +171,7 @@ Rules:
 - Numbers, `+ - * / %`, comparisons, `&&`, `||`, `!`, the ternary `? :`, and `??`.
 - `math.` functions: `sin`, `cos`, `asin`, `acos`, `atan`, `atan2` (degrees), `abs`, `sqrt`, `floor`, `ceil`, `round`, `trunc`, `exp`, `ln`, `pow`, `mod`, `min`, `max`, `clamp`, `lerp`, `lerprotate`, `hermite_blend`, `sign`, `random`, `random_integer`, `die_roll`, and the constant `math.pi`.
 - `query.` (or `q.`) values: `anim_time`, `life_time`, `ground_speed`, `modified_move_speed`, `distance_moved`, `modified_distance_moved`, `health`, `max_health`, `head_y_rotation`, `head_x_rotation`, `is_on_ground`, `is_in_water`, `is_sitting`, `is_sleeping`.
+- `ysm.head_yaw`, `ysm.head_pitch` and `ysm.ground_speed2` (Yes Steve Model) read the head angles and the ground speed; other `ysm.` values are 0.
 - `variable.`, `temp.` and `context.` values are read as 0. An expression that cannot be parsed is read as 0, and so is one longer than 1024 characters, nested more than 48 deep, or holding more than 512 operators and function calls.
 - `math.die_roll` throws 64 dice at most.
 
@@ -306,6 +322,19 @@ racine
     jambe_gauche
 ```
 
+### Dossiers Yes Steve Model
+
+Un modèle fait pour le mod Yes Steve Model peut aussi être porté par Laura, si vous l'avez sous forme de dossier (et non de fichier `.ysm` chiffré). Placez tout le dossier dans `config/lauramod/models/` (ou, sur un serveur, dans le `config/lauramod/models/` du serveur). Le nom du dossier est le nom du modèle : `config/lauramod/models/maid/` est le modèle `maid`.
+
+- **Dossiers de version 1** (sans `ysm.json`) : `main.json` (géométrie), `main.animation.json`, éventuellement `extra.animation.json`, et les textures. Elle porte `default.png`, ou le premier PNG du dossier s'il n'y en a pas.
+- **Dossiers de version 2** : un `ysm.json` à la racine du dossier nomme chaque fichier, en général dans `models/`, `animations/` et `textures/`. Elle porte la texture nommée par `default_texture` (`default` par défaut), ou la première de la liste.
+- **Les fichiers `.ysm` chiffrés ne sont pas gérés** et ne sont jamais lus. Un dossier qui ne contient qu'un `.ysm` est ignoré, avec une ligne dans le journal.
+- Seul ce dont elle a besoin est utilisé et envoyé aux joueurs : la géométrie principale, les animations principales et extra et la texture par défaut. Les modèles de bras, les sons, les autres textures et les autres fichiers d'animation restent sur le disque.
+- **Taille.** Comme dans Yes Steve Model, le modèle est dessiné à son `height_scale` et son `width_scale` (0,7 s'ils manquent, aussi pour les dossiers de version 1) : il a ainsi la taille d'un joueur. Sa boîte de collision ne change pas.
+- **Os.** `UpBody` est son corps, `Root` (ou `AllBody`) sa racine, `RightHandLocator` et `LeftHandLocator` tiennent ses objets, et un os `BackpackLocator` porte son sac à dos.
+- **Animations.** Elle joue `idle`, `walk`, `sleep`, `swim` et `sit` du modèle (`ride` si le modèle n'a pas de `sit`). Les animations `parallel0` à `parallel7` (oreilles, queues, clignements) jouent toujours par-dessus. Les animations `extra0` à `extra7` sont gardées mais pas jouées. `ysm.head_yaw`, `ysm.head_pitch` et `ysm.ground_speed2` sont lues ; les autres valeurs `ysm.` valent 0. Les animations du modèle tournent déjà sa tête : elle n'y ajoute pas son regard.
+- **Emotes.** Ces modèles n'ont ni `wave`, ni `hug`, ni `clap` : une emote absente du modèle est empruntée aux animations par défaut et jouée sur les bras, jambes, tête et corps reconnus, mélangée à l'animation du modèle.
+
 ### Animations qu'elle joue
 
 Une animation est trouvée par la dernière partie de son nom, en minuscules : `animation.laura.walk` correspond à `walk`. Les animations absentes sont simplement ignorées.
@@ -315,7 +344,7 @@ Une animation est trouvée par la dernière partie de son nom, en minuscules : `
 | Situation | Animation | Utilisée à la place si elle manque |
 |---|---|---|
 | Endormie | `sleep` | `idle` |
-| Assise (ordre rester) ou sur une monture | `sit` | `idle` |
+| Assise (ordre rester) ou sur une monture | `sit` | `ride`, puis `idle` |
 | En train de nager | `swim` | `idle` |
 | Rapporte ou porte un objet, en mouvement | `carry_walk` | `carry`, puis `walk` |
 | Rapporte ou porte un objet, à l'arrêt | `carry` | `idle` |
@@ -335,6 +364,8 @@ Règles :
 - Modes de boucle : en boucle, maintien de la dernière image, lecture unique.
 - Les changements d'état se font en fondu sur 0,25 seconde.
 - Un modèle **sans aucune animation** emprunte les animations par défaut. Elles sont appliquées aux os reconnus comme tête, corps, bras, jambes et racine.
+- Un modèle **qui a des animations mais pas une emote donnée** emprunte cette emote aux animations par défaut, sur les mêmes os reconnus, mélangée à sa propre animation d'état.
+- Les animations `parallel0` à `parallel7` jouent toujours par-dessus tout le reste.
 - Un modèle **sans animation `walk`** reçoit le balancement des bras et des jambes d'un joueur sur les os reconnus.
 - Interpolation des images clés : linéaire, par paliers, et lissée (catmullrom et bezier sont jouées toutes deux comme une courbe lissée).
 
@@ -343,6 +374,7 @@ Règles :
 - Nombres, `+ - * / %`, comparaisons, `&&`, `||`, `!`, le ternaire `? :`, et `??`.
 - Fonctions `math.` : `sin`, `cos`, `asin`, `acos`, `atan`, `atan2` (en degrés), `abs`, `sqrt`, `floor`, `ceil`, `round`, `trunc`, `exp`, `ln`, `pow`, `mod`, `min`, `max`, `clamp`, `lerp`, `lerprotate`, `hermite_blend`, `sign`, `random`, `random_integer`, `die_roll`, et la constante `math.pi`.
 - Valeurs `query.` (ou `q.`) : `anim_time`, `life_time`, `ground_speed`, `modified_move_speed`, `distance_moved`, `modified_distance_moved`, `health`, `max_health`, `head_y_rotation`, `head_x_rotation`, `is_on_ground`, `is_in_water`, `is_sitting`, `is_sleeping`.
+- `ysm.head_yaw`, `ysm.head_pitch` et `ysm.ground_speed2` (Yes Steve Model) lisent les angles de la tête et la vitesse au sol ; les autres valeurs `ysm.` valent 0.
 - Les valeurs `variable.`, `temp.` et `context.` valent 0. Une expression illisible vaut 0, de même qu'une expression de plus de 1024 caractères, imbriquée sur plus de 48 niveaux, ou contenant plus de 512 opérateurs et appels de fonction.
 - `math.die_roll` lance au plus 64 dés.
 

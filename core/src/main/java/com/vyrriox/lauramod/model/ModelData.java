@@ -24,6 +24,12 @@ public final class ModelData {
     public final Map<String, Animation> animations = new LinkedHashMap<>();
     /** Model height in pixels, used to scale the shadow and the name tag. */
     public float height = 32;
+    /** Scale the model is drawn at, around its feet (Yes Steve Model models: 0.7 unless they say otherwise). */
+    public float renderScale = 1;
+    /** Scale of the width (X and Z) when it differs from {@link #renderScale}. */
+    public float renderWidthScale = 1;
+    /** True when the model's own animations turn the head towards where she looks (Yes Steve Model files do). */
+    public boolean headFollowsAnimations;
     private volatile Map<String, Bone> humanoidParts;
 
     public ModelData(int textureWidth, int textureHeight) {
