@@ -7,6 +7,14 @@ Arms: negative X raises the arm forward, positive Z moves the right arm outward 
 left arm), negative Y turns the right arm toward the chest. Head: positive X looks down. Body:
 positive X leans forward.
 
+Rotations apply X first, then Y, then Z, around the parent: Z turns the arm in the front plane
+whatever X did before. Once X has raised an arm above the shoulder, a positive Z on the right arm
+brings the hand back over her head. Arms raised to the side (wave, cheer, dance) are therefore
+raised with Z alone (about 130 to 160, mirrored for the left arm), and arms raised in front (yawn,
+swim) open with a negative Z on the right arm. A hand brought to her face stops in front of it, at
+mouth height: the arms are straight boxes and would go through her head otherwise.
+Check every change with: python3 tools/check_animations.py
+
 Author: vyrriox
 """
 
@@ -19,6 +27,11 @@ def sin(freq, amp, phase=0, offset=0, time=T):
     ph = f"+{phase}" if phase else ""
     off = f"{offset}+" if offset else ""
     return f"{off}math.sin({time}*{freq}{ph})*{amp}"
+
+
+def ENV(length, rise, fall, time=T):
+    """0 at both ends of a one shot animation, 1 in between: multiplies a raised arm so it rises and falls."""
+    return f"math.clamp(math.min({time}/{rise}, ({length}-{time})/{fall}), 0, 1)"
 
 
 def kf(*frames):
@@ -104,8 +117,8 @@ A["sleep"] = anim(4.0, True, {
     "head": {"rotation": [0, 0, sin(90, 2, time=L)]},
 })
 A["swim"] = anim(1.2, True, {
-    "right_arm": {"rotation": [f"-150+math.sin({L}*300)*30", 0, 12]},
-    "left_arm": {"rotation": [f"-150+math.sin({L}*300+180)*30", 0, -12]},
+    "right_arm": {"rotation": [f"-150+math.sin({L}*300)*30", 0, -12]},
+    "left_arm": {"rotation": [f"-150+math.sin({L}*300+180)*30", 0, 12]},
     "right_leg": {"rotation": [sin(600, 25, time=L), 0, 0]},
     "left_leg": {"rotation": [sin(600, 25, 180, time=L), 0, 0]},
     "head": {"rotation": [-15, 0, 0]},
@@ -129,11 +142,13 @@ A["gagged"] = anim(3.0, True, {
 })
 
 # ------------------------------------------------------------------ emotes (one shot)
+# Arm raised to the side, hand above her head, swinging side to side: four waves that end where
+# they started, at 2.2 s.
 A["wave"] = anim(2.5, False, {
     "right_arm": {"rotation": [
-        f"{T} < 0.25 ? -660*{T} : ({T} > 2.2 ? -165+({T}-2.2)*550 : -165)",
+        f"{T} < 0.25 ? -60*{T} : ({T} > 2.2 ? -15+({T}-2.2)*50 : -15)",
         0,
-        f"{T} < 0.25 ? 80*{T} : ({T} > 2.2 ? 20-({T}-2.2)*66 : 20+math.sin(({T}-0.25)*720)*22)"]},
+        f"{T} < 0.25 ? 500*{T} : ({T} > 2.2 ? 125-({T}-2.2)*416.7 : 125+math.sin(({T}-0.25)*738.46)*13)"]},
     "head": {"rotation": [0, -10, sin(360, 6)]},
 })
 A["hug"] = anim(3.0, False, {
@@ -147,8 +162,9 @@ A["dance"] = anim(10.0, False, {
     "root": {"position": [f"math.sin({T}*180)*1.2", f"math.abs(math.sin({T}*360))*-1.2", 0]},
     "body": {"rotation": [0, sin(180, 18), sin(360, 5)]},
     "head": {"rotation": [sin(360, 6), sin(180, -12), sin(360, 8, 90)]},
-    "right_arm": {"rotation": [f"-150+math.sin({T}*360)*25", 0, f"20+math.sin({T}*180)*25"]},
-    "left_arm": {"rotation": [f"-150+math.sin({T}*360+180)*25", 0, f"-20+math.sin({T}*180)*25"]},
+    # Both arms up to the side, swaying together; they rise and fall at both ends.
+    "right_arm": {"rotation": [f"-15+math.sin({T}*360)*10", 0, f"(115+math.sin({T}*180)*20)*{ENV(10.0, 0.4, 0.5)}"]},
+    "left_arm": {"rotation": [f"-15+math.sin({T}*360+180)*10", 0, f"(-115+math.sin({T}*180)*20)*{ENV(10.0, 0.4, 0.5)}"]},
     "right_leg": {"rotation": [sin(360, 20), 0, sin(180, 6)]},
     "left_leg": {"rotation": [sin(360, 20, 180), 0, sin(180, 6)]},
 })
@@ -164,24 +180,28 @@ A["clap"] = anim(2.1, False, {
 A["laugh"] = anim(2.5, False, {
     "body": {"rotation": [f"-6+math.sin({T}*1440)*3", 0, 0]},
     "head": {"rotation": [f"-14+math.sin({T}*1440)*4", 0, 0]},
-    **{k: v for k, v in pose(2.5, {"right_arm": [-40, -35, 0], "left_arm": [-40, 35, 0]}, 0.2, 0.3).items()},
+    **{k: v for k, v in pose(2.5, {"right_arm": [-40, -28, 0], "left_arm": [-40, 28, 0]}, 0.2, 0.3).items()},
     "root": {"position": [0, f"math.abs(math.sin({T}*720))*-0.4", 0]},
 })
 A["cry"] = anim(4.0, False, {
-    "head": {"rotation": [f"20+math.sin({T}*900)*3", 0, 0]},
+    # Both hands in front of her face, sobbing.
+    "head": {"rotation": [f"3+math.sin({T}*900)*3", 0, 0]},
     "body": {"rotation": [10, 0, 0]},
-    "right_arm": {"rotation": [f"-135+math.sin({T}*900)*4", -28, 0]},
-    "left_arm": {"rotation": [f"-135+math.sin({T}*900+60)*4", 28, 0]},
+    "right_arm": {"rotation": [f"-112+math.sin({T}*900)*4", -20, 0]},
+    "left_arm": {"rotation": [f"-112+math.sin({T}*900+60)*4", 20, 0]},
 })
 A["blush"] = anim(2.5, False, {
-    **pose(2.5, {"head": [12, 20, 8], "right_arm": [-120, -30, 0], "left_arm": [-10, 0, -6]}, 0.25, 0.3),
+    **pose(2.5, {"head": [10, 18, 6], "right_arm": [-112, -20, 0], "left_arm": [-10, 0, -6]}, 0.25, 0.3),
     "body": {"rotation": [0, sin(360, 6), 0]},
 })
-A["facepalm"] = anim(2.0, False, pose(2.0, {"right_arm": [-140, -30, 0], "head": [22, 0, 0]}, 0.25, 0.3))
+A["facepalm"] = anim(2.0, False, {
+    **pose(2.0, {"right_arm": [-115, -17, 0]}, 0.25, 0.3),
+    "head": {"rotation": [f"4*{ENV(2.0, 0.25, 0.3)}", f"math.sin({T}*270)*6*{ENV(2.0, 0.25, 0.3)}", 0]},
+})
 A["jump"] = anim(1.5, False, {
     "root": {"position": [0, f"{T} < 0.2 ? {T}*6 : ({T} < 0.9 ? -math.sin(({T}-0.2)*257)*9 : 0)", 0]},
-    "right_arm": {"rotation": [f"{T} < 0.9 ? -170 : -170+({T}-0.9)*283", 0, 25]},
-    "left_arm": {"rotation": [f"{T} < 0.9 ? -170 : -170+({T}-0.9)*283", 0, -25]},
+    "right_arm": {"rotation": [-10, 0, f"{T} < 0.15 ? {T}*900 : ({T} < 0.9 ? 135 : 135-({T}-0.9)*225)"]},
+    "left_arm": {"rotation": [-10, 0, f"{T} < 0.15 ? {T}*-900 : ({T} < 0.9 ? -135 : -135+({T}-0.9)*225)"]},
     "right_leg": {"rotation": [f"{T} > 0.2 && {T} < 0.9 ? 30 : 0", 0, 0]},
     "left_leg": {"rotation": [f"{T} > 0.2 && {T} < 0.9 ? -20 : 0", 0, 0]},
 })
@@ -189,8 +209,9 @@ A["bow"] = anim(2.0, False, pose(2.0, {
     "body": [28, 0, 0], "head": [20, 0, 0], "right_arm": [-10, 0, 25], "left_arm": [-10, 0, -25], "right_leg": [25, 0, 0],
     "root": [0, 1.5, 0]}, 0.5, 0.7))
 A["think"] = anim(3.0, False, {
-    **pose(3.0, {"right_arm": [-118, -34, 0], "left_arm": [-40, 38, 0]}),
-    "head": {"rotation": [-12, sin(60, 10), 10]},
+    # Hand under her chin, the other arm across her waist.
+    **pose(3.0, {"right_arm": [-102, -25, 0], "left_arm": [-40, 38, 0]}),
+    "head": {"rotation": [-10, sin(60, 10), 10]},
 })
 A["shrug"] = anim(1.5, False, pose(1.5, {
     "right_arm": [-30, 0, 45], "left_arm": [-30, 0, -45], "head": [0, 0, 14], "root": [0, -0.6, 0]}, 0.3, 0.4))
@@ -201,23 +222,25 @@ A["stomp"] = anim(2.0, False, {
     "head": {"rotation": [-8, sin(540, 8), 0]},
 })
 A["yawn"] = anim(2.5, False, pose(2.5, {
-    "right_arm": [-175, 0, 18], "left_arm": [-175, 0, -18], "head": [-24, 0, 0], "body": [-6, 0, 0]}, 0.6, 0.6))
+    "right_arm": [-168, 0, -14], "left_arm": [-168, 0, 14], "head": [-24, 0, 0], "body": [-6, 0, 0]}, 0.6, 0.6))
 A["eat"] = anim(1.6, False, {
-    "right_arm": {"rotation": [f"-95+math.sin({T}*900)*10", -30, 0]},
-    "head": {"rotation": [f"6+math.sin({T}*900)*5", 0, 0]},
+    # Hand goes from her plate to her mouth and back.
+    "right_arm": {"rotation": [f"-96+math.sin({T}*900)*8", -18, 0]},
+    "head": {"rotation": [f"4+math.sin({T}*900)*3", 0, 0]},
 })
 A["poke"] = anim(1.0, False, {
     "right_arm": {"rotation": kf((0, [0, 0, 0]), (0.2, [-90, -10, 0]), (0.35, [-80, -10, 0]), (0.5, [-90, -10, 0]), (1.0, [0, 0, 0]))},
     "head": {"rotation": [0, 0, 8]},
 })
 A["slap"] = anim(0.75, False, {
-    "right_arm": {"rotation": kf((0, [0, 0, 0]), (0.15, [-110, 40, 30]), (0.35, [-90, -50, 0]), (0.75, [0, 0, 0]))},
+    "right_arm": {"rotation": kf((0, [0, 0, 0]), (0.15, [-110, 40, 30]), (0.35, [-90, -38, 0]), (0.75, [0, 0, 0]))},
     "body": {"rotation": kf((0, [0, 0, 0]), (0.15, [0, 12, 0]), (0.35, [0, -15, 0]), (0.75, [0, 0, 0]))},
 })
 A["celebrate"] = anim(4.0, False, {
     "root": {"position": [0, f"math.abs(math.sin({T}*360))*-2.4", 0]},
-    "right_arm": {"rotation": [f"-165+math.sin({T}*720)*12", 0, f"25+math.sin({T}*720)*10"]},
-    "left_arm": {"rotation": [f"-165+math.sin({T}*720+180)*12", 0, f"-25-math.sin({T}*720)*10"]},
+    # Arms up in a V, pumping in turn.
+    "right_arm": {"rotation": [f"-10+math.sin({T}*720)*8", 0, f"(122+math.sin({T}*720)*12)*{ENV(4.0, 0.3, 0.4)}"]},
+    "left_arm": {"rotation": [f"-10+math.sin({T}*720+180)*8", 0, f"(-122-math.sin({T}*720+180)*12)*{ENV(4.0, 0.3, 0.4)}"]},
     "head": {"rotation": [-12, sin(360, 12), 0]},
     "right_leg": {"rotation": [sin(720, 12), 0, 4]},
     "left_leg": {"rotation": [sin(720, -12), 0, -4]},
@@ -243,8 +266,9 @@ A["hum"] = anim(4.5, False, {
     "root": {"position": [0, f"math.abs(math.sin({T}*160))*-0.5", 0]},
 })
 A["stretch"] = anim(2.8, False, {
-    "right_arm": {"rotation": kf((0, [0, 0, 0]), (0.6, [-178, 0, 8]), (1.2, [-178, 0, 8]), (1.8, [-178, 0, 30]), (2.3, [-100, 0, 60]), (2.8, [0, 0, 0]))},
-    "left_arm": {"rotation": kf((0, [0, 0, 0]), (0.6, [-178, 0, -8]), (1.2, [-178, 0, -8]), (1.8, [-178, 0, -30]), (2.3, [-100, 0, -60]), (2.8, [0, 0, 0]))},
+    # Arms straight up, opening wider while she leans, then down in front, still open.
+    "right_arm": {"rotation": kf((0, [0, 0, 0]), (0.6, [-170, 0, -10]), (1.2, [-170, 0, -10]), (1.8, [-170, 0, -26]), (2.2, [-120, 0, -40]), (2.5, [-45, 0, 6]), (2.8, [0, 0, 0]))},
+    "left_arm": {"rotation": kf((0, [0, 0, 0]), (0.6, [-170, 0, 10]), (1.2, [-170, 0, 10]), (1.8, [-170, 0, 26]), (2.2, [-120, 0, 40]), (2.5, [-45, 0, -6]), (2.8, [0, 0, 0]))},
     "body": {"rotation": kf((0, [0, 0, 0]), (0.6, [-8, 0, 0]), (1.2, [-4, 0, 10]), (1.8, [-4, 0, -10]), (2.8, [0, 0, 0]))},
     "root": {"position": kf((0, [0, 0, 0]), (0.6, [0, -1, 0]), (2.3, [0, -1, 0]), (2.8, [0, 0, 0]))},
 })
@@ -254,26 +278,29 @@ A["tap_foot"] = anim(2.6, False, {
     "head": {"rotation": [0, sin(90, 15), 6]},
 })
 A["blow_kiss"] = anim(1.7, False, {
-    "right_arm": {"rotation": kf((0, [0, 0, 0]), (0.4, [-130, -40, 0]), (0.8, [-130, -40, 0]), (1.1, [-110, 20, 40]), (1.7, [0, 0, 0]))},
-    "head": {"rotation": kf((0, [0, 0, 0]), (0.4, [8, 0, -8]), (1.1, [-8, 0, 6]), (1.7, [0, 0, 0]))},
+    # Fingers to her lips, then the kiss thrown forward and out.
+    "right_arm": {"rotation": kf((0, [0, 0, 0]), (0.4, [-112, -20, 0]), (0.8, [-112, -20, 0]), (1.1, [-105, 25, 0]), (1.7, [0, 0, 0]))},
+    "head": {"rotation": kf((0, [0, 0, 0]), (0.4, [-6, 0, 0]), (1.1, [-8, 0, 6]), (1.7, [0, 0, 0]))},
 })
 A["sneeze"] = anim(1.6, False, {
-    "head": {"rotation": kf((0, [0, 0, 0]), (0.6, [-22, 0, 0]), (0.8, [32, 0, 0]), (1.1, [10, 0, 0]), (1.6, [0, 0, 0]))},
+    # Hand in front of her nose; the head snaps forward a little less than the body.
+    "head": {"rotation": kf((0, [0, 0, 0]), (0.6, [-22, 0, 0]), (0.8, [14, 0, 0]), (1.1, [6, 0, 0]), (1.6, [0, 0, 0]))},
     "body": {"rotation": kf((0, [0, 0, 0]), (0.6, [-6, 0, 0]), (0.8, [18, 0, 0]), (1.1, [4, 0, 0]), (1.6, [0, 0, 0]))},
-    "right_arm": {"rotation": kf((0, [0, 0, 0]), (0.5, [-120, -35, 0]), (1.1, [-120, -35, 0]), (1.6, [0, 0, 0]))},
+    "right_arm": {"rotation": kf((0, [0, 0, 0]), (0.5, [-108, -19, 0]), (1.1, [-108, -19, 0]), (1.6, [0, 0, 0]))},
 })
 A["hair_flip"] = anim(1.4, False, {
     "head": {"rotation": kf((0, [0, 0, 0]), (0.3, [10, 20, 0]), (0.6, [-18, -25, -14]), (1.0, [-6, -10, -4]), (1.4, [0, 0, 0]))},
-    "right_arm": {"rotation": kf((0, [0, 0, 0]), (0.3, [-150, -10, 10]), (0.6, [-160, 10, 40]), (1.4, [0, 0, 0]))},
+    # Hand up beside her head, then flicked out to the side.
+    "right_arm": {"rotation": kf((0, [0, 0, 0]), (0.3, [-20, 0, 135]), (0.6, [-5, 15, 110]), (1.4, [0, 0, 0]))},
     "body": {"rotation": kf((0, [0, 0, 0]), (0.6, [0, -10, 0]), (1.4, [0, 0, 0]))},
 })
 A["check_nails"] = anim(3.2, False, {
-    **pose(3.2, {"right_arm": [-95, -25, 0], "head": [18, -12, 0]}),
+    **pose(3.2, {"right_arm": [-93, -26, 0], "head": [15, -12, 0]}),
     "left_arm": {"rotation": [f"-60+math.sin({T}*120)*6", 30, 0]},
 })
 A["air_guitar"] = anim(3.8, False, {
     **pose(3.8, {"left_arm": [-60, 35, -20]}, 0.25, 0.3),
-    "right_arm": {"rotation": [f"-40+math.sin({T}*1440)*18", -40, 0]},
+    "right_arm": {"rotation": [f"-45+math.sin({T}*1440)*15", -30, 0]},
     "head": {"rotation": [f"8+math.sin({T}*720)*14", 0, sin(360, 8)]},
     "body": {"rotation": [sin(720, 4), 0, 0]},
     "root": {"position": [0, f"math.abs(math.sin({T}*720))*-0.8", 0]},
@@ -281,10 +308,10 @@ A["air_guitar"] = anim(3.8, False, {
 A["hiccup"] = anim(1.1, False, {
     "root": {"position": kf((0, [0, 0, 0]), (0.15, [0, -1.6, 0]), (0.35, [0, 0, 0]), (1.1, [0, 0, 0]))},
     "head": {"rotation": kf((0, [0, 0, 0]), (0.15, [-12, 0, 0]), (0.5, [4, 0, 0]), (1.1, [0, 0, 0]))},
-    "right_arm": {"rotation": kf((0, [0, 0, 0]), (0.2, [-110, -30, 0]), (0.9, [-110, -30, 0]), (1.1, [0, 0, 0]))},
+    "right_arm": {"rotation": kf((0, [0, 0, 0]), (0.2, [-112, -20, 0]), (0.9, [-112, -20, 0]), (1.1, [0, 0, 0]))},
 })
 A["pout"] = anim(3.0, False, pose(3.0, {
-    "right_arm": [-62, -38, 6], "left_arm": [-70, 40, -6], "head": [-10, 30, -8], "body": [0, 12, 0]}))
+    "right_arm": [-62, -38, 6], "left_arm": [-70, 40, -6], "head": [-10, 30, -8], "body": [0, 6, 0]}))
 A["shiver"] = anim(2.6, False, {
     **pose(2.6, {"right_arm": [-60, -45, 0], "left_arm": [-60, 45, 0]}, 0.2, 0.3),
     "body": {"rotation": [6, 0, f"math.sin({T}*3600)*1.5"]},
@@ -292,7 +319,8 @@ A["shiver"] = anim(2.6, False, {
     "root": {"position": [f"math.sin({T}*4000)*0.15", 0.3, 0]},
 })
 A["fan"] = anim(2.7, False, {
-    "right_arm": {"rotation": [-120, f"-20+math.sin({T}*1080)*25", 0]},
+    # Fanning in front of her face, never into it.
+    "right_arm": {"rotation": [-118, f"-6+math.sin({T}*1080)*10", 0]},
     "head": {"rotation": [-10, 0, sin(180, 6)]},
     "left_arm": {"rotation": [-20, 0, -10]},
 })
@@ -300,3 +328,25 @@ A["fan"] = anim(2.7, False, {
 
 def build():
     return {"format_version": "1.8.0", "animations": {f"animation.laura.{k}": v for k, v in A.items()}}
+
+
+def write(root):
+    """Writes laura_humanoid.json into common/<version>/ of every Minecraft version."""
+    import json
+    import os
+    paths = []
+    for version in sorted(os.listdir(os.path.join(root, "common"))):
+        folder = os.path.join(root, "common", version, "src", "main", "resources", "assets", "lauramod", "animations")
+        if os.path.isdir(folder):
+            path = os.path.join(folder, "laura_humanoid.json")
+            with open(path, "w", encoding="utf-8", newline="\n") as f:
+                json.dump(build(), f, indent=2)
+                f.write("\n")
+            paths.append(path)
+    return paths
+
+
+if __name__ == "__main__":
+    import os
+    for written in write(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))):
+        print("Wrote", written)

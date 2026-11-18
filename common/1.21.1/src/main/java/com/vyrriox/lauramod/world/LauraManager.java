@@ -81,6 +81,14 @@ public final class LauraManager {
         }
     }
 
+    /** The companion limit is reached; an operator also learns how to raise it without leaving the game. */
+    private static void tellMax(ServerPlayer player) {
+        player.sendSystemMessage(Component.translatable("lauramod.summon.max", LauraConfig.maxPerPlayer.getInt()));
+        if (player.hasPermissions(LauraConfig.reloadPermissionLevel.getInt())) {
+            player.sendSystemMessage(Component.translatable("lauramod.summon.max_hint").withStyle(net.minecraft.ChatFormatting.GRAY));
+        }
+    }
+
     public static void tick(MinecraftServer server) {
         List<Runnable> due = new ArrayList<>();
         synchronized (SCHEDULED) {
@@ -481,7 +489,7 @@ public final class LauraManager {
                 if (nearest != null) {
                     LauraSpeech.say(nearest, player, "already_here", LineFormatter.values());
                 } else {
-                    player.sendSystemMessage(Component.translatable("lauramod.summon.max", LauraConfig.maxPerPlayer.getInt()));
+                    tellMax(player);
                 }
                 return;
             }
@@ -575,7 +583,7 @@ public final class LauraManager {
             if (nearest != null) {
                 LauraSpeech.say(nearest, player, "already_here", LineFormatter.values());
             } else if (!waiting && mine.size() >= LauraConfig.maxPerPlayer.getInt()) {
-                player.sendSystemMessage(Component.translatable("lauramod.summon.max", LauraConfig.maxPerPlayer.getInt()));
+                tellMax(player);
             }
         } else {
             player.sendSystemMessage(Component.translatable("lauramod.summon.everyone_coming"));
@@ -713,7 +721,7 @@ public final class LauraManager {
     public static void claim(ServerPlayer player, LauraEntity laura) {
         LauraWorldData data = data(player.getServer());
         if (data.byOwner(player.getUUID()).size() >= LauraConfig.maxPerPlayer.getInt()) {
-            player.sendSystemMessage(Component.translatable("lauramod.summon.max", LauraConfig.maxPerPlayer.getInt()));
+            tellMax(player);
             return;
         }
         if (!underWorldLimit(data)) {

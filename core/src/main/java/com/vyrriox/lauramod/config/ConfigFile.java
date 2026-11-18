@@ -53,6 +53,35 @@ public final class ConfigFile {
         return section;
     }
 
+    /** A value by its {@code section.key} path, or null. */
+    public Value<?> find(String path) {
+        int dot = path == null ? -1 : path.indexOf('.');
+        if (dot < 0) {
+            return null;
+        }
+        for (Section section : sections()) {
+            if (section.name().equals(path.substring(0, dot))) {
+                for (Value<?> value : section.values()) {
+                    if (value.key().equals(path.substring(dot + 1))) {
+                        return value;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    /** Every {@code section.key} path, in file order. */
+    public List<String> paths() {
+        List<String> out = new ArrayList<>();
+        for (Section section : sections()) {
+            for (Value<?> value : section.values()) {
+                out.add(section.name() + "." + value.key());
+            }
+        }
+        return out;
+    }
+
     public List<Section> sections() {
         return Collections.unmodifiableList(sections);
     }
@@ -268,6 +297,58 @@ public final class ConfigFile {
 
         void reset() {
             value = def;
+        }
+
+        /**
+         * Sets the value from text typed in a command: a number, true or false, a word, or a list
+         * written {@code a, b} or {@code ["a", "b"]}. Returns null when the text was taken as typed;
+         * otherwise the value is left unchanged and the allowed values are returned.
+         */
+        public String setFromText(String text) {
+            String t = text == null ? "" : text.trim();
+            JsonElement element;
+            if (this instanceof StringValue) {
+                if (t.length() >= 2 && t.startsWith("\"") && t.endsWith("\"")) {
+                    t = t.substring(1, t.length() - 1);
+                }
+                element = new JsonPrimitive(t);
+            } else if (this instanceof StringListValue && !t.startsWith("[")) {
+                JsonArray array = new JsonArray();
+                for (String part : t.split(",")) {
+                    if (!part.isBlank()) {
+                        array.add(part.trim());
+                    }
+                }
+                element = array;
+            } else {
+                try {
+                    element = JsonParser.parseString(t);
+                } catch (RuntimeException e) {
+                    element = new JsonPrimitive(t);
+                }
+            }
+            T before = value;
+            boolean exact;
+            try {
+                exact = read(element);
+            } catch (RuntimeException e) {
+                exact = false;
+            }
+            if (!exact) {
+                value = before;
+                return describeRange();
+            }
+            return null;
+        }
+
+        /** The current value as it is written in the file. */
+        public String currentText() {
+            return writeCurrent();
+        }
+
+        /** Allowed values and the default, in English like the comments of the file. */
+        public String describe() {
+            return describeRange();
         }
 
         /** Parses the element into this value. Returns false when a correction was needed. */

@@ -133,8 +133,8 @@ icon = "style"
   icon = "style"
   name.en = "Looks"
   name.fr = "Apparence"
-  text.en = "six outfits, any Minecraft skin, or a Blockbench model."
-  text.fr = "six tenues, n'importe quel skin Minecraft ou un modèle Blockbench."
+  text.en = "six outfits, any Minecraft skin, a Blockbench model, or a Yes Steve Model folder."
+  text.fr = "six tenues, n'importe quel skin Minecraft, un modèle Blockbench ou un dossier Yes Steve Model."
 
   [[section.item]]
   icon = "emotes"
