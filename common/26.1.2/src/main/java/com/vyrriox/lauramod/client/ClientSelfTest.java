@@ -26,6 +26,8 @@ public final class ClientSelfTest {
     private static final boolean ENABLED = Boolean.getBoolean("lauramod.clienttest");
     private static final List<Runnable> STEPS = new ArrayList<>();
     private static int wait = -1;
+    /** Ticks before the next step, when a step needs another delay than the usual 25. */
+    private static int nextWait = -1;
     private static int step;
 
     private ClientSelfTest() {
@@ -60,7 +62,8 @@ public final class ClientSelfTest {
         } catch (Throwable t) {
             LauraCore.LOGGER.error("[CLIENTTEST] step {} failed", step, t);
         }
-        wait = 25;
+        wait = nextWait > 0 ? nextWait : 25;
+        nextWait = -1;
     }
 
     private static void onServer(Minecraft mc, java.util.function.Consumer<ServerPlayer> action) {
@@ -125,6 +128,50 @@ public final class ClientSelfTest {
     private static void shot(Minecraft mc, String name) {
         Screenshot.grab(mc.gameDirectory, "laura_" + name + ".png", mc.getMainRenderTarget(), 1,
                 message -> LauraCore.LOGGER.info("[CLIENTTEST] {}", message.getString()));
+    }
+
+    /**
+     * Optional: {@code clienttest-emotes.txt} in the game folder lists emotes, one per line, as
+     * {@code name} or {@code name:seconds} (when to take the picture, 1 s by default). Each one is
+     * played and pictured from the front and from her right side, AI paused so she holds still.
+     */
+    private static void emoteShots(Minecraft mc) {
+        java.nio.file.Path file = mc.gameDirectory.toPath().resolve("clienttest-emotes.txt");
+        if (!java.nio.file.Files.isRegularFile(file)) {
+            return;
+        }
+        List<String> lines;
+        try {
+            lines = java.nio.file.Files.readAllLines(file);
+        } catch (java.io.IOException e) {
+            LauraCore.LOGGER.error("[CLIENTTEST] cannot read {}", file, e);
+            return;
+        }
+        for (String line : lines) {
+            String[] parts = line.trim().split(":");
+            com.vyrriox.lauramod.entity.Emote emote = com.vyrriox.lauramod.entity.Emote.byName(parts[0]);
+            if (parts[0].isEmpty() || emote == com.vyrriox.lauramod.entity.Emote.NONE) {
+                continue;
+            }
+            int delay = parts.length > 1 ? Math.max(2, Math.round(Float.parseFloat(parts[1]) * 20)) : 20;
+            for (String view : new String[]{"front", "side"}) {
+                int turn = view.equals("front") ? 0 : -90;
+                STEPS.add(() -> onServer(mc, player -> LauraManager.findAll(player).stream().findFirst().ifPresent(l -> {
+                    l.setNoAi(true);
+                    inFront(player, l);
+                    l.setYRot(l.getYRot() + turn);
+                    l.setYBodyRot(l.getYRot());
+                    l.setYHeadRot(l.getYRot());
+                    l.playEmote(com.vyrriox.lauramod.entity.Emote.NONE);
+                })));
+                STEPS.add(() -> {
+                    onServer(mc, player -> LauraManager.findAll(player).stream().findFirst().ifPresent(l -> l.playEmote(emote)));
+                    nextWait = delay;
+                });
+                STEPS.add(() -> shot(mc, "emote_" + emote.animationName() + "_" + view));
+            }
+        }
+        STEPS.add(() -> onServer(mc, player -> LauraManager.findAll(player).stream().findFirst().ifPresent(l -> l.setNoAi(false))));
     }
 
     private static void plan(Minecraft mc) {
@@ -207,6 +254,7 @@ public final class ClientSelfTest {
         }));
         STEPS.add(() -> wave(mc));
         STEPS.add(() -> shot(mc, "default_wave"));
+        emoteShots(mc);
         // Custom model check: config/lauramod/models/test_fr.bbmodel, when present, has French bone
         // names, a nose on its front, a blue right arm and no animation. It shows the borrowed
         // default animations (the same wave, on "bras_d") and the bone lookup (hay on "tete", bag
