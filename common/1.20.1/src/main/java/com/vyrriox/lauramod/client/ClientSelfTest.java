@@ -302,6 +302,29 @@ public final class ClientSelfTest {
             }
         });
         STEPS.add(() -> shot(mc, "world_back_default"));
+        // Yes Steve Model folder check: config/lauramod/models/ysm_test/, when present, is a model in
+        // YSM's open folder form. It shows the 0.7 scale, its own idle animation and a borrowed emote.
+        STEPS.add(() -> onServer(mc, player -> LauraManager.findAll(player).stream().findFirst().ifPresent(l -> {
+            com.vyrriox.lauramod.world.LauraActions.ungag(player, l, false);
+            inFront(player, l);
+        })));
+        STEPS.add(() -> {
+            LauraEntity l = laura();
+            if (l != null) {
+                com.vyrriox.lauramod.client.network.LauraClientNetwork.setModel(l.getId(), "server:ysm_test");
+            }
+        });
+        STEPS.add(() -> {
+        });
+        STEPS.add(() -> shot(mc, "ysm_idle"));
+        STEPS.add(() -> wave(mc));
+        STEPS.add(() -> shot(mc, "ysm_wave"));
+        STEPS.add(() -> {
+            LauraEntity l = laura();
+            if (l != null) {
+                com.vyrriox.lauramod.client.network.LauraClientNetwork.setModel(l.getId(), "reset");
+            }
+        });
         STEPS.add(() -> onServer(mc, player -> {
             List<LauraEntity> all = LauraManager.findAll(player);
             if (!all.isEmpty()) {
