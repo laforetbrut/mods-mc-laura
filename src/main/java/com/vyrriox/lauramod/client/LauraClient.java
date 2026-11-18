@@ -102,6 +102,7 @@ public final class LauraClient {
         Minecraft mc = Minecraft.getInstance();
         ClientState.ticks++;
         ClientSelfTest.tick();
+        com.vyrriox.lauramod.client.sound.LauraSounds.tick();
         if (mc.player == null || mc.level == null) {
             if (joined) {
                 joined = false;
