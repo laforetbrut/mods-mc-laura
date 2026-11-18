@@ -29,7 +29,7 @@
 
 <div align="center" style="text-align:center">
 <h3><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/title-yours-en.gif" alt="Make Her Yours" width="800"></h3>
-<p><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/icons/style.png" alt="" width="32"> <span style="color:#f77fb2;font-size:18px"><strong>Looks:</strong></span> six outfits, any Minecraft skin, or a Blockbench model.</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/icons/style.png" alt="" width="32"> <span style="color:#f77fb2;font-size:18px"><strong>Looks:</strong></span> six outfits, any Minecraft skin, a Blockbench model, or a Yes Steve Model folder.</p>
 <p><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/icons/emotes.png" alt="" width="32"> <span style="color:#f77fb2;font-size:18px"><strong>30 emotes:</strong></span> from chat, the menu (key K) or the wheel (key G).</p>
 </div>
 
@@ -69,7 +69,7 @@
 
 <div align="center" style="text-align:center">
 <h3><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/title-yours-fr.gif" alt="La Personnaliser" width="800"></h3>
-<p><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/icons/style.png" alt="" width="32"> <span style="color:#f77fb2;font-size:18px"><strong>Apparence&nbsp;:</strong></span> six tenues, n'importe quel skin Minecraft ou un modèle Blockbench.</p>
+<p><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/icons/style.png" alt="" width="32"> <span style="color:#f77fb2;font-size:18px"><strong>Apparence&nbsp;:</strong></span> six tenues, n'importe quel skin Minecraft, un modèle Blockbench ou un dossier Yes Steve Model.</p>
 <p><img src="https://cdn.jsdelivr.net/gh/Team-Arcadia/images@main/mods/lauramod/curseforge/icons/emotes.png" alt="" width="32"> <span style="color:#f77fb2;font-size:18px"><strong>30 émotes&nbsp;:</strong></span> depuis le chat, le menu (touche K) ou la roue (touche G).</p>
 </div>
 

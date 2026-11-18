@@ -10,6 +10,8 @@ All notable changes to My Girlfriend Laura are documented here.
 
 - **Mute some of her sounds**: her menu, Settings, Sounds lists every sound file she can play. Click one to hear it, click the heart on its right to mute it, on your game only. She picks another file instead, and stays quiet when every file of a sound is muted. Saved as `sounds.muted` in `lauramod-client.json`.
 - **`/laura admin config <setting> [value]`**: shows or changes any setting of `lauramod-common.json` from the game, saves the file and applies it like `/laura reload`, for example `/laura admin config general.maxPerPlayer 10`. Settings of the `permissions` section need permission level 4. When a player reaches the companion limit, operators are told this command.
+- **Yes Steve Model folders**: a model made for Yes Steve Model in its open folder form (1.x files, or 2.x with `ysm.json`) can be dropped in `config/lauramod/models/<name>/` and worn by her. She uses its geometry, its default texture, its idle, walk, sit (or ride), sleep and swim animations and its `parallel` layers, at the scale it asks for (0.7 by default), holds items on its hand locators and borrows the default emotes it lacks. Encrypted `.ysm` files cannot be used. See [docs/MODELS.md](docs/MODELS.md).
+- **Emotes on any custom model**: a model with animations of its own but without an emote now borrows that emote from the default animations, on its recognised arms, legs, head and body.
 
 ### Changed
 
@@ -24,6 +26,8 @@ All notable changes to My Girlfriend Laura are documented here.
 
 - **Couper certains de ses sons** : son menu, Réglages, Sons liste chaque fichier sonore qu'elle peut jouer. Cliquez sur l'un pour l'écouter, sur le cœur à sa droite pour le couper, dans votre jeu seulement. Elle choisit un autre fichier à la place, et reste silencieuse quand tous les fichiers d'un son sont coupés. Enregistré dans `sounds.muted` de `lauramod-client.json`.
 - **`/laura admin config <réglage> [valeur]`** : affiche ou change n'importe quel réglage de `lauramod-common.json` depuis le jeu, enregistre le fichier et l'applique comme `/laura reload`, par exemple `/laura admin config general.maxPerPlayer 10`. Les réglages de la section `permissions` demandent le niveau de permission 4. Quand un joueur atteint la limite de compagnes, les opérateurs voient cette commande.
+- **Dossiers Yes Steve Model** : un modèle fait pour Yes Steve Model sous sa forme de dossier ouverte (fichiers 1.x, ou 2.x avec `ysm.json`) peut être posé dans `config/lauramod/models/<nom>/` et porté par elle. Elle utilise sa géométrie, sa texture par défaut, ses animations idle, walk, sit (ou ride), sleep et swim et ses couches `parallel`, à l'échelle qu'il demande (0,7 par défaut), tient les objets sur ses repères de mains et emprunte les émotes par défaut qui lui manquent. Les fichiers `.ysm` chiffrés ne sont pas utilisables. Voir [docs/MODELS.md](docs/MODELS.md).
+- **Émotes sur tout modèle personnalisé** : un modèle qui a ses propres animations mais pas une émote emprunte maintenant cette émote aux animations par défaut, sur ses bras, jambes, tête et corps reconnus.
 
 ### Modifications
 
