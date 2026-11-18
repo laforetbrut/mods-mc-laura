@@ -6,15 +6,33 @@ All notable changes to My Girlfriend Laura are documented here.
 
 ## [Unreleased]
 
+### Added
+
+- **Mute some of her sounds**: her menu, Settings, Sounds lists every sound file she can play. Click one to hear it, click the heart on its right to mute it, on your game only. She picks another file instead, and stays quiet when every file of a sound is muted. Saved as `sounds.muted` in `lauramod-client.json`.
+- **`/laura admin config <setting> [value]`**: shows or changes any setting of `lauramod-common.json` from the game, saves the file and applies it like `/laura reload`, for example `/laura admin config general.maxPerPlayer 10`. Settings of the `permissions` section need permission level 4. When a player reaches the companion limit, operators are told this command.
+
 ### Changed
 
 - **License**: Apache License 2.0 instead of MIT. Forks and redistribution stay allowed; a redistributed copy must keep the copyright, the `LICENSE` and `NOTICE` files, and state what was changed. Apache 2.0 also grants the patent rights of contributors. Releases up to 2.0.0 remain under MIT.
 - **Source layout**: the logic that does not depend on Minecraft or a loader (dialogue sets and text matching, the model parser helpers and Molang, config files, skin references, caches, enums) now lives once in `core/src/main/java` and is compiled into the nine targets, instead of one copy per Minecraft version. Packages are unchanged. The mod logger and id moved to `LauraCore`. The continuous integration checks that core never imports the game or a loader.
 
+### Fixed
+
+- **Arms in her head**: several default animations put an arm through her head or closed a raised arm over it (wave, celebrate, dance, jump, yawn, stretch, swim), and the hand-to-face emotes (facepalm, think, blush, cry, sneeze, hiccup, eat, blow a kiss, fan, hair flip, check nails) pushed the hand into her face. A raised arm now opens outward, and a hand brought to her face stops in front of it. A few arms that dug into her torso (laugh, pout, slap, air guitar) were moved too. `tools/check_animations.py` plays every default animation on the player model, slim and wide arms, and fails when an arm enters her head or her torso; the continuous integration runs it.
+
+### Ajouts
+
+- **Couper certains de ses sons** : son menu, Réglages, Sons liste chaque fichier sonore qu'elle peut jouer. Cliquez sur l'un pour l'écouter, sur le cœur à sa droite pour le couper, dans votre jeu seulement. Elle choisit un autre fichier à la place, et reste silencieuse quand tous les fichiers d'un son sont coupés. Enregistré dans `sounds.muted` de `lauramod-client.json`.
+- **`/laura admin config <réglage> [valeur]`** : affiche ou change n'importe quel réglage de `lauramod-common.json` depuis le jeu, enregistre le fichier et l'applique comme `/laura reload`, par exemple `/laura admin config general.maxPerPlayer 10`. Les réglages de la section `permissions` demandent le niveau de permission 4. Quand un joueur atteint la limite de compagnes, les opérateurs voient cette commande.
+
 ### Modifications
 
 - **Licence**: Apache License 2.0 au lieu de MIT. Les forks et la redistribution restent permis ; une copie redistribuée doit garder le copyright, les fichiers `LICENSE` et `NOTICE`, et indiquer ce qui a été modifié. Apache 2.0 accorde aussi les droits de brevet des contributeurs. Les versions jusqu'à la 2.0.0 restent sous MIT.
 - **Organisation des sources** : la logique qui ne dépend ni de Minecraft ni d'un chargeur (jeux de dialogues et reconnaissance de texte, outils de l'analyseur de modèles et Molang, fichiers de configuration, références de skins, caches, énumérations) se trouve désormais une seule fois dans `core/src/main/java` et est compilée dans les neuf cibles, au lieu d'une copie par version de Minecraft. Les paquets ne changent pas. Le logger et l'identifiant du mod passent dans `LauraCore`. L'intégration continue vérifie que core n'importe jamais le jeu ni un chargeur.
+
+### Correctifs
+
+- **Bras dans la tête** : plusieurs animations par défaut faisaient passer un bras dans sa tête ou refermaient un bras levé au-dessus (salut, fête, danse, saut, bâillement, étirement, nage), et les émotes main au visage (facepalm, réflexion, rougir, pleurer, éternuer, hoquet, manger, envoyer un bisou, s'éventer, coup de cheveux, regarder ses ongles) enfonçaient la main dans son visage. Un bras levé s'ouvre maintenant vers l'extérieur, et une main portée au visage s'arrête devant. Quelques bras qui rentraient dans son torse (rire, bouder, gifle, air guitar) ont aussi été déplacés. `tools/check_animations.py` joue chaque animation par défaut sur le modèle de joueur, bras fins et larges, et échoue quand un bras entre dans sa tête ou son torse ; l'intégration continue le lance.
 
 ---
 

@@ -29,7 +29,7 @@ Check these points:
 - Over the void or over lava there is no safe place for her: nothing is created and you read "There is no safe place for her here. Stand on solid ground and call her again." The summon cooldown is not used up. The same message is shown when a dismissed companion, a revived one or one restored from her saved state has nowhere to stand. In `TIMER` mode she waits and tries again every 5 seconds until you stand somewhere safe.
 
 **How many companions can I have?**
-3 by default (`general.maxPerPlayer`). The second and the following ones get the names of `general.extraNames`. Laura's Heart only creates your first companion: ask for the next ones with `/laura summon` or the chat phrase.
+3 by default (`general.maxPerPlayer`). An operator can change it without opening the file: `/laura admin config general.maxPerPlayer 10`, saved and applied at once. When you reach the limit, operators are told this command too. The second and the following ones get the names of `general.extraNames`. Laura's Heart only creates your first companion: ask for the next ones with `/laura summon` or the chat phrase.
 
 **How do I rename her?**
 `/laura name <name>`, the pencil next to her name in the menu, or a name tag.
@@ -67,6 +67,9 @@ In `lauramod-common.json`:
 
 **How do I keep her quiet for a moment?**
 Right click her with a hay bale. Remove it with shears, or `/laura ungag`. To hide her speech bubbles only for you, use the Settings tab of her menu.
+
+**One of her sounds makes me jump. Can I turn it off?**
+Yes, for your game only. Open her menu, Settings, Sounds: click a sound to hear it, click the heart on its right to mute it. She picks another sound instead, and stays quiet when every sound of that kind is muted. The list is `sounds.muted` in `lauramod-client.json`.
 
 **How do I write an item or a file name in a command?**
 As it is, without quotes: `/laura fetch minecraft:oak_log 16`, `/laura fetch #minecraft:logs`, `/laura fetch bread`, `/laura skin file summer/beach`. In a fetch command the count and the word `queue` go at the end of the line.
@@ -215,7 +218,7 @@ Vérifiez ces points :
 - Au-dessus du vide ou de la lave il n'y a aucun endroit sûr pour elle : rien n'est créé et vous lisez « Il n'y a aucun endroit sûr pour elle ici. Pose-toi sur un sol solide et rappelle-la. » Le délai entre deux invocations n'est pas entamé. Le même message s'affiche quand une compagne congédiée, ramenée à la vie ou restaurée depuis son état sauvegardé n'a nulle part où se tenir. En mode `TIMER` elle attend et réessaie toutes les 5 secondes jusqu'à ce que vous soyez à un endroit sûr.
 
 **Combien de compagnes puis-je avoir ?**
-3 par défaut (`general.maxPerPlayer`). La deuxième et les suivantes reçoivent les noms de `general.extraNames`. Le Cœur de Laura ne crée que votre première compagne : demandez les suivantes avec `/laura summon` ou la phrase du chat.
+3 par défaut (`general.maxPerPlayer`). Un opérateur peut le changer sans ouvrir le fichier : `/laura admin config general.maxPerPlayer 10`, enregistré et appliqué aussitôt. Quand vous atteignez la limite, les opérateurs voient aussi cette commande. La deuxième et les suivantes reçoivent les noms de `general.extraNames`. Le Cœur de Laura ne crée que votre première compagne : demandez les suivantes avec `/laura summon` ou la phrase du chat.
 
 **Comment la renommer ?**
 `/laura name <nom>`, le crayon à côté de son nom dans le menu, ou une étiquette.
@@ -253,6 +256,9 @@ Dans `lauramod-common.json` :
 
 **Comment la faire taire un moment ?**
 Faites un clic droit sur elle avec une botte de foin. Retirez-la avec des cisailles, ou `/laura ungag`. Pour masquer ses bulles seulement chez vous, utilisez l'onglet Réglages de son menu.
+
+**Un de ses sons me fait sursauter. Je peux le couper ?**
+Oui, dans votre jeu seulement. Ouvrez son menu, Réglages, Sons : cliquez sur un son pour l'écouter, sur le cœur à sa droite pour le couper. Elle choisit un autre son à la place, et reste silencieuse quand tous les sons de ce genre sont coupés. La liste est `sounds.muted` dans `lauramod-client.json`.
 
 **Comment écrire un objet ou un nom de fichier dans une commande ?**
 Tel quel, sans guillemets : `/laura fetch minecraft:oak_log 16`, `/laura fetch #minecraft:logs`, `/laura fetch bread`, `/laura skin file summer/beach`. Dans une commande fetch, la quantité et le mot `queue` se placent à la fin de la ligne.
